@@ -1,0 +1,27 @@
+sudo: required
+
+services:
+  - docker
+
+language: java
+
+jdk:
+  - oraclejdk10
+
+script:
+  - ./gradlew check installDist
+  - docker build -t "irus/kotbot:${TRAVIS_BUILD_NUMBER}"
+
+deploy:
+  provider: script
+  script: bash docker_push.sh
+  on:
+    branch: master
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
