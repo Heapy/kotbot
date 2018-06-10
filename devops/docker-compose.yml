@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+  kotbot:
+    image: irus/kotbot:5 # get from ${TRAVIS_BUILD_NUMBER}
+    container_name: kotbot
+    restart: always
+    volumes:
+     - ${KOTBOT_DATA}/logs:/root/vol/logs/
+    environment:
+      KOTBOT_OPTS: ${KOTBOT_OPTS}
+      KOTBOT_TOKEN: ${KOTBOT_TOKEN}
+    depends_on:
+     - kotbot_database
+  kotbot_database:
+    image: postgres:10.3
+    container_name: kotbot_database
+    restart: always
+    user: "${KOTBOT_SYSTEM_USER}"
+    environment:
+      POSTGRES_PASSWORD: "kotbot"
+      POSTGRES_USER: "kotbot"
+      POSTGRES_DB: "kotbot"
+    volumes:
+     - ${KOTBOT_DATA}/pgdata:/var/lib/postgresql/data
+     - /etc/passwd:/etc/passwd:ro
+
