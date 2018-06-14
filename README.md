@@ -2,6 +2,10 @@
 
 Bot for Kotlin chats in telegram.
 
+## Docker Image
+
+Project distributed as docker image, and available in [docker hub](https://hub.docker.com/r/irus/kotbot/).
+
 ## Why?
 
 Combot becomes paid.
