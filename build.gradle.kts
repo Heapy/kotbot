@@ -1,9 +1,8 @@
 plugins {
     application
-    kotlin("jvm") version "1.2.41"
+    kotlin("jvm") version "1.2.50"
 }
 
-val kotlinVersion: String by project
 val tgBotsApiVersion: String by project
 val mockkVersion: String by project
 val junitVersion: String by project
