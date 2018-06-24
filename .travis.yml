@@ -10,7 +10,7 @@ jdk:
 
 script:
   - ./gradlew check installDist
-  - docker build -t "irus/kotbot:${TRAVIS_BUILD_NUMBER}" ./
+  - docker build -t "irus/kotbot:1.0.0-dev-b${TRAVIS_BUILD_NUMBER}" ./
 
 deploy:
   provider: script
