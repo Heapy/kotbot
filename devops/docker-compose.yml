@@ -1,18 +1,20 @@
 version: "3.3"
 services:
   kotbot:
-    image: irus/kotbot:5 # get from ${TRAVIS_BUILD_NUMBER}
+    image: heapy/kotbot:b1 # get from ${TRAVIS_BUILD_NUMBER}
     container_name: kotbot
     restart: always
     volumes:
      - ${KOTBOT_DATA}/logs:/root/vol/logs/
     environment:
-      KOTBOT_OPTS: ${KOTBOT_OPTS}
       KOTBOT_TOKEN: ${KOTBOT_TOKEN}
+      KOTBOT_ENV: ${KOTBOT_ENV}
+      KOTBOT_VERSION: ${KOTBOT_VERSION}
+      KOTBOT_OPTS: ${KOTBOT_OPTS}
     depends_on:
      - kotbot_database
   kotbot_database:
-    image: postgres:10.3
+    image: postgres:10.5
     container_name: kotbot_database
     restart: always
     user: "${KOTBOT_SYSTEM_USER}"

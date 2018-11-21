@@ -1,10 +1,10 @@
-# kotbot [![Build Status](https://travis-ci.com/KotlinBy/kotbot.svg?branch=master)](https://travis-ci.com/KotlinBy/kotbot)
+# kotbot [![Build Status](https://travis-ci.com/Heapy/kotbot.svg?branch=master)](https://travis-ci.com/Heapy/kotbot)
 
 Bot for Kotlin chats in telegram.
 
 ## Docker Image
 
-Project distributed as docker image, and available in [docker hub](https://hub.docker.com/r/irus/kotbot/).
+Project distributed as docker image, and available in [docker hub](https://hub.docker.com/r/heapy/kotbot/).
 
 ## Why?
 
@@ -14,6 +14,13 @@ Combot becomes paid.
 
 * [Telegram Bots](https://core.telegram.org/bots)
 * [rubenlagus/TelegramBots](https://github.com/rubenlagus/TelegramBots)
+
+## Modules
+
+- web - http api
+- stats - calculates statistics based on data stored in database
+- dao - database access layer
+- bot - layer which works with telegram api
 
 ## TODO
 

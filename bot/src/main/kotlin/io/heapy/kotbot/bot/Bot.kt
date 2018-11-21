@@ -1,0 +1,31 @@
+package io.heapy.kotbot.bot
+
+import io.heapy.integration.slf4j.logger
+import org.telegram.telegrambots.ApiContextInitializer
+import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException
+
+/**
+ * Function which should start bot.
+ *
+ * @author Ruslan Ibragimov
+ * @since 1.0.0
+ */
+fun startBot(
+    configuration: BotConfiguration
+): ShutdownBot {
+    try {
+        ApiContextInitializer.init()
+        val bot = TelegramBotsApi()
+            .registerBot(KotBot(configuration))
+        LOGGER.info("${configuration.name} started.")
+        return bot::stop
+    } catch (e: TelegramApiException) {
+        LOGGER.error("An error occurred in the bot", e)
+        throw e
+    }
+}
+
+private val LOGGER = logger<KotBot>()
+
+typealias ShutdownBot = () -> Unit

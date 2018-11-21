@@ -1,0 +1,3 @@
+dependencies {
+    implementation(Libs.tgBotApi)
+}
