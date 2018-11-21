@@ -8,6 +8,9 @@ language: java
 jdk:
   - openjdk11
 
+before_script:
+  - echo "org.gradle.jvmargs=-Xmx128m" >> gradle.properties
+
 script:
   - ./gradlew check installDist
   - docker build -t "heapy/kotbot:b${TRAVIS_BUILD_NUMBER}" ./
