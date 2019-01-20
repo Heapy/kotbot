@@ -1,8 +1,8 @@
 object Libs {
-    private val kotlin = "1.3.10"
+    private val kotlin = "1.3.11"
     val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin"
 
-    val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1"
+    val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.0"
 
     val tgBotApi = "org.telegram:telegrambots:4.1"
 
@@ -22,5 +22,5 @@ object Libs {
     val junitApi = "org.junit.jupiter:junit-jupiter-api:$junit"
     val junitEngine = "org.junit.jupiter:junit-jupiter-engine:$junit"
 
-    val mockk = "io.mockk:mockk:1.8.13.kotlin13"
+    val mockk = "io.mockk:mockk:1.9"
 }

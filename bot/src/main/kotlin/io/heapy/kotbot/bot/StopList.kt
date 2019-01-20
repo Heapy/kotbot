@@ -7,6 +7,11 @@ package io.heapy.kotbot.bot
  * @since 1.0.0
  */
 internal val stopList = listOf(
+    // Please Don't Say Just Hello In Chat
+    "hi",
+    "hello",
+    "привет",
+
     // offensive bydlo style
     "посан",
     "пацан",
@@ -22,6 +27,7 @@ internal val stopList = listOf(
     "хуй",
     "хуя",
     "хуёвый",
+    "хуйня",
     "хуем",
     "охуеть",
     "пизда",

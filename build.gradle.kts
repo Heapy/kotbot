@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
+import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 
 plugins {
     application
-    kotlin("jvm").version("1.3.10")
+    kotlin("jvm").version("1.3.11")
 }
 
 allprojects {
-    apply<KotlinPlatformJvmPlugin>()
+    apply<KotlinPluginWrapper>()
 
     repositories {
         jcenter()
