@@ -24,6 +24,31 @@ Combot becomes paid.
 
 ## TODO
 
+### Moderation
+
+User can't send messages, until he add this bot and answer on bot's sign up questions.
+
+#### Bot commands
+
+* `/stats` Display your statistics: number of warnings and helpful flags.
+
+#### Administrative commands
+
+These commands only work for group admins.
+
+* `!mute [reason]` Reply to a user to mute them for 24 hours;
+* `!fmute [reason]` is forever mute;
+* `!unmute` Reply to a user to unmute them;
+* `!channelmode` Enable read-only mode. Only admins can send messages. Send the command again to disable the mode;
+* `!warn [reason]` Reply to a user to warn them. User will receive personal warning messages through bot. First warn just send message, second - mutes for 24 hours, third - mutes user forever. Warnings expires over time.
+
+#### Community commands
+
+These commands work for everybody.
+
+`!report` Reply to a message to report it to admins;
+`+1` Reply to a message to mark it as helpful.
+
 ### Stats
 
 #### Per User
