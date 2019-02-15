@@ -1,26 +1,26 @@
 object Libs {
-    private val kotlin = "1.3.11"
-    val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin"
+    const val kotlinVersion = "1.3.21"
+    const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.0"
+    const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.1"
 
-    val tgBotApi = "org.telegram:telegrambots:4.1"
+    const val tgBotApi = "org.telegram:telegrambots:4.1.2"
 
-    private val ktor = "1.0.0"
-    val ktorServer = "io.ktor:ktor-server-netty:$ktor"
-    val ktorJackson = "io.ktor:ktor-jackson:$ktor"
+    private const val ktor = "1.1.2"
+    const val ktorServer = "io.ktor:ktor-server-netty:$ktor"
+    const val ktorJackson = "io.ktor:ktor-jackson:$ktor"
 
-    private val komodo = "0.0.1-dev-b37"
-    val komodoLogging = "io.heapy.komodo.integration:komodo-slf4j:$komodo"
-    val logback = "ch.qos.logback:logback-classic:1.3.0-alpha4"
+    private const val komodo = "0.0.1-dev-b37"
+    const val komodoLogging = "io.heapy.komodo.integration:komodo-slf4j:$komodo"
+    const val logback = "ch.qos.logback:logback-classic:1.3.0-alpha4"
 
-    private val micrometerVersion = "1.1.0"
-    val micrometer = "io.micrometer:micrometer-core:$micrometerVersion"
-    val micrometerPrometheus = "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
+    private const val micrometerVersion = "1.1.3"
+    const val micrometer = "io.micrometer:micrometer-core:$micrometerVersion"
+    const val micrometerPrometheus = "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
 
-    private val junit = "5.3.1"
-    val junitApi = "org.junit.jupiter:junit-jupiter-api:$junit"
-    val junitEngine = "org.junit.jupiter:junit-jupiter-engine:$junit"
+    private const val junit = "5.3.1"
+    const val junitApi = "org.junit.jupiter:junit-jupiter-api:$junit"
+    const val junitEngine = "org.junit.jupiter:junit-jupiter-engine:$junit"
 
-    val mockk = "io.mockk:mockk:1.9"
+    const val mockk = "io.mockk:mockk:1.9"
 }
