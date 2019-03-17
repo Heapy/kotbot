@@ -41,6 +41,12 @@ class KotBot(
                 execute(DeleteMessage(update.message.chatId, update.message.messageId))
                 execute(KickChatMember(update.message.chatId, update.message.from.id))
             }
+
+            if (update.message.hasText() && update.message.text.contains("t.cn/")) {
+                LOGGER.info("Delete message with t.cn link ${update.message.text}")
+                execute(DeleteMessage(update.message.chatId, update.message.messageId))
+                execute(KickChatMember(update.message.chatId, update.message.from.id))
+            }
         }
     }
 
