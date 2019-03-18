@@ -30,6 +30,12 @@ class KotBot(
             execute(KickChatMember(update.message.chatId, update.message.from.id))
         }
 
+        if (update.message?.caption?.contains("t.cn/") == true) {
+            LOGGER.info("Delete message with t.cn link in caption ${update.message.text}")
+            execute(DeleteMessage(update.message.chatId, update.message.messageId))
+            execute(KickChatMember(update.message.chatId, update.message.from.id))
+        }
+
         if (update.hasMessage()) {
             if (update.message.hasSticker()) {
                 LOGGER.info("Delete message with sticker ${update.message.text}")
