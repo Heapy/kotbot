@@ -1,4 +1,4 @@
 # Container with application
-FROM openjdk:11.0.1-jre-sid
+FROM amazoncorretto:11.0.3
 COPY /build/install/kotbot /kotbot
 ENTRYPOINT /kotbot/bin/kotbot
