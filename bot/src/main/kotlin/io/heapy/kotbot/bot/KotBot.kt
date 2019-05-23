@@ -1,18 +1,22 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.rule.Action
+import io.heapy.kotbot.bot.rule.DeleteMessageAction
+import io.heapy.kotbot.bot.rule.KickUserAction
+import io.heapy.kotbot.bot.rule.Rule
 import io.heapy.logging.debug
 import io.heapy.logging.logger
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
-import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 
 /**
  * @author Ruslan Ibragimov
  */
 class KotBot(
-    private val configuration: BotConfiguration
+    private val configuration: BotConfiguration,
+    private val rules: List<Rule>
 ) : TelegramLongPollingBot() {
     override fun getBotToken() = configuration.token
     override fun getBotUsername() = configuration.name
@@ -20,33 +24,22 @@ class KotBot(
     override fun onUpdateReceived(update: Update) {
         LOGGER.debug { update.toString() }
 
-        if (update.message?.newChatMembers != null) {
-            LOGGER.info("Delete message ${update.message.text}")
-            LOGGER.info("Joined users ${update.message.newChatMembers}")
-            execute(DeleteMessage(update.message.chatId, update.message.messageId))
-        }
-
-        update.anyText?.also { text ->
-            when {
-                text.contains("t.me/joinchat/") -> {
-                    LOGGER.info("Delete message with join link ${update.message.text}")
-                    execute(DeleteMessage(update.message.chatId, update.message.messageId))
-                    execute(KickChatMember(update.message.chatId, update.message.from.id))
-                }
-                text.contains("t.cn/") -> {
-                    LOGGER.info("Delete message with t.cn link ${update.message.text}")
-                    execute(DeleteMessage(update.message.chatId, update.message.messageId))
-                    execute(KickChatMember(update.message.chatId, update.message.from.id))
-                }
-            }
-        }
+        rules
+            .flatMap { rule -> rule.validate(update) }
+            .distinct()
+            .forEach(::executeAction)
     }
 
-    private val Update.anyMessage: Message?
-        get() = editedMessage ?: message
-
-    private val Update.anyText: String?
-        get() = anyMessage?.let { it.caption ?: it.text }
+    internal fun executeAction(action: Action): Unit = when (action) {
+            is DeleteMessageAction -> {
+                execute(DeleteMessage(action.chatId, action.messageId))
+                Unit
+            }
+            is KickUserAction -> {
+                execute(KickChatMember(action.chatId, action.userId))
+                Unit
+            }
+    }
 
     companion object {
         private val LOGGER = logger<KotBot>()

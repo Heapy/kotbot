@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.rule.Rule
 import io.heapy.logging.logger
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -12,12 +13,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
  * @since 1.0.0
  */
 fun startBot(
-    configuration: BotConfiguration
+    configuration: BotConfiguration,
+    rules: List<Rule>
 ): ShutdownBot {
     try {
         ApiContextInitializer.init()
         val bot = TelegramBotsApi()
-            .registerBot(KotBot(configuration))
+            .registerBot(KotBot(configuration, rules))
         LOGGER.info("${configuration.name} started.")
         return bot::stop
     } catch (e: TelegramApiException) {
