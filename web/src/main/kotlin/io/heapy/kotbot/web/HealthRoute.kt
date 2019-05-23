@@ -21,4 +21,4 @@ fun Routing.health() {
 
 internal val OK = HealthResponse("ok")
 
-data class HealthResponse(val status: String)
+internal data class HealthResponse(val status: String)

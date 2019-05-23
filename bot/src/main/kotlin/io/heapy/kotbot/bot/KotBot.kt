@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.integration.slf4j.logger
+import io.heapy.logging.debug
+import io.heapy.logging.logger
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
@@ -17,16 +18,11 @@ class KotBot(
     override fun getBotUsername() = configuration.name
 
     override fun onUpdateReceived(update: Update) {
-        LOGGER.debug(update.toString())
+        LOGGER.debug { update.toString() }
 
         if (update.message?.newChatMembers != null) {
             LOGGER.info("Delete message ${update.message.text}")
             LOGGER.info("Joined users ${update.message.newChatMembers}")
-            execute(DeleteMessage(update.message.chatId, update.message.messageId))
-        }
-
-        if (update.anyMessage?.hasSticker() == true) {
-            LOGGER.info("Delete message with sticker ${update.message.text}")
             execute(DeleteMessage(update.message.chatId, update.message.messageId))
         }
 

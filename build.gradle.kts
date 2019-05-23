@@ -18,14 +18,14 @@ allprojects {
 
     tasks.withType<KotlinJvmCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = Libs.jvmTarget
             freeCompilerArgs += listOf("-progressive")
         }
     }
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = Libs.jvmTarget
+        targetCompatibility = Libs.jvmTarget
     }
 
     dependencies {
@@ -33,6 +33,7 @@ allprojects {
         compile(Libs.kotlinCoroutines)
         compile(Libs.logback)
         compile(Libs.komodoLogging)
+        compile(Libs.komodoDotenv)
 
         compile(Libs.micrometer)
         compile(Libs.micrometerPrometheus)

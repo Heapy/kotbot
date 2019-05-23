@@ -7,6 +7,5 @@ package io.heapy.kotbot.metrics
  * @since 1.0.0
  */
 interface MetricsConfiguration {
-    val environment: String
     val version: String
 }

@@ -37,7 +37,6 @@ private fun commonTags(
     configuration: MetricsConfiguration
 ): List<Tag> {
     return listOf(
-        Tag.of("environment", configuration.environment),
         Tag.of("version", configuration.version)
     )
 }

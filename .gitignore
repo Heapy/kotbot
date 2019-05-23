@@ -6,3 +6,6 @@ out
 # Gradle
 .gradle
 build
+
+# Configuration
+/devops/.env

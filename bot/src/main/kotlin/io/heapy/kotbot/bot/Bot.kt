@@ -1,6 +1,6 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.integration.slf4j.logger
+import io.heapy.logging.logger
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException

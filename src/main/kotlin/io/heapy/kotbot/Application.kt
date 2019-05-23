@@ -1,10 +1,10 @@
 package io.heapy.kotbot
 
-import io.heapy.integration.slf4j.logger
 import io.heapy.kotbot.bot.startBot
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.startServer
+import io.heapy.logging.logger
 
 /**
  * Entry point of bot.
