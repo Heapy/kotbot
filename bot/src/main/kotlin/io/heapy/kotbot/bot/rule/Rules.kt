@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.rule
 
+import io.heapy.kotbot.bot.BotQueries
 import io.heapy.kotbot.bot.anyText
 import io.heapy.logging.logger
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -8,7 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update
  * @author Ruslan Ibragimov
  */
 interface Rule {
-    fun validate(update: Update): List<Action>
+    fun validate(update: Update): List<Action> = emptyList()
+    fun validate(update: Update, queries: BotQueries): List<Action> = validate(update)
 }
 
 private val LOGGER = logger<Rule>()

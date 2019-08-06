@@ -14,12 +14,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
  */
 fun startBot(
     configuration: BotConfiguration,
-    rules: List<Rule>
+    rules: List<Rule>,
+    state: State
 ): ShutdownBot {
     try {
         ApiContextInitializer.init()
         val bot = TelegramBotsApi()
-            .registerBot(KotBot(configuration, rules))
+            .registerBot(KotBot(configuration, rules, state))
         LOGGER.info("${configuration.name} started.")
         return bot::stop
     } catch (e: TelegramApiException) {

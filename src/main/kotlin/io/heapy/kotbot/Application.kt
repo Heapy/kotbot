@@ -1,10 +1,7 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.rule.DeleteHelloRule
-import io.heapy.kotbot.bot.rule.DeleteJoinRule
-import io.heapy.kotbot.bot.rule.DeleteSpamRule
-import io.heapy.kotbot.bot.rule.DeleteSwearingRule
-import io.heapy.kotbot.bot.startBot
+import io.heapy.kotbot.bot.*
+import io.heapy.kotbot.bot.rule.*
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.startServer
@@ -20,11 +17,22 @@ object Application {
     fun main(args: Array<String>) {
         val configuration = Configuration()
         val metricsRegistry = createPrometheusMeterRegistry(configuration)
+        val store = InMemoryStore().apply {
+            //families += Family(mutableListOf(-1001416698098L), -348604360L) // admin dialog: 50470510
+        }
+        val state = State()
         val rules = listOf(
             DeleteJoinRule(),
             DeleteSpamRule(),
             DeleteHelloRule(),
-            DeleteSwearingRule()
+            DeleteSwearingRule(),
+
+            GetIdRule(store),
+            ReportRule(store),
+            FamilyStartRule(state),
+            FamilyLeaveRule(store, state),
+            RefreshPermissionsCallbackRule(state),
+            FamilyManageRule(store, state)
         )
 
         startServer(
@@ -33,7 +41,8 @@ object Application {
 
         startBot(
             configuration,
-            rules
+            rules,
+            state
         )
 
         LOGGER.info("Application started.")
