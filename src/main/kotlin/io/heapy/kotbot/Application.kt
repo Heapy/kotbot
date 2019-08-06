@@ -15,24 +15,21 @@ import io.heapy.logging.logger
 object Application {
     @JvmStatic
     fun main(args: Array<String>) {
+        val classLoader = Application::class.java.classLoader
+
         val configuration = Configuration()
         val metricsRegistry = createPrometheusMeterRegistry(configuration)
-        val store = InMemoryStore().apply {
-            //families += Family(mutableListOf(-1001416698098L), -348604360L) // admin dialog: 50470510
-        }
+        val store = InMemoryStore()
         val state = State()
-        val rules = listOf(
-            DeleteJoinRule(),
-            DeleteSpamRule(),
-            DeleteHelloRule(),
-            DeleteSwearingRule(),
+        val rules = listOfNotNull(
+            deleteJoinRule,
+            deleteSpamRule,
+            defaultDeleteHelloRule,
+            classLoader.getResource("contains.txt")?.let { resourceDeleteSwearingRule(it) },
 
-            GetIdRule(store),
-            ReportRule(store),
-            FamilyStartRule(state),
-            FamilyLeaveRule(store, state),
-            RefreshPermissionsCallbackRule(state),
-            FamilyManageRule(store, state)
+            getIdRule(state),
+            admRule(store, state),
+            familyRules(store, state)
         )
 
         startServer(

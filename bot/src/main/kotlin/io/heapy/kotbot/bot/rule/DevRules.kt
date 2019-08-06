@@ -1,31 +1,27 @@
 package io.heapy.kotbot.bot.rule
 
 import io.heapy.kotbot.bot.BotStore
-import org.telegram.telegrambots.meta.api.objects.Update
+import io.heapy.kotbot.bot.State
 
-class GetIdRule(private val store: BotStore) : Rule {
-    override fun validate(update: Update): List<Action> {
-        if(!update.hasMessage()) return emptyList()
-        val message = update.message
-        if(!message.hasText()) return emptyList()
-        val text = message.text
-        val chat = message.chat
-        return when {
-            text == "/getid" -> {
-                listOf(
-                    DeleteMessageAction(chat.id, message.messageId),
-                    SendMessageAction(chat.id, "Chat id for \"${chat.title}\" is ${chat.id}")
-                )
-            }
-            text.startsWith("/adm ") -> {
-                val admMsg = "@${message.from.userName}: ${text.substring("/adm ".length)}"
-                listOf(DeleteMessageAction(chat.id, message.messageId)) +
-                    store.families
-                        .filter { it.chatIds.contains(chat.id) }
-                        .map { SendMessageAction(it.adminChatId, admMsg) }
-            }
-            else -> emptyList()
-        }
-    }
+fun getIdRule(state: State) : Rule = adminCommandRule("/getid", state) { _, message, _ ->
+    val chat = message.chat
+    val chatId = chat.id
+    listOf(
+        DeleteMessageAction(chatId, message.messageId),
+        SendMessageAction(chatId, "Chat id for \"${chat.title}\" is ${chatId}")
+    )
 }
 
+fun admRule(store: BotStore, state: State) : Rule = commandRule("/adm", state) { args, message, _ ->
+    val admMsg = "@${message.from.userName}: $args"
+    val chatId = message.chat.id
+    listOf(DeleteMessageAction(chatId, message.messageId)) +
+            store.families
+                .filter { it.chatIds.contains(chatId) }
+                .map { SendMessageAction(it.adminChatId, admMsg) }
+}
+
+fun devRules(store: BotStore, state: State) = compositeRule(
+    getIdRule(state),
+    admRule(store, state)
+)
