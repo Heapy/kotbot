@@ -1,27 +1,21 @@
-version: "3.3"
+version: "2.4"
 services:
   kotbot:
     image: heapy/kotbot:${KOTBOT_RELEASE}
     container_name: kotbot
     restart: always
     volumes:
-     - ${KOTBOT_DATA}/logs:/root/vol/logs/
+     - ${KOTBOT_DATA}/db/:/kotbot/db/
     environment:
       KOTBOT_OPTS: ${KOTBOT_OPTS}
       KOTBOT_TOKEN: ${KOTBOT_TOKEN}
       KOTBOT_RELEASE: ${KOTBOT_RELEASE}
-    depends_on:
-     - kotbot_database
-  kotbot_database:
-    image: postgres:10.5
-    container_name: kotbot_database
-    restart: always
-    user: "${KOTBOT_SYSTEM_USER}"
-    environment:
-      POSTGRES_PASSWORD: "kotbot"
-      POSTGRES_USER: "kotbot"
-      POSTGRES_DB: "kotbot"
-    volumes:
-     - ${KOTBOT_DATA}/pgdata:/var/lib/postgresql/data
-     - /etc/passwd:/etc/passwd:ro
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "journald"
+    mem_limit: 256m
+    mem_swappiness: 0
