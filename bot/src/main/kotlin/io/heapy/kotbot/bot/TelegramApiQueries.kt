@@ -5,6 +5,9 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
 import org.telegram.telegrambots.meta.bots.AbsSender
 
+/**
+ * Provides [BotQueries] implementation for Telegram API.
+ */
 class TelegramApiQueries(private val api: AbsSender): BotQueries {
     override fun getBotUser(): Pair<Int, String> {
         val bot = api.execute(GetMe())
