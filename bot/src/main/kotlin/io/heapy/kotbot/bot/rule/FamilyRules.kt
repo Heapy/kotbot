@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.rule
 
 import io.heapy.kotbot.bot.*
+import io.heapy.kotbot.bot.utils.*
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
@@ -16,18 +17,27 @@ enum class FamilyCallbacks {
 
 /**
  * Command `/report`: pings family admin chat for them to pay attention to events happening in current chat.
+ * Family chat message mentions chat, report sender and, if `/report` message is a reply to another one, report target.
+ * It also provides a reference to report or report target if possible.
  */
 fun reportRule(store: BotStore, state: State) = commandRule("/report", state) { _, message, _ ->
     val chat = message.chat
     val family = store.families
         .firstOrNull { message.chatId in it.chatIds }
         ?: return@commandRule emptyList()
+    val reportMessage = if(message.isReply) message.replyToMessage else message
+
     val chatTitle = "\"${chat.title}\""
     val chatMention = chat.userName?.let { "$chatTitle (@$it)" } ?: chatTitle
+
+    val senderText = "\nSent by @${message.from.fullRef}"
+    val reportText = if(message.isReply) "\nReported user ${reportMessage.from.fullRef}" else ""
+    val reportRef = reportMessage.publicLink?.let { "\n$it" } ?: ""
+
     listOf(
         SendMessageAction(
             family.adminChatId,
-            "Report sent by @${message.from.userName} in $chatMention"
+            "Report in $chatMention:$senderText$reportText$reportRef"
         )
     )
 }
@@ -142,7 +152,7 @@ fun familyCreateRule(store: BotStore, state: State) = adminCommandRule("/family"
             listOf(
                 SendMessageAction(chatId,
                     "This chat is now a family admin!\n" +
-                            "Use `/family-add` to add other chats to the family")
+                            "Use /family_add to add other chats to the family")
             )
         }
     }
