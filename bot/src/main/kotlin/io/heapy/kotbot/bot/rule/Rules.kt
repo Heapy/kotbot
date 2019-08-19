@@ -54,21 +54,25 @@ fun commandRule(rule: (Message, BotQueries) -> List<Action>): Rule = rule { upda
 /**
  * Creates rule processing command named [commandText]. Handles both commands with and without bot username appended.
  */
-fun commandRule(commandText: String, state: State, rule: (String, Message, BotQueries) -> List<Action>): Rule =
+fun commandRule(commandText: String, state: State, rule: (args: String, Message, BotQueries) -> List<Action>): Rule =
     if(commandText.length > COMMAND_NAME_MAX_LENGTH)
         error("Command name must not be more than $COMMAND_NAME_MAX_LENGTH characters long.")
     else
-        commandRule rule@ { message, queries ->
+        commandRule { message, queries ->
             val text = message.text
-            if(!text.startsWith(commandText)) return@rule emptyList()
-            val botSuffix = "@${state.botUserName}"
-            val args = text.substring(commandText.length)
-            val filteredArgs = if(args.startsWith(botSuffix)) {
-                args.substring(botSuffix.length + 1)
-            } else {
-                args
+            val botCommandText = "$commandText@${state.botUserName}"
+            when {
+                text == commandText || text == botCommandText ->
+                    rule("", message, queries)
+
+                text.startsWith("$commandText ") ->
+                    rule(text.substring(commandText.length + 1), message, queries)
+
+                text.startsWith("$botCommandText ") ->
+                    rule(text.substring(botCommandText.length + 1), message, queries)
+
+                else -> emptyList()
             }
-            rule(filteredArgs, message, queries)
         }
 
 /**
