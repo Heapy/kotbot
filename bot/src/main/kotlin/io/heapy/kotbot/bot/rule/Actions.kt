@@ -40,3 +40,12 @@ data class SendMessageAction(
     val text: String,
     val inlineKeyboard: List<List<InlineKeyboardButton>>? = null
 ): ChatAction()
+
+/**
+ * An [Action] which forwards message [messageId] from chat [fromChatId] to chat [chatId].
+ */
+data class ForwardMessageAction(
+    override val chatId: Long,
+    val fromChatId: Long,
+    val messageId: Int
+): ChatAction()

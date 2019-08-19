@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot
 import io.heapy.kotbot.bot.rule.*
 import io.heapy.logging.*
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.meta.api.methods.ForwardMessage
 import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
@@ -41,11 +42,9 @@ class KotBot(
         when (action) {
             is DeleteMessageAction -> {
                 execute(DeleteMessage(action.chatId, action.messageId))
-                Unit
             }
             is KickUserAction -> {
                 execute(KickChatMember(action.chatId, action.userId))
-                Unit
             }
             is SendMessageAction -> {
                 execute(SendMessage(action.chatId, action.text).also {
@@ -53,9 +52,12 @@ class KotBot(
                         it.replyMarkup = InlineKeyboardMarkup().apply { keyboard = action.inlineKeyboard }
                     }
                 })
-                Unit
+            }
+            is ForwardMessageAction -> {
+                execute(ForwardMessage(action.chatId, action.fromChatId, action.messageId))
             }
         }
+        Unit
     } catch (e: TelegramApiRequestException) {
         val code = TelegramError.byCode(e.errorCode)
         when {
