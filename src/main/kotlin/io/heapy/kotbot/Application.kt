@@ -22,13 +22,8 @@ object Application {
         val store = InMemoryStore()
         val state = State()
         val rules = listOfNotNull(
-            deleteJoinRule,
-            deleteSpamRule,
-            defaultDeleteHelloRule,
-            classLoader.getResource("contains.txt")?.let { resourceDeleteSwearingRule(it) },
-
-            getIdRule(state),
-            admRule(store, state),
+            policyRules(classLoader.getResource("contains.txt")),
+            devRules(store, state),
             familyRules(store, state)
         )
 

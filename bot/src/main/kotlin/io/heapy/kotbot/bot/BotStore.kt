@@ -8,7 +8,3 @@ class Family(
     val chatIds: MutableList<Long>,
     val adminChatId: Long
 )
-
-class Chat(
-
-)
