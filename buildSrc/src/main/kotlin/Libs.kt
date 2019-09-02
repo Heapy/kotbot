@@ -8,6 +8,11 @@ object Libs {
     const val tgBotApi = "org.telegram:telegrambots:4.2"
 
     private const val ktor = "1.2.0"
+    const val ktorClientCio = "io.ktor:ktor-client-cio:$ktor"
+    const val ktorClientCore = "io.ktor:ktor-client-core:$ktor"
+    const val ktorClientJackson = "io.ktor:ktor-client-jackson:$ktor"
+    const val ktorClientJson = "io.ktor:ktor-client-json:$ktor"
+    const val ktorClientLoggingJvm = "io.ktor:ktor-client-logging-jvm:$ktor"
     const val ktorServer = "io.ktor:ktor-server-netty:$ktor"
     const val ktorJackson = "io.ktor:ktor-jackson:$ktor"
 

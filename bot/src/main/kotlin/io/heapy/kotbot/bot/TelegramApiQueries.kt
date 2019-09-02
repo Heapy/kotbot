@@ -1,6 +1,9 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.utils.execAsync
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import org.telegram.telegrambots.meta.api.methods.GetMe
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
@@ -25,4 +28,17 @@ class TelegramApiQueries(private val api: AbsSender, private val http: HttpClien
     }
 
     override suspend fun getChatName(chatId: Long): String = api.execAsync(GetChat(chatId)).title
+
+    override suspend fun isCasBanned(userId: Int): Boolean =
+        http
+            .get<Map<String, Any?>>(CAS_API) {
+                parameter(CAS_USER_ID, userId)
+            }
+            .let { it["ok"] as? Boolean ?: false }
+
+    override fun getCasStatusUrl(userId: Int): String =
+        "https://combot.org/cas/query?u=$userId"
 }
+
+private const val CAS_API = "https://combot.org/api/cas/check"
+private const val CAS_USER_ID = "user_id"

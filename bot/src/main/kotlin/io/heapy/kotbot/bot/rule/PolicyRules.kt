@@ -1,6 +1,8 @@
 package io.heapy.kotbot.bot.rule
 
 import io.heapy.kotbot.bot.*
+import io.heapy.kotbot.bot.utils.fullRef
+import org.telegram.telegrambots.meta.api.objects.User
 import java.net.URL
 
 /**
@@ -94,11 +96,37 @@ suspend fun deleteSpamRule() = rule { update, _ ->
 }
 
 /**
+ * A rule which kicks CAS-banned users which:
+ * - Join group
+ * - Post new messages
+ * - Edit existing messages
+ *
+ * CAS stands for Combot Anti-spam System and provides an API to check their global ban status.
+ */
+suspend fun deleteCasBannedRule() = rule { update, queries ->
+    val message = update.anyMessage ?: return@rule emptyList()
+    val newUsers = message.newChatMembers
+    val hasNewUsers = newUsers.isNotEmpty()
+    val users: List<User> = if(hasNewUsers) newUsers else listOf(message.from)
+    users
+        .filter { queries.isCasBanned(it.id) }
+        .fold(mutableListOf()) { list, user ->
+            LOGGER.info("Delete CAS-banned user ${user.fullRef}. Reason: ${queries.getCasStatusUrl(user.id)}")
+            if (!hasNewUsers) {
+                list.add(DeleteMessageAction(message.chatId, message.messageId))
+            }
+            list.add(KickUserAction(message.chatId, user.id))
+            list
+        }
+}
+
+/**
  * A group of commands and rules related to policy implementation.
  */
 suspend fun policyRules(swearingResource: URL?) = compositeRule(
     deleteJoinRule(),
     deleteSpamRule(),
     defaultDeleteHelloRule(),
-    swearingResource?.let { deleteSwearingRule(it) }
+    swearingResource?.let { deleteSwearingRule(it) },
+    deleteCasBannedRule()
 )

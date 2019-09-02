@@ -1,7 +1,14 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.rule.*
+import io.heapy.kotbot.bot.utils.execAsync
 import io.heapy.logging.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.features.json.JacksonSerializer
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.http.ContentType
+import kotlinx.coroutines.*
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage
 import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
@@ -22,7 +29,18 @@ class KotBot(
     override fun getBotToken() = configuration.token
     override fun getBotUsername() = configuration.name
 
-    private val queries = TelegramApiQueries(this)
+    private val httpClient = HttpClient(CIO) {
+        /*install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.INFO
+        }*/
+        install(JsonFeature) {
+            serializer = JacksonSerializer()
+            acceptContentTypes = listOf(ContentType.Any)
+        }
+    }
+
+    private val queries = TelegramApiQueries(this, httpClient)
 
     init {
         runBlocking {
