@@ -4,7 +4,7 @@ package io.heapy.kotbot.bot
  * Provides a way to execute idempotent queries against messenger authority.
  */
 interface BotQueries {
-    fun getBotUser(): Pair<Int, String>
-    fun isAdminUser(chatId: Long, userId: Int): Boolean
-    fun getChatName(chatId: Long): String
+    suspend fun getBotUser(): Pair<Int, String>
+    suspend fun isAdminUser(chatId: Long, userId: Int): Boolean
+    suspend fun getChatName(chatId: Long): String
 }

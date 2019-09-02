@@ -1,6 +1,6 @@
 object Libs {
     const val jvmTarget = "11"
-    const val kotlinVersion = "1.3.31"
+    const val kotlinVersion = "1.3.50"
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.2.1"

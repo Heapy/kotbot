@@ -22,39 +22,46 @@ class KotBot(
     override fun getBotToken() = configuration.token
     override fun getBotUsername() = configuration.name
 
-    private val queries = TelegramApiQueries(this).also {
-        val (botUserId, botUserName) = it.getBotUser()
-        state.botUserId = botUserId
-        state.botUserName = botUserName
-        LOGGER.info { "Bot info: @${botUserName} [${botUserId}]" }
+    private val queries = TelegramApiQueries(this)
+
+    init {
+        runBlocking {
+            val (botUserId, botUserName) = queries.getBotUser()
+            state.botUserId = botUserId
+            state.botUserName = botUserName
+            LOGGER.info { "Bot info: @${botUserName} [${botUserId}]" }
+        }
     }
 
-    override fun onUpdateReceived(update: Update) {
+    override fun onUpdateReceived(update: Update) = runBlocking {
         LOGGER.debug { update.toString() }
 
         rules
             .flatMap { rule -> rule.validate(update, queries) }
             .distinct()
-            .forEach(::executeAction)
+            .map { async { executeAction(it) } }
+            .awaitAll()
+
+        Unit
     }
 
-    internal fun executeAction(action: Action): Unit = try {
+    private suspend fun executeAction(action: Action): Unit = try {
         when (action) {
             is DeleteMessageAction -> {
-                execute(DeleteMessage(action.chatId, action.messageId))
+                execAsync(DeleteMessage(action.chatId, action.messageId))
             }
             is KickUserAction -> {
-                execute(KickChatMember(action.chatId, action.userId))
+                execAsync(KickChatMember(action.chatId, action.userId))
             }
             is SendMessageAction -> {
-                execute(SendMessage(action.chatId, action.text).also {
+                execAsync(SendMessage(action.chatId, action.text).also {
                     if(action.inlineKeyboard != null) {
                         it.replyMarkup = InlineKeyboardMarkup().apply { keyboard = action.inlineKeyboard }
                     }
                 })
             }
             is ForwardMessageAction -> {
-                execute(ForwardMessage(action.chatId, action.fromChatId, action.messageId))
+                execAsync(ForwardMessage(action.chatId, action.fromChatId, action.messageId))
             }
         }
         Unit

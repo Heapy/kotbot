@@ -6,6 +6,7 @@ import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.startServer
 import io.heapy.logging.logger
+import kotlinx.coroutines.runBlocking
 
 /**
  * Entry point of bot.
@@ -14,7 +15,7 @@ import io.heapy.logging.logger
  */
 object Application {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>): Unit = runBlocking {
         val classLoader = Application::class.java.classLoader
 
         val configuration = Configuration()
@@ -38,6 +39,8 @@ object Application {
         )
 
         LOGGER.info("Application started.")
+
+        Unit
     }
 
     private val LOGGER = logger<Application>()

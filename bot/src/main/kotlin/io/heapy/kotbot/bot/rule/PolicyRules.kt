@@ -6,7 +6,7 @@ import java.net.URL
 /**
  * A rule which deletes all *username joined the group* messages.
  */
-val deleteJoinRule = rule { update, _ ->
+suspend fun deleteJoinRule() = rule { update, _ ->
     if (!update.message?.newChatMembers.isNullOrEmpty()) {
         LOGGER.info("Delete joined users message ${update.message.newChatMembers}")
         listOf(DeleteMessageAction(update.message.chatId, update.message.messageId))
@@ -18,7 +18,7 @@ val deleteJoinRule = rule { update, _ ->
 /**
  * A rule which deletes messages containing only specified phrases.
  */
-fun deleteSpecificWordRule(tag: String, strings: List<String>) = rule { update, _ ->
+suspend fun deleteSpecificWordRule(tag: String, strings: List<String>) = rule { update, _ ->
     update.anyText { text, message ->
         if (strings.contains(text.toLowerCase())) {
             LOGGER.info("Delete $tag message ${message.text}")
@@ -32,7 +32,7 @@ fun deleteSpecificWordRule(tag: String, strings: List<String>) = rule { update, 
 /**
  * A rule which deletes messages containing only welcome phrases.
  */
-val defaultDeleteHelloRule = deleteSpecificWordRule("hello", listOf(
+suspend fun defaultDeleteHelloRule() = deleteSpecificWordRule("hello", listOf(
     "hi",
     "hello",
     "привет"
@@ -41,7 +41,7 @@ val defaultDeleteHelloRule = deleteSpecificWordRule("hello", listOf(
 /**
  * A rule which deletes all messages matching any of regular expressions passed.
  */
-fun deleteRegexMatchingRule(regexs: List<Regex>) = rule { update, _ ->
+suspend fun deleteRegexMatchingRule(regexs: List<Regex>) = rule { update, _ ->
     update.anyText { text, message ->
         val normalizedText = text.toLowerCase()
         val isSwearing = regexs.any { normalizedText.contains(it) }
@@ -59,7 +59,7 @@ internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
 /**
  * A rule which deletes messages with swearing. List of swear words should be available as a resource located at [url].
  */
-fun deleteSwearingRule(url: URL) = deleteRegexMatchingRule(
+suspend fun deleteSwearingRule(url: URL) = deleteRegexMatchingRule(
     url.readText()
         .split("\n")
         .filter { it.isNotEmpty() }
@@ -68,7 +68,7 @@ fun deleteSwearingRule(url: URL) = deleteRegexMatchingRule(
 /**
  * A rule which deletes spam messages.
  */
-val deleteSpamRule = rule { update, _ ->
+suspend fun deleteSpamRule() = rule { update, _ ->
     update.anyText { text, message ->
         val kick = when {
             text.contains("t.me/joinchat/") -> {
@@ -96,9 +96,9 @@ val deleteSpamRule = rule { update, _ ->
 /**
  * A group of commands and rules related to policy implementation.
  */
-fun policyRules(swearingResource: URL?) = compositeRule(
-    deleteJoinRule,
-    deleteSpamRule,
-    defaultDeleteHelloRule,
-    swearingResource?.let(::deleteSwearingRule)
+suspend fun policyRules(swearingResource: URL?) = compositeRule(
+    deleteJoinRule(),
+    deleteSpamRule(),
+    defaultDeleteHelloRule(),
+    swearingResource?.let { deleteSwearingRule(it) }
 )

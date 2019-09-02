@@ -9,29 +9,29 @@ import java.net.URL
  * @author Ruslan Ibragimov
  */
 interface Rule {
-    fun validate(update: Update, queries: BotQueries): List<Action>
+    suspend fun validate(update: Update, queries: BotQueries): List<Action>
 }
 
 /**
  * Creates generic rule for processing incoming messages and events.
  */
-fun rule(rule: (Update, BotQueries) -> List<Action>): Rule =
+suspend fun rule(rule: suspend (Update, BotQueries) -> List<Action>): Rule =
     object : Rule {
-        override fun validate(update: Update, queries: BotQueries): List<Action> =
+        override suspend fun validate(update: Update, queries: BotQueries): List<Action> =
             rule(update, queries)
     }
 
 /**
  * Creates rule which applies all passed [rules] sequentially.
  */
-fun compositeRule(vararg rules: Rule?): Rule = rule { update, queries ->
+suspend fun compositeRule(vararg rules: Rule?): Rule = rule { update, queries ->
     rules.mapNotNull { it?.validate(update, queries) }.flatten()
 }
 
 /**
  * Creates rule processing incoming [CallbackQuery] (result of pressing callback button, inline keyboard button, etc).
  */
-fun callbackQueryRule(rule: (CallbackQuery, BotQueries) -> List<Action>): Rule = rule { update, queries ->
+suspend fun callbackQueryRule(rule: (CallbackQuery, BotQueries) -> List<Action>): Rule = rule { update, queries ->
     if(!update.hasCallbackQuery())
         emptyList()
     else
@@ -43,7 +43,7 @@ fun callbackQueryRule(rule: (CallbackQuery, BotQueries) -> List<Action>): Rule =
  *
  * `/command_name command_args...`
  */
-fun commandRule(rule: (Message, BotQueries) -> List<Action>): Rule = rule { update, queries ->
+suspend fun commandRule(rule: suspend (Message, BotQueries) -> List<Action>): Rule = rule { update, queries ->
     if(!update.hasMessage() ||
         !update.message.hasText() ||
         !update.message.text.startsWith("/"))
@@ -54,7 +54,7 @@ fun commandRule(rule: (Message, BotQueries) -> List<Action>): Rule = rule { upda
 /**
  * Creates rule processing command named [commandText]. Handles both commands with and without bot username appended.
  */
-fun commandRule(commandText: String, state: State, rule: (args: String, Message, BotQueries) -> List<Action>): Rule =
+suspend fun commandRule(commandText: String, state: State, rule: suspend (args: String, Message, BotQueries) -> List<Action>): Rule =
     if(commandText.length > COMMAND_NAME_MAX_LENGTH)
         error("Command name must not be more than $COMMAND_NAME_MAX_LENGTH characters long.")
     else
@@ -79,7 +79,7 @@ fun commandRule(commandText: String, state: State, rule: (args: String, Message,
  * Creates rule processing command named [commandText]. Validates that the user invoking the command is an administrator
  * of the chat where the command is invoked.
  */
-fun adminCommandRule(commandText: String, state: State, rule: (String, Message, BotQueries) -> List<Action>) : Rule =
+suspend fun adminCommandRule(commandText: String, state: State, rule: suspend (String, Message, BotQueries) -> List<Action>) : Rule =
     commandRule(commandText, state) { args, message, queries ->
         if(queries.isAdminUser(message.chatId, message.from.id)) {
             rule(args, message, queries)
@@ -88,6 +88,6 @@ fun adminCommandRule(commandText: String, state: State, rule: (String, Message, 
         }
     }
 
-private val COMMAND_NAME_MAX_LENGTH = 32
+private const val COMMAND_NAME_MAX_LENGTH = 32
 
 internal val LOGGER = logger<Rule>()
