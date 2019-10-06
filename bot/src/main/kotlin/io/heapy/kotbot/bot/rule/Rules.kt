@@ -75,19 +75,13 @@ class DeleteSwearingRule : Rule {
 class DeleteSpamRule : Rule {
     override fun validate(update: Update): List<Action> {
         update.anyText { text, message ->
-            val kick = when {
-                text.contains("t.me/joinchat/") -> {
-                    LOGGER.info("Delete message with join link ${message.text}")
-                    true
-                }
-                text.contains("t.cn/") -> {
-                    LOGGER.info("Delete message with t.cn link ${message.text}")
-                    true
-                }
-                else -> false
+            val kick = shorteners.any { shorter ->
+                text.contains(shorter)
             }
 
             if (kick) {
+                LOGGER.info("Delete message with shortened link $text")
+
                 return listOf(
                     DeleteMessageAction(message.chatId, message.messageId),
                     KickUserAction(message.chatId, message.from.id)
@@ -96,5 +90,15 @@ class DeleteSpamRule : Rule {
         }
 
         return listOf()
+    }
+
+    companion object {
+        private val shorteners = listOf(
+            "tinyurl.com",
+            "t.me/joinchat",
+            "t.cn",
+            "bit.ly",
+            "tgraph.io"
+        )
     }
 }
