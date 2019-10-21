@@ -102,3 +102,21 @@ class DeleteSpamRule : Rule {
         )
     }
 }
+
+/**
+ * Rule to remove messages with attached audio.
+ */
+class DeleteVoiceMessageRule : Rule {
+
+    override fun validate(update: Update): List<Action> {
+        val message = update.message
+
+        if (message.hasVoice()) {
+            LOGGER.info("Delete voice-message from @${message.from.userName}.")
+
+            return DeleteMessageAction(message).only()
+        }
+
+        return noActions()
+    }
+}
