@@ -1,9 +1,6 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.rule.DeleteHelloRule
-import io.heapy.kotbot.bot.rule.DeleteJoinRule
-import io.heapy.kotbot.bot.rule.DeleteSpamRule
-import io.heapy.kotbot.bot.rule.DeleteSwearingRule
+import io.heapy.kotbot.bot.rule.*
 import io.heapy.kotbot.bot.startBot
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
@@ -24,7 +21,8 @@ object Application {
             DeleteJoinRule(),
             DeleteSpamRule(),
             DeleteHelloRule(),
-            DeleteSwearingRule()
+            DeleteSwearingRule(),
+            DeleteVoiceMessageRule()
         )
 
         startServer(
