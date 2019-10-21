@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.rule
 
+import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
 import io.heapy.logging.logger
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -109,12 +110,12 @@ class DeleteSpamRule : Rule {
 class DeleteVoiceMessageRule : Rule {
 
     override fun validate(update: Update): List<Action> {
-        val message = update.message
+        update.anyMessage?.let { message ->
+            if (message.hasVoice()) {
+                LOGGER.info("Delete voice-message from @${message.from.userName}.")
 
-        if (message.hasVoice()) {
-            LOGGER.info("Delete voice-message from @${message.from.userName}.")
-
-            return DeleteMessageAction(message).only()
+                return DeleteMessageAction(message).only()
+            }
         }
 
         return noActions()
