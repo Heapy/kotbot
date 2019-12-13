@@ -7,7 +7,6 @@ import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.util.pipeline.ContextDsl
-import io.micrometer.prometheus.PrometheusMeterRegistry
 
 /**
  * Expose metrics for prometheus.
@@ -16,9 +15,9 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
  * @since 1.0.0
  */
 @ContextDsl
-fun Routing.metrics(registry: PrometheusMeterRegistry) {
+fun Routing.metrics(scrape: () -> String) {
     get("/api/metrics") {
-        call.respondText(text = registry.scrape(), contentType = ContentType004)
+        call.respondText(text = scrape(), contentType = ContentType004)
     }
 }
 

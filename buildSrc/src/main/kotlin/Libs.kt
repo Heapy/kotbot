@@ -1,15 +1,15 @@
 object Libs {
     const val jvmTarget = "11"
-    const val kotlinVersion = "1.3.50"
-    const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.2"
+    const val kotlinCoroutines = "1.3.2"
 
     const val tgBotApi = "org.telegram:telegrambots:4.3.1"
 
-    private const val ktor = "1.2.4"
+    private const val ktor = "1.2.6"
     const val ktorServer = "io.ktor:ktor-server-netty:$ktor"
-    const val ktorJackson = "io.ktor:ktor-jackson:$ktor"
+    const val ktorServerJackson = "io.ktor:ktor-jackson:$ktor"
+    const val ktorClient = "io.ktor:ktor-client-apache:$ktor"
+    const val ktorClientJackson = "io.ktor:ktor-client-jackson:$ktor"
 
     private const val komodo = "0.0.1-dev-b40"
     const val komodoLogging = "io.heapy.komodo:komodo-logging:$komodo"

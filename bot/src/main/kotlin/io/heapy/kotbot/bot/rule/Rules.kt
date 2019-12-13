@@ -1,40 +1,47 @@
 package io.heapy.kotbot.bot.rule
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
 import io.heapy.logging.logger
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.telegram.telegrambots.meta.api.objects.Update
 
 /**
  * @author Ruslan Ibragimov
  */
 interface Rule {
-    fun validate(update: Update): List<Action>
+    fun validate(update: Update): Flow<Action>
 }
 
 private val LOGGER = logger<Rule>()
 
 class DeleteJoinRule : Rule {
-    override fun validate(update: Update): List<Action> {
+    override fun validate(update: Update): Flow<Action> {
         if (!update.message?.newChatMembers.isNullOrEmpty()) {
             LOGGER.info("Delete joined users message ${update.message.newChatMembers}")
-            return listOf(DeleteMessageAction(update.message.chatId, update.message.messageId))
+            return flowOf(DeleteMessageAction(update.message.chatId, update.message.messageId))
         }
 
-        return listOf()
+        return emptyFlow()
     }
 }
 
 class DeleteHelloRule : Rule {
-    override fun validate(update: Update): List<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.toLowerCase())) {
                 LOGGER.info("Delete hello message ${message.text}")
-                return listOf(DeleteMessageAction(message.chatId, message.messageId))
+                return flowOf(DeleteMessageAction(message.chatId, message.messageId))
             }
         }
 
-        return listOf()
+        return emptyFlow()
     }
 
     companion object {
@@ -47,17 +54,17 @@ class DeleteHelloRule : Rule {
 }
 
 class DeleteSwearingRule : Rule {
-    override fun validate(update: Update): List<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val normalizedText = text.toLowerCase()
             val isSwearing = strings.any { normalizedText.contains(it) }
             if (isSwearing) {
                 LOGGER.info("Delete message with swearing ${message.text}")
-                return listOf(DeleteMessageAction(message.chatId, message.messageId))
+                return flowOf(DeleteMessageAction(message.chatId, message.messageId))
             }
         }
 
-        return listOf()
+        return emptyFlow()
     }
 
     companion object {
@@ -74,7 +81,7 @@ class DeleteSwearingRule : Rule {
 }
 
 class DeleteSpamRule : Rule {
-    override fun validate(update: Update): List<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val kick = shorteners.any { shorter ->
                 text.contains(shorter)
@@ -83,14 +90,14 @@ class DeleteSpamRule : Rule {
             if (kick) {
                 LOGGER.info("Delete message with shortened link $text")
 
-                return listOf(
+                return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
                     KickUserAction(message.chatId, message.from.id)
                 )
             }
         }
 
-        return listOf()
+        return emptyFlow()
     }
 
     companion object {
@@ -108,16 +115,38 @@ class DeleteSpamRule : Rule {
  * Rule to remove messages with attached audio.
  */
 class DeleteVoiceMessageRule : Rule {
-
-    override fun validate(update: Update): List<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasVoice()) {
                 LOGGER.info("Delete voice-message from @${message.from.userName}.")
 
-                return DeleteMessageAction(message).only()
+                return flowOf(DeleteMessageAction(message))
             }
         }
 
-        return noActions()
+        return emptyFlow()
     }
 }
+
+class CombotCasRule(
+    private val client: HttpClient
+) : Rule {
+    override fun validate(update: Update): Flow<Action> = flow {
+        update.anyMessage?.let { message ->
+            val userId = message.from.id
+            val response = client.get<CasResponse>("https://api.cas.chat/check?user_id=$userId")
+            if (response.ok) {
+                LOGGER.info("User $userId is CAS banned")
+                emit(DeleteMessageAction(message))
+                emit(KickUserAction(message.chatId, userId))
+            } else {
+                LOGGER.info("User $userId is NOT CAS banned")
+            }
+        }
+    }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class CasResponse(
+    val ok: Boolean
+)
