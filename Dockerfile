@@ -1,4 +1,4 @@
 # Container with application
-FROM amazoncorretto:8u232
+FROM amazoncorretto:11.0.5
 COPY /build/install/kotbot /kotbot
 ENTRYPOINT /kotbot/bin/kotbot

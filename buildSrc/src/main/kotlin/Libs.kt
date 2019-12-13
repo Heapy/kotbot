@@ -1,5 +1,5 @@
 object Libs {
-    const val jvmTarget = "1.8"
+    const val jvmTarget = "11"
 
     const val kotlinCoroutines = "1.3.2"
 

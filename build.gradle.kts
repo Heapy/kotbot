@@ -20,6 +20,10 @@ dependencies {
     implementation(Libs.ktorClient)
     implementation(Libs.ktorClientJackson)
 
+    // fix for https://github.com/ktorio/ktor/issues/1018
+    implementation("org.apache.httpcomponents:httpcore-nio:4.4.12")
+    implementation("org.apache.httpcomponents:httpcore:4.4.12")
+
     implementation(project(":web"))
     implementation(project(":bot"))
     implementation(project(":stats"))
