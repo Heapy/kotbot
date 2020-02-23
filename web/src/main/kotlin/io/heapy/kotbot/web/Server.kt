@@ -3,7 +3,6 @@ package io.heapy.kotbot.web
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import java.util.concurrent.TimeUnit
 
 /**
  * Create server.
@@ -25,7 +24,7 @@ fun startServer(
 
     server.start(false)
 
-    return { server.stop(1, 2, TimeUnit.SECONDS) }
+    return { server.stop(1000, 2000) }
 }
 
 typealias ShutdownServer = () -> Unit

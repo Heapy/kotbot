@@ -7,5 +7,5 @@ package io.heapy.kotbot.metrics
  * @since 1.0.0
  */
 interface MetricsConfiguration {
-    val version: String
+    val tags: Map<String, String>
 }
