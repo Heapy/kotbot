@@ -1,4 +1,4 @@
-package io.heapy.kotbot.bot.rule
+package io.heapy.kotbot.bot.action
 
 import org.telegram.telegrambots.meta.api.objects.Message
 
@@ -15,6 +15,11 @@ data class DeleteMessageAction(
 data class KickUserAction(
     val chatId: Long,
     val userId: Int
+) : Action()
+
+data class ReplyAction(
+    val chatId: Long,
+    val message: String
 ) : Action()
 
 @Suppress("FunctionName")
