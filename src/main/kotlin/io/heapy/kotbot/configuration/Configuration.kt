@@ -14,7 +14,7 @@ private val env = Dotenv(Paths.get("./devops/.env"))
 class Configuration(
     override val token: String = env.get("KOTBOT_TOKEN"),
     override val name: String = env.getOrNull("KOTBOT_NAME") ?: "KotBot",
-    override val version: String = env.get("KOTBOT_RELEASE")
+    override val tags: Map<String, String> = mapOf("version" to env.get("KOTBOT_RELEASE"))
 ) : BotConfiguration, MetricsConfiguration
 
 

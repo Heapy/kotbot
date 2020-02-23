@@ -36,7 +36,6 @@ fun createPrometheusMeterRegistry(
 private fun commonTags(
     configuration: MetricsConfiguration
 ): List<Tag> {
-    return listOf(
-        Tag.of("version", configuration.version)
-    )
+    return configuration.tags
+        .map { (k, v) -> Tag.of(k, v) }
 }

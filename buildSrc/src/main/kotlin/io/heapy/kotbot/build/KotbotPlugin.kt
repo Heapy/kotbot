@@ -22,6 +22,7 @@ class KotbotPlugin : Plugin<Project> {
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+            "implementation"("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Libs.kotlinCoroutines}")
 
             "testImplementation"(Libs.junitApi)

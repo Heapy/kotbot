@@ -1,5 +1,6 @@
 package io.heapy.kotbot
 
+import io.heapy.kotbot.bot.KotBot
 import io.heapy.kotbot.bot.rule.CombotCasRule
 import io.heapy.kotbot.bot.rule.DeleteHelloRule
 import io.heapy.kotbot.bot.rule.DeleteJoinRule
@@ -25,7 +26,7 @@ object Application {
     @JvmStatic
     fun main(args: Array<String>) {
         val configuration = Configuration()
-        val metricsRegistry = createPrometheusMeterRegistry(configuration)
+        val meterRegistry = createPrometheusMeterRegistry(configuration)
         val client = HttpClient(Apache) {
             install(JsonFeature) {
                 serializer = JacksonSerializer()
@@ -41,12 +42,14 @@ object Application {
         )
 
         startServer(
-            metricsRegistry::scrape
+            meterRegistry::scrape
         )
+
+        val kotbot = { KotBot(configuration, rules, meterRegistry) }
 
         startBot(
             configuration,
-            rules
+            kotbot
         )
 
         LOGGER.info("Application started.")
