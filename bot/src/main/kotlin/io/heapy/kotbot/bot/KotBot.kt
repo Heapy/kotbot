@@ -1,8 +1,15 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.kotbot.bot.rule.Action
-import io.heapy.kotbot.bot.rule.DeleteMessageAction
-import io.heapy.kotbot.bot.rule.KickUserAction
+import io.heapy.kotbot.bot.action.Action
+import io.heapy.kotbot.bot.action.DeleteMessageAction
+import io.heapy.kotbot.bot.action.KickUserAction
+import io.heapy.kotbot.bot.action.ReplyAction
+import io.heapy.kotbot.bot.command.Command
+import io.heapy.kotbot.bot.command.Command.Access
+import io.heapy.kotbot.bot.command.Command.Access.*
+import io.heapy.kotbot.bot.command.Command.Context.GROUP_CHAT
+import io.heapy.kotbot.bot.command.Command.Context.USER_CHAT
+import io.heapy.kotbot.bot.command.NoopCommand
 import io.heapy.kotbot.bot.rule.Rule
 import io.heapy.logging.debug
 import io.heapy.logging.logger
@@ -14,6 +21,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 
@@ -23,6 +31,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class KotBot(
     private val configuration: BotConfiguration,
     private val rules: List<Rule>,
+    private val commands: List<Command>,
     private val meterRegistry: MeterRegistry
 ) : TelegramLongPollingBot() {
     override fun getBotToken() = configuration.token
@@ -34,24 +43,104 @@ class KotBot(
         CoroutineScope(supervisor).launch {
             LOGGER.debug { update.toString() }
 
-            rules
-                .map { rule -> rule to rule.validate(update) }
-                .flatMap { (rule, flow) ->
-                    try {
-                        flow.toList().also { actions ->
-                            if (actions.isNotEmpty()) {
-                                recordRuleTrigger(rule)
-                            }
-                        }
-                    } catch (e: Exception) {
-                        LOGGER.error("Exception in rule", e)
-                        recordRuleFailure(rule)
-                        listOf<Action>()
+            val result = findAndExecuteCommand(update)
+            if (!result) {
+                executeRules(update)
+            }
+        }
+    }
+
+    internal suspend fun findAndExecuteCommand(update: Update): Boolean {
+        // Command accepts text only in message, no update message supported
+        val text = update.message?.text ?: return false
+
+        // find command-like message or return
+        commands.find { command ->
+            text.startsWith(command.info.name)
+        } ?: return false
+
+        try {
+            // parse command-like message
+            val info = updateToCommandInfo(update)
+
+            // find actual command
+            val command = commands.find { command ->
+                command.info.name == info.name
+                        && command.info.context == info.context
+                        && command.info.arity == info.arity
+                        && command.info.access >= info.access
+            } ?: NoopCommand
+
+            command.execute(update, listOf())
+                .toList()
+                .let {
+                    if (info.context == GROUP_CHAT) {
+                        it + DeleteMessageAction(update.message)
+                    } else {
+                        it
                     }
                 }
                 .distinct()
                 .forEach(::executeAction)
+        } catch (e: Exception) {
+            LOGGER.error("Exception in command", e)
+            listOf<Action>()
         }
+
+        return true
+    }
+
+    internal fun updateToCommandInfo(update: Update): UpdateCommand {
+        val context = when {
+            update.message.chat.isUserChat -> USER_CHAT
+            else -> GROUP_CHAT
+        }
+
+        // TODO: Access Control
+        val access = USER
+
+        // TODO: can support escaped string with double-quote
+        val tokens = update.message.text.split(' ')
+
+        val name = tokens[0]
+        val arity = tokens.size - 1
+        val args = tokens.drop(1)
+
+        return UpdateCommand(
+            name = name,
+            arity = arity,
+            access = access,
+            context = context,
+            args = args
+        )
+    }
+
+    data class UpdateCommand(
+        override val name: String,
+        override val arity: Int,
+        override val context: Command.Context,
+        override val access: Access,
+        val args: List<String>
+    ) : Command.Info
+
+    internal suspend fun executeRules(update: Update) {
+        rules
+            .map { rule -> rule to rule.validate(update) }
+            .flatMap { (rule, flow) ->
+                try {
+                    flow.toList().also { actions ->
+                        if (actions.isNotEmpty()) {
+                            recordRuleTrigger(rule)
+                        }
+                    }
+                } catch (e: Exception) {
+                    LOGGER.error("Exception in rule", e)
+                    recordRuleFailure(rule)
+                    listOf<Action>()
+                }
+            }
+            .distinct()
+            .forEach(::executeAction)
     }
 
     internal fun recordRuleTrigger(rule: Rule) {
@@ -80,6 +169,10 @@ class KotBot(
         }
         is KickUserAction -> {
             execute(KickChatMember(action.chatId, action.userId))
+            Unit
+        }
+        is ReplyAction -> {
+            execute(SendMessage(action.chatId, action.message))
             Unit
         }
     }

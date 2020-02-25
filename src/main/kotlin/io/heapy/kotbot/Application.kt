@@ -1,6 +1,7 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.bot.KotBot
+import io.heapy.kotbot.bot.command.HelloWorldCommand
 import io.heapy.kotbot.bot.rule.CombotCasRule
 import io.heapy.kotbot.bot.rule.DeleteHelloRule
 import io.heapy.kotbot.bot.rule.DeleteJoinRule
@@ -40,12 +41,22 @@ object Application {
             DeleteVoiceMessageRule(),
             CombotCasRule(client)
         )
+        val commands = listOf(
+            HelloWorldCommand()
+        )
 
         startServer(
             meterRegistry::scrape
         )
 
-        val kotbot = { KotBot(configuration, rules, meterRegistry) }
+        val kotbot = {
+            KotBot(
+                configuration,
+                rules,
+                commands,
+                meterRegistry
+            )
+        }
 
         startBot(
             configuration,

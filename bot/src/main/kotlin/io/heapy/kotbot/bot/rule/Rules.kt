@@ -1,6 +1,9 @@
 package io.heapy.kotbot.bot.rule
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.heapy.kotbot.bot.action.Action
+import io.heapy.kotbot.bot.action.DeleteMessageAction
+import io.heapy.kotbot.bot.action.KickUserAction
 import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
 import io.heapy.logging.logger
