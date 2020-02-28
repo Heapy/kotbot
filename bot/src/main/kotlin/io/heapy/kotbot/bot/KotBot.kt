@@ -83,7 +83,7 @@ class KotBot(
                 .distinct()
                 .forEach(::executeAction)
         } catch (e: Exception) {
-            LOGGER.error("Exception in command", e)
+            LOGGER.error("Exception in command. Update: {}", update, e)
             listOf<Action>()
         }
 
@@ -134,7 +134,7 @@ class KotBot(
                         }
                     }
                 } catch (e: Exception) {
-                    LOGGER.error("Exception in rule", e)
+                    LOGGER.error("Exception in rule {}", rule, e)
                     recordRuleFailure(rule)
                     listOf<Action>()
                 }
@@ -151,7 +151,6 @@ class KotBot(
     }
 
     internal fun recordRuleFailure(rule: Rule) {
-        val name = ruleToMetricName(rule)
         meterRegistry.counter(
             "rule.error",
             Tags.of("rule", ruleToMetricName(rule))
