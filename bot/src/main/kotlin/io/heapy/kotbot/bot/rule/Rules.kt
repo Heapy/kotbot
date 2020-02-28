@@ -56,6 +56,30 @@ class DeleteHelloRule : Rule {
     }
 }
 
+class LongTimeNoSeeRule : Rule {
+    override fun validate(update: Update): Flow<Action> {
+        update.anyText { text, message ->
+            if (strings.contains(text.toLowerCase())) {
+                LOGGER.info("Delete spam ${message.text}")
+                return flowOf(
+                    DeleteMessageAction(message.chatId, message.messageId),
+                    KickUserAction(message.chatId, message.from.id)
+                )
+            }
+        }
+
+        return emptyFlow()
+    }
+
+    companion object {
+        private val strings = listOf(
+            "Long time no see.",
+            "What's going on?",
+            "How is everything?"
+        )
+    }
+}
+
 class DeleteSwearingRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->

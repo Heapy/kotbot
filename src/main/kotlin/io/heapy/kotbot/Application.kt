@@ -8,6 +8,7 @@ import io.heapy.kotbot.bot.rule.DeleteJoinRule
 import io.heapy.kotbot.bot.rule.DeleteSpamRule
 import io.heapy.kotbot.bot.rule.DeleteSwearingRule
 import io.heapy.kotbot.bot.rule.DeleteVoiceMessageRule
+import io.heapy.kotbot.bot.rule.LongTimeNoSeeRule
 import io.heapy.kotbot.bot.startBot
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
@@ -37,6 +38,7 @@ object Application {
             DeleteJoinRule(),
             DeleteSpamRule(),
             DeleteHelloRule(),
+            LongTimeNoSeeRule(),
             DeleteSwearingRule(),
             DeleteVoiceMessageRule(),
             CombotCasRule(client)
