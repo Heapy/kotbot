@@ -1,7 +1,7 @@
 object Libs {
     const val jvmTarget = "11"
 
-    const val kotlinCoroutines = "1.3.2"
+    const val kotlinCoroutines = "1.3.4"
 
     const val tgBotApi = "org.telegram:telegrambots:4.3.1"
 
