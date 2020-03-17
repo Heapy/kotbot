@@ -5,7 +5,7 @@ object Libs {
 
     const val tgBotApi = "org.telegram:telegrambots:4.3.1"
 
-    private const val ktor = "1.3.0"
+    private const val ktor = "1.3.2"
     const val ktorServer = "io.ktor:ktor-server-netty:$ktor"
     const val ktorServerJackson = "io.ktor:ktor-jackson:$ktor"
     const val ktorClient = "io.ktor:ktor-client-apache:$ktor"
