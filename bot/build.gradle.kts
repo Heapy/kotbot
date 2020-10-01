@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    api(Libs.tgBotApi)
-    implementation(Libs.komodoLogging)
+    api(tgBotApi)
+    implementation(komodoLogging)
 
-    implementation(Libs.micrometer)
+    implementation(micrometer)
 
-    implementation(Libs.ktorClient)
+    implementation(ktorClient)
 }

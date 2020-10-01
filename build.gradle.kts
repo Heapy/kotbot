@@ -9,16 +9,18 @@ application {
 }
 
 dependencies {
-    implementation(Libs.logback)
-    implementation(Libs.komodoLogging)
+    implementation(logback)
+    implementation(komodoLogging)
 
-    implementation(Libs.komodoDotenv)
+    implementation(komodoDotenv)
 
-    implementation(Libs.micrometer)
-    implementation(Libs.micrometerPrometheus)
+    implementation(micrometer)
+    implementation(micrometerPrometheus)
 
-    implementation(Libs.ktorClient)
-    implementation(Libs.ktorClientJackson)
+    implementation(ktorClient)
+    implementation(ktorClientJackson)
+
+    implementation(config4k)
 
     implementation(project(":web"))
     implementation(project(":bot"))

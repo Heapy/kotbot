@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(Libs.ktorServer)
-    implementation(Libs.ktorServerJackson)
+    implementation(ktorServer)
+    implementation(ktorServerJackson)
 }
