@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.rule
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.heapy.kotbot.bot.CasConfiguration
 import io.heapy.kotbot.bot.action.Action
 import io.heapy.kotbot.bot.action.DeleteMessageAction
 import io.heapy.kotbot.bot.action.KickUserAction
@@ -156,18 +157,23 @@ class DeleteVoiceMessageRule : Rule {
 }
 
 class CombotCasRule(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val casConfiguration: CasConfiguration
 ) : Rule {
     override fun validate(update: Update): Flow<Action> = flow {
         update.anyMessage?.let { message ->
             val userId = message.from.id
-            val response = client.get<CasResponse>("https://api.cas.chat/check?user_id=$userId")
-            if (response.ok) {
-                LOGGER.info("User $userId is CAS banned")
-                emit(DeleteMessageAction(message))
-                emit(KickUserAction(message.chatId, userId))
+            if (!casConfiguration.allowlist.contains(userId.toLong())) {
+                val response = client.get<CasResponse>("https://api.cas.chat/check?user_id=$userId")
+                if (response.ok) {
+                    LOGGER.info("User $userId is CAS banned")
+                    emit(DeleteMessageAction(message))
+                    emit(KickUserAction(message.chatId, userId))
+                } else {
+                    LOGGER.info("User $userId is NOT CAS banned")
+                }
             } else {
-                LOGGER.info("User $userId is NOT CAS banned")
+                LOGGER.info("User $userId is in CAS allowlist")
             }
         }
     }

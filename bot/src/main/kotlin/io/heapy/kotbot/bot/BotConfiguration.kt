@@ -10,3 +10,7 @@ interface BotConfiguration {
     val token: String
     val name: String
 }
+
+interface CasConfiguration {
+    val allowlist: Set<Long>
+}

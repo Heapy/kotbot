@@ -13,7 +13,9 @@ Combot becomes paid.
 ## Development
 
 1. Use [@BotFather](https://t.me/BotFather) to create bot which you will use for testing;
-2. Copy `./devops/.env-template-dev` to `./devops/.env` and replace `id:secret` with bot token;
+2. You need to pass bot token that you received from BotFather to Bot, here two available options:
+   1. Copy `./devops/.env-template-dev` to `./devops/.env` and replace `id:secret` with bot token;
+   2. Set env variable `KOTBOT_TOKEN` to token value in Intellij IDEA's "Run/Debug Configuration";
 3. Run main in `io.heapy.kotbot.Application`.
 
 That's it, you have running bot, now add him to some chat and grant admin rules (in order to delete messages and kick users), and test it.

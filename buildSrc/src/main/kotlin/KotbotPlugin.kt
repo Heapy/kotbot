@@ -1,5 +1,3 @@
-package io.heapy.kotbot.build
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
@@ -16,18 +14,18 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
  */
 class KotbotPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
-        plugins.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("org.jetbrains.kotlin.jvm")
 
         val kotlinVersion: String by project
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
             "implementation"("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${Libs.kotlinCoroutines}")
+            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutines")
 
-            "testImplementation"(Libs.junitApi)
-            "testRuntimeOnly"(Libs.junitEngine)
-            "testImplementation"(Libs.mockk)
+            "testImplementation"(junitApi)
+            "testRuntimeOnly"(junitEngine)
+            "testImplementation"(mockk)
         }
 
         repositories {
@@ -37,14 +35,14 @@ class KotbotPlugin : Plugin<Project> {
 
         tasks.withType<KotlinJvmCompile> {
             kotlinOptions {
-                jvmTarget = Libs.jvmTarget
+                jvmTarget = kotbotJvmTarget
                 freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
             }
         }
 
         tasks.withType<JavaCompile> {
-            sourceCompatibility = Libs.jvmTarget
-            targetCompatibility = Libs.jvmTarget
+            sourceCompatibility = kotbotJvmTarget
+            targetCompatibility = kotbotJvmTarget
         }
 
         Unit

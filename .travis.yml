@@ -1,9 +1,6 @@
-sudo: required
-
-services:
-  - docker
-
 language: java
+os: linux
+dist: bionic
 
 jdk:
   - openjdk11

@@ -1,5 +1,7 @@
 package io.heapy.kotbot
 
+import com.typesafe.config.ConfigFactory
+import io.github.config4k.extract
 import io.heapy.kotbot.bot.KotBot
 import io.heapy.kotbot.bot.command.HelloWorldCommand
 import io.heapy.kotbot.bot.rule.CombotCasRule
@@ -10,7 +12,7 @@ import io.heapy.kotbot.bot.rule.DeleteSwearingRule
 import io.heapy.kotbot.bot.rule.DeleteVoiceMessageRule
 import io.heapy.kotbot.bot.rule.LongTimeNoSeeRule
 import io.heapy.kotbot.bot.startBot
-import io.heapy.kotbot.configuration.Configuration
+import io.heapy.kotbot.configuration.DefaultConfiguration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.startServer
 import io.heapy.logging.logger
@@ -27,8 +29,8 @@ import io.ktor.client.features.json.JsonFeature
 object Application {
     @JvmStatic
     fun main(args: Array<String>) {
-        val configuration = Configuration()
-        val meterRegistry = createPrometheusMeterRegistry(configuration)
+        val configuration = ConfigFactory.load().extract<DefaultConfiguration>()
+        val meterRegistry = createPrometheusMeterRegistry(configuration.metrics)
         val client = HttpClient(Apache) {
             install(JsonFeature) {
                 serializer = JacksonSerializer()
@@ -41,7 +43,7 @@ object Application {
             LongTimeNoSeeRule(),
             DeleteSwearingRule(),
             DeleteVoiceMessageRule(),
-            CombotCasRule(client)
+            CombotCasRule(client, configuration.cas)
         )
         val commands = listOf(
             HelloWorldCommand()
@@ -53,7 +55,7 @@ object Application {
 
         val kotbot = {
             KotBot(
-                configuration,
+                configuration.bot,
                 rules,
                 commands,
                 meterRegistry
@@ -61,7 +63,7 @@ object Application {
         }
 
         startBot(
-            configuration,
+            configuration.bot,
             kotbot
         )
 
