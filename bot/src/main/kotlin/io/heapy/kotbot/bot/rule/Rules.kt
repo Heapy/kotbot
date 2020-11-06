@@ -7,6 +7,7 @@ import io.heapy.kotbot.bot.action.DeleteMessageAction
 import io.heapy.kotbot.bot.action.KickUserAction
 import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
+import io.heapy.kotbot.bot.info
 import io.heapy.logging.logger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -40,7 +41,7 @@ class DeleteHelloRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.toLowerCase())) {
-                LOGGER.info("Delete hello message ${message.text}")
+                LOGGER.info("Delete hello message ${message.text} from ${message.from.info}")
                 return flowOf(DeleteMessageAction(message.chatId, message.messageId))
             }
         }
@@ -61,7 +62,7 @@ class LongTimeNoSeeRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.toLowerCase())) {
-                LOGGER.info("Delete spam ${message.text}")
+                LOGGER.info("Delete spam ${message.text} from ${message.from.info}")
                 return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
                     KickUserAction(message.chatId, message.from.id)
@@ -87,7 +88,7 @@ class DeleteSwearingRule : Rule {
             val normalizedText = text.toLowerCase()
             val isSwearing = strings.any { normalizedText.contains(it) }
             if (isSwearing) {
-                LOGGER.info("Delete message with swearing ${message.text}")
+                LOGGER.info("Delete message with swearing ${message.text} from ${message.from.info}")
                 return flowOf(DeleteMessageAction(message.chatId, message.messageId))
             }
         }
@@ -116,7 +117,7 @@ class DeleteSpamRule : Rule {
             }
 
             if (kick) {
-                LOGGER.info("Delete message with shortened link $text")
+                LOGGER.info("Delete message with shortened link $text from ${message.from.info}")
 
                 return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
@@ -146,7 +147,25 @@ class DeleteVoiceMessageRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasVoice()) {
-                LOGGER.info("Delete voice-message from @${message.from.userName}.")
+                LOGGER.info("Delete voice-message from ${message.from.info}.")
+
+                return flowOf(DeleteMessageAction(message))
+            }
+        }
+
+        return emptyFlow()
+    }
+}
+
+/**
+ * Rule to delete messages with attached sticker.
+ * It's not covered by chat settings, since they don't apply on admins
+ */
+class DeleteStickersRule : Rule {
+    override fun validate(update: Update): Flow<Action> {
+        update.anyMessage?.let { message ->
+            if (message.hasSticker()) {
+                LOGGER.info("Delete sticker-message from ${message.from.info}.")
 
                 return flowOf(DeleteMessageAction(message))
             }
@@ -166,14 +185,14 @@ class CombotCasRule(
             if (!casConfiguration.allowlist.contains(userId.toLong())) {
                 val response = client.get<CasResponse>("https://api.cas.chat/check?user_id=$userId")
                 if (response.ok) {
-                    LOGGER.info("User $userId is CAS banned")
+                    LOGGER.info("User ${message.from.info} is CAS banned")
                     emit(DeleteMessageAction(message))
                     emit(KickUserAction(message.chatId, userId))
                 } else {
-                    LOGGER.info("User $userId is NOT CAS banned")
+                    LOGGER.info("User ${message.from.info} is NOT CAS banned")
                 }
             } else {
-                LOGGER.info("User $userId is in CAS allowlist")
+                LOGGER.info("User ${message.from.info} is in CAS allowlist")
             }
         }
     }

@@ -1,6 +1,6 @@
 const val kotbotJvmTarget = "11"
 
-const val kotlinCoroutines = "1.3.9"
+const val kotlinCoroutines = "1.4.1"
 
 const val tgBotApi = "org.telegram:telegrambots:4.9.1"
 
