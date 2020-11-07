@@ -4,6 +4,7 @@ import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
 import io.heapy.kotbot.bot.KotBot
 import io.heapy.kotbot.bot.command.HelloWorldCommand
+import io.heapy.kotbot.bot.command.ChatInfoCommand
 import io.heapy.kotbot.bot.rule.CombotCasRule
 import io.heapy.kotbot.bot.rule.DeleteHelloRule
 import io.heapy.kotbot.bot.rule.DeleteJoinRule
@@ -48,7 +49,8 @@ object Application {
             CombotCasRule(client, configuration.cas)
         )
         val commands = listOf(
-            HelloWorldCommand()
+            HelloWorldCommand(),
+            ChatInfoCommand()
         )
 
         startServer(
