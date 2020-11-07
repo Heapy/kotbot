@@ -72,3 +72,24 @@ class HelloWorldCommand(
         )
     }
 }
+
+class ChatInfoCommand(
+    override val info: Info = INFO
+) : Command {
+    override fun execute(update: Update, args: List<String>): Flow<Action> {
+        return flowOf(ReplyAction(
+            chatId = update.message.chatId,
+            message = """
+                Chat id: ${update.message.chatId}
+            """.trimIndent()
+        ))
+    }
+
+    companion object {
+        private val INFO = CommandInfo(
+            name = "!chat-info",
+            context = Context.GROUP_CHAT,
+            access = Access.ADMIN
+        )
+    }
+}
