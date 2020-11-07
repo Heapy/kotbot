@@ -5,7 +5,7 @@ plugins {
 
 application {
     applicationName = "kotbot"
-    mainClassName = "io.heapy.kotbot.Application"
+    mainClass.set("io.heapy.kotbot.Application")
 }
 
 dependencies {

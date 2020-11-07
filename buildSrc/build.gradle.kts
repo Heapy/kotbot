@@ -6,8 +6,9 @@ repositories {
     jcenter()
 }
 
-val kotlinVersion: String by project
+// This is version for build script
+val kotlinPluginVersion = "1.3.72"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinPluginVersion")
 }

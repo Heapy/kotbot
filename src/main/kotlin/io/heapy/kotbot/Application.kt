@@ -8,6 +8,7 @@ import io.heapy.kotbot.bot.rule.CombotCasRule
 import io.heapy.kotbot.bot.rule.DeleteHelloRule
 import io.heapy.kotbot.bot.rule.DeleteJoinRule
 import io.heapy.kotbot.bot.rule.DeleteSpamRule
+import io.heapy.kotbot.bot.rule.DeleteStickersRule
 import io.heapy.kotbot.bot.rule.DeleteSwearingRule
 import io.heapy.kotbot.bot.rule.DeleteVoiceMessageRule
 import io.heapy.kotbot.bot.rule.LongTimeNoSeeRule
@@ -43,6 +44,7 @@ object Application {
             LongTimeNoSeeRule(),
             DeleteSwearingRule(),
             DeleteVoiceMessageRule(),
+            DeleteStickersRule(),
             CombotCasRule(client, configuration.cas)
         )
         val commands = listOf(
