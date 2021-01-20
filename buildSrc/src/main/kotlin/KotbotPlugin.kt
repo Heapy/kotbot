@@ -33,14 +33,15 @@ class KotbotPlugin : Plugin<Project> {
             maven { url = uri("https://dl.bintray.com/heapy/heap-dev") }
         }
 
-        tasks.withType<KotlinJvmCompile> {
+        tasks.withType<KotlinJvmCompile>().configureEach {
             kotlinOptions {
                 jvmTarget = kotbotJvmTarget
+                languageVersion = "1.4"
                 freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
             }
         }
 
-        tasks.withType<JavaCompile> {
+        tasks.withType<JavaCompile>().configureEach {
             sourceCompatibility = kotbotJvmTarget
             targetCompatibility = kotbotJvmTarget
         }

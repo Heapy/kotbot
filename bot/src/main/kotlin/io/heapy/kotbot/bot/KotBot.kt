@@ -136,7 +136,7 @@ class KotBot(
                 } catch (e: Exception) {
                     LOGGER.error("Exception in rule {}", rule, e)
                     recordRuleFailure(rule)
-                    listOf<Action>()
+                    listOf()
                 }
             }
             .distinct()
@@ -163,15 +163,15 @@ class KotBot(
 
     internal fun executeAction(action: Action): Unit = when (action) {
         is DeleteMessageAction -> {
-            execute(DeleteMessage(action.chatId, action.messageId))
+            execute(DeleteMessage(action.chatId.toString(), action.messageId))
             Unit
         }
         is KickUserAction -> {
-            execute(KickChatMember(action.chatId, action.userId))
+            execute(KickChatMember(action.chatId.toString(), action.userId))
             Unit
         }
         is ReplyAction -> {
-            execute(SendMessage(action.chatId, action.message))
+            execute(SendMessage(action.chatId.toString(), action.message))
             Unit
         }
     }

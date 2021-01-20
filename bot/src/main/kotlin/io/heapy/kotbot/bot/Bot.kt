@@ -1,10 +1,10 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.logging.logger
-import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 
 /**
  * Function which should start bot.
@@ -17,11 +17,10 @@ fun startBot(
     kotbot: () -> LongPollingBot
 ): ShutdownBot {
     try {
-        ApiContextInitializer.init()
-        val bot = TelegramBotsApi()
-            .registerBot(kotbot())
+        val bot = TelegramBotsApi(DefaultBotSession::class.java)
+        val session = bot.registerBot(kotbot())
         LOGGER.info("${configuration.name} started.")
-        return bot::stop
+        return session::stop
     } catch (e: TelegramApiException) {
         LOGGER.error("An error occurred in the bot", e)
         throw e
