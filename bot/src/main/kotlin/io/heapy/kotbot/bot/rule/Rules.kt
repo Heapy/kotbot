@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.rule
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.heapy.komodo.logging.logger
 import io.heapy.kotbot.bot.CasConfiguration
 import io.heapy.kotbot.bot.action.Action
 import io.heapy.kotbot.bot.action.DeleteMessageAction
@@ -8,7 +9,6 @@ import io.heapy.kotbot.bot.action.KickUserAction
 import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
 import io.heapy.kotbot.bot.info
-import io.heapy.logging.logger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import kotlinx.coroutines.flow.Flow

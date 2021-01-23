@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api(tgBotApi)
+    implementation(komodo)
     implementation(komodoLogging)
 
     implementation(micrometer)

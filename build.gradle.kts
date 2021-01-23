@@ -12,6 +12,7 @@ dependencies {
     implementation(logback)
     implementation(komodoLogging)
 
+    implementation(komodo)
     implementation(komodoDotenv)
 
     implementation(micrometer)

@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(komodo)
     implementation(ktorServer)
     implementation(ktorServerJackson)
 }
