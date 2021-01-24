@@ -14,3 +14,8 @@ interface BotConfiguration {
 interface CasConfiguration {
     val allowlist: Set<Long>
 }
+
+interface FamilyConfiguration {
+    val ids: Set<Long>
+    val admins: Map<String, List<Long>>
+}

@@ -4,7 +4,7 @@ import io.heapy.komodo.logging.debug
 import io.heapy.komodo.logging.logger
 import io.heapy.kotbot.bot.action.Action
 import io.heapy.kotbot.bot.action.DeleteMessageAction
-import io.heapy.kotbot.bot.action.KickUserAction
+import io.heapy.kotbot.bot.action.BanMemberAction
 import io.heapy.kotbot.bot.action.ReplyAction
 import io.heapy.kotbot.bot.command.Command
 import io.heapy.kotbot.bot.command.Command.Access
@@ -12,6 +12,7 @@ import io.heapy.kotbot.bot.command.Command.Access.USER
 import io.heapy.kotbot.bot.command.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.bot.command.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.command.NoopCommand
+import io.heapy.kotbot.bot.filter.Filter
 import io.heapy.kotbot.bot.rule.Rule
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
@@ -32,6 +33,7 @@ class KotBot(
     private val configuration: BotConfiguration,
     private val rules: List<Rule>,
     private val commands: List<Command>,
+    private val filters: List<Filter>,
     private val meterRegistry: MeterRegistry
 ) : TelegramLongPollingBot() {
     override fun getBotToken() = configuration.token
@@ -40,8 +42,12 @@ class KotBot(
     private val supervisor = SupervisorJob()
 
     override fun onUpdateReceived(update: Update) {
-        CoroutineScope(supervisor).launch {
+        CoroutineScope(supervisor).launch processing@{
             LOGGER.debug { update.toString() }
+
+            if (filters.any { it.predicate(update) == Filter.Result.DROP }) {
+                return@processing
+            }
 
             val result = findAndExecuteCommand(update)
             if (!result) {
@@ -166,7 +172,7 @@ class KotBot(
             execute(DeleteMessage(action.chatId.toString(), action.messageId))
             Unit
         }
-        is KickUserAction -> {
+        is BanMemberAction -> {
             execute(BanChatMember(action.chatId.toString(), action.userId))
             Unit
         }

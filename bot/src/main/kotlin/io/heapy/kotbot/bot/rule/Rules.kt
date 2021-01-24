@@ -5,7 +5,7 @@ import io.heapy.komodo.logging.logger
 import io.heapy.kotbot.bot.CasConfiguration
 import io.heapy.kotbot.bot.action.Action
 import io.heapy.kotbot.bot.action.DeleteMessageAction
-import io.heapy.kotbot.bot.action.KickUserAction
+import io.heapy.kotbot.bot.action.BanMemberAction
 import io.heapy.kotbot.bot.anyMessage
 import io.heapy.kotbot.bot.anyText
 import io.heapy.kotbot.bot.info
@@ -65,7 +65,7 @@ class LongTimeNoSeeRule : Rule {
                 LOGGER.info("Delete spam ${message.text} from ${message.from.info}")
                 return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
-                    KickUserAction(message.chatId, message.from.id)
+                    BanMemberAction(message.chatId, message.from.id)
                 )
             }
         }
@@ -121,7 +121,7 @@ class DeleteSpamRule : Rule {
 
                 return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
-                    KickUserAction(message.chatId, message.from.id)
+                    BanMemberAction(message.chatId, message.from.id)
                 )
             }
         }
@@ -187,7 +187,7 @@ class CombotCasRule(
                 if (response.ok) {
                     LOGGER.info("User ${message.from.info} is CAS banned")
                     emit(DeleteMessageAction(message))
-                    emit(KickUserAction(message.chatId, userId))
+                    emit(BanMemberAction(message.chatId, userId))
                 } else {
                     LOGGER.info("User ${message.from.info} is NOT CAS banned")
                 }

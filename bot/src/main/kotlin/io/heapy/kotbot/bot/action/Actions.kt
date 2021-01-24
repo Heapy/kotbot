@@ -12,7 +12,7 @@ data class DeleteMessageAction(
     val messageId: Int,
 ) : Action()
 
-data class KickUserAction(
+data class BanMemberAction(
     val chatId: Long,
     val userId: Long,
 ) : Action()

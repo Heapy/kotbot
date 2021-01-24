@@ -33,7 +33,10 @@ class KotbotPlugin : Plugin<Project> {
             kotlinOptions {
                 jvmTarget = kotbotJvmTarget
                 languageVersion = "1.5"
-                freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    "-progressive",
+                    "-Xopt-in=kotlin.RequiresOptIn"
+                )
             }
         }
 
