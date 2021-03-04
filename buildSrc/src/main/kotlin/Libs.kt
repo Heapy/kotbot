@@ -12,7 +12,7 @@ const val ktorClientJackson = "io.ktor:ktor-client-jackson:$ktor"
 
 const val config4k = "io.github.config4k:config4k:0.4.2"
 
-private const val komodoVersion = "0.1.0-development+000087"
+private const val komodoVersion = "0.1.0-development.000092"
 const val komodo = "io.heapy.komodo:komodo:$komodoVersion"
 const val komodoLogging = "io.heapy.komodo:komodo-logging:$komodoVersion"
 const val komodoDotenv = "io.heapy.komodo:komodo-config-dotenv:$komodoVersion"

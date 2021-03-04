@@ -29,8 +29,8 @@ class KotbotPlugin : Plugin<Project> {
         }
 
         repositories {
-            jcenter()
-            maven { url = uri("https://dl.bintray.com/heapy/heap-dev") }
+            mavenCentral()
+            maven { url = uri("https://repo.kotlin.link") }
         }
 
         tasks.withType<KotlinJvmCompile>().configureEach {
