@@ -42,7 +42,7 @@ class DeleteJoinRule : Rule {
 class DeleteHelloRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
-            if (strings.contains(text.toLowerCase())) {
+            if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete hello message ${message.text} from ${message.from.info}")
                 return flowOf(DeleteMessageAction(message.chatId, message.messageId))
             }
@@ -63,7 +63,7 @@ class DeleteHelloRule : Rule {
 class LongTimeNoSeeRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
-            if (strings.contains(text.toLowerCase())) {
+            if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete spam ${message.text} from ${message.from.info}")
                 return flowOf(
                     DeleteMessageAction(message.chatId, message.messageId),
@@ -87,7 +87,7 @@ class LongTimeNoSeeRule : Rule {
 class DeleteSwearingRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
-            val normalizedText = text.toLowerCase()
+            val normalizedText = text.lowercase()
             val isSwearing = strings.any { normalizedText.contains(it) }
             if (isSwearing) {
                 LOGGER.info("Delete message with swearing ${message.text} from ${message.from.info}")

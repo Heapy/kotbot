@@ -9,17 +9,17 @@ sealed class Action
 
 data class DeleteMessageAction(
     val chatId: Long,
-    val messageId: Int
+    val messageId: Int,
 ) : Action()
 
 data class KickUserAction(
     val chatId: Long,
-    val userId: Int
+    val userId: Long,
 ) : Action()
 
 data class ReplyAction(
     val chatId: Long,
-    val message: String
+    val message: String,
 ) : Action()
 
 @Suppress("FunctionName")

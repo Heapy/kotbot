@@ -20,7 +20,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
-import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember
+import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -167,7 +167,7 @@ class KotBot(
             Unit
         }
         is KickUserAction -> {
-            execute(KickChatMember(action.chatId.toString(), action.userId))
+            execute(BanChatMember(action.chatId.toString(), action.userId))
             Unit
         }
         is ReplyAction -> {

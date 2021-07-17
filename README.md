@@ -1,10 +1,10 @@
-# kotbot [![Build Status](https://travis-ci.com/Heapy/kotbot.svg?branch=master)](https://travis-ci.com/Heapy/kotbot)
+# kotbot [![Build](https://github.com/Heapy/kotbot/actions/workflows/build.yml/badge.svg)](https://github.com/Heapy/kotbot/actions/workflows/build.yml)
 
 Bot for Kotlin chats in telegram.
 
 ## Docker Image
 
-Project distributed as docker image, and available in [docker hub](https://hub.docker.com/r/heapy/kotbot/).
+Project distributed as docker image, and available in [GitHub Container Repository](https://github.com/Heapy/kotbot/pkgs/container/kotbot).
 
 ## Why?
 
