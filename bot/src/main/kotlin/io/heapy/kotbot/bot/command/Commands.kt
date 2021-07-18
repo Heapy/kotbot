@@ -9,40 +9,40 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOf
 import org.telegram.telegrambots.meta.api.objects.Update
 
-interface Command {
-    val info: Info
+public interface Command {
+    public val info: Info
 
-    fun execute(
+    public fun execute(
         update: Update,
         args: List<String>
     ): Flow<Action>
 
-    interface Info {
-        val name: String
-        val arity: Int
-        val context: Context
-        val access: Access
+    public interface Info {
+        public val name: String
+        public val arity: Int
+        public val context: Context
+        public val access: Access
     }
 
-    enum class Context {
+    public enum class Context {
         USER_CHAT,
         GROUP_CHAT
     }
 
-    enum class Access {
+    public enum class Access {
         USER,
         ADMIN
     }
 }
 
-data class CommandInfo(
+public data class CommandInfo(
     override val name: String,
     override val arity: Int = 0,
     override val context: Context = Context.USER_CHAT,
     override val access: Access = Access.USER
 ) : Info
 
-object NoopCommand : Command {
+public object NoopCommand : Command {
     override fun execute(update: Update, args: List<String>): Flow<Action> {
         return flowOf()
     }
@@ -56,7 +56,7 @@ object NoopCommand : Command {
     )
 }
 
-class HelloWorldCommand(
+public class HelloWorldCommand(
     override val info: Info = INFO
 ) : Command {
     override fun execute(update: Update, args: List<String>): Flow<Action> {
@@ -68,7 +68,7 @@ class HelloWorldCommand(
         )
     }
 
-    companion object {
+    public companion object {
         private val INFO = CommandInfo(
             name = "!hello",
             access = Access.USER
@@ -76,7 +76,7 @@ class HelloWorldCommand(
     }
 }
 
-class ChatInfoCommand(
+public class ChatInfoCommand(
     override val info: Info = INFO
 ) : Command {
     override fun execute(update: Update, args: List<String>): Flow<Action> {
@@ -90,7 +90,7 @@ class ChatInfoCommand(
         )
     }
 
-    companion object {
+    public companion object {
         private val INFO = CommandInfo(
             name = "!chat-info",
             context = Context.GROUP_CHAT,
@@ -99,7 +99,7 @@ class ChatInfoCommand(
     }
 }
 
-class ContactInfoCommand(
+public class ContactInfoCommand(
     override val info: Info = INFO
 ) : Command {
     override fun execute(update: Update, args: List<String>): Flow<Action> {
@@ -115,7 +115,7 @@ class ContactInfoCommand(
         )
     }
 
-    companion object {
+    public companion object {
         private val INFO = CommandInfo(
             name = "!contact-info",
             context = Context.USER_CHAT,

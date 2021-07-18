@@ -2,6 +2,10 @@ plugins {
     id("io.heapy.kotbot.build")
 }
 
+kotlin {
+    explicitApiWarning()
+}
+
 dependencies {
     api(tgBotApi)
     implementation(komodo)

@@ -29,15 +29,15 @@ import org.telegram.telegrambots.meta.api.objects.Update
 /**
  * @author Ruslan Ibragimov
  */
-class KotBot(
+public class KotBot(
     private val configuration: BotConfiguration,
     private val rules: List<Rule>,
     private val commands: List<Command>,
     private val filters: List<Filter>,
     private val meterRegistry: MeterRegistry
 ) : TelegramLongPollingBot() {
-    override fun getBotToken() = configuration.token
-    override fun getBotUsername() = configuration.name
+    public override fun getBotToken(): String = configuration.token
+    public override fun getBotUsername(): String = configuration.name
 
     private val supervisor = SupervisorJob()
 
@@ -121,7 +121,7 @@ class KotBot(
         )
     }
 
-    data class UpdateCommand(
+    public data class UpdateCommand(
         override val name: String,
         override val arity: Int,
         override val context: Command.Context,
@@ -182,7 +182,7 @@ class KotBot(
         }
     }
 
-    companion object {
+    public companion object {
         private val LOGGER = logger<KotBot>()
     }
 }

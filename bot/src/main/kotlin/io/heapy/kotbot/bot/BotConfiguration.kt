@@ -6,16 +6,16 @@ package io.heapy.kotbot.bot
  * @author Ruslan Ibragimov
  * @since 1.0.0
  */
-interface BotConfiguration {
-    val token: String
-    val name: String
+public interface BotConfiguration {
+    public val token: String
+    public val name: String
 }
 
-interface CasConfiguration {
-    val allowlist: Set<Long>
+public interface CasConfiguration {
+    public val allowlist: Set<Long>
 }
 
-interface FamilyConfiguration {
-    val ids: Set<Long>
-    val admins: Map<String, List<Long>>
+public interface FamilyConfiguration {
+    public val ids: Set<Long>
+    public val admins: Map<String, List<Long>>
 }

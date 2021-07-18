@@ -5,23 +5,23 @@ import org.telegram.telegrambots.meta.api.objects.Message
 /**
  * @author Ruslan Ibragimov
  */
-sealed class Action
+public sealed interface Action
 
-data class DeleteMessageAction(
+public data class DeleteMessageAction(
     val chatId: Long,
     val messageId: Int,
-) : Action()
+) : Action
 
-data class BanMemberAction(
+public data class BanMemberAction(
     val chatId: Long,
     val userId: Long,
-) : Action()
+) : Action
 
-data class ReplyAction(
+public data class ReplyAction(
     val chatId: Long,
     val message: String,
-) : Action()
+) : Action
 
 @Suppress("FunctionName")
-fun DeleteMessageAction(message: Message): DeleteMessageAction =
+public fun DeleteMessageAction(message: Message): DeleteMessageAction =
     DeleteMessageAction(message.chatId, message.messageId)

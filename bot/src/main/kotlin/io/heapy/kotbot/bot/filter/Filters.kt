@@ -7,19 +7,19 @@ import io.heapy.kotbot.bot.filter.Filter.Result.DROP
 import io.heapy.kotbot.bot.filter.Filter.Result.TAKE
 import org.telegram.telegrambots.meta.api.objects.Update
 
-interface Filter {
+public interface Filter {
     /**
      * Returns true if this [Update] can be processed by bot, false otherwise.
      */
-    suspend fun predicate(update: Update): Result
+    public suspend fun predicate(update: Update): Result
 
-    enum class Result {
+    public enum class Result {
         DROP,
         TAKE
     }
 }
 
-class GroupInFamilyFilter(
+public class GroupInFamilyFilter(
     private val familyConfiguration: FamilyConfiguration
 ) : Filter {
     override suspend fun predicate(update: Update): Result {
@@ -45,7 +45,7 @@ class GroupInFamilyFilter(
         }
     }
 
-    companion object {
+    public companion object {
         private val LOGGER = logger<GroupInFamilyFilter>()
     }
 }

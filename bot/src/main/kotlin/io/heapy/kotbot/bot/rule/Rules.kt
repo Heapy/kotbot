@@ -20,13 +20,13 @@ import org.telegram.telegrambots.meta.api.objects.Update
 /**
  * @author Ruslan Ibragimov
  */
-interface Rule {
-    fun validate(update: Update): Flow<Action>
+public interface Rule {
+    public fun validate(update: Update): Flow<Action>
 }
 
 private val LOGGER = logger<Rule>()
 
-class DeleteJoinRule : Rule {
+public class DeleteJoinRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         if (!update.message?.newChatMembers.isNullOrEmpty()) {
             LOGGER.info("Delete joined users message ${update.message.newChatMembers}")
@@ -37,7 +37,7 @@ class DeleteJoinRule : Rule {
     }
 }
 
-class DeleteHelloRule : Rule {
+public class DeleteHelloRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
@@ -49,7 +49,7 @@ class DeleteHelloRule : Rule {
         return emptyFlow()
     }
 
-    companion object {
+    public companion object {
         private val strings = listOf(
             "hi",
             "hello",
@@ -58,7 +58,7 @@ class DeleteHelloRule : Rule {
     }
 }
 
-class LongTimeNoSeeRule : Rule {
+public class LongTimeNoSeeRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
@@ -73,7 +73,7 @@ class LongTimeNoSeeRule : Rule {
         return emptyFlow()
     }
 
-    companion object {
+    public companion object {
         private val strings = listOf(
             "Long time no see.",
             "What's going on?",
@@ -82,7 +82,7 @@ class LongTimeNoSeeRule : Rule {
     }
 }
 
-class DeleteSwearingRule : Rule {
+public class DeleteSwearingRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val normalizedText = text.lowercase()
@@ -96,7 +96,7 @@ class DeleteSwearingRule : Rule {
         return emptyFlow()
     }
 
-    companion object {
+    public companion object {
         internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
 
         private val strings = DeleteSwearingRule::class.java.classLoader
@@ -109,7 +109,7 @@ class DeleteSwearingRule : Rule {
     }
 }
 
-class DeleteSpamRule : Rule {
+public class DeleteSpamRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val kick = shorteners.any { shorter ->
@@ -129,7 +129,7 @@ class DeleteSpamRule : Rule {
         return emptyFlow()
     }
 
-    companion object {
+    public companion object {
         private val shorteners = listOf(
             "tinyurl.com",
             "t.me/joinchat",
@@ -143,7 +143,7 @@ class DeleteSpamRule : Rule {
 /**
  * Rule to remove messages with attached audio.
  */
-class DeleteVoiceMessageRule : Rule {
+public class DeleteVoiceMessageRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasVoice()) {
@@ -161,7 +161,7 @@ class DeleteVoiceMessageRule : Rule {
  * Rule to delete messages with attached sticker.
  * It's not covered by chat settings, since they don't apply on admins
  */
-class DeleteStickersRule : Rule {
+public class DeleteStickersRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasSticker()) {
@@ -175,14 +175,14 @@ class DeleteStickersRule : Rule {
     }
 }
 
-class CombotCasRule(
+public class CombotCasRule(
     private val client: HttpClient,
     private val casConfiguration: CasConfiguration
 ) : Rule {
     override fun validate(update: Update): Flow<Action> = flow {
         update.anyMessage?.let { message ->
             val userId = message.from.id
-            if (!casConfiguration.allowlist.contains(userId.toLong())) {
+            if (!casConfiguration.allowlist.contains(userId)) {
                 val response = client.get<CasResponse>("https://api.cas.chat/check?user_id=$userId")
                 if (response.ok) {
                     LOGGER.info("User ${message.from.info} is CAS banned")
@@ -199,6 +199,6 @@ class CombotCasRule(
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class CasResponse(
+public data class CasResponse(
     val ok: Boolean
 )
