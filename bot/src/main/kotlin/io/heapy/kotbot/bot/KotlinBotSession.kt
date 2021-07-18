@@ -17,7 +17,6 @@ import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.facilities.TelegramHttpClientBuilder
 import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
-import org.telegram.telegrambots.meta.generics.LongPollingBot
 import java.io.InvalidObjectException
 import java.lang.reflect.InvocationTargetException
 import java.net.SocketException
@@ -25,14 +24,6 @@ import java.net.SocketTimeoutException
 import java.nio.charset.StandardCharsets
 
 /**
-https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md
-https://core.telegram.org/bots/api#update
-https://core.telegram.org/bots/api
-
-https://gitlab.com/madhead/telek/-/tree/master/
-https://github.com/augustjune/canoe
-https://github.com/pengrad/java-telegram-bot-api
-https://github.com/kotlin-telegram-bot/kotlin-telegram-bot
 https://github.com/elbekD/kt-telegram-bot
 https://github.com/InsanusMokrassar/TelegramBotAPI
 https://github.com/telegraf/telegraf
@@ -55,7 +46,7 @@ https://github.com/omarmiatello/telegram-api-generator
 https://github.com/rust-lang-by/rust-bot
  */
 public class KotlinBotSession(
-    private val callback: KotlinTelegramLongPollingBot,
+    private val callback: LongPollingKotBot,
     private val token: String,
     private val options: DefaultBotOptions = DefaultBotOptions(),
     private val objectMapper: ObjectMapper = ObjectMapper(),
@@ -135,7 +126,6 @@ public class KotlinBotSession(
 
     override fun close() {
         // TODO: stop process
-        callback.onClosing()
     }
 
     private companion object {

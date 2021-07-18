@@ -1,10 +1,10 @@
 package io.heapy.kotbot.bot
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import kotlinx.serialization.Serializable
 import org.telegram.telegrambots.meta.api.objects.Update
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-internal data class ApiUpdate(
+@Serializable
+public data class ApiUpdate(
     /**
      * The update's unique identifier. Update identifiers start from a certain
      * positive number and increase sequentially. This ID becomes especially
@@ -74,7 +74,8 @@ internal data class ApiUpdate(
      */
     val chat_member: ChatMemberUpdated?,
 ) {
-    data class Message(
+    @Serializable
+    public data class Message(
         /**
          * Unique message identifier inside this chat
          */
@@ -346,45 +347,79 @@ internal data class ApiUpdate(
          */
         val reply_markup: InlineKeyboardMarkup?,
     )
-    data class MessageId(
+    @Serializable
+    public data class MessageId(
         /**
          * Unique message identifier
          */
         val message_id: Int
     )
-    class InlineQuery()
-    class ChosenInlineResult()
-    class CallbackQuery()
-    class ShippingQuery()
-    class PreCheckoutQuery()
-    class Poll()
-    class PollAnswer()
-    class ChatMemberUpdated()
-    class Chat()
-    class MessageEntity()
-    class Animation()
-    class Audio()
-    class Document()
-    class PhotoSize()
-    class Sticker()
-    class Video()
-    class VideoNote()
-    class Voice()
-    class Contact()
-    class Dice()
-    class Game()
-    class Venue()
-    class Location()
-    class MessageAutoDeleteTimerChanged()
-    class Invoice()
-    class SuccessfulPayment()
-    class PassportData()
-    class ProximityAlertTriggered()
-    class VoiceChatScheduled()
-    class VoiceChatStarted()
-    class VoiceChatEnded()
-    class VoiceChatParticipantsInvited()
-    class InlineKeyboardMarkup()
+    @Serializable
+    public class InlineQuery()
+    @Serializable
+    public class ChosenInlineResult()
+    @Serializable
+    public class CallbackQuery()
+    @Serializable
+    public class ShippingQuery()
+    @Serializable
+    public class PreCheckoutQuery()
+    @Serializable
+    public class Poll()
+    @Serializable
+    public class PollAnswer()
+    @Serializable
+    public class ChatMemberUpdated()
+    @Serializable
+    public class Chat()
+    @Serializable
+    public class MessageEntity()
+    @Serializable
+    public class Animation()
+    @Serializable
+    public class Audio()
+    @Serializable
+    public class Document()
+    @Serializable
+    public class PhotoSize()
+    @Serializable
+    public class Sticker()
+    @Serializable
+    public class Video()
+    @Serializable
+    public class VideoNote()
+    @Serializable
+    public class Voice()
+    @Serializable
+    public class Contact()
+    @Serializable
+    public class Dice()
+    @Serializable
+    public class Game()
+    @Serializable
+    public class Venue()
+    @Serializable
+    public class Location()
+    @Serializable
+    public class MessageAutoDeleteTimerChanged()
+    @Serializable
+    public class Invoice()
+    @Serializable
+    public class SuccessfulPayment()
+    @Serializable
+    public class PassportData()
+    @Serializable
+    public class ProximityAlertTriggered()
+    @Serializable
+    public class VoiceChatScheduled()
+    @Serializable
+    public class VoiceChatStarted()
+    @Serializable
+    public class VoiceChatEnded()
+    @Serializable
+    public class VoiceChatParticipantsInvited()
+    @Serializable
+    public class InlineKeyboardMarkup()
 }
 
 public sealed interface TelegramUpdate {
@@ -582,6 +617,7 @@ internal fun PollAnswer(update: Update): PollAnswer {
 /**
  * This object represents a Telegram user or bot.
  */
+@Serializable
 public data class User(
     /**
      * Unique identifier for this user or bot

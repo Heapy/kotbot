@@ -91,10 +91,7 @@ open class ApplicationFactory {
     }
 
     open val kotbot: KotlinBotSession by lazy {
-        KotlinBotSession(
-            callback = KotBot(configuration = configuration.bot),
-            token = configuration.bot.token
-        )
+        TODO()
 //        rules = listOf(
 //            deleteJoinRule,
 //            deleteSpamRule,

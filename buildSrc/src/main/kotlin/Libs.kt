@@ -2,6 +2,7 @@ const val kotbotJvmTarget = "11"
 
 const val kotlinVersion = "1.5.21"
 const val kotlinCoroutines = "1.5.1"
+const val kotlinSerialization = "1.2.2"
 
 const val tgBotApi = "org.telegram:telegrambots:5.3.0"
 

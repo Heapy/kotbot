@@ -13,11 +13,13 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 class KotbotPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         pluginManager.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
             "implementation"("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutines")
+            "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerialization")
 
             "testImplementation"(junitApi)
             "testRuntimeOnly"(junitEngine)
