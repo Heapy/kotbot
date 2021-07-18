@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.regex.MatchResult
-import kotlin.streams.asSequence
 
 /**
  * @author Ruslan Ibragimov
@@ -114,17 +112,11 @@ class DeleteSwearingRule : Rule {
 class DeleteSpamRule : Rule {
     override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
-            val hasRestrictedShortener = shorteners
-                .any(text::contains)
+            val kick = shorteners.any { shorter ->
+                text.contains(shorter)
+            }
 
-            val hasRestrictedChatLink = telegramInvitation
-                .matcher(text)
-                .results()
-                .asSequence()
-                .map(MatchResult::group)
-                .all(whitelist::contains)
-
-            if (hasRestrictedChatLink || hasRestrictedShortener) {
+            if (kick) {
                 LOGGER.info("Delete message with shortened link $text from ${message.from.info}")
 
                 return flowOf(
@@ -138,17 +130,12 @@ class DeleteSpamRule : Rule {
     }
 
     companion object {
-        private val shorteners = arrayOf(
+        private val shorteners = listOf(
             "tinyurl.com",
+            "t.me/joinchat",
             "t.cn",
             "bit.ly",
-            "tgraph.io",
-        )
-
-        private val telegramInvitation = "t\\.me/joinchat/[A-z\\d]+".toRegex().toPattern()
-
-        private val whitelist = arrayOf(
-            "t.me/joinchat/AAAAAEFs51MT1z2bWDhZBQ",
+            "tgraph.io"
         )
     }
 }
@@ -190,7 +177,7 @@ class DeleteStickersRule : Rule {
 
 class CombotCasRule(
     private val client: HttpClient,
-    private val casConfiguration: CasConfiguration,
+    private val casConfiguration: CasConfiguration
 ) : Rule {
     override fun validate(update: Update): Flow<Action> = flow {
         update.anyMessage?.let { message ->
@@ -213,5 +200,5 @@ class CombotCasRule(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CasResponse(
-    val ok: Boolean,
+    val ok: Boolean
 )
