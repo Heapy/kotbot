@@ -23,28 +23,6 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.nio.charset.StandardCharsets
 
-/**
-https://github.com/elbekD/kt-telegram-bot
-https://github.com/InsanusMokrassar/TelegramBotAPI
-https://github.com/telegraf/telegraf
-
-https://habr.com/ru/post/445072/
-https://github.com/ruslanys/telegraff
-
-https://github.com/lamba92/telegram-bot-kotlin-api
-https://github.com/lamba92/telegrambots-ktx
-
-https://github.com/atipugin/telegram-bot-ruby
-https://github.com/eternnoir/pyTelegramBotAPI
-https://github.com/php-telegram-bot/core
-https://github.com/mullwar/telebot
-
-https://github.com/tranql/telegram-bot-api-schema
-https://github.com/ark0f/tg-bot-api
-https://github.com/omarmiatello/telegram-api-generator
-
-https://github.com/rust-lang-by/rust-bot
- */
 public class KotlinBotSession(
     private val callback: LongPollingKotBot,
     private val token: String,
