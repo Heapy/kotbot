@@ -16,22 +16,22 @@ import java.nio.charset.StandardCharsets
 
 private val LOGGER = logger<Kotbot>()
 
-public suspend inline fun <reified Req, reified Res> Kotbot.execute(method: ApiMethod<Req, Res>): Res {
-    val response = httpClient
-        .post("$baseUrl$token/${method.name}") {
-            header("charset", StandardCharsets.UTF_8.name())
-            header("Content-Type", "application/json")
-            setBody(json.encodeToString(method.serializer, method.request))
-        }
+public suspend inline fun <reified Res> Kotbot.execute(
+    method: ApiMethod<Res>
+): Res {
+    return with(method) {
+        val response = httpClient
+            .post("$baseUrl$token/${method.name}") {
+                header("charset", StandardCharsets.UTF_8.name())
+                header("Content-Type", "application/json")
+                setBody(serialize())
+            }
 
-    return if (response.status.isSuccess()) {
-        val data = json.decodeFromString(
-            ApiResponse.serializer(method.deserializer),
-            response.bodyAsText()
-        )
-        data.result!!
-    } else {
-        error("${response.status} ${response.bodyAsText()}")
+        if (response.status.isSuccess()) {
+            deserialize(response.bodyAsText())
+        } else {
+            throw TelegramApiError("${response.status} ${response.bodyAsText()}")
+        }
     }
 }
 
@@ -39,7 +39,7 @@ public suspend fun Kotbot.receiveUpdates(
     timeout: Int = 50,
     limit: Int = 100,
     allowedUpdates: List<String> = listOf(),
-) : Flow<ApiUpdate> {
+): Flow<ApiUpdate> {
     var lastReceivedUpdate = 0
 
     return flow {
