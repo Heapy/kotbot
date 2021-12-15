@@ -9,11 +9,8 @@ application {
 }
 
 dependencies {
+    api(tgBotApi) // TODO: Temp
     implementation(logback)
-    implementation(komodoLogging)
-
-    implementation(komodo)
-    implementation(komodoDotenv)
 
     implementation(micrometer)
     implementation(micrometerPrometheus)
@@ -23,8 +20,9 @@ dependencies {
 
     implementation(config4k)
 
+    implementation(project(":core"))
+
     implementation(project(":web"))
-    implementation(project(":bot"))
     implementation(project(":stats"))
     implementation(project(":dao"))
 }

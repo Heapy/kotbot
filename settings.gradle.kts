@@ -1,7 +1,7 @@
 rootProject.name = "kotbot"
 
 include(
-    "bot",
+    "core",
     "dao",
     "stats",
     "web"

@@ -9,4 +9,4 @@ build
 
 # Configuration
 /devops/.env
-/bot/src/main/resources/application.conf
+/kotbot/src/main/resources/application.conf

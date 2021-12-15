@@ -17,7 +17,6 @@ class KotbotPlugin : Plugin<Project> {
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-            "implementation"("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutines")
             "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerialization")
 
@@ -28,7 +27,9 @@ class KotbotPlugin : Plugin<Project> {
 
         repositories {
             mavenCentral()
-            maven { url = uri("https://repo.kotlin.link") }
+            maven {
+                url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+            }
         }
 
         tasks.withType<KotlinJvmCompile>().configureEach {
@@ -41,7 +42,5 @@ class KotbotPlugin : Plugin<Project> {
                 )
             }
         }
-
-        Unit
     }
 }

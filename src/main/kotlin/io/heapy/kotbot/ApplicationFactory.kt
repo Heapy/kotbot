@@ -2,26 +2,7 @@ package io.heapy.kotbot
 
 import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
-import io.heapy.komodo.logging.logger
-import io.heapy.komodo.shutdown.JvmShutdownManager
-import io.heapy.komodo.shutdown.ShutdownManager
-import io.heapy.kotbot.bot.KotlinBotSession
-import io.heapy.kotbot.bot.SimpleTelegramBot
-import io.heapy.kotbot.bot.TelegramBot
-import io.heapy.kotbot.bot.command.ChatInfoCommand
-import io.heapy.kotbot.bot.command.Command
-import io.heapy.kotbot.bot.command.HelloWorldCommand
-import io.heapy.kotbot.bot.filter.Filter
-import io.heapy.kotbot.bot.filter.GroupInFamilyFilter
-import io.heapy.kotbot.bot.rule.CombotCasRule
-import io.heapy.kotbot.bot.rule.DeleteHelloRule
-import io.heapy.kotbot.bot.rule.DeleteJoinRule
-import io.heapy.kotbot.bot.rule.DeleteSpamRule
-import io.heapy.kotbot.bot.rule.DeleteStickersRule
-import io.heapy.kotbot.bot.rule.DeleteSwearingRule
-import io.heapy.kotbot.bot.rule.DeleteVoiceMessageRule
-import io.heapy.kotbot.bot.rule.LongTimeNoSeeRule
-import io.heapy.kotbot.bot.rule.Rule
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.configuration.DefaultConfiguration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
@@ -80,49 +61,45 @@ open class ApplicationFactory {
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
-            shutdownManager = shutdownManager
         )
     }
-
-    open val shutdownManager: ShutdownManager by lazy(::JvmShutdownManager)
 
     open val groupInFamilyFilter: Filter by lazy {
         GroupInFamilyFilter(configuration.groups)
     }
 
-    open val kotbot: KotlinBotSession by lazy {
-        TODO()
-//        rules = listOf(
-//            deleteJoinRule,
-//            deleteSpamRule,
-//            deleteHelloRule,
-//            longTimeNoSeeRule,
-//            deleteSwearingRule,
-//            deleteVoiceMessageRule,
-//            deleteStickersRule,
-//            combotCasRule,
-//        ),
-//        commands = listOf(
-//            helloWorldCommand,
-//            chatInfoCommand,
-//        ),
-//        filters = listOf(
-//            groupInFamilyFilter
-//        ),
-//        meterRegistry = prometheusMeterRegistry
+    open val kotBot: KotBot by lazy {
+        KotBot(
+            configuration = configuration.bot,
+            rules = listOf(
+                deleteJoinRule,
+                deleteSpamRule,
+                deleteHelloRule,
+                longTimeNoSeeRule,
+                deleteSwearingRule,
+                deleteVoiceMessageRule,
+                deleteStickersRule,
+                combotCasRule,
+            ),
+            commands = listOf(
+                helloWorldCommand,
+                chatInfoCommand,
+            ),
+            filters = listOf(
+                groupInFamilyFilter
+            ),
+            meterRegistry = prometheusMeterRegistry
+        )
     }
 
-    open val telegramBot: TelegramBot by lazy {
-        SimpleTelegramBot(
-            configuration = configuration.bot,
-            shutdownManager = shutdownManager,
-            bot = kotbot
+    open val kotbot: Kotbot by lazy {
+        Kotbot(
+            token = configuration.bot.token,
         )
     }
 
     open fun start() {
         server.start()
-        telegramBot.start()
 
         LOGGER.info("Application started.")
     }

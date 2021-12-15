@@ -9,3 +9,4 @@ package io.heapy.kotbot
 fun main() {
     ApplicationFactory().start()
 }
+
