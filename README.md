@@ -13,24 +13,26 @@ Combot becomes paid.
 ## Development
 
 1. Use [@BotFather](https://t.me/BotFather) to create bot which you will use for testing;
-2. You need to pass bot token that you received from BotFather to Bot, here two available options:
-   1. Copy `./devops/.env-template-dev` to `./devops/.env` and replace `id:secret` with bot token;
-   2. Set env variable `KOTBOT_TOKEN` to token value in Intellij IDEA's "Run/Debug Configuration";
-3. Run main in `io.heapy.kotbot.Application`.
+   1. You need to pass bot token that you received from BotFather to Bot, here two available options:
+      1. Create file `/src/main/resources/application.conf` with following content:
+         ```
+         bot {
+           token = "your_bot_token"
+         }   
+         ```
+      2. Set env variable `KOTBOT_TOKEN` to token value in Intellij IDEA's "Run/Debug Configuration";
+2. Run main in `io.heapy.kotbot.Application`.
 
 That's it, you have running bot, now add him to some chat and grant admin rules (in order to delete messages and kick users), and test it.
 
 ## Docs
 
 * [Telegram Bots](https://core.telegram.org/bots)
-* [rubenlagus/TelegramBots](https://github.com/rubenlagus/TelegramBots)
 
 ## Modules
 
-- web - http api
-- stats - calculates statistics based on data stored in database
-- dao - database access layer
-- bot - layer which works with telegram api
+- root - bot for telegram chats
+- core - Generic Telegram API which will be eventually published in Maven Central
 
 ## TODO
 

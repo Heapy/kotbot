@@ -8,5 +8,4 @@ out
 build
 
 # Configuration
-/devops/.env
-/kotbot/src/main/resources/application.conf
+/src/main/resources/application.conf

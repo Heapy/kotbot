@@ -1,15 +1,13 @@
 version: "2.4"
 services:
   kotbot:
-    image: heapy/kotbot:${KOTBOT_RELEASE}
+    image: ghcr.io/heapy/kotbot:${KOTBOT_VERSION}
     container_name: kotbot
     restart: always
-    volumes:
-     - ${KOTBOT_DATA}/db/:/kotbot/db/
     environment:
-      KOTBOT_OPTS: ${KOTBOT_OPTS}
+      KOTBOT_OPTS: "-Xmx128m"
       KOTBOT_TOKEN: ${KOTBOT_TOKEN}
-      KOTBOT_RELEASE: ${KOTBOT_RELEASE}
+      KOTBOT_VERSION: ${KOTBOT_VERSION}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
       interval: 30s
