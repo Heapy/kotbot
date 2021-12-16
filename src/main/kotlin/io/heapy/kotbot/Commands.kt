@@ -1,7 +1,7 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.*
-import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.Update
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -9,7 +9,7 @@ interface Command {
     val info: Info
 
     fun execute(
-        update: ApiUpdate,
+        update: Update,
         args: List<String>
     ): Flow<Action>
 
@@ -39,7 +39,7 @@ data class CommandInfo(
 ) : Info
 
 object NoopCommand : Command {
-    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
+    override fun execute(update: Update, args: List<String>): Flow<Action> {
         return flowOf()
     }
 
@@ -55,7 +55,7 @@ object NoopCommand : Command {
 class HelloWorldCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
+    override fun execute(update: Update, args: List<String>): Flow<Action> {
         return flowOf(
             ReplyAction(
                 chatId = update.message.chatId,
@@ -75,7 +75,7 @@ class HelloWorldCommand(
 class ChatInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
+    override fun execute(update: Update, args: List<String>): Flow<Action> {
         return flowOf(
             ReplyAction(
                 chatId = update.message.chatId,
@@ -98,7 +98,7 @@ class ChatInfoCommand(
 class ContactInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
+    override fun execute(update: Update, args: List<String>): Flow<Action> {
         val contact = update.message?.replyToMessage?.contact
         return flowOf(
             ReplyAction(

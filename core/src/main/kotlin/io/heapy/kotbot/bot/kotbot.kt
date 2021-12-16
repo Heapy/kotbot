@@ -35,7 +35,7 @@ public suspend fun Kotbot.receiveUpdates(
     timeout: Int = 50,
     limit: Int = 100,
     allowedUpdates: List<String> = listOf(),
-): Flow<ApiUpdate> {
+): Flow<Update> {
     var offset: Int? = null
 
     return flow {

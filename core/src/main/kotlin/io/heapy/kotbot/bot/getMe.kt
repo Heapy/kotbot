@@ -2,9 +2,12 @@ package io.heapy.kotbot.bot
 
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 
-@Serializable
+/**
+ * A simple method for testing your bot's authentication token.
+ * Requires no parameters. Returns basic information about the bot in form
+ * of a [User] object.
+ */
 public class GetMe : ApiMethod<User> {
     private val deserializer: KSerializer<ApiResponse<User>> =
         ApiResponse.serializer(User.serializer())

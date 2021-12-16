@@ -5,7 +5,7 @@ import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.ApiMethod
-import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.receiveUpdates
 import io.micrometer.core.instrument.MeterRegistry
@@ -32,7 +32,7 @@ class KotlinChatsBot(
             }
     }
 
-    internal suspend fun findAndExecuteCommand(update: ApiUpdate): Boolean {
+    internal suspend fun findAndExecuteCommand(update: Update): Boolean {
         // Command accepts text only in message, no update message supported
         val text = update.message?.text ?: return false
 
@@ -75,7 +75,7 @@ class KotlinChatsBot(
         return true
     }
 
-    internal fun updateToCommandInfo(update: ApiUpdate): UpdateCommand {
+    internal fun updateToCommandInfo(update: Update): UpdateCommand {
         val context = when {
             update.message?.chat.isUserChat -> USER_CHAT
             else -> GROUP_CHAT
@@ -108,7 +108,7 @@ class KotlinChatsBot(
         val args: List<String>
     ) : Command.Info
 
-    internal suspend fun executeRules(update: ApiUpdate) {
+    internal suspend fun executeRules(update: Update) {
         rules
             .map { rule -> rule to rule.validate(update) }
             .flatMap { (rule, flow) ->

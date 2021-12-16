@@ -1,6 +1,6 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.configuration.CasConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -15,13 +15,13 @@ import kotlinx.serialization.Serializable
  * @author Ruslan Ibragimov
  */
 interface Rule {
-    fun validate(update: ApiUpdate): Flow<>
+    fun validate(update: Update): Flow<>
 }
 
 private val LOGGER = logger<Rule>()
 
 class DeleteJoinRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         if (!update.message?.new_chat_members.isNullOrEmpty()) {
             LOGGER.info("Delete joined users message ${update.message?.new_chat_members}")
             return flowOf(DeleteMessageAction(update.message?.chat?.id!!, update.message?.message_id!!))
@@ -32,7 +32,7 @@ class DeleteJoinRule : Rule {
 }
 
 class DeleteHelloRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete hello message ${message.text} from ${message.from.info}")
@@ -53,7 +53,7 @@ class DeleteHelloRule : Rule {
 }
 
 class LongTimeNoSeeRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete spam ${message.text} from ${message.from.info}")
@@ -77,7 +77,7 @@ class LongTimeNoSeeRule : Rule {
 }
 
 class DeleteSwearingRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val normalizedText = text.lowercase()
             val isSwearing = strings.any { normalizedText.contains(it) }
@@ -104,7 +104,7 @@ class DeleteSwearingRule : Rule {
 }
 
 class DeleteSpamRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyText { text, message ->
             val kick = shorteners.any { shorter ->
                 text.contains(shorter)
@@ -138,7 +138,7 @@ class DeleteSpamRule : Rule {
  * Rule to remove messages with attached audio.
  */
 class DeleteVoiceMessageRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasVoice()) {
                 LOGGER.info("Delete voice-message from ${message.from.info}.")
@@ -156,7 +156,7 @@ class DeleteVoiceMessageRule : Rule {
  * It's not covered by chat settings, since they don't apply on admins
  */
 class DeleteStickersRule : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> {
+    override fun validate(update: Update): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasSticker()) {
                 LOGGER.info("Delete sticker-message from ${message.from.info}.")
@@ -173,7 +173,7 @@ class CombotCasRule(
     private val client: HttpClient,
     private val casConfiguration: CasConfiguration,
 ) : Rule {
-    override fun validate(update: ApiUpdate): Flow<Action> = flow {
+    override fun validate(update: Update): Flow<Action> = flow {
         update.anyMessage?.let { message ->
             val userId = message.from.id
             if (!casConfiguration.allowlist.contains(userId)) {

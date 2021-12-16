@@ -1,13 +1,13 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.configuration.KniwnChatsConfiguration
 
 fun interface Filter {
     /**
-     * Returns true if this [ApiUpdate] can be processed by bot, false otherwise.
+     * Returns true if this [Update] can be processed by bot, false otherwise.
      */
-    suspend fun predicate(update: ApiUpdate): Boolean
+    suspend fun predicate(update: Update): Boolean
 
     companion object
 }
@@ -25,7 +25,7 @@ fun Filter.Companion.combine(filters: List<Filter>): Filter {
 class KnownChatsFilter(
     private val knownChatsConfiguration: KniwnChatsConfiguration
 ) : Filter {
-    override suspend fun predicate(update: ApiUpdate): Boolean {
+    override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { decision ->
             if (!decision) {
                 LOGGER.error("Don't process update $update since it's not part of chat family.")
@@ -33,7 +33,7 @@ class KnownChatsFilter(
         }
     }
 
-    private fun isWellKnown(update: ApiUpdate): Boolean {
+    private fun isWellKnown(update: Update): Boolean {
         val chat = update.message?.chat
             ?: update.edited_message?.chat
             ?: return true
