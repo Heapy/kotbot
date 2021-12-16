@@ -1,13 +1,12 @@
 package io.heapy.kotbot
 
-import org.telegram.telegrambots.meta.api.objects.Message
-import org.telegram.telegrambots.meta.api.objects.Update
-import org.telegram.telegrambots.meta.api.objects.User
+import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.User
 
-public val Update.anyMessage: Message?
-    get() = editedMessage ?: message
+val ApiUpdate.anyMessage: ApiUpdate.Message?
+    get() = edited_message ?: message
 
-public inline fun Update.anyText(body: (String, Message) -> Unit) {
+inline fun ApiUpdate.anyText(body: (String, ApiUpdate.Message) -> Unit) {
     anyMessage?.let { msg ->
         val text = msg.caption.orEmpty() + msg.text.orEmpty()
         if (text.isNotEmpty()) {
@@ -16,4 +15,4 @@ public inline fun Update.anyText(body: (String, Message) -> Unit) {
     }
 }
 
-public val User.info: String get() = "@$userName/id:$id"
+val User.info: String get() = "@$username/id:$id"

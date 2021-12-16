@@ -1,49 +1,53 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.Filter.Result
-import io.heapy.kotbot.Filter.Result.DROP
-import io.heapy.kotbot.Filter.Result.TAKE
-import org.telegram.telegrambots.meta.api.objects.Update
+import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.configuration.KniwnChatsConfiguration
 
-public interface Filter {
+fun interface Filter {
     /**
-     * Returns true if this [Update] can be processed by bot, false otherwise.
+     * Returns true if this [ApiUpdate] can be processed by bot, false otherwise.
      */
-    public suspend fun predicate(update: Update): Result
+    suspend fun predicate(update: ApiUpdate): Boolean
 
-    public enum class Result {
-        DROP,
-        TAKE
+    companion object
+}
+
+/**
+ * Create single filter from multiple filters.
+ * Returns false if any of the filters returns false.
+ */
+fun Filter.Companion.combine(filters: List<Filter>): Filter {
+    return Filter { update ->
+        filters.all { filter -> filter.predicate(update) }
     }
 }
 
-public class GroupInFamilyFilter(
-    private val familyConfiguration: FamilyConfiguration
+class KnownChatsFilter(
+    private val knownChatsConfiguration: KniwnChatsConfiguration
 ) : Filter {
-    override suspend fun predicate(update: Update): Result {
-        return if (inFamily(update)) {
-            TAKE
-        } else {
-            LOGGER.error("Don't process update $update since it's not part of chat family.")
-            DROP
+    override suspend fun predicate(update: ApiUpdate): Boolean {
+        return isWellKnown(update).also { decision ->
+            if (!decision) {
+                LOGGER.error("Don't process update $update since it's not part of chat family.")
+            }
         }
     }
 
-    private fun inFamily(update: Update): Boolean {
+    private fun isWellKnown(update: ApiUpdate): Boolean {
         val chat = update.message?.chat
-            ?: update.editedMessage?.chat
+            ?: update.edited_message?.chat
             ?: return true
 
-        return when {
-            chat.isSuperGroupChat -> familyConfiguration.ids.contains(chat.id)
-            chat.isChannelChat -> familyConfiguration.ids.contains(chat.id)
-            chat.isGroupChat -> familyConfiguration.ids.contains(chat.id)
-            chat.isUserChat -> true
-            else -> true
+        return when(chat.type) {
+            "supergroup" -> knownChatsConfiguration.ids.contains(chat.id)
+            "channel" -> knownChatsConfiguration.ids.contains(chat.id)
+            "group" -> knownChatsConfiguration.ids.contains(chat.id)
+            "private" -> true
+            else -> false
         }
     }
 
-    public companion object {
-        private val LOGGER = logger<GroupInFamilyFilter>()
+    companion object {
+        private val LOGGER = logger<KnownChatsFilter>()
     }
 }

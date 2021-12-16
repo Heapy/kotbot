@@ -1,17 +1,11 @@
 package io.heapy.kotbot.web
 
-import io.ktor.application.call
-import io.ktor.response.respond
-import io.ktor.routing.Routing
-import io.ktor.routing.get
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
 import io.ktor.util.pipeline.ContextDsl
 
-/**
- * Route for health checking
- *
- * @author Ruslan Ibragimov
- * @since 1.0.0
- */
 @ContextDsl
 fun Routing.health() {
     get("/api/health") {

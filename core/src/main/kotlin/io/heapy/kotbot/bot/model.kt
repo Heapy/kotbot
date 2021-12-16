@@ -370,7 +370,20 @@ public data class ApiUpdate(
     @Serializable
     public class ChatMemberUpdated()
     @Serializable
-    public class Chat()
+    public class Chat(
+        /**
+         * Unique identifier for this chat. This number may have more than 32
+         * significant bits and some programming languages may have
+         * difficulty/silent defects in interpreting it. But it has at most
+         * 52 significant bits, so a signed 64-bit integer or double-precision
+         * float type are safe for storing this identifier.
+         */
+        public val id: Long,
+        /**
+         * Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+         */
+        public val type: String,
+    )
     @Serializable
     public class MessageEntity()
     @Serializable

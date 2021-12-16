@@ -4,49 +4,35 @@ import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
+import io.heapy.kotbot.bot.ApiMethod
+import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.receiveUpdates
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
-import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
-import org.telegram.telegrambots.meta.api.objects.Update
 
-/**
- * @author Ruslan Ibragimov
- */
-public class KotBot(
-    private val configuration: BotConfiguration,
+class KotlinChatsBot(
+    private val kotbot: Kotbot,
     private val rules: List<Rule>,
     private val commands: List<Command>,
-    private val filters: List<Filter>,
+    private val filter: Filter,
     private val meterRegistry: MeterRegistry
-) : TelegramLongPollingBot() {
-    public override fun getBotToken(): String = configuration.token
-    public override fun getBotUsername(): String = configuration.name
-
-    private val supervisor = SupervisorJob()
-
-    override fun onUpdateReceived(update: Update) {
-        CoroutineScope(supervisor).launch processing@{
-            LOGGER.debug("{}", update)
-
-            if (filters.any { it.predicate(update) == Filter.Result.DROP }) {
-                return@processing
+) {
+    suspend fun start() {
+        kotbot.receiveUpdates()
+            .filter(filter::predicate)
+            .onEach { update ->
+                val result = findAndExecuteCommand(update)
+                if (!result) {
+                    executeRules(update)
+                }
             }
-
-            val result = findAndExecuteCommand(update)
-            if (!result) {
-                executeRules(update)
-            }
-        }
     }
 
-    internal suspend fun findAndExecuteCommand(update: Update): Boolean {
+    internal suspend fun findAndExecuteCommand(update: ApiUpdate): Boolean {
         // Command accepts text only in message, no update message supported
         val text = update.message?.text ?: return false
 
@@ -71,7 +57,10 @@ public class KotBot(
                 .toList()
                 .let {
                     if (info.context == GROUP_CHAT) {
-                        it + DeleteMessageAction(update.message)
+                        it + DeleteMessageAction(
+                            chatId = update.message?.chat?.id!!,
+                            messageId = update.message?.message_id!!
+                        )
                     } else {
                         it
                     }
@@ -86,9 +75,9 @@ public class KotBot(
         return true
     }
 
-    internal fun updateToCommandInfo(update: Update): UpdateCommand {
+    internal fun updateToCommandInfo(update: ApiUpdate): UpdateCommand {
         val context = when {
-            update.message.chat.isUserChat -> USER_CHAT
+            update.message?.chat.isUserChat -> USER_CHAT
             else -> GROUP_CHAT
         }
 
@@ -96,7 +85,7 @@ public class KotBot(
         val access = USER
 
         // TODO: can support escaped string with double-quote
-        val tokens = update.message.text.split(' ')
+        val tokens = update.message?.text?.split(' ')!!
 
         val name = tokens[0]
         val arity = tokens.size - 1
@@ -111,7 +100,7 @@ public class KotBot(
         )
     }
 
-    public data class UpdateCommand(
+    data class UpdateCommand(
         override val name: String,
         override val arity: Int,
         override val context: Command.Context,
@@ -119,7 +108,7 @@ public class KotBot(
         val args: List<String>
     ) : Command.Info
 
-    internal suspend fun executeRules(update: Update) {
+    internal suspend fun executeRules(update: ApiUpdate) {
         rules
             .map { rule -> rule to rule.validate(update) }
             .flatMap { (rule, flow) ->
@@ -172,27 +161,11 @@ public class KotBot(
         }
     }
 
-    companion object {
-        private val LOGGER = logger<KotBot>()
+    private fun execute(method: ApiMethod<*>) {
+        println("method called: $method")
     }
-}
 
-/**
- * Configuration required for TG bot.
- *
- * @author Ruslan Ibragimov
- * @since 1.0.0
- */
-public interface BotConfiguration {
-    public val token: String
-    public val name: String
-}
-
-public interface CasConfiguration {
-    public val allowlist: Set<Long>
-}
-
-public interface FamilyConfiguration {
-    public val ids: Set<Long>
-    public val admins: Map<String, List<Long>>
+    companion object {
+        private val LOGGER = logger<KotlinChatsBot>()
+    }
 }

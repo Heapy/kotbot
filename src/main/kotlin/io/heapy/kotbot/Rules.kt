@@ -1,6 +1,7 @@
 package io.heapy.kotbot
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.heapy.kotbot.bot.ApiUpdate
+import io.heapy.kotbot.configuration.CasConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -8,30 +9,30 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.telegram.telegrambots.meta.api.objects.Update
+import kotlinx.serialization.Serializable
 
 /**
  * @author Ruslan Ibragimov
  */
-public interface Rule {
-    public fun validate(update: Update): Flow<Action>
+interface Rule {
+    fun validate(update: ApiUpdate): Flow<>
 }
 
 private val LOGGER = logger<Rule>()
 
-public class DeleteJoinRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
-        if (!update.message?.newChatMembers.isNullOrEmpty()) {
-            LOGGER.info("Delete joined users message ${update.message.newChatMembers}")
-            return flowOf(DeleteMessageAction(update.message.chatId, update.message.messageId))
+class DeleteJoinRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
+        if (!update.message?.new_chat_members.isNullOrEmpty()) {
+            LOGGER.info("Delete joined users message ${update.message?.new_chat_members}")
+            return flowOf(DeleteMessageAction(update.message?.chat?.id!!, update.message?.message_id!!))
         }
 
         return emptyFlow()
     }
 }
 
-public class DeleteHelloRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class DeleteHelloRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete hello message ${message.text} from ${message.from.info}")
@@ -42,7 +43,7 @@ public class DeleteHelloRule : Rule {
         return emptyFlow()
     }
 
-    public companion object {
+    companion object {
         private val strings = listOf(
             "hi",
             "hello",
@@ -51,8 +52,8 @@ public class DeleteHelloRule : Rule {
     }
 }
 
-public class LongTimeNoSeeRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class LongTimeNoSeeRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete spam ${message.text} from ${message.from.info}")
@@ -66,7 +67,7 @@ public class LongTimeNoSeeRule : Rule {
         return emptyFlow()
     }
 
-    public companion object {
+    companion object {
         private val strings = listOf(
             "Long time no see.",
             "What's going on?",
@@ -75,8 +76,8 @@ public class LongTimeNoSeeRule : Rule {
     }
 }
 
-public class DeleteSwearingRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class DeleteSwearingRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyText { text, message ->
             val normalizedText = text.lowercase()
             val isSwearing = strings.any { normalizedText.contains(it) }
@@ -89,7 +90,7 @@ public class DeleteSwearingRule : Rule {
         return emptyFlow()
     }
 
-    public companion object {
+    companion object {
         internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
 
         private val strings = DeleteSwearingRule::class.java.classLoader
@@ -102,8 +103,8 @@ public class DeleteSwearingRule : Rule {
     }
 }
 
-public class DeleteSpamRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class DeleteSpamRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyText { text, message ->
             val kick = shorteners.any { shorter ->
                 text.contains(shorter)
@@ -122,7 +123,7 @@ public class DeleteSpamRule : Rule {
         return emptyFlow()
     }
 
-    public companion object {
+    companion object {
         private val shorteners = listOf(
             "tinyurl.com",
             "t.me/joinchat",
@@ -136,8 +137,8 @@ public class DeleteSpamRule : Rule {
 /**
  * Rule to remove messages with attached audio.
  */
-public class DeleteVoiceMessageRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class DeleteVoiceMessageRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasVoice()) {
                 LOGGER.info("Delete voice-message from ${message.from.info}.")
@@ -154,8 +155,8 @@ public class DeleteVoiceMessageRule : Rule {
  * Rule to delete messages with attached sticker.
  * It's not covered by chat settings, since they don't apply on admins
  */
-public class DeleteStickersRule : Rule {
-    override fun validate(update: Update): Flow<Action> {
+class DeleteStickersRule : Rule {
+    override fun validate(update: ApiUpdate): Flow<Action> {
         update.anyMessage?.let { message ->
             if (message.hasSticker()) {
                 LOGGER.info("Delete sticker-message from ${message.from.info}.")
@@ -168,11 +169,11 @@ public class DeleteStickersRule : Rule {
     }
 }
 
-public class CombotCasRule(
+class CombotCasRule(
     private val client: HttpClient,
-    private val casConfiguration: CasConfiguration
+    private val casConfiguration: CasConfiguration,
 ) : Rule {
-    override fun validate(update: Update): Flow<Action> = flow {
+    override fun validate(update: ApiUpdate): Flow<Action> = flow {
         update.anyMessage?.let { message ->
             val userId = message.from.id
             if (!casConfiguration.allowlist.contains(userId)) {
@@ -191,7 +192,7 @@ public class CombotCasRule(
     }
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public data class CasResponse(
-    val ok: Boolean
+@Serializable
+data class CasResponse(
+    val ok: Boolean,
 )

@@ -1,45 +1,45 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.*
+import io.heapy.kotbot.bot.ApiUpdate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import org.telegram.telegrambots.meta.api.objects.Update
 
-public interface Command {
-    public val info: Info
+interface Command {
+    val info: Info
 
-    public fun execute(
-        update: Update,
+    fun execute(
+        update: ApiUpdate,
         args: List<String>
     ): Flow<Action>
 
-    public interface Info {
-        public val name: String
-        public val arity: Int
-        public val context: Context
-        public val access: Access
+    interface Info {
+        val name: String
+        val arity: Int
+        val context: Context
+        val access: Access
     }
 
-    public enum class Context {
+    enum class Context {
         USER_CHAT,
         GROUP_CHAT
     }
 
-    public enum class Access {
+    enum class Access {
         USER,
         ADMIN
     }
 }
 
-public data class CommandInfo(
+data class CommandInfo(
     override val name: String,
     override val arity: Int = 0,
     override val context: Context = Context.USER_CHAT,
     override val access: Access = Access.USER
 ) : Info
 
-public object NoopCommand : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+object NoopCommand : Command {
+    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
         return flowOf()
     }
 
@@ -52,10 +52,10 @@ public object NoopCommand : Command {
     )
 }
 
-public class HelloWorldCommand(
+class HelloWorldCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
         return flowOf(
             ReplyAction(
                 chatId = update.message.chatId,
@@ -64,7 +64,7 @@ public class HelloWorldCommand(
         )
     }
 
-    public companion object {
+    companion object {
         private val INFO = CommandInfo(
             name = "!hello",
             access = Access.USER
@@ -72,10 +72,10 @@ public class HelloWorldCommand(
     }
 }
 
-public class ChatInfoCommand(
+class ChatInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
         return flowOf(
             ReplyAction(
                 chatId = update.message.chatId,
@@ -86,7 +86,7 @@ public class ChatInfoCommand(
         )
     }
 
-    public companion object {
+    companion object {
         private val INFO = CommandInfo(
             name = "!chat-info",
             context = Context.GROUP_CHAT,
@@ -95,10 +95,10 @@ public class ChatInfoCommand(
     }
 }
 
-public class ContactInfoCommand(
+class ContactInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(update: ApiUpdate, args: List<String>): Flow<Action> {
         val contact = update.message?.replyToMessage?.contact
         return flowOf(
             ReplyAction(
@@ -111,7 +111,7 @@ public class ContactInfoCommand(
         )
     }
 
-    public companion object {
+    companion object {
         private val INFO = CommandInfo(
             name = "!contact-info",
             context = Context.USER_CHAT,

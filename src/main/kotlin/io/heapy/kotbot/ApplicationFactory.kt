@@ -4,19 +4,19 @@ import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.configuration.Configuration
-import io.heapy.kotbot.configuration.DefaultConfiguration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.KtorServer
 import io.heapy.kotbot.web.Server
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import java.lang.System.getenv
 
 open class ApplicationFactory {
     open val configuration: Configuration by lazy {
-        ConfigFactory.load().extract<DefaultConfiguration>()
+        ConfigFactory.load().extract()
     }
 
     open val prometheusMeterRegistry: PrometheusMeterRegistry by lazy {
@@ -26,9 +26,9 @@ open class ApplicationFactory {
     }
 
     open val httpClient: HttpClient by lazy {
-        HttpClient(Apache) {
-            install(JsonFeature) {
-                serializer = JacksonSerializer()
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
             }
         }
     }
@@ -65,12 +65,18 @@ open class ApplicationFactory {
     }
 
     open val groupInFamilyFilter: Filter by lazy {
-        GroupInFamilyFilter(configuration.groups)
+        KnownChatsFilter(configuration.groups)
     }
 
-    open val kotBot: KotBot by lazy {
-        KotBot(
-            configuration = configuration.bot,
+    open val kotbot: Kotbot by lazy {
+        Kotbot(
+            token = getenv("KOTBOT_TOKEN"),
+        )
+    }
+
+    open val kotlinChatsBot: KotlinChatsBot by lazy {
+        KotlinChatsBot(
+            kotbot = kotbot,
             rules = listOf(
                 deleteJoinRule,
                 deleteSpamRule,
@@ -85,21 +91,18 @@ open class ApplicationFactory {
                 helloWorldCommand,
                 chatInfoCommand,
             ),
-            filters = listOf(
-                groupInFamilyFilter
+            filter = Filter.combine(
+                listOf(
+                    groupInFamilyFilter
+                )
             ),
             meterRegistry = prometheusMeterRegistry
         )
     }
 
-    open val kotbot: Kotbot by lazy {
-        Kotbot(
-            token = configuration.bot.token,
-        )
-    }
-
-    open fun start() {
+    open suspend fun start() {
         server.start()
+        kotlinChatsBot.start()
 
         LOGGER.info("Application started.")
     }
