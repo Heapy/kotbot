@@ -1,7 +1,10 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.*
+import io.heapy.kotbot.bot.ApiMethod
+import io.heapy.kotbot.bot.SendMessage
 import io.heapy.kotbot.bot.Update
+import io.heapy.kotbot.bot.Update.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -9,9 +12,10 @@ interface Command {
     val info: Info
 
     fun execute(
+        message: Message,
         update: Update,
         args: List<String>
-    ): Flow<Action>
+    ): Flow<ApiMethod<*>>
 
     interface Info {
         val name: String
@@ -39,7 +43,7 @@ data class CommandInfo(
 ) : Info
 
 object NoopCommand : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
         return flowOf()
     }
 
@@ -55,11 +59,11 @@ object NoopCommand : Command {
 class HelloWorldCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
         return flowOf(
-            ReplyAction(
-                chatId = update.message.chatId,
-                message = "Hello, World!"
+            SendMessage(
+                chat_id = message.chat.id.toString(),
+                text = "Hello, World!"
             )
         )
     }
@@ -75,12 +79,12 @@ class HelloWorldCommand(
 class ChatInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
         return flowOf(
-            ReplyAction(
-                chatId = update.message.chatId,
-                message = """
-                Chat id: ${update.message.chatId}
+            SendMessage(
+                chat_id = message.chat.id.toString(),
+                text = """
+                Chat id: ${message.chat.id}
             """.trimIndent()
             )
         )
@@ -98,14 +102,14 @@ class ChatInfoCommand(
 class ContactInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(update: Update, args: List<String>): Flow<Action> {
-        val contact = update.message?.replyToMessage?.contact
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
+        val contact = message.reply_to_message?.contact
         return flowOf(
-            ReplyAction(
-                chatId = update.message.chatId,
-                message = """
-                User id: ${contact?.userId}
-                Name: ${contact?.firstName} ${contact?.lastName}
+            SendMessage(
+                chat_id = message.chat.id.toString(),
+                text = """
+                User id: ${contact?.user_id}
+                Name: ${contact?.first_name} ${contact?.last_name}
             """.trimIndent()
             )
         )

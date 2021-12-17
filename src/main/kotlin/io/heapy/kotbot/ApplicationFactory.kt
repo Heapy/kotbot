@@ -12,6 +12,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.serialization.json.Json
 import java.lang.System.getenv
 
 open class ApplicationFactory {
@@ -28,7 +29,9 @@ open class ApplicationFactory {
     open val httpClient: HttpClient by lazy {
         HttpClient(CIO) {
             install(ContentNegotiation) {
-                json()
+                json(json = Json {
+                    ignoreUnknownKeys = true
+                })
             }
         }
     }

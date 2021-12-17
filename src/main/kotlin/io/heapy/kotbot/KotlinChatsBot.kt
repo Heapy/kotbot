@@ -5,11 +5,14 @@ import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.ApiMethod
+import io.heapy.kotbot.bot.DeleteMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.execute
 import io.heapy.kotbot.bot.receiveUpdates
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
@@ -30,54 +33,58 @@ class KotlinChatsBot(
                     executeRules(update)
                 }
             }
+            .collect()
     }
 
     internal suspend fun findAndExecuteCommand(update: Update): Boolean {
-        // Command accepts text only in message, no update message supported
-        val text = update.message?.text ?: return false
+        update.message?.let { message ->
+            // Command accepts text only in message, no update message supported
+            message.text?.let { text ->
+                try {
+                    commands.find { command ->
+                        text.startsWith(command.info.name)
+                    } ?: return false
 
-        // find command-like message or return
-        commands.find { command ->
-            text.startsWith(command.info.name)
-        } ?: return false
+                    // parse command-like message
+                    val info = updateToCommandInfo(update)
 
-        try {
-            // parse command-like message
-            val info = updateToCommandInfo(update)
+                    // find actual command
+                    val command = commands.find { command ->
+                        command.info.name == info.name
+                            && command.info.context == info.context
+                            && command.info.arity == info.arity
+                            && command.info.access >= info.access
+                    } ?: NoopCommand
 
-            // find actual command
-            val command = commands.find { command ->
-                command.info.name == info.name
-                        && command.info.context == info.context
-                        && command.info.arity == info.arity
-                        && command.info.access >= info.access
-            } ?: NoopCommand
+                    command.execute(message, update, listOf())
+                        .toList()
+                        .let {
+                            if (info.context == GROUP_CHAT) {
+                                it + DeleteMessage(
+                                    chat_id = message.chat.id.toString(),
+                                    message_id = message.message_id
+                                )
+                            } else {
+                                it
+                            }
+                        }
+                        .distinct()
+                        .forEach {
+                            execute(it)
+                        }
 
-            command.execute(update, listOf())
-                .toList()
-                .let {
-                    if (info.context == GROUP_CHAT) {
-                        it + DeleteMessageAction(
-                            chatId = update.message?.chat?.id!!,
-                            messageId = update.message?.message_id!!
-                        )
-                    } else {
-                        it
-                    }
+                    return true
+                } catch (e: Exception) {
+                    LOGGER.error("Exception in command. Update: {}", update, e)
                 }
-                .distinct()
-                .forEach(::executeAction)
-        } catch (e: Exception) {
-            LOGGER.error("Exception in command. Update: {}", update, e)
-            listOf<Action>()
+            }
         }
-
-        return true
+        return false
     }
 
     internal fun updateToCommandInfo(update: Update): UpdateCommand {
-        val context = when {
-            update.message?.chat.isUserChat -> USER_CHAT
+        val context = when (update.message?.chat?.type) {
+            "private" -> USER_CHAT
             else -> GROUP_CHAT
         }
 
@@ -125,7 +132,9 @@ class KotlinChatsBot(
                 }
             }
             .distinct()
-            .forEach(::executeAction)
+            .forEach {
+                execute(it)
+            }
     }
 
     internal fun recordRuleTrigger(rule: Rule) {
@@ -146,23 +155,12 @@ class KotlinChatsBot(
         return rule::class.simpleName ?: "UnknownRule"
     }
 
-    internal fun executeAction(action: Action): Unit = when (action) {
-        is DeleteMessageAction -> {
-            execute(DeleteMessage(action.chatId.toString(), action.messageId))
-            Unit
+    internal suspend fun execute(method: ApiMethod<*>) {
+        try {
+            kotbot.execute(method)
+        } catch (e: Exception) {
+            LOGGER.error("Method {} failed: {}", method, e.message, e)
         }
-        is BanMemberAction -> {
-            execute(BanChatMember(action.chatId.toString(), action.userId))
-            Unit
-        }
-        is ReplyAction -> {
-            execute(SendMessage(action.chatId.toString(), action.message))
-            Unit
-        }
-    }
-
-    private fun execute(method: ApiMethod<*>) {
-        println("method called: $method")
     }
 
     companion object {

@@ -403,7 +403,13 @@ public data class Update(
     @Serializable
     public class Voice()
     @Serializable
-    public class Contact()
+    public data class Contact(
+        val phone_number: String,
+        val first_name: String,
+        val last_name: String?,
+        val user_id: Long?,
+        val vcard: String?,
+    )
     @Serializable
     public class Dice()
     @Serializable

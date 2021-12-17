@@ -24,21 +24,21 @@ public data class BanChatMember(
     /**
      * Unique identifier of the target user
      */
-    private val user_id: Int,
+    private val user_id: Long,
     /**
      * Date when the user will be unbanned, unix time. If user is banned
      * for more than 366 days or less than 30 seconds from the current
      * time they are considered to be banned forever. Applied for
      * supergroups and channels only.
      */
-    private val until_date: Int?,
+    private val until_date: Int? = null,
     /**
      * Pass True to delete all messages from the chat for the user that
      * is being removed. If False, the user will be able to see messages
      * in the group that were sent before the user was removed. Always
      * True for supergroups and channels.
      */
-    private val revoke_messages: Boolean?,
+    private val revoke_messages: Boolean? = null,
 ) : ApiMethod<Boolean> {
     @Transient
     private val deserializer: KSerializer<ApiResponse<Boolean>> =
