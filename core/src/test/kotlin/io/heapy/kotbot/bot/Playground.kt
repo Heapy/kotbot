@@ -18,8 +18,8 @@ suspend fun main() {
             println("Update $it")
             try {
                 kotbot.execute(DeleteMessage(
-                    chatId = it.message?.chat?.id!!.toString(),
-                    messageId = it.message?.message_id!!
+                    chat_id = it.message?.chat?.id!!.toString(),
+                    message_id = it.message?.message_id!!
                 ))
             } catch (e: Exception) {
                 println(e.message)
