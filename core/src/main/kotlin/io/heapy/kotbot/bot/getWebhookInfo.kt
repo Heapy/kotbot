@@ -11,10 +11,10 @@ import kotlinx.serialization.Transient
  * getUpdates, will return an object with the url field empty.
  */
 @Serializable
-public class GetWebhookInfo: ApiMethod<WebhookInfo> {
+public class GetWebhookInfo: Method<WebhookInfo> {
     @Transient
-    private val deserializer: KSerializer<ApiResponse<WebhookInfo>> =
-        ApiResponse.serializer(WebhookInfo.serializer())
+    private val deserializer: KSerializer<Response<WebhookInfo>> =
+        Response.serializer(WebhookInfo.serializer())
 
     override suspend fun Kotbot.execute(): WebhookInfo {
         return requestForJson(

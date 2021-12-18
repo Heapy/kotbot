@@ -47,10 +47,10 @@ public data class GetUpdates(
      * a short period of time.
      */
     private val allowed_updates: List<String>? = null,
-) : ApiMethod<List<Update>> {
+) : Method<List<Update>> {
     @Transient
-    private val deserializer: KSerializer<ApiResponse<List<Update>>> =
-        ApiResponse.serializer(ListSerializer(Update.serializer()))
+    private val deserializer: KSerializer<Response<List<Update>>> =
+        Response.serializer(ListSerializer(Update.serializer()))
 
     override suspend fun Kotbot.execute(): List<Update> {
         return requestForJson(

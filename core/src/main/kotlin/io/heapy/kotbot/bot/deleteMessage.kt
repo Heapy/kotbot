@@ -27,10 +27,10 @@ public data class DeleteMessage(
      * Identifier of the message to delete
      */
     private val message_id: Int,
-) : ApiMethod<Boolean> {
+) : Method<Boolean> {
     @Transient
-    private val deserializer: KSerializer<ApiResponse<Boolean>> =
-        ApiResponse.serializer(Boolean.serializer())
+    private val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
 
     override suspend fun Kotbot.execute(): Boolean {
         return requestForJson(

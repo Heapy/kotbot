@@ -4,7 +4,7 @@ import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
-import io.heapy.kotbot.bot.ApiMethod
+import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.DeleteMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Kotbot
@@ -155,7 +155,7 @@ class KotlinChatsBot(
         return rule::class.simpleName ?: "UnknownRule"
     }
 
-    internal suspend fun execute(method: ApiMethod<*>) {
+    internal suspend fun execute(method: Method<*>) {
         try {
             kotbot.execute(method)
         } catch (e: Exception) {

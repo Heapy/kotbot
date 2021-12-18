@@ -57,10 +57,10 @@ public data class SendMessage(
      */
     private val reply_markup: Update.InlineKeyboardMarkup? = null,
 
-) : ApiMethod<Update.Message> {
+) : Method<Update.Message> {
     @Transient
-    private val deserializer: KSerializer<ApiResponse<Update.Message>> =
-        ApiResponse.serializer(Update.Message.serializer())
+    private val deserializer: KSerializer<Response<Update.Message>> =
+        Response.serializer(Update.Message.serializer())
 
     override suspend fun Kotbot.execute(): Update.Message {
         return requestForJson(

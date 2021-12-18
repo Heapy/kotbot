@@ -8,9 +8,9 @@ import kotlinx.serialization.KSerializer
  * Requires no parameters. Returns basic information about the bot in form
  * of a [User] object.
  */
-public class GetMe : ApiMethod<User> {
-    private val deserializer: KSerializer<ApiResponse<User>> =
-        ApiResponse.serializer(User.serializer())
+public class GetMe : Method<User> {
+    private val deserializer: KSerializer<Response<User>> =
+        Response.serializer(User.serializer())
 
     override suspend fun Kotbot.execute(): User {
         return requestForJson(

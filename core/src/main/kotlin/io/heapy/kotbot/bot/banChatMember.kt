@@ -39,10 +39,10 @@ public data class BanChatMember(
      * True for supergroups and channels.
      */
     private val revoke_messages: Boolean? = null,
-) : ApiMethod<Boolean> {
+) : Method<Boolean> {
     @Transient
-    private val deserializer: KSerializer<ApiResponse<Boolean>> =
-        ApiResponse.serializer(Boolean.serializer())
+    private val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
 
     override suspend fun Kotbot.execute(): Boolean {
         return requestForJson(

@@ -1,7 +1,7 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.*
-import io.heapy.kotbot.bot.ApiMethod
+import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.SendMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Update.Message
@@ -15,7 +15,7 @@ interface Command {
         message: Message,
         update: Update,
         args: List<String>
-    ): Flow<ApiMethod<*>>
+    ): Flow<Method<*>>
 
     interface Info {
         val name: String
@@ -43,7 +43,7 @@ data class CommandInfo(
 ) : Info
 
 object NoopCommand : Command {
-    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<Method<*>> {
         return flowOf()
     }
 
@@ -59,7 +59,7 @@ object NoopCommand : Command {
 class HelloWorldCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<Method<*>> {
         return flowOf(
             SendMessage(
                 chat_id = message.chat.id.toString(),
@@ -79,7 +79,7 @@ class HelloWorldCommand(
 class ChatInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<Method<*>> {
         return flowOf(
             SendMessage(
                 chat_id = message.chat.id.toString(),
@@ -102,7 +102,7 @@ class ChatInfoCommand(
 class ContactInfoCommand(
     override val info: Info = INFO
 ) : Command {
-    override fun execute(message: Message, update: Update, args: List<String>): Flow<ApiMethod<*>> {
+    override fun execute(message: Message, update: Update, args: List<String>): Flow<Method<*>> {
         val contact = message.reply_to_message?.contact
         return flowOf(
             SendMessage(
