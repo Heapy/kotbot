@@ -72,6 +72,12 @@ public data class Update(
      * in the list of allowed_updates to receive these updates.
      */
     val chat_member: ChatMemberUpdated? = null,
+    /**
+     * Optional. A request to join the chat has been sent. The bot must have
+     * the can_invite_users administrator right in the chat to
+     * receive these updates.
+     */
+    val chat_join_request: ChatJoinRequest? = null
 ) {
     @Serializable
     public data class Message(
@@ -370,6 +376,8 @@ public data class Update(
     @Serializable
     public class ChatMemberUpdated()
     @Serializable
+    public class ChatJoinRequest()
+    @Serializable
     public class Chat(
         /**
          * Unique identifier for this chat. This number may have more than 32
@@ -492,4 +500,50 @@ public data class User(
      * Returned only in getMe.
      */
     public val supports_inline_queries: Boolean? = null,
+)
+
+@Serializable
+public class InputFile()
+
+/**
+ * Contains information about the current status of a webhook.
+ */
+@Serializable
+public data class WebhookInfo(
+    /**
+     * Webhook URL, may be empty if webhook is not set up
+     */
+    val url: String,
+    /**
+     * True, if a custom certificate was provided for webhook certificate checks
+     */
+    val has_custom_certificate: Boolean,
+    /**
+     * Number of updates awaiting delivery
+     */
+    val pending_update_count: Int,
+    /**
+     * Optional. Currently used webhook IP address
+     */
+    val ip_address: String? = null,
+    /**
+     * Optional. Unix time for the most recent error that happened when
+     * trying to deliver an update via webhook
+     */
+    val last_error_date: Int? = null,
+    /**
+     * Optional. Error message in human-readable format for the most
+     * recent error that happened when trying to deliver an update via webhook
+     */
+    val last_error_message: String? = null,
+    /**
+     * Optional. Maximum allowed number of simultaneous HTTPS connections
+     * to the webhook for update delivery
+     */
+    val max_connections: Int? = null,
+    /**
+     * Optional. A list of update types the bot is subscribed to.
+     * Defaults to all update types except chat_member
+     */
+    val allowed_updates: List<String>? = null,
 )
