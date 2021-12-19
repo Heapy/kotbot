@@ -135,6 +135,7 @@ class DeleteSpamRule : Rule {
         private val shorteners = listOf(
             "tinyurl.com",
             "t.me/joinchat",
+            "t.me/+",
             "t.cn",
             "bit.ly",
             "tgraph.io"
