@@ -2,38 +2,22 @@ package io.heapy.kotbot
 
 import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
-import io.heapy.komodo.logging.logger
-import io.heapy.komodo.shutdown.JvmShutdownManager
-import io.heapy.komodo.shutdown.ShutdownManager
-import io.heapy.kotbot.bot.KotBot
-import io.heapy.kotbot.bot.KotbotTelegramBot
-import io.heapy.kotbot.bot.TelegramBot
-import io.heapy.kotbot.bot.command.ChatInfoCommand
-import io.heapy.kotbot.bot.command.Command
-import io.heapy.kotbot.bot.command.HelloWorldCommand
-import io.heapy.kotbot.bot.rule.CombotCasRule
-import io.heapy.kotbot.bot.rule.DeleteHelloRule
-import io.heapy.kotbot.bot.rule.DeleteJoinRule
-import io.heapy.kotbot.bot.rule.DeleteSpamRule
-import io.heapy.kotbot.bot.rule.DeleteStickersRule
-import io.heapy.kotbot.bot.rule.DeleteSwearingRule
-import io.heapy.kotbot.bot.rule.DeleteVoiceMessageRule
-import io.heapy.kotbot.bot.rule.LongTimeNoSeeRule
-import io.heapy.kotbot.bot.rule.Rule
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.configuration.Configuration
-import io.heapy.kotbot.configuration.DefaultConfiguration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.KtorServer
 import io.heapy.kotbot.web.Server
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.serialization.json.Json
+import java.lang.System.getenv
 
 open class ApplicationFactory {
     open val configuration: Configuration by lazy {
-        ConfigFactory.load().extract<DefaultConfiguration>()
+        ConfigFactory.load().extract()
     }
 
     open val prometheusMeterRegistry: PrometheusMeterRegistry by lazy {
@@ -43,40 +27,28 @@ open class ApplicationFactory {
     }
 
     open val httpClient: HttpClient by lazy {
-        HttpClient(Apache) {
-            install(JsonFeature) {
-                serializer = JacksonSerializer()
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(json = Json {
+                    ignoreUnknownKeys = true
+                })
             }
         }
     }
 
-    open val deleteJoinRule: Rule by lazy {
-        DeleteJoinRule()
-    }
+    open val deleteJoinRule: Rule by lazy(::DeleteJoinRule)
 
-    open val deleteSpamRule: Rule by lazy {
-        DeleteSpamRule()
-    }
+    open val deleteSpamRule: Rule by lazy(::DeleteSpamRule)
 
-    open val deleteHelloRule: Rule by lazy {
-        DeleteHelloRule()
-    }
+    open val deleteHelloRule: Rule by lazy(::DeleteHelloRule)
 
-    open val longTimeNoSeeRule: Rule by lazy {
-        LongTimeNoSeeRule()
-    }
+    open val longTimeNoSeeRule: Rule by lazy(::LongTimeNoSeeRule)
 
-    open val deleteSwearingRule: Rule by lazy {
-        DeleteSwearingRule()
-    }
+    open val deleteSwearingRule: Rule by lazy(::DeleteSwearingRule)
 
-    open val deleteVoiceMessageRule: Rule by lazy {
-        DeleteVoiceMessageRule()
-    }
+    open val deleteVoiceMessageRule: Rule by lazy(::DeleteVoiceMessageRule)
 
-    open val deleteStickersRule: Rule by lazy {
-        DeleteStickersRule()
-    }
+    open val deleteStickersRule: Rule by lazy(::DeleteStickersRule)
 
     open val combotCasRule: Rule by lazy {
         CombotCasRule(
@@ -85,28 +57,29 @@ open class ApplicationFactory {
         )
     }
 
-    open val helloWorldCommand: Command by lazy {
-        HelloWorldCommand()
-    }
+    open val helloWorldCommand: Command by lazy(::HelloWorldCommand)
 
-    open val chatInfoCommand: Command by lazy {
-        ChatInfoCommand()
-    }
+    open val chatInfoCommand: Command by lazy(::ChatInfoCommand)
 
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
-            shutdownManager = shutdownManager
         )
     }
 
-    open val shutdownManager: ShutdownManager by lazy {
-        JvmShutdownManager()
+    open val groupInFamilyFilter: Filter by lazy {
+        KnownChatsFilter(configuration.groups)
     }
 
-    open val kotbot: KotBot by lazy {
-        KotBot(
-            configuration = configuration.bot,
+    open val kotbot: Kotbot by lazy {
+        Kotbot(
+            token = configuration.bot.token,
+        )
+    }
+
+    open val kotlinChatsBot: KotlinChatsBot by lazy {
+        KotlinChatsBot(
+            kotbot = kotbot,
             rules = listOf(
                 deleteJoinRule,
                 deleteSpamRule,
@@ -121,21 +94,18 @@ open class ApplicationFactory {
                 helloWorldCommand,
                 chatInfoCommand,
             ),
+            filter = Filter.combine(
+                listOf(
+                    groupInFamilyFilter
+                )
+            ),
             meterRegistry = prometheusMeterRegistry
         )
     }
 
-    open val telegramBot: TelegramBot by lazy {
-        KotbotTelegramBot(
-            configuration = configuration.bot,
-            shutdownManager = shutdownManager,
-            kotBot = kotbot
-        )
-    }
-
-    open fun start() {
+    open suspend fun start() {
         server.start()
-        telegramBot.start()
+        kotlinChatsBot.start()
 
         LOGGER.info("Application started.")
     }

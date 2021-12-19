@@ -11,12 +11,10 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.micrometer.prometheus.PrometheusRenameFilter
 
-/**
- * Provides configured instance of prometheus registry.
- *
- * @author Ruslan Ibragimov
- * @since 1.0.0
- */
+data class MetricsConfiguration(
+    val tags: Map<String, String>,
+)
+
 fun createPrometheusMeterRegistry(
     configuration: MetricsConfiguration,
     prometheusConfig: PrometheusConfig = PrometheusConfig.DEFAULT

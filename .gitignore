@@ -8,4 +8,4 @@ out
 build
 
 # Configuration
-/devops/.env
+/src/main/resources/application.conf

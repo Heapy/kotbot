@@ -9,22 +9,28 @@ application {
 }
 
 dependencies {
-    implementation(logback)
-    implementation(komodoLogging)
+    // TODO: Remove
+    compileOnly("org.telegram:telegrambots:5.5.0")
 
-    implementation(komodo)
-    implementation(komodoDotenv)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.serialization)
 
-    implementation(micrometer)
-    implementation(micrometerPrometheus)
+    testImplementation(libs.junit.api)
+    testRuntimeOnly(libs.junit.engine)
+    testImplementation(libs.mockk)
 
-    implementation(ktorClient)
-    implementation(ktorClientJackson)
+    implementation(libs.logback)
 
-    implementation(config4k)
+    implementation(libs.micrometer.prometheus)
 
-    implementation(project(":web"))
-    implementation(project(":bot"))
-    implementation(project(":stats"))
-    implementation(project(":dao"))
+    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.client)
+    implementation(libs.ktor.client.content.negation)
+    implementation(libs.ktor.server)
+    implementation(libs.ktor.server.content.negation)
+
+    implementation(libs.config4k)
+
+    implementation(project(":core"))
 }
