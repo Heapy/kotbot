@@ -6,7 +6,7 @@ data class Configuration(
     val bot: BotConfiguration,
     val cas: CasConfiguration,
     val metrics: MetricsConfiguration,
-    val groups: KniwnChatsConfiguration,
+    val groups: KnownChatsConfiguration,
 )
 
 data class BotConfiguration(
@@ -17,7 +17,7 @@ data class CasConfiguration(
     val allowlist: Set<Long>,
 )
 
-data class KniwnChatsConfiguration(
+data class KnownChatsConfiguration(
     val ids: Set<Long>,
     val admins: Map<String, List<Long>>,
 )

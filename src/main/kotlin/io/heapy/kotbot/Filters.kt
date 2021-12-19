@@ -1,7 +1,7 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.bot.Update
-import io.heapy.kotbot.configuration.KniwnChatsConfiguration
+import io.heapy.kotbot.configuration.KnownChatsConfiguration
 
 fun interface Filter {
     /**
@@ -23,7 +23,7 @@ fun Filter.Companion.combine(filters: List<Filter>): Filter {
 }
 
 class KnownChatsFilter(
-    private val knownChatsConfiguration: KniwnChatsConfiguration,
+    private val knownChatsConfiguration: KnownChatsConfiguration,
 ) : Filter {
     override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { decision ->
