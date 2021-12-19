@@ -1,11 +1,11 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.Access
+import io.heapy.kotbot.Command.Access.ADMIN
 import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.Method
-import io.heapy.kotbot.bot.DeleteMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.execute
@@ -22,7 +22,8 @@ class KotlinChatsBot(
     private val rules: List<Rule>,
     private val commands: List<Command>,
     private val filter: Filter,
-    private val meterRegistry: MeterRegistry
+    private val meterRegistry: MeterRegistry,
+    private val admins: List<Long>,
 ) {
     suspend fun start() {
         kotbot.receiveUpdates()
@@ -60,10 +61,7 @@ class KotlinChatsBot(
                         .toList()
                         .let {
                             if (info.context == GROUP_CHAT) {
-                                it + DeleteMessage(
-                                    chat_id = message.chat.id.toString(),
-                                    message_id = message.message_id
-                                )
+                                it + message.delete
                             } else {
                                 it
                             }
@@ -88,8 +86,9 @@ class KotlinChatsBot(
             else -> GROUP_CHAT
         }
 
-        // TODO: Access Control
-        val access = USER
+        val access = update.anyMessage?.from?.id?.let { id ->
+            if (admins.contains(id)) ADMIN else USER
+        } ?: USER
 
         // TODO: can support escaped string with double-quote
         val tokens = update.message?.text?.split(' ')!!

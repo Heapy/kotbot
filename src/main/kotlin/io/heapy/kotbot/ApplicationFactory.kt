@@ -13,7 +13,6 @@ import io.ktor.client.plugins.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.serialization.json.Json
-import java.lang.System.getenv
 
 open class ApplicationFactory {
     open val configuration: Configuration by lazy {
@@ -61,6 +60,8 @@ open class ApplicationFactory {
 
     open val chatInfoCommand: Command by lazy(::ChatInfoCommand)
 
+    open val spamCommand: Command by lazy(::SpamCommand)
+
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
@@ -93,13 +94,15 @@ open class ApplicationFactory {
             commands = listOf(
                 helloWorldCommand,
                 chatInfoCommand,
+                spamCommand,
             ),
             filter = Filter.combine(
                 listOf(
                     groupInFamilyFilter
                 )
             ),
-            meterRegistry = prometheusMeterRegistry
+            meterRegistry = prometheusMeterRegistry,
+            admins = configuration.groups.admins.flatMap { it.value }
         )
     }
 

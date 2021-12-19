@@ -1,8 +1,6 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.bot.Method
-import io.heapy.kotbot.bot.BanChatMember
-import io.heapy.kotbot.bot.DeleteMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.configuration.CasConfiguration
 import io.ktor.client.HttpClient
@@ -26,7 +24,7 @@ class DeleteJoinRule : Rule {
             if (!message.new_chat_members.isNullOrEmpty()) {
                 LOGGER.info("Delete joined users message ${message.new_chat_members}")
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
+                    message.delete,
                 )
             }
         }
@@ -41,7 +39,7 @@ class DeleteHelloRule : Rule {
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete hello message ${message.text} from ${message.from?.info}")
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
+                    message.delete,
                 )
             }
         }
@@ -64,8 +62,8 @@ class LongTimeNoSeeRule : Rule {
             if (strings.contains(text.lowercase())) {
                 LOGGER.info("Delete spam ${message.text} from ${message.from?.info}")
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
-                    BanChatMember(message.chat.id.toString(), message.from!!.id),
+                    message.delete,
+                    message.banFrom,
                 )
             }
         }
@@ -90,7 +88,7 @@ class DeleteSwearingRule : Rule {
             if (isSwearing) {
                 LOGGER.info("Delete message with swearing ${message.text} from ${message.from?.info}")
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
+                    message.delete,
                 )
             }
         }
@@ -122,8 +120,8 @@ class DeleteSpamRule : Rule {
                 LOGGER.info("Delete message with shortened link $text from ${message.from?.info}")
 
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
-                    BanChatMember(message.chat.id.toString(), message.from!!.id),
+                    message.delete,
+                    message.banFrom,
                 )
             }
         }
@@ -153,7 +151,7 @@ class DeleteVoiceMessageRule : Rule {
                 LOGGER.info("Delete voice-message from ${message.from?.info}.")
 
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
+                    message.delete,
                 )
             }
         }
@@ -173,7 +171,7 @@ class DeleteStickersRule : Rule {
                 LOGGER.info("Delete sticker-message from ${message.from?.info}.")
 
                 return flowOf(
-                    DeleteMessage(message.chat.id.toString(), message.message_id),
+                    message.delete,
                 )
             }
         }
@@ -193,8 +191,8 @@ class CombotCasRule(
                 val response = client.get("https://api.cas.chat/check?user_id=$userId").body<CasResponse>()
                 if (response.ok) {
                     LOGGER.info("User ${message.from?.info} is CAS banned")
-                    emit(DeleteMessage(message.chat.id.toString(), message.message_id))
-                    emit(BanChatMember(message.chat.id.toString(), message.from!!.id))
+                    emit(message.delete)
+                    emit(message.banFrom)
                 } else {
                     LOGGER.info("User ${message.from?.info} is NOT CAS banned")
                 }
