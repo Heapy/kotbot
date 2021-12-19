@@ -5,6 +5,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.util.pipeline.ContextDsl
+import kotlinx.serialization.Serializable
 
 @ContextDsl
 fun Routing.health() {
@@ -15,4 +16,5 @@ fun Routing.health() {
 
 internal val OK = HealthResponse("ok")
 
+@Serializable
 internal data class HealthResponse(val status: String)
