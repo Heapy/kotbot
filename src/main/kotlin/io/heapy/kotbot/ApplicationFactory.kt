@@ -73,7 +73,7 @@ open class ApplicationFactory {
 
     open val kotbot: Kotbot by lazy {
         Kotbot(
-            token = getenv("KOTBOT_TOKEN"),
+            token = configuration.bot.token,
         )
     }
 

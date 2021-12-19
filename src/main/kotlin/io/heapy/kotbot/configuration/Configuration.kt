@@ -3,13 +3,18 @@ package io.heapy.kotbot.configuration
 import io.heapy.kotbot.metrics.MetricsConfiguration
 
 data class Configuration(
+    val bot: BotConfiguration,
     val cas: CasConfiguration,
     val metrics: MetricsConfiguration,
-    val groups: KniwnChatsConfiguration
+    val groups: KniwnChatsConfiguration,
+)
+
+data class BotConfiguration(
+    val token: String,
 )
 
 data class CasConfiguration(
-    val allowlist: Set<Long>
+    val allowlist: Set<Long>,
 )
 
 data class KniwnChatsConfiguration(
