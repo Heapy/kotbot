@@ -23,7 +23,7 @@ fun Filter.Companion.combine(filters: List<Filter>): Filter {
 }
 
 class KnownChatsFilter(
-    private val knownChatsConfiguration: KniwnChatsConfiguration
+    private val knownChatsConfiguration: KniwnChatsConfiguration,
 ) : Filter {
     override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { decision ->
