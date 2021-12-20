@@ -246,7 +246,7 @@ public data class Update(
          * Optional. A member was removed from the group, information about
          * them (this member may be the bot itself)
          */
-        val left_chat_member: List<User>? = null,
+        val left_chat_member: User? = null,
         /**
          * Optional. A chat title was changed to this value
          */
