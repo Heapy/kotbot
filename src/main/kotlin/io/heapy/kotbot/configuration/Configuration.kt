@@ -19,6 +19,7 @@ data class CasConfiguration(
 
 data class KnownChatsConfiguration(
     val ids: Set<Long>,
+    val blocked: Set<Long>,
     val admins: Map<String, List<Long>>,
 )
 

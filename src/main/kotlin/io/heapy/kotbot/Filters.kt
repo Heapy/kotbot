@@ -27,9 +27,23 @@ class KnownChatsFilter(
 ) : Filter {
     override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { decision ->
-            if (!decision) {
+            if (!decision && !isBlocked(update)) {
                 LOGGER.error("Don't process update $update since it's not part of chat family.")
             }
+        }
+    }
+
+    private fun isBlocked(update: Update): Boolean {
+        val chat = update.message?.chat
+            ?: update.edited_message?.chat
+            ?: return true
+
+        return when(chat.type) {
+            "supergroup" -> knownChatsConfiguration.blocked.contains(chat.id)
+            "channel" -> knownChatsConfiguration.blocked.contains(chat.id)
+            "group" -> knownChatsConfiguration.blocked.contains(chat.id)
+            "private" -> false
+            else -> true
         }
     }
 
