@@ -1,13 +1,12 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Access.ADMIN
 import io.heapy.kotbot.Command.Access.USER
 import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Update
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.execute
 import io.heapy.kotbot.bot.receiveUpdates
 import io.micrometer.core.instrument.MeterRegistry
@@ -43,24 +42,20 @@ class KotlinChatsBot(
             message.text?.let { text ->
                 try {
                     commands.find { command ->
-                        text.startsWith(command.info.name)
+                        command.name == text.split(" ").getOrNull(0)
                     } ?: return false
-
-                    // parse command-like message
-                    val info = updateToCommandInfo(update)
 
                     // find actual command
                     val command = commands.find { command ->
-                        command.info.name == info.name
-                            && command.info.context == info.context
-                            && command.info.arity == info.arity
-                            && command.info.access >= info.access
+                        command.name == update.name
+                            && command.context == update.context
+                            && command.access >= update.access
                     } ?: NoopCommand
 
-                    command.execute(message, update, listOf())
+                    command.execute(update)
                         .toList()
                         .let {
-                            if (info.context == GROUP_CHAT) {
+                            if (update.context == GROUP_CHAT) {
                                 it + message.delete
                             } else {
                                 it
@@ -80,39 +75,19 @@ class KotlinChatsBot(
         return false
     }
 
-    internal fun updateToCommandInfo(update: Update): UpdateCommand {
-        val context = when (update.message?.chat?.type) {
+    private val Update.context: Command.Context
+        get() = when (message?.chat?.type) {
             "private" -> USER_CHAT
             else -> GROUP_CHAT
         }
 
-        val access = update.anyMessage?.from?.id?.let { id ->
+    private val Update.access: Command.Access
+        get() = message?.from?.id?.let { id ->
             if (admins.contains(id)) ADMIN else USER
         } ?: USER
 
-        // TODO: can support escaped string with double-quote
-        val tokens = update.message?.text?.split(' ')!!
-
-        val name = tokens[0]
-        val arity = tokens.size - 1
-        val args = tokens.drop(1)
-
-        return UpdateCommand(
-            name = name,
-            arity = arity,
-            access = access,
-            context = context,
-            args = args
-        )
-    }
-
-    data class UpdateCommand(
-        override val name: String,
-        override val arity: Int,
-        override val context: Command.Context,
-        override val access: Access,
-        val args: List<String>
-    ) : Command.Info
+    private val Update.name: String
+        get() = message?.text?.split(' ')!![0]
 
     internal suspend fun executeRules(update: Update) {
         rules

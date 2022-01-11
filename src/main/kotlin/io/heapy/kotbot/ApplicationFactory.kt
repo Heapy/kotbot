@@ -62,6 +62,16 @@ open class ApplicationFactory {
 
     open val spamCommand: Command by lazy(::SpamCommand)
 
+    open val chatCommands: List<Command> by lazy {
+        configuration.groups.ids.map { (name, id) ->
+            SendMessageFromBotCommand(
+                admin = configuration.groups.admin,
+                name = "/$name",
+                id = id,
+            )
+        }
+    }
+
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
@@ -95,7 +105,7 @@ open class ApplicationFactory {
                 helloWorldCommand,
                 chatInfoCommand,
                 spamCommand,
-            ),
+            ) + chatCommands,
             filter = Filter.combine(
                 listOf(
                     groupInFamilyFilter

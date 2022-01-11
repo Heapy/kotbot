@@ -53,9 +53,9 @@ class KnownChatsFilter(
             ?: return true
 
         return when(chat.type) {
-            "supergroup" -> knownChatsConfiguration.ids.contains(chat.id)
-            "channel" -> knownChatsConfiguration.ids.contains(chat.id)
-            "group" -> knownChatsConfiguration.ids.contains(chat.id)
+            "supergroup" -> knownChatsConfiguration.ids.values.contains(chat.id)
+            "channel" -> knownChatsConfiguration.ids.values.contains(chat.id)
+            "group" -> knownChatsConfiguration.ids.values.contains(chat.id)
             "private" -> true
             else -> false
         }

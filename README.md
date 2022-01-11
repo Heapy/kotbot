@@ -109,3 +109,18 @@ These commands work for everybody.
 ### UI
 
 * Web archive of messages (/room/year-month-day/)
+
+
+### BotFather configuration:
+
+Commands:
+
+```
+kotlin_meta - Send message to Kotlin Meta
+kotlin_lang - Send message to Kotlin Lang
+kotlin_jvm - Send message to Kotlin JVM
+kotlin_start - Send message to Kotlin Start
+kotlin_mobile - Send message to Kotlin Mobile
+kotlin_native - Send message to Kotlin Native
+kotlin_js - Send message to Kotlin JS
+```
