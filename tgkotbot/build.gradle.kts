@@ -30,6 +30,8 @@ dependencies {
 
     implementation(libs.config4k)
 
+    implementation(libs.mapdb)
+
     implementation(project(":core"))
 }
 
