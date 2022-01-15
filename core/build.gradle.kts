@@ -1,5 +1,6 @@
 plugins {
-    id("io.heapy.kotbot.build")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -17,6 +18,21 @@ dependencies {
     testRuntimeOnly(libs.junit.engine)
     testImplementation(libs.mockk)
     testImplementation(libs.slf4j.simple)
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
+        languageVersion = "1.6"
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-progressive",
+            "-Xopt-in=kotlin.RequiresOptIn"
+        )
+    }
 }
 
 tasks.test {

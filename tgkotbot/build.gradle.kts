@@ -1,6 +1,7 @@
 plugins {
-    id("io.heapy.kotbot.build")
     application
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 application {
@@ -30,6 +31,21 @@ dependencies {
     implementation(libs.config4k)
 
     implementation(project(":core"))
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
+        languageVersion = "1.6"
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-progressive",
+            "-Xopt-in=kotlin.RequiresOptIn"
+        )
+    }
 }
 
 tasks.test {
