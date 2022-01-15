@@ -12,6 +12,7 @@ jobs:
         with:
           java-version: "11"
           distribution: "zulu"
+      - uses: gradle/gradle-build-action@v2
       - run: ./gradlew check distTar
       - uses: actions/upload-artifact@v2
         with:
