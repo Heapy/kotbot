@@ -18,3 +18,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.slf4j.simple)
 }
+
+tasks.test {
+    useJUnitPlatform()
+}

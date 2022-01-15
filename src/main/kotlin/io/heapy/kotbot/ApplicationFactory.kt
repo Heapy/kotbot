@@ -62,7 +62,13 @@ open class ApplicationFactory {
 
     open val spamCommand: Command by lazy(::SpamCommand)
 
-    open val chatCommands: List<Command> by lazy {
+    open val postToForumCommand: Command by lazy {
+        PostToForumCommand(
+            forum = configuration.groups.forum
+        )
+    }
+
+    open val sendMessageToGroupCommands: List<Command> by lazy {
         configuration.groups.ids.map { (name, id) ->
             SendMessageFromBotCommand(
                 admin = configuration.groups.admin,
@@ -105,7 +111,8 @@ open class ApplicationFactory {
                 helloWorldCommand,
                 chatInfoCommand,
                 spamCommand,
-            ) + chatCommands,
+                postToForumCommand,
+            ) + sendMessageToGroupCommands,
             filter = Filter.combine(
                 listOf(
                     groupInFamilyFilter

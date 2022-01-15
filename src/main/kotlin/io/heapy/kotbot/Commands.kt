@@ -26,14 +26,21 @@ interface Command {
     val Update.cmdMessage: Message
         get() = message!!
 
+    val Message.textWithoutCommand: String?
+        get() = text?.substringAfter(name)?.takeIf { it.isNotBlank() }
+
     enum class Context {
         USER_CHAT,
         GROUP_CHAT
     }
 
     enum class Access {
-        USER,
-        ADMIN
+        ADMIN,
+        USER;
+
+        fun isAllowed(actual: Access): Boolean {
+            return this >= actual
+        }
     }
 }
 
@@ -60,7 +67,7 @@ class HelloWorldCommand : Command {
         return flowOf(
             SendMessage(
                 chat_id = update.cmdMessage.chat.id.toString(),
-                text = "Hello, World!"
+                text = update.cmdMessage.textWithoutCommand ?: "Hello, world!"
             )
         )
     }
@@ -104,6 +111,38 @@ class SpamCommand : Command {
     }
 }
 
+class PostToForumCommand(
+    private val forum: Long,
+) : Command {
+    override val name = "/post"
+    override val context = Context.USER_CHAT
+    override val access = Access.USER
+
+    override fun execute(
+        update: Update
+    ): Flow<Method<*>> {
+        update.cmdMessage.textWithoutCommand?.let { message ->
+            return flowOf(
+                SendMessage(
+                    chat_id = forum.toString(),
+                    text = message
+                ),
+                SendMessage(
+                    chat_id = update.cmdMessage.chat.id.toString(),
+                    text = "Message posted to forum"
+                )
+            )
+        }
+
+        return flowOf(
+            SendMessage(
+                chat_id = update.cmdMessage.chat.id.toString(),
+                text = "Send message in format `/post <message>`"
+            )
+        )
+    }
+}
+
 class SendMessageFromBotCommand(
     private val admin: Long,
     override val name: String,
@@ -115,9 +154,7 @@ class SendMessageFromBotCommand(
     override fun execute(
         update: Update
     ): Flow<Method<*>> {
-        update.cmdMessage.text
-            ?.split(' ', limit = 2)
-            ?.getOrNull(1)
+        update.cmdMessage.textWithoutCommand
             ?.let { text ->
                 return flowOf(
                     SendMessage(

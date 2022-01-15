@@ -40,6 +40,10 @@ public data class SendMessage(
      */
     private val disable_notification: Boolean? = null,
     /**
+     * Protects the contents of the sent message from forwarding and saving
+     */
+    private val protect_content: Boolean? = null,
+    /**
      * If the message is a reply, ID of the original message
      */
     private val reply_to_message_id: Int? = null,
