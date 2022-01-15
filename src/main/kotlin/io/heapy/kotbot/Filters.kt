@@ -23,8 +23,11 @@ fun Filter.Companion.combine(filters: List<Filter>): Filter {
 }
 
 class KnownChatsFilter(
-    private val knownChatsConfiguration: KnownChatsConfiguration,
+    conf: KnownChatsConfiguration,
 ) : Filter {
+    private val knownGroups = conf.ids.values + conf.admin
+    private val blockedGroups = conf.blocked
+
     override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { decision ->
             if (!decision && !isBlocked(update)) {
@@ -39,9 +42,9 @@ class KnownChatsFilter(
             ?: return true
 
         return when(chat.type) {
-            "supergroup" -> knownChatsConfiguration.blocked.contains(chat.id)
-            "channel" -> knownChatsConfiguration.blocked.contains(chat.id)
-            "group" -> knownChatsConfiguration.blocked.contains(chat.id)
+            "supergroup" -> blockedGroups.contains(chat.id)
+            "channel" -> blockedGroups.contains(chat.id)
+            "group" -> blockedGroups.contains(chat.id)
             "private" -> false
             else -> true
         }
@@ -53,9 +56,9 @@ class KnownChatsFilter(
             ?: return true
 
         return when(chat.type) {
-            "supergroup" -> knownChatsConfiguration.ids.values.contains(chat.id)
-            "channel" -> knownChatsConfiguration.ids.values.contains(chat.id)
-            "group" -> knownChatsConfiguration.ids.values.contains(chat.id)
+            "supergroup" -> knownGroups.contains(chat.id)
+            "channel" -> knownGroups.contains(chat.id)
+            "group" -> knownGroups.contains(chat.id)
             "private" -> true
             else -> false
         }
