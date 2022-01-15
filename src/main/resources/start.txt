@@ -4,6 +4,7 @@
 3\. Допишите ваш вопрос к появившейся команде
 4\. Отправьте сообщение
 Вопрос появится в канале\. Следите за комментариями к посту\.
+Бот работает в тестовом режиме, сообщения об ошибках и предложениея принимаются в @kotlin\_meta\.
 
 This bot can help to ask question at @kotlin\_forum\.
 1\. Open bot menu
@@ -11,3 +12,4 @@ This bot can help to ask question at @kotlin\_forum\.
 3\. Write your question after the command
 4\. Send the message
 The question will appear in the channel\. Follow post comments there\.
+The bot is in test mode, send bug reports and suggestions to @kotlin\_meta\.
