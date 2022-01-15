@@ -1,4 +1,4 @@
-package io.heapy.kotbot
+package io.heapy.kotbot.experimental
 
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.User
