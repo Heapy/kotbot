@@ -2,22 +2,20 @@ package io.heapy.kotbot
 
 import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Context
-import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.SendMessage
 import io.heapy.kotbot.bot.Update
 import io.heapy.kotbot.bot.Update.Message
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 
 interface Command {
     val name: String
     val context: Context
     val access: Access
 
-    fun execute(
-        update: Update
-    ): Flow<Method<*>>
+    suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    )
 
     /**
      * Non-null access to message,
@@ -44,32 +42,20 @@ interface Command {
     }
 }
 
-object NoopCommand : Command {
-    override val name = "/noop"
-    override val context = Context.USER_CHAT
-    override val access = Access.ADMIN
-
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
-        return flowOf()
-    }
-}
-
 class HelloWorldCommand : Command {
     override val name = "/hello"
     override val context = Context.USER_CHAT
     override val access = Access.ADMIN
 
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
-        return flowOf(
-            SendMessage(
-                chat_id = update.cmdMessage.chat.id.toString(),
-                text = update.cmdMessage.textWithoutCommand ?: "Hello, world!"
-            )
-        )
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        kotbot.executeSafely(SendMessage(
+            chat_id = update.cmdMessage.chat.id.toString(),
+            text = update.cmdMessage.textWithoutCommand ?: "Hello, world!"
+        ))
+        kotbot.executeSafely(update.cmdMessage.delete)
     }
 }
 
@@ -78,17 +64,17 @@ class ChatInfoCommand : Command {
     override val context = Context.GROUP_CHAT
     override val access = Access.ADMIN
 
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
-        return flowOf(
-            SendMessage(
-                chat_id = update.cmdMessage.chat.id.toString(),
-                text = """
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        kotbot.executeSafely(SendMessage(
+            chat_id = update.cmdMessage.chat.id.toString(),
+            text = """
                 Chat id: ${update.cmdMessage.chat.id}
             """.trimIndent()
-            )
-        )
+        ))
+        kotbot.executeSafely(update.cmdMessage.delete)
     }
 }
 
@@ -97,17 +83,15 @@ class SpamCommand : Command {
     override val context = Context.GROUP_CHAT
     override val access = Access.ADMIN
 
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
         update.cmdMessage.reply_to_message?.let { reply ->
-            return flowOf(
-                reply.delete,
-                reply.banFrom
-            )
+            kotbot.executeSafely(reply.delete)
+            kotbot.executeSafely(reply.banFrom)
+            kotbot.executeSafely(update.cmdMessage.delete)
         }
-
-        return emptyFlow()
     }
 }
 
@@ -118,28 +102,34 @@ class PostToForumCommand(
     override val context = Context.USER_CHAT
     override val access = Access.USER
 
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
         update.cmdMessage.textWithoutCommand?.let { message ->
-            return flowOf(
-                SendMessage(
-                    chat_id = forum.toString(),
-                    text = message
-                ),
-                SendMessage(
-                    chat_id = update.cmdMessage.chat.id.toString(),
-                    text = "Message posted to forum"
-                )
-            )
+            val forumMessage = kotbot.executeSafely(SendMessage(
+                chat_id = forum.toString(),
+                text = message
+            ))
+            kotbot.executeSafely(SendMessage(
+                chat_id = update.cmdMessage.chat.id.toString(),
+                text = "Message posted to forum: https://t.me/kotlin_forum/${forumMessage?.message_id}"
+            ))
+            return
         }
 
-        return flowOf(
-            SendMessage(
+        post_text?.let { text ->
+            kotbot.executeSafely(SendMessage(
                 chat_id = update.cmdMessage.chat.id.toString(),
-                text = "Send message in format `/post <message>`"
-            )
-        )
+                text = text,
+                parse_mode = "MarkdownV2",
+            ))
+
+        }
+    }
+
+    companion object {
+        private val post_text = readResource("post.txt")
     }
 }
 
@@ -151,26 +141,45 @@ class SendMessageFromBotCommand(
     override val context = Context.USER_CHAT
     override val access = Access.ADMIN
 
-    override fun execute(
-        update: Update
-    ): Flow<Method<*>> {
-        update.cmdMessage.textWithoutCommand
-            ?.let { text ->
-                return flowOf(
-                    SendMessage(
-                        chat_id = id.toString(),
-                        text = text
-                    ),
-                    SendMessage(
-                        chat_id = admin.toString(),
-                        text = """
-                            ${update.cmdMessage.from?.username} sent following message to chat $name:
-                            $text
-                        """.trimIndent()
-                    )
-                )
-            }
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        update.cmdMessage.textWithoutCommand?.let { text ->
+            kotbot.executeSafely(SendMessage(
+                chat_id = id.toString(),
+                text = text
+            ))
+            kotbot.executeSafely(SendMessage(
+                chat_id = admin.toString(),
+                text = """
+                    ${update.cmdMessage.from?.username} sent following message to chat $name:
+                    $text
+                """.trimIndent()
+            ))
+        }
+    }
+}
 
-        return emptyFlow()
+class StartCommand : Command {
+    override val name = "/start"
+    override val context = Context.USER_CHAT
+    override val access = Access.USER
+
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        start_text?.let { text ->
+            kotbot.executeSafely(SendMessage(
+                chat_id = update.cmdMessage.chat.id.toString(),
+                text = text,
+                parse_mode = "MarkdownV2",
+            ))
+        }
+    }
+
+    companion object {
+        private val start_text = readResource("start.txt")
     }
 }

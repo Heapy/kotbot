@@ -62,6 +62,8 @@ open class ApplicationFactory {
 
     open val spamCommand: Command by lazy(::SpamCommand)
 
+    open val startCommand: Command by lazy(::StartCommand)
+
     open val postToForumCommand: Command by lazy {
         PostToForumCommand(
             forum = configuration.groups.forum
@@ -112,6 +114,7 @@ open class ApplicationFactory {
                 chatInfoCommand,
                 spamCommand,
                 postToForumCommand,
+                startCommand,
             ) + sendMessageToGroupCommands,
             filter = Filter.combine(
                 listOf(

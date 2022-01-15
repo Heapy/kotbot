@@ -99,9 +99,7 @@ class DeleteSwearingRule : Rule {
     companion object {
         internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
 
-        private val strings = DeleteSwearingRule::class.java.classLoader
-            .getResource("contains.txt")
-            ?.readText()
+        private val strings = readResource("contains.txt")
             ?.split("\n")
             ?.filter { it.isNotEmpty() }
             ?.map(::wordRegex)

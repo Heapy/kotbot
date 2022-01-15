@@ -1,0 +1,7 @@
+Отправьте сообщение в формате `/post <message>`
+На телефоне для этого можно удержать команду из меню бота\.
+На компьютере наведите мышь на команду и нажмите Tab\.
+
+Send message in format `/post <message>`
+On mobile, you can long\-tap command within bot menu\.
+On PC, hover at the command and press Tab\.

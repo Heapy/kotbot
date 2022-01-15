@@ -37,41 +37,23 @@ class KotlinChatsBot(
     }
 
     internal suspend fun findAndExecuteCommand(update: Update): Boolean {
-        update.message?.let { message ->
-            // Command accepts text only in message, no update message supported
-            message.text?.let { text ->
-                try {
-                    commands.find { command ->
-                        command.name == text.split(" ").getOrNull(0)
-                    } ?: return false
+        // Command accepts text only in message, no update message supported
+        update.message?.text?.run {
+            try {
+                val command = commands.find { command ->
+                    command.name == update.name
+                        && command.context == update.context
+                        && command.access.isAllowed(update.access)
+                } ?: return false
 
-                    // find actual command
-                    val command = commands.find { command ->
-                        command.name == update.name
-                            && command.context == update.context
-                            && command.access >= update.access
-                    } ?: NoopCommand
+                command.execute(kotbot, update)
 
-                    command.execute(update)
-                        .toList()
-                        .let {
-                            if (update.context == GROUP_CHAT) {
-                                it + message.delete
-                            } else {
-                                it
-                            }
-                        }
-                        .distinct()
-                        .forEach {
-                            execute(it)
-                        }
-
-                    return true
-                } catch (e: Exception) {
-                    LOGGER.error("Exception in command. Update: {}", update, e)
-                }
+                return true
+            } catch (e: Exception) {
+                LOGGER.error("Exception in command. Update: {}", update, e)
             }
         }
+
         return false
     }
 
@@ -86,8 +68,8 @@ class KotlinChatsBot(
             if (admins.contains(id)) ADMIN else USER
         } ?: USER
 
-    private val Update.name: String
-        get() = message?.text?.split(' ')!![0]
+    private val Update.name: String?
+        get() = message?.text?.split(' ')?.getOrNull(0)
 
     internal suspend fun executeRules(update: Update) {
         rules
@@ -107,7 +89,7 @@ class KotlinChatsBot(
             }
             .distinct()
             .forEach {
-                execute(it)
+                kotbot.executeSafely(it)
             }
     }
 
@@ -128,16 +110,17 @@ class KotlinChatsBot(
     internal fun ruleToMetricName(rule: Rule): String {
         return rule::class.simpleName ?: "UnknownRule"
     }
+}
 
-    internal suspend fun execute(method: Method<*>) {
-        try {
-            kotbot.execute(method)
-        } catch (e: Exception) {
-            LOGGER.error("Method {} failed: {}", method, e.message, e)
-        }
-    }
+private val LOGGER = logger<KotlinChatsBot>()
 
-    companion object {
-        private val LOGGER = logger<KotlinChatsBot>()
+internal suspend fun <Response> Kotbot.executeSafely(
+    method: Method<Response>
+): Response? {
+    return try {
+        execute(method)
+    } catch (e: Exception) {
+        LOGGER.error("Method {} failed: {}", method, e.message, e)
+        null
     }
 }

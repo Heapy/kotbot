@@ -9,9 +9,6 @@ application {
 }
 
 dependencies {
-    // TODO: Remove
-    compileOnly("org.telegram:telegrambots:5.5.0")
-
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization)
@@ -33,4 +30,8 @@ dependencies {
     implementation(libs.config4k)
 
     implementation(project(":core"))
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
