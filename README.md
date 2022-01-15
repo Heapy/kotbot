@@ -116,6 +116,8 @@ These commands work for everybody.
 Commands:
 
 ```
+post - Create new post in @kotlin_forum
+spam - Mark message as spam
 kotlin_meta - Send message to Kotlin Meta
 kotlin_lang - Send message to Kotlin Lang
 kotlin_jvm - Send message to Kotlin JVM
