@@ -13,6 +13,8 @@ import io.ktor.client.plugins.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.serialization.json.Json
+import org.mapdb.DB
+import org.mapdb.DBMaker
 
 open class ApplicationFactory {
     open val configuration: Configuration by lazy {
@@ -83,6 +85,18 @@ open class ApplicationFactory {
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
+        )
+    }
+
+    open val db: DB by lazy {
+        DBMaker.fileDB("kotbot.db")
+            .transactionEnable()
+            .make()
+    }
+
+    open val userContextStore: UserContextStore by lazy {
+        UserContextStore(
+            db = db,
         )
     }
 
