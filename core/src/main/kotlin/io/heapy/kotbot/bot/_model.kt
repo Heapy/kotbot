@@ -80,286 +80,6 @@ public data class Update(
     val chat_join_request: ChatJoinRequest? = null
 ) {
     @Serializable
-    public data class Message(
-        /**
-         * Unique message identifier inside this chat
-         */
-        val message_id: Int,
-        /**
-         * Optional. Sender, empty for messages sent to channels
-         */
-        val from: User? = null,
-        /**
-         * Optional. Sender of the message, sent on behalf of a chat. The
-         * channel itself for channel messages. The supergroup itself for
-         * messages from anonymous group administrators. The linked channel
-         * for messages automatically forwarded to the discussion group
-         */
-        val sender_chat: Chat? = null,
-        /**
-         * Date the message was sent in Unix time
-         */
-        val date: Int,
-        /**
-         * Conversation the message belongs to
-         */
-        val chat: Chat,
-        /**
-         * Optional. For forwarded messages, sender of the original message
-         */
-        val forward_from: User? = null,
-        /**
-         * Optional. For messages forwarded from channels or from anonymous
-         * administrators, information about the original sender chat
-         */
-        val forward_from_chat: Chat? = null,
-        /**
-         * Optional. For messages forwarded from channels, identifier of the
-         * original message in the channel
-         */
-        val forward_from_message_id: Int? = null,
-        /**
-         * Optional. For messages forwarded from channels, signature of
-         * the post author if present
-         */
-        val forward_signature: String? = null,
-        /**
-         * Optional. Sender's name for messages forwarded from users who disallow
-         * adding a link to their account in forwarded messages
-         */
-        val forward_sender_name: String? = null,
-        /**
-         * Optional. For forwarded messages, date the original message was
-         * sent in Unix time
-         */
-        val forward_date: Int? = null,
-        /**
-         * Optional. For replies, the original message. Note that the Message
-         * object in this field will not contain further reply_to_message
-         * fields even if it itself is a reply.
-         */
-        val reply_to_message: Message? = null,
-        /**
-         * Optional. Bot through which the message was sent
-         */
-        val via_bot: User? = null,
-        /**
-         * Optional. Date the message was last edited in Unix time
-         */
-        val edit_date: Int? = null,
-        /**
-         * Optional. The unique identifier of a media message group
-         * this message belongs to
-         */
-        val media_group_id: String? = null,
-        /**
-         * Optional. Signature of the post author for messages in channels, or
-         * the custom title of an anonymous group administrator
-         */
-        val author_signature: String? = null,
-        /**
-         * Optional. For text messages, the actual UTF-8 text of the message,
-         * 0-4096 characters
-         */
-        val text: String? = null,
-        /**
-         * Optional. For text messages, special entities like usernames, URLs,
-         * bot commands, etc. that appear in the text
-         */
-        val entities: List<MessageEntity>? = null,
-        /**
-         * Optional. Message is an animation, information about the animation.
-         * For backward compatibility, when this field is set,
-         * the document field will also be set
-         */
-        val animation: Animation? = null,
-        /**
-         * Optional. Message is an audio file, information about the file
-         */
-        val audio: Audio? = null,
-        /**
-         * Optional. Message is a general file, information about the file
-         */
-        val document: Document? = null,
-        /**
-         * Optional. Message is a photo, available sizes of the photo
-         */
-        val photo: List<PhotoSize>? = null,
-        /**
-         * Optional. Message is a sticker, information about the sticker
-         */
-        val sticker: Sticker? = null,
-        /**
-         * Optional. Message is a video, information about the video
-         */
-        val video: Video? = null,
-        /**
-         * Optional. Message is a video note, information about the video message
-         */
-        val video_note: VideoNote? = null,
-        /**
-         * Optional. Message is a voice message, information about the file
-         */
-        val voice: Voice? = null,
-        /**
-         * Optional. Caption for the animation, audio, document, photo,
-         * video or voice, 0-1024 characters
-         */
-        val caption: String? = null,
-        /**
-         * Optional. For messages with a caption, special entities like usernames,
-         * URLs, bot commands, etc. that appear in the caption
-         */
-        val caption_entities: List<MessageEntity>? = null,
-        /**
-         * Optional. Message is a shared contact, information about the contact
-         */
-        val contact: Contact? = null,
-        /**
-         * Optional. Message is a dice with random value
-         */
-        val dice: Dice? = null,
-        /**
-         * Optional. Message is a game, information about the game
-         */
-        val game: Game? = null,
-        /**
-         * Optional. Message is a native poll, information about the poll
-         */
-        val poll: Poll? = null,
-        /**
-         * Optional. Message is a venue, information about the venue. For
-         * backward compatibility, when this field is set, the location
-         * field will also be set
-         */
-        val venue: Venue? = null,
-        /**
-         * Optional. Message is a shared location, information about the location
-         */
-        val location: Location? = null,
-        /**
-         * Optional. New members that were added to the group or supergroup
-         * and information about them (the bot itself may be one of these members)
-         */
-        val new_chat_members: List<User>? = null,
-        /**
-         * Optional. A member was removed from the group, information about
-         * them (this member may be the bot itself)
-         */
-        val left_chat_member: User? = null,
-        /**
-         * Optional. A chat title was changed to this value
-         */
-        val new_chat_title: String? = null,
-        /**
-         * Optional. A chat photo was change to this value
-         */
-        val new_chat_photo: List<PhotoSize>? = null,
-        /**
-         * Optional. Service message: the chat photo was deleted
-         */
-        val delete_chat_photo: Boolean? = null,
-        /**
-         * Optional. Service message: the group has been created
-         */
-        val group_chat_created: Boolean? = null,
-        /**
-         * Optional. Service message: the supergroup has been created. This
-         * field can't be received in a message coming through updates, because
-         * bot can't be a member of a supergroup when it is created. It can only
-         * be found in reply_to_message if someone replies to a very first
-         * message in a directly created supergroup.
-         */
-        val supergroup_chat_created: Boolean? = null,
-        /**
-         * Optional. Service message: the channel has been created.
-         * This field can't be received in a message coming through updates,
-         * because bot can't be a member of a channel when it is created.
-         * It can only be found in reply_to_message if someone replies
-         * to a very first message in a channel.
-         */
-        val channel_chat_created: Boolean? = null,
-        /**
-         * Optional. Service message: auto-delete timer settings changed in the chat
-         */
-        val message_auto_delete_timer_changed: MessageAutoDeleteTimerChanged? = null,
-        /**
-         * Optional. The group has been migrated to a supergroup with the
-         * specified identifier. This number may have more than 32 significant
-         * bits and some programming languages may have difficulty/silent
-         * defects in interpreting it. But it has at most 52 significant bits,
-         * so a signed 64-bit integer or double-precision float type are safe
-         * for storing this identifier.
-         */
-        val migrate_to_chat_id: Long? = null,
-        /**
-         * Optional. The supergroup has been migrated from a group with the
-         * specified identifier. This number may have more than 32 significant
-         * bits and some programming languages may have difficulty/silent
-         * defects in interpreting it. But it has at most 52 significant bits,
-         * so a signed 64-bit integer or double-precision float type are safe
-         * for storing this identifier.
-         */
-        val migrate_from_chat_id: Long? = null,
-        /**
-         * Optional. Specified message was pinned. Note that the Message
-         * object in this field will not contain further reply_to_message
-         * fields even if it is itself a reply.
-         */
-        val pinned_message: Message? = null,
-        /**
-         * Optional. Message is an invoice for a payment,
-         * information about the invoice.
-         */
-        val invoice: Invoice? = null,
-        /**
-         * Optional. Message is a service message about a successful payment,
-         * information about the payment.
-         */
-        val successful_payment: SuccessfulPayment? = null,
-        /**
-         * Optional. The domain name of the website on which the user has logged in.
-         */
-        val connected_website: String? = null,
-        /**
-         * Optional. Telegram Passport data
-         */
-        val passport_data: PassportData? = null,
-        /**
-         * Optional. Service message. A user in the chat triggered another
-         * user's proximity alert while sharing Live Location.
-         */
-        val proximity_alert_triggered: ProximityAlertTriggered? = null,
-        /**
-         * Optional. Service message: voice chat scheduled
-         */
-        val voice_chat_scheduled: VoiceChatScheduled? = null,
-        /**
-         * Optional. Service message: voice chat started
-         */
-        val voice_chat_started: VoiceChatStarted? = null,
-        /**
-         * Optional. Service message: voice chat ended
-         */
-        val voice_chat_ended: VoiceChatEnded? = null,
-        /**
-         * Optional. Service message: new participants invited to a voice chat
-         */
-        val voice_chat_participants_invited: VoiceChatParticipantsInvited? = null,
-        /**
-         * Optional. Inline keyboard attached to the message. `login_url`
-         * buttons are represented as ordinary `url` buttons.
-         */
-        val reply_markup: InlineKeyboardMarkup? = null,
-    )
-    @Serializable
-    public data class MessageId(
-        /**
-         * Unique message identifier
-         */
-        val message_id: Int
-    )
-    @Serializable
     public class InlineQuery()
     @Serializable
     public class ChosenInlineResult()
@@ -377,8 +97,6 @@ public data class Update(
     public class ChatMemberUpdated()
     @Serializable
     public class ChatJoinRequest()
-    @Serializable
-    public class MessageEntity()
     @Serializable
     public class Animation()
     @Serializable
@@ -432,6 +150,345 @@ public data class Update(
     @Serializable
     public class InlineKeyboardMarkup()
 }
+
+/**
+ * This object represents a unique message identifier.
+ */
+@Serializable
+public data class MessageId(
+    /**
+     * Unique message identifier
+     */
+    val message_id: Int
+)
+
+/**
+ * This object represents a message.
+ */
+@Serializable
+public data class Message(
+    /**
+     * Unique message identifier inside this chat
+     */
+    val message_id: Int,
+    /**
+     * Optional. Sender of the message; empty for messages sent to channels.
+     * For backward compatibility, the field contains a fake sender user in
+     * non-channel chats, if the message was sent on behalf of a chat.
+     */
+    val from: User? = null,
+    /**
+     * Optional. Sender of the message, sent on behalf of a chat. For example,
+     * the channel itself for channel posts, the supergroup itself for messages
+     * from anonymous group administrators, the linked channel for messages
+     * automatically forwarded to the discussion group. For backward
+     * compatibility, the field from contains a fake sender user in non-channel
+     * chats, if the message was sent on behalf of a chat.
+     */
+    val sender_chat: Chat? = null,
+    /**
+     * Date the message was sent in Unix time
+     */
+    val date: Int,
+    /**
+     * Conversation the message belongs to
+     */
+    val chat: Chat,
+    /**
+     * Optional. For forwarded messages, sender of the original message
+     */
+    val forward_from: User? = null,
+    /**
+     * Optional. For messages forwarded from channels or from anonymous
+     * administrators, information about the original sender chat
+     */
+    val forward_from_chat: Chat? = null,
+    /**
+     * Optional. For messages forwarded from channels, identifier of the
+     * original message in the channel
+     */
+    val forward_from_message_id: Int? = null,
+    /**
+     * Optional. For messages forwarded from channels, signature of
+     * the post author if present
+     */
+    val forward_signature: String? = null,
+    /**
+     * Optional. Sender's name for messages forwarded from users who disallow
+     * adding a link to their account in forwarded messages
+     */
+    val forward_sender_name: String? = null,
+    /**
+     * Optional. For forwarded messages, date the original message was
+     * sent in Unix time
+     */
+    val forward_date: Int? = null,
+    /**
+     * Optional. For replies, the original message. Note that the Message
+     * object in this field will not contain further reply_to_message
+     * fields even if it itself is a reply.
+     */
+    val reply_to_message: Message? = null,
+    /**
+     * Optional. Bot through which the message was sent
+     */
+    val via_bot: User? = null,
+    /**
+     * Optional. Date the message was last edited in Unix time
+     */
+    val edit_date: Int? = null,
+    /**
+     * Optional. The unique identifier of a media message group
+     * this message belongs to
+     */
+    val media_group_id: String? = null,
+    /**
+     * Optional. Signature of the post author for messages in channels, or
+     * the custom title of an anonymous group administrator
+     */
+    val author_signature: String? = null,
+    /**
+     * Optional. For text messages, the actual UTF-8 text of the message,
+     * 0-4096 characters
+     */
+    val text: String? = null,
+    /**
+     * Optional. For text messages, special entities like usernames, URLs,
+     * bot commands, etc. that appear in the text
+     */
+    val entities: List<MessageEntity>? = null,
+    /**
+     * Optional. Message is an animation, information about the animation.
+     * For backward compatibility, when this field is set,
+     * the document field will also be set
+     */
+    val animation: Update.Animation? = null,
+    /**
+     * Optional. Message is an audio file, information about the file
+     */
+    val audio: Update.Audio? = null,
+    /**
+     * Optional. Message is a general file, information about the file
+     */
+    val document: Update.Document? = null,
+    /**
+     * Optional. Message is a photo, available sizes of the photo
+     */
+    val photo: List<Update.PhotoSize>? = null,
+    /**
+     * Optional. Message is a sticker, information about the sticker
+     */
+    val sticker: Update.Sticker? = null,
+    /**
+     * Optional. Message is a video, information about the video
+     */
+    val video: Update.Video? = null,
+    /**
+     * Optional. Message is a video note, information about the video message
+     */
+    val video_note: Update.VideoNote? = null,
+    /**
+     * Optional. Message is a voice message, information about the file
+     */
+    val voice: Update.Voice? = null,
+    /**
+     * Optional. Caption for the animation, audio, document, photo,
+     * video or voice, 0-1024 characters
+     */
+    val caption: String? = null,
+    /**
+     * Optional. For messages with a caption, special entities like usernames,
+     * URLs, bot commands, etc. that appear in the caption
+     */
+    val caption_entities: List<MessageEntity>? = null,
+    /**
+     * Optional. Message is a shared contact, information about the contact
+     */
+    val contact: Update.Contact? = null,
+    /**
+     * Optional. Message is a dice with random value
+     */
+    val dice: Update.Dice? = null,
+    /**
+     * Optional. Message is a game, information about the game
+     */
+    val game: Update.Game? = null,
+    /**
+     * Optional. Message is a native poll, information about the poll
+     */
+    val poll: Update.Poll? = null,
+    /**
+     * Optional. Message is a venue, information about the venue. For
+     * backward compatibility, when this field is set, the location
+     * field will also be set
+     */
+    val venue: Update.Venue? = null,
+    /**
+     * Optional. Message is a shared location, information about the location
+     */
+    val location: Update.Location? = null,
+    /**
+     * Optional. New members that were added to the group or supergroup
+     * and information about them (the bot itself may be one of these members)
+     */
+    val new_chat_members: List<User>? = null,
+    /**
+     * Optional. A member was removed from the group, information about
+     * them (this member may be the bot itself)
+     */
+    val left_chat_member: User? = null,
+    /**
+     * Optional. A chat title was changed to this value
+     */
+    val new_chat_title: String? = null,
+    /**
+     * Optional. A chat photo was change to this value
+     */
+    val new_chat_photo: List<Update.PhotoSize>? = null,
+    /**
+     * Optional. Service message: the chat photo was deleted
+     */
+    val delete_chat_photo: Boolean? = null,
+    /**
+     * Optional. Service message: the group has been created
+     */
+    val group_chat_created: Boolean? = null,
+    /**
+     * Optional. Service message: the supergroup has been created. This
+     * field can't be received in a message coming through updates, because
+     * bot can't be a member of a supergroup when it is created. It can only
+     * be found in reply_to_message if someone replies to a very first
+     * message in a directly created supergroup.
+     */
+    val supergroup_chat_created: Boolean? = null,
+    /**
+     * Optional. Service message: the channel has been created.
+     * This field can't be received in a message coming through updates,
+     * because bot can't be a member of a channel when it is created.
+     * It can only be found in reply_to_message if someone replies
+     * to a very first message in a channel.
+     */
+    val channel_chat_created: Boolean? = null,
+    /**
+     * Optional. Service message: auto-delete timer settings changed in the chat
+     */
+    val message_auto_delete_timer_changed: Update.MessageAutoDeleteTimerChanged? = null,
+    /**
+     * Optional. The group has been migrated to a supergroup with the
+     * specified identifier. This number may have more than 32 significant
+     * bits and some programming languages may have difficulty/silent
+     * defects in interpreting it. But it has at most 52 significant bits,
+     * so a signed 64-bit integer or double-precision float type are safe
+     * for storing this identifier.
+     */
+    val migrate_to_chat_id: Long? = null,
+    /**
+     * Optional. The supergroup has been migrated from a group with the
+     * specified identifier. This number may have more than 32 significant
+     * bits and some programming languages may have difficulty/silent
+     * defects in interpreting it. But it has at most 52 significant bits,
+     * so a signed 64-bit integer or double-precision float type are safe
+     * for storing this identifier.
+     */
+    val migrate_from_chat_id: Long? = null,
+    /**
+     * Optional. Specified message was pinned. Note that the Message
+     * object in this field will not contain further reply_to_message
+     * fields even if it is itself a reply.
+     */
+    val pinned_message: Message? = null,
+    /**
+     * Optional. Message is an invoice for a payment,
+     * information about the invoice.
+     */
+    val invoice: Update.Invoice? = null,
+    /**
+     * Optional. Message is a service message about a successful payment,
+     * information about the payment.
+     */
+    val successful_payment: Update.SuccessfulPayment? = null,
+    /**
+     * Optional. The domain name of the website on which the user has logged in.
+     */
+    val connected_website: String? = null,
+    /**
+     * Optional. Telegram Passport data
+     */
+    val passport_data: Update.PassportData? = null,
+    /**
+     * Optional. Service message. A user in the chat triggered another
+     * user's proximity alert while sharing Live Location.
+     */
+    val proximity_alert_triggered: Update.ProximityAlertTriggered? = null,
+    /**
+     * Optional. Service message: voice chat scheduled
+     */
+    val voice_chat_scheduled: Update.VoiceChatScheduled? = null,
+    /**
+     * Optional. Service message: voice chat started
+     */
+    val voice_chat_started: Update.VoiceChatStarted? = null,
+    /**
+     * Optional. Service message: voice chat ended
+     */
+    val voice_chat_ended: Update.VoiceChatEnded? = null,
+    /**
+     * Optional. Service message: new participants invited to a voice chat
+     */
+    val voice_chat_participants_invited: Update.VoiceChatParticipantsInvited? = null,
+    /**
+     * Optional. Inline keyboard attached to the message. `login_url`
+     * buttons are represented as ordinary `url` buttons.
+     */
+    val reply_markup: Update.InlineKeyboardMarkup? = null,
+)
+
+/**
+ * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
+ */
+@Serializable
+public data class MessageEntity(
+    /**
+     * Type of the entity. Currently, can be
+     * “mention” (`@username`),
+     * “hashtag” (`#hashtag`),
+     * “cashtag” (`$USD`),
+     * “bot_command” (`/start@jobs_bot`),
+     * “url” (`https://telegram.org`),
+     * “email” (`do-not-reply@telegram.org`),
+     * “phone_number” (`+1-212-555-0123`),
+     * “bold” (bold text),
+     * “italic” (italic text),
+     * “underline” (underlined text),
+     * “strikethrough” (strikethrough text),
+     * “spoiler” (spoiler message),
+     * “code” (monowidth string),
+     * “pre” (monowidth block),
+     * “text_link” (for clickable text URLs),
+     * “text_mention” (for users [without usernames](https://telegram.org/blog/edit#new-mentions))
+     */
+    val type: String,
+    /**
+     * Offset in UTF-16 code units to the start of the entity
+     */
+    val offset: Int,
+    /**
+     * Length of the entity in UTF-16 code units
+     */
+    val length: Int,
+    /**
+     * Optional. For “text_link” only, url that will be opened after user taps on the text
+     */
+    val url: String? = null,
+    /**
+     * Optional. For “text_mention” only, the mentioned user
+     */
+    val user: User? = null,
+    /**
+     * Optional. For “pre” only, the programming language of the entity text
+     */
+    val language: String? = null,
+)
 
 /**
  * This object represents a chat.

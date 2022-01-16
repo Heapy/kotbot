@@ -7,7 +7,7 @@ import kotlinx.serialization.Transient
 
 /**
  * Use this method to send text messages.
- * On success, the sent [Update.Message] is returned.
+ * On success, the sent [Message] is returned.
  */
 @Serializable
 public data class SendMessage(
@@ -29,7 +29,7 @@ public data class SendMessage(
      * A JSON-serialized list of special entities that appear in message text,
      * which can be specified instead of parse_mode
      */
-    private val entities: List<Update.MessageEntity>? = null,
+    private val entities: List<MessageEntity>? = null,
     /**
      * Disables link previews for links in this message
      */
@@ -61,12 +61,12 @@ public data class SendMessage(
      */
     private val reply_markup: Update.InlineKeyboardMarkup? = null,
 
-) : Method<Update.Message> {
+) : Method<Message> {
     @Transient
-    private val deserializer: KSerializer<Response<Update.Message>> =
-        Response.serializer(Update.Message.serializer())
+    private val deserializer: KSerializer<Response<Message>> =
+        Response.serializer(Message.serializer())
 
-    override suspend fun Kotbot.execute(): Update.Message {
+    override suspend fun Kotbot.execute(): Message {
         return requestForJson(
             name = "sendMessage",
             serialize = {
