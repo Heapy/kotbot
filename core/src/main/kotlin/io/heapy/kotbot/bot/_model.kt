@@ -989,13 +989,136 @@ public data class Poll(
     val close_date: Int? = null,
 )
 
-// TODO: Continue here https://core.telegram.org/bots/api#location
-
+/**
+ * This object represents a point on the map.
+ */
 @Serializable
-public class Location
+public data class Location(
+    /**
+     * Longitude as defined by sender
+     */
+    val longitude: Double,
+    /**
+     * Latitude as defined by sender
+     */
+    val latitude: Double,
+    /**
+     * Optional. The radius of uncertainty for the location,
+     * measured in meters; 0-1500
+     */
+    val horizontal_accuracy: Double? = null,
+    /**
+     * Optional. Time relative to the message sending date, during which the
+     * location can be updated; in seconds. For active live locations only.
+     */
+    val live_period: Int? = null,
+    /**
+     * Optional. The direction in which user is moving, in degrees; 1-360.
+     * For active live locations only.
+     */
+    val heading: Int? = null,
+    /**
+     * Optional. Maximum distance for proximity alerts about approaching another chat member,
+     * in meters. For sent live locations only.
+     */
+    val proximity_alert_radius: Int? = null
+)
 
+/**
+ * This object represents a venue.
+ */
 @Serializable
-public class Venue
+public data class Venue(
+    /**
+     * Venue location. Can't be a live location
+     */
+    val location: Location,
+    /**
+     * Name of the venue
+     */
+    val title: String,
+    /**
+     * Address of the venue
+     */
+    val address: String,
+    /**
+     * Optional. Foursquare identifier of the venue
+     */
+    val foursquare_id: String? = null,
+    /**
+     * Optional. Foursquare type of the venue.
+     * (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+     */
+    val foursquare_type: String? = null,
+    /**
+     * Optional. Google Places identifier of the venue
+     */
+    val google_place_id: String? = null,
+    /**
+     * Optional. Google Places type of the venue. (See [supported types](https://developers.google
+     * .com/maps/documentation/places/web-service/supported_types).)
+     */
+    val google_place_type: String? = null,
+)
+
+/**
+ * This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
+ */
+@Serializable
+public data class ProximityAlertTriggered(
+    /**
+     * User that triggered the alert
+     */
+    val traveler: User,
+    /**
+     * User that set the alert
+     */
+    val watcher: User,
+    /**
+     * The distance between the users
+     */
+    val distance: Int,
+)
+
+/**
+ * This object represents a service message about a change in auto-delete timer settings.
+ */
+@Serializable
+public data class MessageAutoDeleteTimerChanged(
+    /**
+     * New auto-delete time for messages in the chat; in seconds
+     */
+    val message_auto_delete_time: Int,
+)
+
+/**
+ * This object represents a service message about a voice chat scheduled in the chat.
+ */
+@Serializable
+public data class VoiceChatScheduled(
+    /**
+     * Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator
+     */
+    val start_date: Int,
+)
+
+/**
+ * This object represents a service message about a voice chat started in the chat.
+ * Currently holds no information.
+ */
+@Serializable
+public class VoiceChatStarted
+
+/**
+ * This object represents a service message about a voice chat ended in the chat.
+ */
+@Serializable
+public data class VoiceChatEnded(
+    /**
+     * Voice chat duration in seconds
+     */
+    val duration: Int,
+)
 
 /**
  * Represents a location to which a chat is connected.
@@ -1081,9 +1204,6 @@ public class Sticker
 public class Game
 
 @Serializable
-public class MessageAutoDeleteTimerChanged
-
-@Serializable
 public class Invoice
 
 @Serializable
@@ -1091,34 +1211,6 @@ public class SuccessfulPayment
 
 @Serializable
 public class PassportData
-
-/**
- * This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
- */
-@Serializable
-public data class ProximityAlertTriggered(
-    /**
-     * User that triggered the alert
-     */
-    val traveler: User,
-    /**
-     * User that set the alert
-     */
-    val watcher: User,
-    /**
-     * The distance between the users
-     */
-    val distance: Int,
-)
-
-@Serializable
-public class VoiceChatScheduled
-
-@Serializable
-public class VoiceChatStarted
-
-@Serializable
-public class VoiceChatEnded
 
 @Serializable
 public class VoiceChatParticipantsInvited
