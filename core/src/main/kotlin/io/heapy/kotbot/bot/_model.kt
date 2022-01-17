@@ -1121,6 +1121,63 @@ public data class VoiceChatEnded(
 )
 
 /**
+ * This object represents a service message about new members invited to a voice chat.
+ */
+@Serializable
+public data class VoiceChatParticipantsInvited(
+    /**
+     * Optional. New members that were invited to the voice chat
+     */
+    val users: List<User>? = null,
+)
+
+/**
+ * This object represent a user's profile pictures.
+ */
+@Serializable
+public data class UserProfilePhotos(
+    /**
+     * Total number of profile pictures the target user has
+     */
+    val total_count: Int,
+    /**
+     * Requested profile pictures (in up to 4 sizes each)
+     */
+    val photos: List<PhotoSize>,
+)
+
+/**
+ * This object represents a file ready to be downloaded.
+ * The file can be downloaded via the link `https://api.telegram.org/file/bot<token>/<file_path>`.
+ * It is guaranteed that the link will be valid for at least 1 hour.
+ * When the link expires, a new one can be requested by calling getFile.
+ *
+ * Maximum file size to download is 20 MB
+ */
+@Serializable
+public data class File(
+    /**
+     * Identifier for this file, which can be used to download or reuse the file
+     */
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots.
+     * Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Optional. File size in bytes, if known
+     */
+    val file_size: Int? = null,
+    /**
+     * Optional. File path. Use `https://api.telegram.org/file/bot<token>/<file_path>` to get the file.
+     */
+    val file_path: String? = null,
+)
+
+// TODO: https://core.telegram.org/bots/api#replykeyboardmarkup
+
+/**
  * Represents a location to which a chat is connected.
  */
 @Serializable
@@ -1211,9 +1268,6 @@ public class SuccessfulPayment
 
 @Serializable
 public class PassportData
-
-@Serializable
-public class VoiceChatParticipantsInvited
 
 @Serializable
 public class InlineKeyboardMarkup
