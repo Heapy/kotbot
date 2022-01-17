@@ -59,7 +59,7 @@ public data class SendMessage(
      *
      * TODO: Wrong type
      */
-    private val reply_markup: Update.InlineKeyboardMarkup? = null,
+    private val reply_markup: InlineKeyboardMarkup? = null,
 
 ) : Method<Message> {
     @Transient

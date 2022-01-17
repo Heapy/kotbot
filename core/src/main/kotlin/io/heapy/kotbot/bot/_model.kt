@@ -2,6 +2,10 @@ package io.heapy.kotbot.bot
 
 import kotlinx.serialization.Serializable
 
+/**
+ * This [object](https://core.telegram.org/bots/api#available-types) represents an incoming update.
+ * At most one of the optional parameters can be present in any given update.
+ */
 @Serializable
 public data class Update(
     /**
@@ -77,89 +81,168 @@ public data class Update(
      * the can_invite_users administrator right in the chat to
      * receive these updates.
      */
-    val chat_join_request: ChatJoinRequest? = null
-) {
-    @Serializable
-    public class InlineQuery()
-    @Serializable
-    public class ChosenInlineResult()
-    @Serializable
-    public class CallbackQuery()
-    @Serializable
-    public class ShippingQuery()
-    @Serializable
-    public class PreCheckoutQuery()
-    @Serializable
-    public class Poll()
-    @Serializable
-    public class PollAnswer()
-    @Serializable
-    public class ChatMemberUpdated()
-    @Serializable
-    public class ChatJoinRequest()
-    @Serializable
-    public class Animation()
-    @Serializable
-    public class Audio()
-    @Serializable
-    public class Document()
-    @Serializable
-    public class PhotoSize()
-    @Serializable
-    public class Sticker()
-    @Serializable
-    public class Video()
-    @Serializable
-    public class VideoNote()
-    @Serializable
-    public class Voice()
-    @Serializable
-    public data class Contact(
-        val phone_number: String,
-        val first_name: String,
-        val last_name: String?,
-        val user_id: Long?,
-        val vcard: String?,
-    )
-    @Serializable
-    public class Dice()
-    @Serializable
-    public class Game()
-    @Serializable
-    public class Venue()
-    @Serializable
-    public class Location()
-    @Serializable
-    public class MessageAutoDeleteTimerChanged()
-    @Serializable
-    public class Invoice()
-    @Serializable
-    public class SuccessfulPayment()
-    @Serializable
-    public class PassportData()
-    @Serializable
-    public class ProximityAlertTriggered()
-    @Serializable
-    public class VoiceChatScheduled()
-    @Serializable
-    public class VoiceChatStarted()
-    @Serializable
-    public class VoiceChatEnded()
-    @Serializable
-    public class VoiceChatParticipantsInvited()
-    @Serializable
-    public class InlineKeyboardMarkup()
-}
+    val chat_join_request: ChatJoinRequest? = null)
 
 /**
- * This object represents a unique message identifier.
+ * This object represents a Telegram user or bot.
  */
 @Serializable
-public data class MessageId(
+public data class User(
     /**
-     * Unique message identifier
+     * Unique identifier for this user or bot. This number may have more than
+     * 32 significant bits and some programming languages may have
+     * difficulty/silent defects in interpreting it. But it has at most
+     * 52 significant bits, so a 64-bit integer or double-precision float
+     * type are safe for storing this identifier.
      */
-    val message_id: Int
+    val id: Long,
+
+    /**
+     * True, if this user is a bot
+     */
+    val is_bot: Boolean,
+
+    /**
+     * User's or bot's first name
+     */
+    val first_name: String,
+
+    /**
+     * Optional. User's or bot's last name
+     */
+    val last_name: String? = null,
+
+    /**
+     * Optional. User's or bot's username
+     */
+    val username: String? = null,
+
+    /**
+     * Optional. IETF language tag of the user's language
+     */
+    val language_code: String? = null,
+
+    /**
+     * Optional. True, if the bot can be invited to groups.
+     * Returned only in getMe.
+     */
+    val can_join_groups: Boolean? = null,
+
+    /**
+     * Optional. True, if privacy mode is disabled for the bot.
+     * Returned only in getMe.
+     */
+    val can_read_all_group_messages: Boolean? = null,
+
+    /**
+     * Optional. True, if the bot supports inline queries.
+     * Returned only in getMe.
+     */
+    val supports_inline_queries: Boolean? = null,
+)
+
+/**
+ * This object represents a chat.
+ */
+@Serializable
+public data class Chat(
+    /**
+     * Unique identifier for this chat. This number may have more than 32
+     * significant bits and some programming languages may have
+     * difficulty/silent defects in interpreting it. But it has at most
+     * 52 significant bits, so a signed 64-bit integer or double-precision
+     * float type are safe for storing this identifier.
+     */
+    val id: Long,
+    /**
+     * Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+     */
+    val type: String,
+    /**
+     * Optional. Title, for supergroups, channels and group chats
+     */
+    val title: String? = null,
+    /**
+     * Optional. Username, for private chats, supergroups and channels if available
+     */
+    val username: String? = null,
+    /**
+     * Optional. First name of the other party in a private chat
+     */
+    val first_name: String? = null,
+    /**
+     * Optional. Last name of the other party in a private chat
+     */
+    val last_name: String? = null,
+    /**
+     * Optional. Chat photo.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val photo: ChatPhoto? = null,
+    /**
+     * Optional. Bio of the other party in a private chat.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val bio: String? = null,
+    /**
+     * Optional. True, if privacy settings of the other party in the private chat allows to use `tg://user?id=<user_id>` links only in chats with the user.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val has_private_forwards: Boolean = false,
+    /**
+     * Optional. Description, for groups, supergroups and channel chats. Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val description: String? = null,
+    /**
+     * Optional. Primary invite link, for groups, supergroups and channel chats.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val invite_link: String? = null,
+    /**
+     * Optional. The most recent pinned message (by sending date).
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val pinned_message: Message? = null,
+    /**
+     * Optional. Default chat member permissions, for groups and supergroups.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val permissions: ChatPermissions? = null,
+    /**
+     * Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val slow_mode_delay: Int? = null,
+    /**
+     * Optional. The time after which all messages sent to the chat will be automatically deleted; in seconds.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val message_auto_delete_time: Int? = null,
+    /**
+     * Optional. True, if messages from the chat can't be forwarded to other chats.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val has_protected_content: Boolean? = null,
+    /**
+     * Optional. For supergroups, name of group sticker set.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val sticker_set_name: String? = null,
+    /**
+     * Optional. True, if the bot can change the group sticker set.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val can_set_sticker_set: Boolean? = false,
+    /**
+     * Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val linked_chat_id: Int? = null,
+    /**
+     * Optional. For supergroups, the location to which the supergroup is connected.
+     * Returned only in [getChat](https://core.telegram.org/bots/api#getchat).
+     */
+    val location: ChatLocation? = null,
 )
 
 /**
@@ -224,6 +307,11 @@ public data class Message(
      */
     val forward_date: Int? = null,
     /**
+     * Optional. True, if the message is a channel post that was automatically
+     * forwarded to the connected discussion group
+     */
+    val is_automatic_forward: Boolean? = null,
+    /**
      * Optional. For replies, the original message. Note that the Message
      * object in this field will not contain further reply_to_message
      * fields even if it itself is a reply.
@@ -237,6 +325,10 @@ public data class Message(
      * Optional. Date the message was last edited in Unix time
      */
     val edit_date: Int? = null,
+    /**
+     * Optional. True, if the message can't be forwarded
+     */
+    val has_protected_content: Boolean? = null,
     /**
      * Optional. The unique identifier of a media message group
      * this message belongs to
@@ -262,35 +354,35 @@ public data class Message(
      * For backward compatibility, when this field is set,
      * the document field will also be set
      */
-    val animation: Update.Animation? = null,
+    val animation: Animation? = null,
     /**
      * Optional. Message is an audio file, information about the file
      */
-    val audio: Update.Audio? = null,
+    val audio: Audio? = null,
     /**
      * Optional. Message is a general file, information about the file
      */
-    val document: Update.Document? = null,
+    val document: Document? = null,
     /**
      * Optional. Message is a photo, available sizes of the photo
      */
-    val photo: List<Update.PhotoSize>? = null,
+    val photo: List<PhotoSize>? = null,
     /**
      * Optional. Message is a sticker, information about the sticker
      */
-    val sticker: Update.Sticker? = null,
+    val sticker: Sticker? = null,
     /**
      * Optional. Message is a video, information about the video
      */
-    val video: Update.Video? = null,
+    val video: Video? = null,
     /**
      * Optional. Message is a video note, information about the video message
      */
-    val video_note: Update.VideoNote? = null,
+    val video_note: VideoNote? = null,
     /**
      * Optional. Message is a voice message, information about the file
      */
-    val voice: Update.Voice? = null,
+    val voice: Voice? = null,
     /**
      * Optional. Caption for the animation, audio, document, photo,
      * video or voice, 0-1024 characters
@@ -304,29 +396,29 @@ public data class Message(
     /**
      * Optional. Message is a shared contact, information about the contact
      */
-    val contact: Update.Contact? = null,
+    val contact: Contact? = null,
     /**
      * Optional. Message is a dice with random value
      */
-    val dice: Update.Dice? = null,
+    val dice: Dice? = null,
     /**
      * Optional. Message is a game, information about the game
      */
-    val game: Update.Game? = null,
+    val game: Game? = null,
     /**
      * Optional. Message is a native poll, information about the poll
      */
-    val poll: Update.Poll? = null,
+    val poll: Poll? = null,
     /**
      * Optional. Message is a venue, information about the venue. For
      * backward compatibility, when this field is set, the location
      * field will also be set
      */
-    val venue: Update.Venue? = null,
+    val venue: Venue? = null,
     /**
      * Optional. Message is a shared location, information about the location
      */
-    val location: Update.Location? = null,
+    val location: Location? = null,
     /**
      * Optional. New members that were added to the group or supergroup
      * and information about them (the bot itself may be one of these members)
@@ -344,7 +436,7 @@ public data class Message(
     /**
      * Optional. A chat photo was change to this value
      */
-    val new_chat_photo: List<Update.PhotoSize>? = null,
+    val new_chat_photo: List<PhotoSize>? = null,
     /**
      * Optional. Service message: the chat photo was deleted
      */
@@ -372,7 +464,7 @@ public data class Message(
     /**
      * Optional. Service message: auto-delete timer settings changed in the chat
      */
-    val message_auto_delete_timer_changed: Update.MessageAutoDeleteTimerChanged? = null,
+    val message_auto_delete_timer_changed: MessageAutoDeleteTimerChanged? = null,
     /**
      * Optional. The group has been migrated to a supergroup with the
      * specified identifier. This number may have more than 32 significant
@@ -401,12 +493,12 @@ public data class Message(
      * Optional. Message is an invoice for a payment,
      * information about the invoice.
      */
-    val invoice: Update.Invoice? = null,
+    val invoice: Invoice? = null,
     /**
      * Optional. Message is a service message about a successful payment,
      * information about the payment.
      */
-    val successful_payment: Update.SuccessfulPayment? = null,
+    val successful_payment: SuccessfulPayment? = null,
     /**
      * Optional. The domain name of the website on which the user has logged in.
      */
@@ -414,33 +506,44 @@ public data class Message(
     /**
      * Optional. Telegram Passport data
      */
-    val passport_data: Update.PassportData? = null,
+    val passport_data: PassportData? = null,
     /**
      * Optional. Service message. A user in the chat triggered another
      * user's proximity alert while sharing Live Location.
      */
-    val proximity_alert_triggered: Update.ProximityAlertTriggered? = null,
+    val proximity_alert_triggered: ProximityAlertTriggered? = null,
     /**
      * Optional. Service message: voice chat scheduled
      */
-    val voice_chat_scheduled: Update.VoiceChatScheduled? = null,
+    val voice_chat_scheduled: VoiceChatScheduled? = null,
     /**
      * Optional. Service message: voice chat started
      */
-    val voice_chat_started: Update.VoiceChatStarted? = null,
+    val voice_chat_started: VoiceChatStarted? = null,
     /**
      * Optional. Service message: voice chat ended
      */
-    val voice_chat_ended: Update.VoiceChatEnded? = null,
+    val voice_chat_ended: VoiceChatEnded? = null,
     /**
      * Optional. Service message: new participants invited to a voice chat
      */
-    val voice_chat_participants_invited: Update.VoiceChatParticipantsInvited? = null,
+    val voice_chat_participants_invited: VoiceChatParticipantsInvited? = null,
     /**
      * Optional. Inline keyboard attached to the message. `login_url`
      * buttons are represented as ordinary `url` buttons.
      */
-    val reply_markup: Update.InlineKeyboardMarkup? = null,
+    val reply_markup: InlineKeyboardMarkup? = null,
+)
+
+/**
+ * This object represents a unique message identifier.
+ */
+@Serializable
+public data class MessageId(
+    /**
+     * Unique message identifier
+     */
+    val message_id: Int,
 )
 
 /**
@@ -491,96 +594,540 @@ public data class MessageEntity(
 )
 
 /**
- * This object represents a chat.
+ * This object represents one size of a photo or a file / sticker thumbnail.
  */
 @Serializable
-public data class Chat(
+public data class PhotoSize(
     /**
-     * Unique identifier for this chat. This number may have more than 32
-     * significant bits and some programming languages may have
-     * difficulty/silent defects in interpreting it. But it has at most
-     * 52 significant bits, so a signed 64-bit integer or double-precision
-     * float type are safe for storing this identifier.
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val id: Long,
+    val file_id: String,
     /**
-     * Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots.
+     * Can't be used to download or reuse the file.
      */
-    public val type: String,
+    val file_unique_id: String,
     /**
-     * Optional. Title, for supergroups, channels and group chats
+     * Photo width
      */
-    public val title: String? = null,
+    val width: Int,
     /**
-     * Optional. Username, for private chats, supergroups and channels if available
+     * Photo height
      */
-    public val username: String? = null,
+    val height: Int,
     /**
-     * Optional. First name of the other party in a private chat
+     * Optional. File size in bytes
      */
-    public val first_name: String? = null,
-    /**
-     * Optional. Last name of the other party in a private chat
-     */
-    public val last_name: String? = null,
+    val file_size: Int,
 )
 
 /**
- * This object represents a Telegram user or bot.
+ * This object represents an animation file
+ * (GIF or H.264/MPEG-4 AVC video without sound).
  */
 @Serializable
-public data class User(
+public data class Animation(
     /**
-     * Unique identifier for this user or bot
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val id: Long,
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots.
+     * Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Video width as defined by sender
+     */
+    val width: Int,
+    /**
+     * Video height as defined by sender
+     */
+    val height: Int,
+    /**
+     * Duration of the video in seconds as defined by sender
+     */
+    val duration: Int,
+    /**
+     * Optional. Animation thumbnail as defined by sender
+     */
+    val thumb: PhotoSize? = null,
+    /**
+     * Optional. Original animation filename as defined by sender
+     */
+    val file_name: String? = null,
+    /**
+     * Optional. MIME type of the file as defined by sender
+     */
+    val mime_type: String? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+)
 
+/**
+ * This object represents an audio file to be treated as music by the Telegram clients.
+ */
+@Serializable
+public data class Audio(
     /**
-     * True, if this user is a bot
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val is_bot: Boolean,
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots.
+     * Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Duration of the audio in seconds as defined by sender
+     */
+    val duration: Int,
+    /**
+     * Optional. Performer of the audio as defined by sender or by audio tags
+     */
+    val performer: String? = null,
+    /**
+     * Optional. Title of the audio as defined by sender or by audio tags
+     */
+    val title: String? = null,
+    /**
+     * Optional. Original filename as defined by sender
+     */
+    val file_name: String? = null,
+    /**
+     * Optional. MIME type of the file as defined by sender
+     */
+    val mime_type: String? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+    /**
+     * Optional. Thumbnail of the album cover to which the music file belongs
+     */
+    val thumb: PhotoSize? = null,
+)
 
+/**
+ * This object represents a general file (as opposed to photos, voice messages and audio files).
+ */
+@Serializable
+public data class Document(
     /**
-     * User's or bot's first name
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val first_name: String,
+    val file_id: String,
+    /**
+     * Identifier for this file, which can be used to download or reuse the file
+     */
+    val file_unique_id: String,
+    /**
+     * Optional. Document thumbnail as defined by sender
+     */
+    val thumb: PhotoSize? = null,
+    /**
+     * Optional. Original filename as defined by sender
+     */
+    val file_name: String? = null,
+    /**
+     * Optional. MIME type of the file as defined by sender
+     */
+    val mime_type: String? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+)
 
+/**
+ * This object represents a video file.
+ */
+@Serializable
+public data class Video(
     /**
-     * Optional. User's or bot's last name
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val last_name: String? = null,
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Video width as defined by sender
+     */
+    val width: Int,
+    /**
+     * Video height as defined by sender
+     */
+    val height: Int,
+    /**
+     * Duration of the video in seconds as defined by sender
+     */
+    val duration: Int,
+    /**
+     * Optional. Video thumbnail
+     */
+    val thumb: PhotoSize? = null,
+    /**
+     * Optional. Original filename as defined by sender
+     */
+    val file_name: String? = null,
+    /**
+     * Optional. MIME type of the file as defined by sender
+     */
+    val mime_type: String? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+)
 
+/**
+ * This object represents a video message
+ * (available in Telegram apps as of v.4.0).
+ */
+@Serializable
+public data class VideoNote(
     /**
-     * Optional. User's or bot's username
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val username: String? = null,
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Video width and height (diameter of the video message) as defined by sender
+     */
+    val length: Int,
+    /**
+     * Duration of the video in seconds as defined by sender
+     */
+    val duration: Int,
+    /**
+     * Optional. Video thumbnail
+     */
+    val thumb: PhotoSize? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+)
 
+/**
+ * This object represents a voice note.
+ */
+@Serializable
+public data class Voice(
     /**
-     * Optional. IETF language tag of the user's language
+     * Identifier for this file, which can be used to download or reuse the file
      */
-    public val language_code: String? = null,
+    val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     */
+    val file_unique_id: String,
+    /**
+     * Duration of the audio in seconds as defined by sender
+     */
+    val duration: Int,
+    /**
+     * Optional. MIME type of the file as defined by sender
+     */
+    val mime_type: String? = null,
+    /**
+     * Optional. File size in bytes
+     */
+    val file_size: Int? = null,
+)
 
+/**
+ * This object represents a phone contact.
+ */
+@Serializable
+public data class Contact(
     /**
-     * Optional. True, if the bot can be invited to groups.
-     * Returned only in getMe.
+     * Contact's phone number
      */
-    public val can_join_groups: Boolean? = null,
+    val phone_number: String,
+    /**
+     * Contact's first name
+     */
+    val first_name: String,
+    /**
+     * Optional. Contact's last name
+     */
+    val last_name: String?,
+    /**
+     * Optional. Contact's user identifier in Telegram. This number may have
+     * more than 32 significant bits and some programming languages may have
+     * difficulty/silent defects in interpreting it. But it has at most 52
+     * significant bits, so a 64-bit integer or double-precision float type
+     * are safe for storing this identifier.
+     */
+    val user_id: Long?,
+    /**
+     * Optional. Additional data about the contact in the form of a vCard
+     */
+    val vcard: String?,
+)
 
+/**
+ * This object represents an animated emoji that displays a random value.
+ */
+@Serializable
+public data class Dice(
     /**
-     * Optional. True, if privacy mode is disabled for the bot.
-     * Returned only in getMe.
+     * Emoji on which the dice throw animation is based
      */
-    public val can_read_all_group_messages: Boolean? = null,
+    val emoji: String,
+    /**
+     * Value of the dice, 1-6 for “🎲”, “🎯” and “🎳” base emoji, 1-5 for “🏀” and “⚽” base emoji, 1-64 for “🎰” base emoji
+     */
+    val value: Int,
+)
 
+/**
+ * This object contains information about one answer option in a poll.
+ */
+@Serializable
+public data class PollOption(
     /**
-     * Optional. True, if the bot supports inline queries.
-     * Returned only in getMe.
+     * Option text, 1-100 characters
      */
-    public val supports_inline_queries: Boolean? = null,
+    val text: String,
+    /**
+     * Number of users that voted for this option
+     */
+    val voter_count: Int,
+)
+
+/**
+ * This object represents an answer of a user in a non-anonymous poll.
+ */
+@Serializable
+public data class PollAnswer(
+    /**
+     * Unique poll identifier
+     */
+    val poll_id: String,
+    /**
+     * The user, who changed the answer to the poll
+     */
+    val user: User,
+    /**
+     * 0-based identifiers of answer options, chosen by the user.
+     * May be empty if the user retracted their vote.
+     */
+    val option_ids: List<Int>,
+)
+
+/**
+ * This object contains information about a poll.
+ */
+@Serializable
+public data class Poll(
+    /**
+     * Unique poll identifier
+     */
+    val id: String,
+    /**
+     * Poll question, 1-300 characters
+     */
+    val question: String,
+    /**
+     * List of poll options
+     */
+    val options: List<PollOption>,
+    /**
+     * Total number of users that voted in the poll
+     */
+    val total_voter_count: Int,
+    /**
+     * True, if the poll is closed
+     */
+    val is_closed: Boolean,
+    /**
+     * True, if the poll is anonymous
+     */
+    val is_anonymous: Boolean,
+    /**
+     * Poll type, currently can be “regular” or “quiz”
+     */
+    val type: String,
+    /**
+     * True, if the poll allows multiple answers
+     */
+    val allows_multiple_answers: Boolean,
+    /**
+     * Optional. 0-based identifier of the correct answer option. Available
+     * only for polls in the quiz mode, which are closed, or was sent
+     * (not forwarded) by the bot or to the private chat with the bot.
+     */
+    val correct_option_id: Int? = null,
+    /**
+     * Optional. Text that is shown when a user chooses an incorrect answer
+     * or taps on the lamp icon in a quiz-style poll, 0-200 characters
+     */
+    val explanation: String? = null,
+    /**
+     * Optional. Special entities like usernames, URLs, bot commands, etc.
+     * that appear in the explanation
+     */
+    val explanation_entities: List<MessageEntity>? = null,
+    /**
+     * Optional. Amount of time in seconds
+     * the poll will be active after creation
+     */
+    val open_period: Int? = null,
+    /**
+     * Optional. Point in time (Unix timestamp) when the
+     * poll will be automatically closed
+     */
+    val close_date: Int? = null,
+)
+
+// TODO: Continue here https://core.telegram.org/bots/api#location
+
+@Serializable
+public class Location
+
+@Serializable
+public class Venue
+
+/**
+ * Represents a location to which a chat is connected.
+ */
+@Serializable
+public data class ChatLocation(
+    /**
+     * The location to which the supergroup is connected. Can't be a live location.
+     */
+    val location: Location,
+    /**
+     * Location address; 1-64 characters, as defined by the chat owner
+     */
+    val address: String,
+)
+
+/**
+ * Describes actions that a non-administrator user is allowed to take in a chat.
+ */
+@Serializable
+public data class ChatPermissions(
+    /**
+     * Optional. True, if the user is allowed to send text messages, contacts, locations and venues
+     */
+    val can_send_messages: Boolean? = null,
+    // TODO https://core.telegram.org/bots/api#chatpermissions
+)
+
+/**
+ * This object represents a chat photo.
+ */
+@Serializable
+public data class ChatPhoto(
+    /**
+     * File identifier of small (160x160) chat photo. This file_id can be used
+     * only for photo download and only for as long as the photo is not changed.
+     */
+    val small_file_id: String,
+    /**
+     * Unique file identifier of small (160x160) chat photo, which is supposed
+     * to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     */
+    val small_file_unique_id: String,
+    /**
+     * File identifier of big (640x640) chat photo. This file_id can be used
+     * only for photo download and only for as long as the photo is not changed.
+     */
+    val big_file_id: String,
+    /**
+     * Unique file identifier of big (640x640) chat photo, which is supposed
+     * to be the same over time and for different bots. Can't be used to
+     * download or reuse the file.
+     */
+    val big_file_unique_id: String,
 )
 
 @Serializable
-public class InputFile()
+public class InlineQuery
+
+@Serializable
+public class ChosenInlineResult
+
+@Serializable
+public class CallbackQuery
+
+@Serializable
+public class ShippingQuery
+
+@Serializable
+public class PreCheckoutQuery
+
+@Serializable
+public class ChatMemberUpdated
+
+@Serializable
+public class ChatJoinRequest
+
+@Serializable
+public class Sticker
+
+@Serializable
+public class Game
+
+@Serializable
+public class MessageAutoDeleteTimerChanged
+
+@Serializable
+public class Invoice
+
+@Serializable
+public class SuccessfulPayment
+
+@Serializable
+public class PassportData
+
+/**
+ * This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
+ */
+@Serializable
+public data class ProximityAlertTriggered(
+    /**
+     * User that triggered the alert
+     */
+    val traveler: User,
+    /**
+     * User that set the alert
+     */
+    val watcher: User,
+    /**
+     * The distance between the users
+     */
+    val distance: Int,
+)
+
+@Serializable
+public class VoiceChatScheduled
+
+@Serializable
+public class VoiceChatStarted
+
+@Serializable
+public class VoiceChatEnded
+
+@Serializable
+public class VoiceChatParticipantsInvited
+
+@Serializable
+public class InlineKeyboardMarkup
+
+@Serializable
+public class InputFile
 
 /**
  * Contains information about the current status of a webhook.
