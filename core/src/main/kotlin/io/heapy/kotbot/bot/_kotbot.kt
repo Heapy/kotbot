@@ -82,8 +82,8 @@ public data class Response<Result>(
 
 @Serializable
 public data class ResponseParameters(
-    public val migrate_to_chat_id: Long?,
-    public val retry_after: Int?,
+    public val migrate_to_chat_id: Long? = null,
+    public val retry_after: Int? = null,
 )
 
 internal fun <T> Response<T>.unwrap(): T {
