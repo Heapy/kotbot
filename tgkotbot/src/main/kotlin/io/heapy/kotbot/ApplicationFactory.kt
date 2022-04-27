@@ -45,6 +45,8 @@ open class ApplicationFactory {
 
     open val longTimeNoSeeRule: Rule by lazy(::LongTimeNoSeeRule)
 
+    open val kasperskyCareersRule: Rule by lazy(::KasperskyCareersRule)
+
     open val deleteSwearingRule: Rule by lazy(::DeleteSwearingRule)
 
     open val deleteVoiceMessageRule: Rule by lazy(::DeleteVoiceMessageRule)
@@ -118,6 +120,7 @@ open class ApplicationFactory {
                 deleteSpamRule,
                 deleteHelloRule,
                 longTimeNoSeeRule,
+                kasperskyCareersRule,
                 deleteSwearingRule,
                 deleteVoiceMessageRule,
                 deleteStickersRule,

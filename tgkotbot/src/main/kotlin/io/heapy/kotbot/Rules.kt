@@ -80,6 +80,28 @@ class LongTimeNoSeeRule : Rule {
     }
 }
 
+class KasperskyCareersRule : Rule {
+    override fun validate(update: Update): Flow<Method<*>> {
+        update.anyText { text, message ->
+            if (strings.contains(text.lowercase())) {
+                LOGGER.info("Delete spam ${message.text} from ${message.from?.info}")
+                return flowOf(
+                    message.delete,
+                    message.banFrom,
+                )
+            }
+        }
+
+        return emptyFlow()
+    }
+
+    companion object {
+        private val strings = listOf(
+            "careers.kaspersky.ru",
+        )
+    }
+}
+
 class DeleteSwearingRule : Rule {
     override fun validate(update: Update): Flow<Method<*>> {
         update.anyText { text, message ->
