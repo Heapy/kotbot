@@ -11,12 +11,12 @@ application {
 }
 
 dependencies {
+    implementation(projects.core)
+
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
+    implementation(libs.kotlin.serialization.hocon)
 
     implementation(libs.logback)
 
@@ -28,24 +28,26 @@ dependencies {
     implementation(libs.ktor.server)
     implementation(libs.ktor.server.content.negation)
 
-    implementation(libs.config4k)
+    implementation(libs.flyway)
+    implementation(libs.postgresql)
+    implementation(libs.hikari)
 
-    implementation(libs.mapdb)
-
-    implementation(projects.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }
 
 repositories {
     mavenCentral()
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "11"
         languageVersion = "1.7"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xcontext-receivers",
         )
     }
 }

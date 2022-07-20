@@ -1,7 +1,6 @@
 package io.heapy.kotbot
 
 import com.typesafe.config.ConfigFactory
-import io.github.config4k.extract
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.configuration.Configuration
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
@@ -12,13 +11,14 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.json.Json
-import org.mapdb.DB
-import org.mapdb.DBMaker
 
 open class ApplicationFactory {
+    @OptIn(ExperimentalSerializationApi::class)
     open val configuration: Configuration by lazy {
-        ConfigFactory.load().extract()
+        Hocon.decodeFromConfig(Configuration.serializer(), ConfigFactory.load())
     }
 
     open val prometheusMeterRegistry: PrometheusMeterRegistry by lazy {
@@ -90,15 +90,8 @@ open class ApplicationFactory {
         )
     }
 
-    open val db: DB by lazy {
-        DBMaker.fileDB("kotbot.db")
-            .transactionEnable()
-            .make()
-    }
-
     open val userContextStore: UserContextStore by lazy {
         UserContextStore(
-            db = db,
         )
     }
 

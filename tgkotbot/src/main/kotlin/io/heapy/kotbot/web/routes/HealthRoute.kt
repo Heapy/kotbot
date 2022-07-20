@@ -1,4 +1,4 @@
-package io.heapy.kotbot.web
+package io.heapy.kotbot.web.routes
 
 import io.ktor.server.application.call
 import io.ktor.server.response.respond

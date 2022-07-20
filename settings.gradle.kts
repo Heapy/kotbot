@@ -4,5 +4,6 @@ rootProject.name = "kotbot"
 
 include(
     "core",
+    "core-gen",
     "tgkotbot",
 )

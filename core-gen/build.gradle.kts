@@ -4,37 +4,24 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-kotlin {
-    explicitApiWarning()
-}
-
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization)
-
-    implementation(libs.ktor.client)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.logback)
+    implementation(libs.kotlinpoet)
 }
 
 repositories {
     mavenCentral()
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "11"
         languageVersion = "1.7"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-opt-in=kotlin.RequiresOptIn",
+            "-Xcontext-receivers",
         )
     }
-}
-
-tasks.test {
-    useJUnitPlatform()
 }

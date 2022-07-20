@@ -10,7 +10,9 @@ import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.micrometer.prometheus.PrometheusRenameFilter
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MetricsConfiguration(
     val tags: Map<String, String>,
 )
