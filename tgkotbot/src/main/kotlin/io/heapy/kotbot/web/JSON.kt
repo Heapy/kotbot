@@ -3,10 +3,10 @@ package io.heapy.kotbot.web
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
-import io.ktor.server.plugins.ContentNegotiation
-import io.ktor.util.pipeline.ContextDsl
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.util.KtorDsl
 
-@ContextDsl
+@KtorDsl
 fun Application.JSON() {
     install(ContentNegotiation) {
         json()

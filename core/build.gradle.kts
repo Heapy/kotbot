@@ -15,8 +15,7 @@ dependencies {
 
     implementation(libs.ktor.client)
 
-    testImplementation(libs.junit.api)
-    testRuntimeOnly(libs.junit.engine)
+    testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.slf4j.simple)
 }
@@ -25,10 +24,10 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "11"
-        languageVersion = "1.6"
+        languageVersion = "1.7"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"

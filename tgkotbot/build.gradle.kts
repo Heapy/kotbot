@@ -15,8 +15,7 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization)
 
-    testImplementation(libs.junit.api)
-    testRuntimeOnly(libs.junit.engine)
+    testImplementation(libs.junit)
     testImplementation(libs.mockk)
 
     implementation(libs.logback)
@@ -33,7 +32,7 @@ dependencies {
 
     implementation(libs.mapdb)
 
-    implementation(project(":core"))
+    implementation(projects.core)
 }
 
 repositories {
@@ -43,7 +42,7 @@ repositories {
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "11"
-        languageVersion = "1.6"
+        languageVersion = "1.7"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
             "-Xopt-in=kotlin.RequiresOptIn"

@@ -81,7 +81,8 @@ public data class Update(
      * the can_invite_users administrator right in the chat to
      * receive these updates.
      */
-    val chat_join_request: ChatJoinRequest? = null)
+    val chat_join_request: ChatJoinRequest? = null,
+)
 
 /**
  * This object represents a Telegram user or bot.
@@ -859,7 +860,7 @@ public data class Contact(
     /**
      * Optional. Contact's last name
      */
-    val last_name: String?,
+    val last_name: String? = null,
     /**
      * Optional. Contact's user identifier in Telegram. This number may have
      * more than 32 significant bits and some programming languages may have
@@ -867,11 +868,11 @@ public data class Contact(
      * significant bits, so a 64-bit integer or double-precision float type
      * are safe for storing this identifier.
      */
-    val user_id: Long?,
+    val user_id: Long? = null,
     /**
      * Optional. Additional data about the contact in the form of a vCard
      */
-    val vcard: String?,
+    val vcard: String? = null,
 )
 
 /**

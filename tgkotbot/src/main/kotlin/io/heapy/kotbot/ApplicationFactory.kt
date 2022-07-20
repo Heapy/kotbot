@@ -9,7 +9,7 @@ import io.heapy.kotbot.web.KtorServer
 import io.heapy.kotbot.web.Server
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.ContentNegotiation
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.serialization.json.Json
