@@ -200,6 +200,30 @@ class DeleteStickersRule : Rule {
     }
 }
 
+class DeletePropagandaRule : Rule {
+    override fun validate(update: Update): Flow<Method<*>> {
+        update.anyMessage?.let { message ->
+            val hasOffensiveText = listOfNotNull(
+                message.from?.first_name,
+                message.from?.last_name,
+                message.text
+            ).any {
+                it.contains("🇷🇺")
+            }
+
+            if (hasOffensiveText) {
+                LOGGER.info("Delete flag-message from ${message.from?.info}.")
+
+                return flowOf(
+                    message.delete,
+                )
+            }
+        }
+
+        return emptyFlow()
+    }
+}
+
 class CombotCasRule(
     private val client: HttpClient,
     private val casConfiguration: CasConfiguration,

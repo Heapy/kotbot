@@ -60,6 +60,8 @@ open class ApplicationFactory {
         )
     }
 
+    open val deletePropagandaRule: Rule by lazy(::DeletePropagandaRule)
+
     open val helloWorldCommand: Command by lazy(::HelloWorldCommand)
 
     open val chatInfoCommand: Command by lazy(::ChatInfoCommand)
@@ -118,6 +120,7 @@ open class ApplicationFactory {
                 deleteVoiceMessageRule,
                 deleteStickersRule,
                 combotCasRule,
+                deletePropagandaRule,
             ),
             commands = listOf(
                 helloWorldCommand,
