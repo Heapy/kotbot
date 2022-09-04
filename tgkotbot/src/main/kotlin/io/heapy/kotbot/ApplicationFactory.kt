@@ -51,6 +51,8 @@ open class ApplicationFactory {
 
     open val deleteVoiceMessageRule: Rule by lazy(::DeleteVoiceMessageRule)
 
+    open val deleteVideoNoteMessageRule: Rule by lazy(::DeleteVideoNoteRule)
+
     open val deleteStickersRule: Rule by lazy(::DeleteStickersRule)
 
     open val combotCasRule: Rule by lazy {
@@ -118,6 +120,7 @@ open class ApplicationFactory {
                 kasperskyCareersRule,
                 deleteSwearingRule,
                 deleteVoiceMessageRule,
+                deleteVideoNoteMessageRule,
                 deleteStickersRule,
                 combotCasRule,
                 deletePropagandaRule,

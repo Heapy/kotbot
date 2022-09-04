@@ -38,3 +38,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
 tasks.test {
     useJUnitPlatform()
 }
+
+sourceSets.main.get().java.srcDir("src/generated/kotlin")

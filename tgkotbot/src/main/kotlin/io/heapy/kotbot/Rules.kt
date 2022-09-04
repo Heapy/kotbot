@@ -1,7 +1,7 @@
 package io.heapy.kotbot
 
 import io.heapy.kotbot.bot.Method
-import io.heapy.kotbot.bot.Update
+import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.configuration.CasConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -168,7 +168,26 @@ class DeleteVoiceMessageRule : Rule {
     override fun validate(update: Update): Flow<Method<*>> {
         update.anyMessage?.let { message ->
             if (message.voice != null) {
-                LOGGER.info("Delete voice-message from ${message.from?.info}.")
+                LOGGER.info("Delete voice message from ${message.from?.info}.")
+
+                return flowOf(
+                    message.delete,
+                )
+            }
+        }
+
+        return emptyFlow()
+    }
+}
+
+/**
+ * Rule to remove messages with attached audio.
+ */
+class DeleteVideoNoteRule : Rule {
+    override fun validate(update: Update): Flow<Method<*>> {
+        update.anyMessage?.let { message ->
+            if (message.video_note != null) {
+                LOGGER.info("Delete video note message from ${message.from?.info}.")
 
                 return flowOf(
                     message.delete,

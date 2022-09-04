@@ -1,6 +1,6 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.Update
+import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.configuration.KnownChatsConfiguration
 
 fun interface Filter {

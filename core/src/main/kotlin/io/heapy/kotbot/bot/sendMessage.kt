@@ -1,5 +1,8 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
+import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.MessageEntity
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -60,7 +63,6 @@ public data class SendMessage(
      * TODO: Wrong type
      */
     private val reply_markup: InlineKeyboardMarkup? = null,
-
 ) : Method<Message> {
     @Transient
     private val deserializer: KSerializer<Response<Message>> =

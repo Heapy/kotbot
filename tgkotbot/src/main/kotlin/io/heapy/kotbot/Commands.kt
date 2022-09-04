@@ -4,8 +4,8 @@ import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Context
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.SendMessage
-import io.heapy.kotbot.bot.Update
-import io.heapy.kotbot.bot.Message
+import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.model.Message
 
 interface Command {
     val name: String

@@ -6,9 +6,11 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 fun main() {
+    // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
         .getResource("custom.json")
-        .readText()
+        ?.readText()
+        ?: error("custom.json not found")
 
     Json.decodeFromString(TelegramApi.serializer(), apiJson)
         .generate()
@@ -48,107 +50,42 @@ data class Method(
     val return_type: ApiType
 )
 
-@Serializable(ArgumentSerializer::class)
-sealed class Argument
-
-@Serializable
-data class IntArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val default: Int? = null,
-    val min: Int? = null,
-    val max: Int? = null,
-) : Argument()
-
-@Serializable
-data class FloatArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-) : Argument()
-
-@Serializable
-data class StringArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val default: String? = null,
-    val min_len: Int? = null,
-    val max_len: Int? = null,
-    val enumeration: List<String>? = null,
-) : Argument()
-
-@Serializable
-data class BooleanArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val default: Boolean? = null,
-) : Argument()
-
-@Serializable
-data class ArrayArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val array: ApiType,
-) : Argument()
-
-@Serializable
-data class ReferenceArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val reference: String,
-) : Argument()
-
-@Serializable
-data class AnyOfArgument(
-    val name: String,
-    val description: String,
-    val type: String,
-    val required: Boolean,
-    val any_of: List<ApiType>,
-) : Argument()
-
 @Serializable(ApiTypeSerializer::class)
-sealed class ApiType
+sealed interface ApiType
 
 @Serializable
 data class BooleanApiType(
     val type: String,
     val default: Boolean? = null,
-) : ApiType()
+) : ApiType
 
 @Serializable
 data class ReferenceApiType(
     val type: String,
     val reference: String,
-) : ApiType()
+) : ApiType
 
 @Serializable
 data class ArrayApiType(
     val type: String,
     val array: ApiType,
-) : ApiType()
+) : ApiType
 
 @Serializable
-data class BasicApiType(
+data class StringApiType(
     val type: String,
-) : ApiType()
+) : ApiType
+
+@Serializable
+data class IntApiType(
+    val type: String,
+) : ApiType
 
 @Serializable
 data class AnyOfApiType(
     val type: String,
     val any_of: List<ApiType>,
-) : ApiType()
+) : ApiType
 
 object ArgumentSerializer : JsonContentPolymorphicSerializer<Argument>(Argument::class) {
     override fun selectDeserializer(element: JsonElement) =
@@ -168,9 +105,9 @@ object ApiTypeSerializer : JsonContentPolymorphicSerializer<ApiType>(ApiType::cl
     override fun selectDeserializer(element: JsonElement) =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             "bool" -> BooleanApiType.serializer()
-            "integer" -> BasicApiType.serializer()
+            "integer" -> IntApiType.serializer()
             "array" -> ArrayApiType.serializer()
-            "string" -> BasicApiType.serializer()
+            "string" -> StringApiType.serializer()
             "reference" -> ReferenceApiType.serializer()
             "any_of" -> AnyOfApiType.serializer()
             else -> error("Unknown argument type: $type")
@@ -187,112 +124,109 @@ object ObjectSerializer : JsonContentPolymorphicSerializer<Object>(Object::class
         }
 }
 
-object PropertySerializer : JsonContentPolymorphicSerializer<Property>(Property::class) {
-    override fun selectDeserializer(element: JsonElement) =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            "integer" -> IntProperty.serializer()
-            "string" -> StringProperty.serializer()
-            "bool" -> BooleanProperty.serializer()
-            "reference" -> ReferenceProperty.serializer()
-            "array" -> ArrayProperty.serializer()
-            "float" -> FloatProperty.serializer()
-            "any_of" -> AnyOfProperty.serializer()
-            else -> error("Unknown argument type: $type")
-        }
-}
-
 @Serializable(ObjectSerializer::class)
-sealed class Object
+sealed interface Object {
+    val name: String
+}
 
 @Serializable
 data class EmptyObject(
-    val name: String,
+    override val name: String,
     val description: String,
     val documentation_link: String,
-) : Object()
+) : Object
 
 @Serializable
 data class PropertiesObject(
-    val name: String,
+    override val name: String,
     val description: String,
     val documentation_link: String,
     val type: String,
-    val properties: List<Property>,
-) : Object()
+    val properties: List<Argument>,
+) : Object
 
 @Serializable
 data class AnyOfObject(
-    val name: String,
+    override val name: String,
     val description: String,
     val documentation_link: String,
     val type: String,
     val any_of: List<ApiType>,
-) : Object()
+) : Object
 
-@Serializable(PropertySerializer::class)
-sealed class Property
+@Serializable(ArgumentSerializer::class)
+sealed interface Argument {
+    val type: String
+    val name: String
+    val description: String
+    val required: Boolean
+}
+
+val Argument.nullable: Boolean get() = !required
 
 @Serializable
-data class ReferenceProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class ReferenceArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val reference: String,
-) : Property()
+) : Argument
 
 @Serializable
-data class IntProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class IntArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val default: Int? = null,
-) : Property()
+    val min: Int? = null,
+    val max: Int? = null,
+) : Argument
 
 @Serializable
-data class BooleanProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class BooleanArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val default: Boolean? = null,
-) : Property()
+) : Argument
 
 @Serializable
-data class StringProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class StringArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val min_len: Int? = null,
     val max_len: Int? = null,
     val enumeration: List<String>? = null,
     val default: String? = null,
-) : Property()
+) : Argument
 
 @Serializable
-data class ArrayProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class ArrayArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val array: ApiType,
-) : Property()
+) : Argument
 
 @Serializable
-data class FloatProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
-) : Property()
+data class FloatArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
+) : Argument
 
 @Serializable
-data class AnyOfProperty(
-    val name: String,
-    val description: String,
-    val required: Boolean,
-    val type: String,
+data class AnyOfArgument(
+    override val type: String,
+    override val name: String,
+    override val description: String,
+    override val required: Boolean,
     val any_of: List<ApiType>,
-) : Property()
+) : Argument

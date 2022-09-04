@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.model.Update
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

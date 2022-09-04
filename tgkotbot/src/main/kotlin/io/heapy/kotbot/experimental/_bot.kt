@@ -4,7 +4,7 @@ import io.heapy.kotbot.ApplicationFactory
 import io.heapy.kotbot.Command
 import io.heapy.kotbot.Filter
 import io.heapy.kotbot.Rule
-import io.heapy.kotbot.bot.Update
+import io.heapy.kotbot.bot.model.Update
 import kotlin.properties.ReadOnlyProperty
 
 val `@user_chat` by userChat()

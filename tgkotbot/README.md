@@ -1,6 +1,6 @@
 # @tgkotbot
 
-Bot for Kotlin chats in telegram.
+Bot for Kotlin chats in the telegram.
 
 ## Docker Image
 
@@ -9,18 +9,18 @@ in [GitHub Container Repository](https://github.com/Heapy/kotbot/pkgs/container/
 
 ## Development
 
-1. Use [@BotFather](https://t.me/BotFather) to create bot which you will use for testing;
-1. You need to pass bot token that you received from BotFather to Bot, here two available options:
+1. Use [@BotFather](https://t.me/BotFather) to create a bot which you will use for testing;
+2. You need to pass bot token that you received from BotFather to Bot, here two available options:
     1. Create file `/src/main/resources/application.conf` with following content:
        ```
        bot {
          token = "your_bot_token"
        }   
        ```
-    1. Set env variable `KOTBOT_TOKEN` to token value in Intellij IDEA's "Run/Debug Configuration";
-1. Run main in `io.heapy.kotbot.Application`.
+   2. Set env variable `KOTBOT_TOKEN` to token value in Intellij IDEA's "Run/Debug Configuration";
+3. Run main in `io.heapy.kotbot.Application`.
 
-That's it, you have running bot, now add him to some chat and grant admin rules (in order to delete messages and kick
+That's it, you have a running bot, now add him to some group and grant admin rules (in order to delete messages and kick
 users), and test it.
 
 ## TODO

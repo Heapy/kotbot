@@ -2,9 +2,9 @@ package io.heapy.kotbot
 
 import io.heapy.kotbot.bot.BanChatMember
 import io.heapy.kotbot.bot.DeleteMessage
-import io.heapy.kotbot.bot.Message
-import io.heapy.kotbot.bot.Update
-import io.heapy.kotbot.bot.User
+import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.model.User
 
 val Update.anyMessage: Message?
     get() = edited_message ?: message

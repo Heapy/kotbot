@@ -6,7 +6,7 @@ import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
-import io.heapy.kotbot.bot.Update
+import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.execute
 import io.heapy.kotbot.bot.receiveUpdates
 import io.micrometer.core.instrument.MeterRegistry

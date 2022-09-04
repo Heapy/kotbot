@@ -1,7 +1,7 @@
 package io.heapy.kotbot.experimental
 
-import io.heapy.kotbot.bot.Update
-import io.heapy.kotbot.bot.User
+import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.model.User
 
 // Attempt to provide convenient access to the bot API.
 
