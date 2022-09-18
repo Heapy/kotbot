@@ -10,10 +10,20 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import kotlin.io.path.Path
 
-private val debug = true
+private val debug = false
 
 fun TelegramApi.generate() {
-    val objectsFiles = objects.map(Object::toFileSpec)
+    val supertypes = objects.filterIsInstance<AnyOfObject>()
+        .flatMap { anyOf ->
+            anyOf.any_of
+                .map { apiType -> apiType as ReferenceApiType }
+                .map { apiType -> apiType.reference }
+                .associateWith { anyOf.name }
+                .map { it.key to it.value }
+        }
+        .toMap()
+
+    val objectsFiles = objects.map { it.toFileSpec(supertypes) }
     val helperFiles = helpers.map(ClassName::toFileSpec).takeIf { debug } ?: listOf()
 
     val anyOfArgumentsFiles = objects.filterIsInstance<PropertiesObject>()
@@ -54,9 +64,74 @@ private fun AnyOfArgument.toFileSpec() =
             TypeSpec.interfaceBuilder(className())
                 .addModifiers(KModifier.SEALED)
                 .whenDebug { addAnnotation(anyOfObjectArgument) }
-                .addAnnotation(serializableAnnotation)
+                .addAnnotation(
+                    AnnotationSpec.builder(serializableAnnotation)
+                        .addMember("with = %T::class", ClassName(basePackageName, "${className()}Serializer"))
+                        .build()
+                )
                 .build()
         )
+        .apply {
+            any_of.forEach { type ->
+                when(type) {
+                    is IntApiType -> addType(
+                        TypeSpec.classBuilder("Int${className()}")
+                            .addModifiers(KModifier.VALUE)
+                            .addAnnotation(JvmInline::class)
+                            .addAnnotation(serializableAnnotation)
+                            .addSuperinterface(ClassName(modelPackageName, className()))
+                            .addProperty(
+                                PropertySpec.builder("value", intType)
+                                    .initializer("value")
+                                    .build()
+                            )
+                            .primaryConstructor(
+                                FunSpec.constructorBuilder()
+                                    .addParameter("value", intType)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    is StringApiType -> addType(
+                        TypeSpec.classBuilder("String${className()}")
+                            .addModifiers(KModifier.VALUE)
+                            .addAnnotation(JvmInline::class)
+                            .addAnnotation(serializableAnnotation)
+                            .addSuperinterface(ClassName(modelPackageName, className()))
+                            .addProperty(
+                                PropertySpec.builder("value", stringType)
+                                    .initializer("value")
+                                    .build()
+                            )
+                            .primaryConstructor(
+                                FunSpec.constructorBuilder()
+                                    .addParameter("value", stringType)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    is ReferenceApiType -> addType(
+                        TypeSpec.classBuilder("${type.reference}${className()}")
+                            .addModifiers(KModifier.VALUE)
+                            .addAnnotation(JvmInline::class)
+                            .addAnnotation(serializableAnnotation)
+                            .addSuperinterface(ClassName(modelPackageName, className()))
+                            .addProperty(
+                                PropertySpec.builder("value", ClassName(modelPackageName, type.reference))
+                                    .initializer("value")
+                                    .build()
+                            )
+                            .primaryConstructor(
+                                FunSpec.constructorBuilder()
+                                    .addParameter("value", ClassName(modelPackageName, type.reference))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    else -> error("Unsupported type $type")
+                }
+            }
+        }
         .build()
 
 private fun ClassName.toFileSpec(): FileSpec =
@@ -69,7 +144,9 @@ private fun ClassName.toFileSpec(): FileSpec =
 
 fun <T> T.whenDebug(apply: T.() -> T): T = if (debug) apply() else this
 
-private fun Object.toFileSpec(): FileSpec {
+private fun Object.toFileSpec(
+    supertypes: Map<String, String>,
+): FileSpec {
     return FileSpec.builder(modelPackageName, name)
         .apply {
             val type = when (val obj = this@toFileSpec) {
@@ -93,6 +170,11 @@ private fun Object.toFileSpec(): FileSpec {
                 is PropertiesObject -> TypeSpec.classBuilder(obj.name)
                     .addAnnotation(serializableAnnotation)
                     .addModifiers(KModifier.DATA)
+                    .apply {
+                        supertypes[obj.name]?.let { supertype ->
+                            addSuperinterface(ClassName(modelPackageName, supertype))
+                        }
+                    }
                     .primaryConstructor(
                         FunSpec.constructorBuilder()
                             .addParameters(obj.properties.map(Argument::asParameterSpec))

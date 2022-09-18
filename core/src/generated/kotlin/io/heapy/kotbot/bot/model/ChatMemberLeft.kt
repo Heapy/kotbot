@@ -16,4 +16,4 @@ public data class ChatMemberLeft(
    * Information about the user
    */
   public val user: User,
-)
+) : ChatMember

@@ -1,14 +1,6 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.kotbot.bot.model.BotCommandScope
-import io.heapy.kotbot.bot.model.BotCommandScopeAllPrivateChats
-import io.heapy.kotbot.bot.model.BotCommandScopeDefault
-import io.heapy.kotbot.bot.model.ChatMember
-import io.heapy.kotbot.bot.model.InlineQueryResult
-import io.heapy.kotbot.bot.model.InputMedia
-import io.heapy.kotbot.bot.model.InputMessageContent
-import io.heapy.kotbot.bot.model.MenuButton
-import io.heapy.kotbot.bot.model.PassportElementError
+import io.heapy.kotbot.bot.model.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
@@ -18,30 +10,46 @@ import kotlinx.serialization.json.jsonPrimitive
 public object BotCommandScopeSerializer : JsonContentPolymorphicSerializer<BotCommandScope>(BotCommandScope::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out BotCommandScope> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-//            "default" -> BotCommandScopeDefault.serializer()
-//            "all_private_chats" -> BotCommandScopeAllPrivateChats.serializer()
-            else -> error("Unknown argument type: $type")
+            "default" -> BotCommandScopeDefault.serializer()
+            "all_private_chats" -> BotCommandScopeAllPrivateChats.serializer()
+            "all_group_chats" -> BotCommandScopeAllGroupChats.serializer()
+            "all_chat_administrators" -> BotCommandScopeAllChatAdministrators.serializer()
+            "chat" -> BotCommandScopeChat.serializer()
+            "chat_administrators" -> BotCommandScopeChatAdministrators.serializer()
+            "chat_member" -> BotCommandScopeChatMember.serializer()
+            else -> error("Unknown BotCommandScope type: $type")
         }
 }
 
 public object ChatMemberSerializer : JsonContentPolymorphicSerializer<ChatMember>(ChatMember::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out ChatMember> =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown argument type: $type")
+        when (val status = element.jsonObject["status"]?.jsonPrimitive?.content) {
+            "creator" -> ChatMemberOwner.serializer()
+            "administrator" -> ChatMemberAdministrator.serializer()
+            "member" -> ChatMemberMember.serializer()
+            "restricted" -> ChatMemberRestricted.serializer()
+            "left" -> ChatMemberLeft.serializer()
+            "kicked" -> ChatMemberBanned.serializer()
+            else -> error("Unknown ChatMember status: $status")
         }
 }
 
 public object InlineQueryResultSerializer : JsonContentPolymorphicSerializer<InlineQueryResult>(InlineQueryResult::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out InlineQueryResult> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown argument type: $type")
+            else -> error("Unknown InlineQueryResult type: $type")
         }
 }
 
 public object InputMediaSerializer : JsonContentPolymorphicSerializer<InputMedia>(InputMedia::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out InputMedia> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown argument type: $type")
+            "animation" -> InputMediaAnimation.serializer()
+            "document" -> InputMediaDocument.serializer()
+            "audio" -> InputMediaAudio.serializer()
+            "photo" -> InputMediaPhoto.serializer()
+            "video" -> InputMediaVideo.serializer()
+            else -> error("Unknown InputMedia type: $type")
         }
 }
 
@@ -61,6 +69,24 @@ public object MenuButtonSerializer : JsonContentPolymorphicSerializer<MenuButton
 
 public object PassportElementErrorSerializer : JsonContentPolymorphicSerializer<PassportElementError>(PassportElementError::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out PassportElementError> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public object ChatIdSerializer : JsonContentPolymorphicSerializer<ChatId>(ChatId::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out ChatId> =
+        element.jsonPrimitive.let { jsonPrimitive ->
+            when {
+                jsonPrimitive.isString -> StringChatId.serializer()
+                jsonPrimitive.content.toLongOrNull() != null -> IntChatId.serializer()
+                else -> error("Unknown argument type: ${jsonPrimitive.content}")
+            }
+        }
+}
+
+public object ThumbSerializer : JsonContentPolymorphicSerializer<Thumb>(Thumb::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out Thumb> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             else -> error("Unknown argument type: $type")
         }

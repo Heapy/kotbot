@@ -28,4 +28,4 @@ public data class InlineQueryResultCachedSticker(
    * *Optional*. Content of the message to be sent instead of the sticker
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

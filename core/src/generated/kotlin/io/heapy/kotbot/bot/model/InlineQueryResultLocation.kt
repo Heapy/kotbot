@@ -66,4 +66,4 @@ public data class InlineQueryResultLocation(
    * *Optional*. Thumbnail height
    */
   public val thumb_height: Int? = null,
-)
+) : InlineQueryResult

@@ -25,4 +25,4 @@ public data class PassportElementErrorFiles(
    * Error message
    */
   public val message: String,
-)
+) : PassportElementError

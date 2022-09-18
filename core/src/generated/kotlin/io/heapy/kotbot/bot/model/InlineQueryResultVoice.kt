@@ -50,4 +50,4 @@ public data class InlineQueryResultVoice(
    * *Optional*. Content of the message to be sent instead of the voice recording
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

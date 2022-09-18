@@ -12,4 +12,4 @@ public data class BotCommandScopeAllPrivateChats(
    * Scope type, must be *all\_private\_chats*
    */
   public val type: String,
-)
+) : BotCommandScope

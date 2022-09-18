@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfArgument
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -16,6 +15,5 @@ public data class BotCommandScopeChatAdministrators(
   /**
    * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
    */
-  @AnyOfArgument
   public val chat_id: ChatId,
-)
+) : BotCommandScope

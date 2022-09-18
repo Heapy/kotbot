@@ -2,7 +2,7 @@
 
 ### Kotlin
 
-- [InsanusMokrassar/TelegramBotAPI](https://github.com/InsanusMokrassar/TelegramBotAPI) – Ktor, Kotlin Serializtion, KMP in mind. Opinionated DSL API.
+- [InsanusMokrassar/TelegramBotAPI](https://github.com/InsanusMokrassar/TelegramBotAPI) – Ktor, Kotlin Serialization, KMP in mind. Opinionated DSL API.
 - [madhead/telek](https://gitlab.com/madhead/telek) – Kotlin Serialization, Apache HttpClient, KMP in mind
 - [kotlin-telegram-bot/kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot) – Retrofit, GSON, Opinionated DSL API
 - [ruslanys/telegraff](https://github.com/ruslanys/telegraff) – Opinionated DSL API, Spring Boot in Core module 🙃

@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.BotCommandScopeSerializer
 import kotlinx.serialization.Serializable
 
@@ -16,5 +15,4 @@ import kotlinx.serialization.Serializable
  * * [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
  */
 @Serializable(with = BotCommandScopeSerializer::class)
-@AnyOfObject
 public sealed interface BotCommandScope

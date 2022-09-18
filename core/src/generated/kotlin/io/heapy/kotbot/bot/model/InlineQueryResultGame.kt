@@ -24,4 +24,4 @@ public data class InlineQueryResultGame(
    * *Optional*. [Inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
-)
+) : InlineQueryResult

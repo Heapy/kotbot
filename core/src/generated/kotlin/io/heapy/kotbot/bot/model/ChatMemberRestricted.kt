@@ -58,4 +58,4 @@ public data class ChatMemberRestricted(
    * Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
    */
   public val until_date: Int,
-)
+) : ChatMember

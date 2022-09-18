@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.ChatMemberSerializer
 import kotlinx.serialization.Serializable
 
@@ -15,5 +14,4 @@ import kotlinx.serialization.Serializable
  * * [ChatMemberBanned](https://core.telegram.org/bots/api/#chatmemberbanned)
  */
 @Serializable(with = ChatMemberSerializer::class)
-@AnyOfObject
 public sealed interface ChatMember

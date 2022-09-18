@@ -12,4 +12,4 @@ public data class BotCommandScopeDefault(
    * Scope type, must be *default*
    */
   public val type: String,
-)
+) : BotCommandScope

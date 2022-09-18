@@ -33,4 +33,4 @@ public data class InputLocationMessageContent(
    * *Optional*. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
    */
   public val proximity_alert_radius: Int? = null,
-)
+) : InputMessageContent

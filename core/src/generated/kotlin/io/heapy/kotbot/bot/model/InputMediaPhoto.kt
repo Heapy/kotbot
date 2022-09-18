@@ -29,4 +29,4 @@ public data class InputMediaPhoto(
    * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
-)
+) : InputMedia

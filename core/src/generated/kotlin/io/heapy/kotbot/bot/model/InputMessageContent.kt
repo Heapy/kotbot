@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.InputMessageContentSerializer
 import kotlinx.serialization.Serializable
 
@@ -14,5 +13,4 @@ import kotlinx.serialization.Serializable
  * * [InputInvoiceMessageContent](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
  */
 @Serializable(with = InputMessageContentSerializer::class)
-@AnyOfObject
 public sealed interface InputMessageContent

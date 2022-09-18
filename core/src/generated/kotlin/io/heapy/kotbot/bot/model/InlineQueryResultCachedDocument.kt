@@ -49,4 +49,4 @@ public data class InlineQueryResultCachedDocument(
    * *Optional*. Content of the message to be sent instead of the file
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

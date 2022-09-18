@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.MenuButtonSerializer
 import kotlinx.serialization.Serializable
 
@@ -12,5 +11,4 @@ import kotlinx.serialization.Serializable
  * * [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
  */
 @Serializable(with = MenuButtonSerializer::class)
-@AnyOfObject
 public sealed interface MenuButton

@@ -25,4 +25,4 @@ public data class ChatMemberOwner(
    * *Optional*. Custom title for this user
    */
   public val custom_title: String? = null,
-)
+) : ChatMember

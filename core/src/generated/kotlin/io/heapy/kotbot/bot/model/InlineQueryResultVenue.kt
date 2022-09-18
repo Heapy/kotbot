@@ -70,4 +70,4 @@ public data class InlineQueryResultVenue(
    * *Optional*. Thumbnail height
    */
   public val thumb_height: Int? = null,
-)
+) : InlineQueryResult

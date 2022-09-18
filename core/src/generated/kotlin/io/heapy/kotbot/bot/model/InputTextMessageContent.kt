@@ -26,4 +26,4 @@ public data class InputTextMessageContent(
    * *Optional*. Disables link previews for links in the sent message
    */
   public val disable_web_page_preview: Boolean? = null,
-)
+) : InputMessageContent

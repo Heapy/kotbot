@@ -72,4 +72,4 @@ public data class InlineQueryResultVideo(
    * *Optional*. Content of the message to be sent instead of the video. This field is **required** if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

@@ -24,4 +24,4 @@ public data class InputContactMessageContent(
    * *Optional*. Additional data about the contact in the form of a [vCard](https://en.wikipedia.org/wiki/VCard), 0-2048 bytes
    */
   public val vcard: String? = null,
-)
+) : InputMessageContent

@@ -41,4 +41,4 @@ public data class InputVenueMessageContent(
    * *Optional*. Google Places type of the venue. (See [supported types](https://developers.google.com/places/web-service/supported_types).)
    */
   public val google_place_type: String? = null,
-)
+) : InputMessageContent

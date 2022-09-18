@@ -24,4 +24,4 @@ public data class PassportElementErrorSelfie(
    * Error message
    */
   public val message: String,
-)
+) : PassportElementError

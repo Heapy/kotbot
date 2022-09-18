@@ -41,4 +41,4 @@ public data class InlineQueryResultCachedAudio(
    * *Optional*. Content of the message to be sent instead of the audio
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

@@ -24,4 +24,4 @@ public data class PassportElementErrorFrontSide(
    * Error message
    */
   public val message: String,
-)
+) : PassportElementError

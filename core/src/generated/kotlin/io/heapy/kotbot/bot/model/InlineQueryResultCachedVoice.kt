@@ -45,4 +45,4 @@ public data class InlineQueryResultCachedVoice(
    * *Optional*. Content of the message to be sent instead of the voice message
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

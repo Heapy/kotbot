@@ -53,4 +53,4 @@ public data class InlineQueryResultContact(
    * *Optional*. Thumbnail height
    */
   public val thumb_height: Int? = null,
-)
+) : InlineQueryResult

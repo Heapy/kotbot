@@ -24,4 +24,4 @@ public data class PassportElementErrorUnspecified(
    * Error message
    */
   public val message: String,
-)
+) : PassportElementError

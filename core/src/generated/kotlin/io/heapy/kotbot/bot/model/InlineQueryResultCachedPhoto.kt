@@ -49,4 +49,4 @@ public data class InlineQueryResultCachedPhoto(
    * *Optional*. Content of the message to be sent instead of the photo
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

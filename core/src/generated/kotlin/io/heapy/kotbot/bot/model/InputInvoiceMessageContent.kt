@@ -91,4 +91,4 @@ public data class InputInvoiceMessageContent(
    * *Optional*. Pass *True* if the final price depends on the shipping method
    */
   public val is_flexible: Boolean? = null,
-)
+) : InputMessageContent

@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfArgument
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
@@ -22,7 +21,6 @@ public data class InputMediaDocument(
   /**
    * *Optional*. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file\_attach\_name>” if the thumbnail was uploaded using multipart/form-data under <file\_attach\_name>. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files)
    */
-  @AnyOfArgument
   public val thumb: Thumb? = null,
   /**
    * *Optional*. Caption of the document to be sent, 0-1024 characters after entities parsing
@@ -40,4 +38,4 @@ public data class InputMediaDocument(
    * *Optional*. Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always *True*, if the document is sent as part of an album.
    */
   public val disable_content_type_detection: Boolean? = null,
-)
+) : InputMedia

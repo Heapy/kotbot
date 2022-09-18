@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.InputMediaSerializer
 import kotlinx.serialization.Serializable
 
@@ -14,5 +13,4 @@ import kotlinx.serialization.Serializable
  * * [InputMediaVideo](https://core.telegram.org/bots/api/#inputmediavideo)
  */
 @Serializable(with = InputMediaSerializer::class)
-@AnyOfObject
 public sealed interface InputMedia

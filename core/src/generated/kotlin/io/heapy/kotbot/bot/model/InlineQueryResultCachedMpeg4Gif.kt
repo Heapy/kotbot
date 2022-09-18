@@ -45,4 +45,4 @@ public data class InlineQueryResultCachedMpeg4Gif(
    * *Optional*. Content of the message to be sent instead of the video animation
    */
   public val input_message_content: InputMessageContent? = null,
-)
+) : InlineQueryResult

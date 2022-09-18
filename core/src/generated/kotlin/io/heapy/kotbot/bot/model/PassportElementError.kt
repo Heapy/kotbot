@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import io.heapy.kotbot.bot.AnyOfObject
 import io.heapy.kotbot.bot.PassportElementErrorSerializer
 import kotlinx.serialization.Serializable
 
@@ -18,5 +17,4 @@ import kotlinx.serialization.Serializable
  * * [PassportElementErrorUnspecified](https://core.telegram.org/bots/api/#passportelementerrorunspecified)
  */
 @Serializable(with = PassportElementErrorSerializer::class)
-@AnyOfObject
 public sealed interface PassportElementError
