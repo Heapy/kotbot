@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.model
 
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
@@ -30,7 +31,7 @@ public data class WebhookInfo(
   /**
    * *Optional*. Unix time for the most recent error that happened when trying to deliver an update via webhook
    */
-  public val last_error_date: Int? = null,
+  public val last_error_date: Long? = null,
   /**
    * *Optional*. Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
    */
@@ -38,13 +39,13 @@ public data class WebhookInfo(
   /**
    * *Optional*. Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
    */
-  public val last_synchronization_error_date: Int? = null,
+  public val last_synchronization_error_date: Long? = null,
   /**
    * *Optional*. The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
    */
   public val max_connections: Int? = null,
   /**
-   * *Optional*. A list of update types the bot is subscribed to. Defaults to all update types except *chat\_member*
+   * *Optional*. A list of update types the bot is subscribed to. Defaults to all update types except *chat_member*
    */
   public val allowed_updates: List<String>? = null,
 )

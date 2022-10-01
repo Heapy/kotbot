@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class MenuButtonWebApp(
   /**
-   * Type of the button, must be *web\_app*
+   * Type of the button, must be *web_app*
    */
-  public val type: String,
+  public val type: String = "web_app",
   /**
    * Text on the button
    */

@@ -19,7 +19,7 @@ public data class StickerSet(
    */
   public val title: String,
   /**
-   * Type of stickers in the set, currently one of “regular”, “mask”, “custom\_emoji”
+   * Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
    */
   public val sticker_type: String,
   /**

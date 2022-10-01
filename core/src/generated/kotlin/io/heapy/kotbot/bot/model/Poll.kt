@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.model
 
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
@@ -62,5 +63,5 @@ public data class Poll(
   /**
    * *Optional*. Point in time (Unix timestamp) when the poll will be automatically closed
    */
-  public val close_date: Int? = null,
+  public val close_date: Long? = null,
 )

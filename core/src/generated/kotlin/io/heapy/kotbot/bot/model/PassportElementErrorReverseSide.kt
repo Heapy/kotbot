@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class PassportElementErrorReverseSide(
   /**
-   * Error source, must be *reverse\_side*
+   * Error source, must be *reverse_side*
    */
-  public val source: String,
+  public val source: String = "reverse_side",
   /**
-   * The section of the user's Telegram Passport which has the issue, one of “driver\_license”, “identity\_card”
+   * The section of the user's Telegram Passport which has the issue, one of “driver_license”, “identity_card”
    */
   public val type: String,
   /**

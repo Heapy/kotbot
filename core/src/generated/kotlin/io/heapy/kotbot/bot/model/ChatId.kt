@@ -1,7 +1,7 @@
 package io.heapy.kotbot.bot.model
 
 import io.heapy.kotbot.bot.ChatIdSerializer
-import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlin.jvm.JvmInline
 import kotlinx.serialization.Serializable
@@ -11,8 +11,8 @@ public sealed interface ChatId
 
 @JvmInline
 @Serializable
-public value class IntChatId(
-  public val `value`: Int,
+public value class LongChatId(
+  public val `value`: Long,
 ) : ChatId
 
 @JvmInline

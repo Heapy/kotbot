@@ -5,7 +5,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * This object represents one button of the reply keyboard. For simple text buttons *String* can be used instead of this object to specify text of the button. Optional fields *web\_app*, *request\_contact*, *request\_location*, and *request\_poll* are mutually exclusive.
+ * This object represents one button of the reply keyboard. For simple text buttons *String* can be used instead of this object to specify text of the button. Optional fields *web_app*, *request_contact*, *request_location*, and *request_poll* are mutually exclusive.
  */
 @Serializable
 public data class KeyboardButton(
@@ -26,7 +26,7 @@ public data class KeyboardButton(
    */
   public val request_poll: KeyboardButtonPollType? = null,
   /**
-   * *Optional*. If specified, the described [Web App](https://core.telegram.org/bots/webapps) will be launched when the button is pressed. The Web App will be able to send a “web\_app\_data” service message. Available in private chats only.
+   * *Optional*. If specified, the described [Web App](https://core.telegram.org/bots/webapps) will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only.
    */
   public val web_app: WebAppInfo? = null,
 )

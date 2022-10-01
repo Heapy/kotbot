@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class PassportElementErrorTranslationFile(
   /**
-   * Error source, must be *translation\_file*
+   * Error source, must be *translation_file*
    */
-  public val source: String,
+  public val source: String = "translation_file",
   /**
-   * Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
+   * Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
    */
   public val type: String,
   /**

@@ -6,14 +6,14 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+ * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
  */
 @Serializable
 public data class InlineQueryResultDocument(
   /**
    * Type of the result, must be *document*
    */
-  public val type: String,
+  public val type: String = "document",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -31,7 +31,7 @@ public data class InlineQueryResultDocument(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

@@ -1,6 +1,6 @@
 package io.heapy.kotbot.bot.model
 
-import kotlin.Int
+import kotlin.Long
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,7 +19,7 @@ public data class ChatMemberUpdated(
   /**
    * Date the change was done in Unix time
    */
-  public val date: Int,
+  public val date: Long,
   /**
    * Previous information about the chat member
    */

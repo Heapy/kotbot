@@ -6,16 +6,16 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+ * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the video.
  *
- * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+ * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input_message_content*.
  */
 @Serializable
 public data class InlineQueryResultVideo(
   /**
    * Type of the result, must be *video*
    */
-  public val type: String,
+  public val type: String = "video",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -45,7 +45,7 @@ public data class InlineQueryResultVideo(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

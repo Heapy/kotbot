@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.model
 
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -37,7 +38,7 @@ public data class ChatInviteLink(
   /**
    * *Optional*. Point in time (Unix timestamp) when the link will expire or has been expired
    */
-  public val expire_date: Int? = null,
+  public val expire_date: Long? = null,
   /**
    * *Optional*. The maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
    */

@@ -1,7 +1,7 @@
 package io.heapy.kotbot.bot.model
 
 import kotlin.Boolean
-import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -13,7 +13,7 @@ public data class ChatMemberRestricted(
   /**
    * The member's status in the chat, always “restricted”
    */
-  public val status: String,
+  public val status: String = "restricted",
   /**
    * Information about the user
    */
@@ -57,5 +57,5 @@ public data class ChatMemberRestricted(
   /**
    * Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
    */
-  public val until_date: Int,
+  public val until_date: Long,
 ) : ChatMember

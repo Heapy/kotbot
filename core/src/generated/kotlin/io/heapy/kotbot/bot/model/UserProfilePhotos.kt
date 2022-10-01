@@ -16,5 +16,5 @@ public data class UserProfilePhotos(
   /**
    * Requested profile pictures (in up to 4 sizes each)
    */
-  public val photos: List<PhotoSize>,
+  public val photos: List<List<PhotoSize>>,
 )

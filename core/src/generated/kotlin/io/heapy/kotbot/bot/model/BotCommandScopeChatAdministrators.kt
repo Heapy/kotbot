@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class BotCommandScopeChatAdministrators(
   /**
-   * Scope type, must be *chat\_administrators*
+   * Scope type, must be *chat_administrators*
    */
-  public val type: String,
+  public val type: String = "chat_administrators",
   /**
    * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
    */

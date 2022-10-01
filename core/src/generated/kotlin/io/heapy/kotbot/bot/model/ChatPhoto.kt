@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatPhoto(
   /**
-   * File identifier of small (160x160) chat photo. This file\_id can be used only for photo download and only for as long as the photo is not changed.
+   * File identifier of small (160x160) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
    */
   public val small_file_id: String,
   /**
@@ -17,7 +17,7 @@ public data class ChatPhoto(
    */
   public val small_file_unique_id: String,
   /**
-   * File identifier of big (640x640) chat photo. This file\_id can be used only for photo download and only for as long as the photo is not changed.
+   * File identifier of big (640x640) chat photo. This file_id can be used only for photo download and only for as long as the photo is not changed.
    */
   public val big_file_id: String,
   /**

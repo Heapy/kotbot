@@ -1,6 +1,6 @@
 package io.heapy.kotbot.bot.model
 
-import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -20,9 +20,9 @@ public data class PassportFile(
   /**
    * File size in bytes
    */
-  public val file_size: Int,
+  public val file_size: Long,
   /**
    * Unix time when the file was uploaded
    */
-  public val file_date: Int,
+  public val file_date: Long,
 )

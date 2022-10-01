@@ -4,7 +4,6 @@ import io.heapy.kotbot.bot.model.Update
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.ListSerializer
 
 /**
@@ -49,10 +48,6 @@ public data class GetUpdates(
      */
     private val allowed_updates: List<String>? = null,
 ) : Method<List<Update>> {
-    @Transient
-    private val deserializer: KSerializer<Response<List<Update>>> =
-        Response.serializer(ListSerializer(Update.serializer()))
-
     override suspend fun Kotbot.execute(): List<Update> {
         return requestForJson(
             name = "getUpdates",
@@ -67,4 +62,9 @@ public data class GetUpdates(
             }
         )
     }
+
+     private companion object {
+         private val deserializer: KSerializer<Response<List<Update>>> =
+             Response.serializer(ListSerializer(Update.serializer()))
+     }
 }

@@ -5,14 +5,14 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the contact.
+ * Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the contact.
  */
 @Serializable
 public data class InlineQueryResultContact(
   /**
    * Type of the result, must be *contact*
    */
-  public val type: String,
+  public val type: String = "contact",
   /**
    * Unique identifier for this result, 1-64 Bytes
    */

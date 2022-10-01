@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.model
 
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -19,7 +20,7 @@ public data class Sticker(
    */
   public val file_unique_id: String,
   /**
-   * Type of the sticker, currently one of “regular”, “mask”, “custom\_emoji”. The type of the sticker is independent from its format, which is determined by the fields *is\_animated* and *is\_video*.
+   * Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. The type of the sticker is independent from its format, which is determined by the fields *is_animated* and *is_video*.
    */
   public val type: String,
   /**
@@ -65,5 +66,5 @@ public data class Sticker(
   /**
    * *Optional*. File size in bytes
    */
-  public val file_size: Int? = null,
+  public val file_size: Long? = null,
 )

@@ -27,7 +27,7 @@ public data class Message(
   /**
    * Date the message was sent in Unix time
    */
-  public val date: Int,
+  public val date: Long,
   /**
    * Conversation the message belongs to
    */
@@ -55,13 +55,13 @@ public data class Message(
   /**
    * *Optional*. For forwarded messages, date the original message was sent in Unix time
    */
-  public val forward_date: Int? = null,
+  public val forward_date: Long? = null,
   /**
    * *Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
    */
   public val is_automatic_forward: Boolean? = null,
   /**
-   * *Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
+   * *Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
    */
   public val reply_to_message: Message? = null,
   /**
@@ -71,7 +71,7 @@ public data class Message(
   /**
    * *Optional*. Date the message was last edited in Unix time
    */
-  public val edit_date: Int? = null,
+  public val edit_date: Long? = null,
   /**
    * *Optional*. *True*, if the message can't be forwarded
    */
@@ -181,11 +181,11 @@ public data class Message(
    */
   public val group_chat_created: Boolean? = null,
   /**
-   * *Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a directly created supergroup.
+   * *Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
    */
   public val supergroup_chat_created: Boolean? = null,
   /**
-   * *Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a channel.
+   * *Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
    */
   public val channel_chat_created: Boolean? = null,
   /**
@@ -201,7 +201,7 @@ public data class Message(
    */
   public val migrate_from_chat_id: Long? = null,
   /**
-   * *Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it is itself a reply.
+   * *Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply_to_message* fields even if it is itself a reply.
    */
   public val pinned_message: Message? = null,
   /**

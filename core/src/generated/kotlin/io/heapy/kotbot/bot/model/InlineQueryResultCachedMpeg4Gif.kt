@@ -5,14 +5,14 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+ * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the animation.
  */
 @Serializable
 public data class InlineQueryResultCachedMpeg4Gif(
   /**
-   * Type of the result, must be *mpeg4\_gif*
+   * Type of the result, must be *mpeg4_gif*
    */
-  public val type: String,
+  public val type: String = "mpeg4_gif",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -34,7 +34,7 @@ public data class InlineQueryResultCachedMpeg4Gif(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

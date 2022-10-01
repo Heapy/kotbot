@@ -11,9 +11,9 @@ public data class PassportElementErrorSelfie(
   /**
    * Error source, must be *selfie*
    */
-  public val source: String,
+  public val source: String = "selfie",
   /**
-   * The section of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”
+   * The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
    */
   public val type: String,
   /**

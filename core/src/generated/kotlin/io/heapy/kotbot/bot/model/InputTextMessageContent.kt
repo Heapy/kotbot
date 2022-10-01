@@ -19,7 +19,7 @@ public data class InputTextMessageContent(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in message text, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in message text, which can be specified instead of *parse_mode*
    */
   public val entities: List<MessageEntity>? = null,
   /**

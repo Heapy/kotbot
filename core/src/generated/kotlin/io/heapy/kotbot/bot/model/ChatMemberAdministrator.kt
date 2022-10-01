@@ -12,7 +12,7 @@ public data class ChatMemberAdministrator(
   /**
    * The member's status in the chat, always “administrator”
    */
-  public val status: String,
+  public val status: String = "administrator",
   /**
    * Information about the user
    */

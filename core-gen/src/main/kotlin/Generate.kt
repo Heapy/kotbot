@@ -1,3 +1,5 @@
+@file:JvmName("Generate")
+
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -7,13 +9,24 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
+import kotlinx.serialization.json.Json
 import kotlin.io.path.Path
 
-private val debug = false
+fun main() {
+    // https://ark0f.github.io/tg-bot-api/custom.json
+    val apiJson = {}::class.java
+        .getResource("custom.json")
+        ?.readText()
+        ?: error("custom.json not found")
+
+    Json.decodeFromString(TelegramApi.serializer(), apiJson)
+        .generate()
+}
 
 fun TelegramApi.generate() {
-    val supertypes = objects.filterIsInstance<AnyOfObject>()
+    val supertypeMapping = objects.filterIsInstance<AnyOfObject>()
         .flatMap { anyOf ->
             anyOf.any_of
                 .map { apiType -> apiType as ReferenceApiType }
@@ -23,37 +36,32 @@ fun TelegramApi.generate() {
         }
         .toMap()
 
-    val objectsFiles = objects.map { it.toFileSpec(supertypes) }
-    val helperFiles = helpers.map(ClassName::toFileSpec).takeIf { debug } ?: listOf()
+    val methodFiles = methods.map(Method::toFileSpec)
+
+    val objectsFiles = objects.map { it.toFileSpec(supertypeMapping) }
 
     val anyOfArgumentsFiles = objects.filterIsInstance<PropertiesObject>()
         .flatMap(PropertiesObject::toAnyOfArguments)
         .distinct()
         .map(AnyOfArgument::toFileSpec)
 
-    (anyOfArgumentsFiles + helperFiles + objectsFiles).forEach {
+    (anyOfArgumentsFiles + objectsFiles + methodFiles).forEach {
         it.writeTo(Path("core", "src", "generated", "kotlin"))
     }
 }
 
 private val basePackageName = "io.heapy.kotbot.bot"
 private val modelPackageName = "$basePackageName.model"
+private val methodPackageName = "$basePackageName.method"
 
+private val jvmInlineAnnotation = ClassName("kotlin.jvm", "JvmInline")
 private val serializableAnnotation = ClassName("kotlinx.serialization", "Serializable")
+private val listType = ClassName("kotlin.collections", "List")
+private val stringType = ClassName("kotlin", "String")
 private val booleanType = ClassName("kotlin", "Boolean")
 private val intType = ClassName("kotlin", "Int")
-private val stringType = ClassName("kotlin", "String")
 private val longType = ClassName("kotlin", "Long")
-
-private val emptyObjectAnnotation = ClassName(basePackageName, "EmptyObject")
-private val anyOfObjectAnnotation = ClassName(basePackageName, "AnyOfObject")
-private val anyOfObjectArgument = ClassName(basePackageName, "AnyOfArgument")
-
-private val helpers = listOf(
-    emptyObjectAnnotation,
-    anyOfObjectAnnotation,
-    anyOfObjectArgument,
-)
+private val doubleType = ClassName("kotlin", "Double")
 
 private fun PropertiesObject.toAnyOfArguments() =
     properties.filterIsInstance<AnyOfArgument>()
@@ -63,7 +71,6 @@ private fun AnyOfArgument.toFileSpec() =
         .addType(
             TypeSpec.interfaceBuilder(className())
                 .addModifiers(KModifier.SEALED)
-                .whenDebug { addAnnotation(anyOfObjectArgument) }
                 .addAnnotation(
                     AnnotationSpec.builder(serializableAnnotation)
                         .addMember("with = %T::class", ClassName(basePackageName, "${className()}Serializer"))
@@ -73,25 +80,26 @@ private fun AnyOfArgument.toFileSpec() =
         )
         .apply {
             any_of.forEach { type ->
-                when(type) {
+                when (type) {
                     is IntApiType -> addType(
-                        TypeSpec.classBuilder("Int${className()}")
+                        TypeSpec.classBuilder("Long${className()}")
                             .addModifiers(KModifier.VALUE)
                             .addAnnotation(JvmInline::class)
                             .addAnnotation(serializableAnnotation)
                             .addSuperinterface(ClassName(modelPackageName, className()))
                             .addProperty(
-                                PropertySpec.builder("value", intType)
+                                PropertySpec.builder("value", longType)
                                     .initializer("value")
                                     .build()
                             )
                             .primaryConstructor(
                                 FunSpec.constructorBuilder()
-                                    .addParameter("value", intType)
+                                    .addParameter("value", longType)
                                     .build()
                             )
                             .build()
                     )
+
                     is StringApiType -> addType(
                         TypeSpec.classBuilder("String${className()}")
                             .addModifiers(KModifier.VALUE)
@@ -110,6 +118,7 @@ private fun AnyOfArgument.toFileSpec() =
                             )
                             .build()
                     )
+
                     is ReferenceApiType -> addType(
                         TypeSpec.classBuilder("${type.reference}${className()}")
                             .addModifiers(KModifier.VALUE)
@@ -128,98 +137,135 @@ private fun AnyOfArgument.toFileSpec() =
                             )
                             .build()
                     )
+
                     else -> error("Unsupported type $type")
                 }
             }
         }
         .build()
 
-private fun ClassName.toFileSpec(): FileSpec =
-    FileSpec.builder(packageName, simpleName)
-        .addType(
-            TypeSpec.annotationBuilder(simpleName)
-                .build()
-        )
-        .build()
-
-fun <T> T.whenDebug(apply: T.() -> T): T = if (debug) apply() else this
-
 private fun Object.toFileSpec(
     supertypes: Map<String, String>,
 ): FileSpec {
     return FileSpec.builder(modelPackageName, name)
-        .apply {
-            val type = when (val obj = this@toFileSpec) {
-                is AnyOfObject -> TypeSpec.interfaceBuilder(obj.name)
-                    .addModifiers(KModifier.SEALED)
-                    .addAnnotation(
-                        AnnotationSpec.builder(serializableAnnotation)
-                            .addMember("with = %T::class", ClassName(basePackageName, "${obj.name}Serializer"))
+        .addType(when (val obj = this) {
+            is AnyOfObject -> TypeSpec.interfaceBuilder(obj.name)
+                .addModifiers(KModifier.SEALED)
+                .addAnnotation(
+                    AnnotationSpec.builder(serializableAnnotation)
+                        .addMember("with = %T::class", ClassName(basePackageName, "${obj.name}Serializer"))
+                        .build()
+                )
+                .addKdoc(CodeBlock.of(obj.description.asKdoc()))
+                .build()
+
+            is EmptyObject -> when (name) {
+                "InputFile" -> TypeSpec.classBuilder(obj.name)
+                    .addAnnotation(serializableAnnotation)
+                    .addAnnotation(jvmInlineAnnotation)
+                    .addModifiers(KModifier.VALUE)
+                    .addKdoc(CodeBlock.of(obj.description.asKdoc()))
+                    .addProperty(
+                        PropertySpec.builder("value", stringType)
+                            .initializer("value")
                             .build()
                     )
-                    .whenDebug { addAnnotation(anyOfObjectAnnotation) }
-                    .addKdoc(CodeBlock.of(obj.description.asKdoc()))
-                    .build()
-
-                is EmptyObject -> TypeSpec.classBuilder(obj.name)
-                    .addAnnotation(serializableAnnotation)
-                    .whenDebug { addAnnotation(emptyObjectAnnotation) }
-                    .addKdoc(CodeBlock.of(obj.description.asKdoc()))
-                    .build()
-
-                is PropertiesObject -> TypeSpec.classBuilder(obj.name)
-                    .addAnnotation(serializableAnnotation)
-                    .addModifiers(KModifier.DATA)
-                    .apply {
-                        supertypes[obj.name]?.let { supertype ->
-                            addSuperinterface(ClassName(modelPackageName, supertype))
-                        }
-                    }
                     .primaryConstructor(
                         FunSpec.constructorBuilder()
-                            .addParameters(obj.properties.map(Argument::asParameterSpec))
+                            .addParameter("value", stringType)
                             .build()
                     )
-                    .addProperties(obj.properties.map(Argument::asPropertySpec))
+                    .build()
+
+                else -> TypeSpec.classBuilder(obj.name)
+                    .addAnnotation(serializableAnnotation)
                     .addKdoc(CodeBlock.of(obj.description.asKdoc()))
                     .build()
             }
-            addType(type)
-        }
+
+            is PropertiesObject -> TypeSpec.classBuilder(obj.name)
+                .addAnnotation(serializableAnnotation)
+                .addModifiers(KModifier.DATA)
+                .apply {
+                    supertypes[obj.name]?.let { supertype ->
+                        addSuperinterface(ClassName(modelPackageName, supertype))
+                    }
+                }
+                .primaryConstructor(
+                    FunSpec.constructorBuilder()
+                        .addParameters(obj.properties.map(Argument::asParameterSpec))
+                        .build()
+                )
+                .addProperties(obj.properties.map(Argument::asPropertySpec))
+                .addKdoc(CodeBlock.of(obj.description.asKdoc()))
+                .build()
+        })
         .build()
 }
 
-private fun Argument.propertyInitializer(): CodeBlock = CodeBlock.of(name)
+private fun Argument.propertyInitializer(): CodeBlock =
+    CodeBlock.of(name)
 
-private fun AnyOfArgument.className(): String {
-    return name.split('_')
+private fun AnyOfArgument.className(): String =
+    name.snakeToTitle()
+
+private fun String.snakeToTitle(): String =
+    split('_')
         .joinToString(separator = "") { part ->
-            part.replaceFirstChar { char ->
-                char.uppercaseChar()
-            }
+            part.replaceFirstChar(Char::uppercaseChar)
         }
-}
+
+private fun String.camelToTitle(): String = replaceFirstChar(Char::uppercaseChar)
 
 /**
  * Replaces spaces with non-breaking spaces.
  * Replaces control symbols with html entities.
  */
-private fun String.asKdoc(): String {
-    return replace(' ', '·')
+private fun String.asKdoc(): String =
+    replace("\\_", "_")
+        .replace(' ', '·')
         .replace("»", "&raquo;")
         .replace("«", "&laquo;")
+
+private fun ArrayArgument.generic(): TypeName {
+    return when (val type = array) {
+        is AnyOfApiType -> ClassName(modelPackageName, when(name) {
+            "media" -> "InputMedia"
+            else -> name.snakeToTitle()
+        })
+        is StringApiType -> stringType
+        is IntApiType -> intType
+        is BooleanApiType -> booleanType
+        is ReferenceApiType -> ClassName(modelPackageName, type.reference)
+        is ArrayApiType -> listType
+            .parameterizedBy(type.array.generic())
+    }
 }
 
-private fun Argument.asPropertySpec(): PropertySpec {
-    return when (val arg = this) {
+private fun ApiType.generic(): TypeName {
+    return when (val type = this) {
+        is AnyOfApiType -> TODO()
+        is BooleanApiType -> booleanType
+        is IntApiType -> intType
+        is ReferenceApiType -> ClassName(modelPackageName, type.reference)
+        is StringApiType -> stringType
+        is ArrayApiType -> listType
+            .parameterizedBy(type.array.generic())
+    }
+}
+
+private fun Argument.asPropertySpec(): PropertySpec =
+    when (val arg = this) {
         is AnyOfArgument ->
             PropertySpec
                 .builder(
                     name = name,
-                    type = ClassName(modelPackageName, arg.className())
-                        .copy(nullable = nullable)
+                    type = ClassName(modelPackageName, when (name) {
+                        "from_chat_id" -> "ChatId"
+                        "photo", "png_sticker" -> "InputFile"
+                        else -> arg.className()
+                    }).copy(nullable = nullable)
                 )
-                .whenDebug { addAnnotation(anyOfObjectArgument) }
                 .addKdoc(description.asKdoc())
                 .initializer(propertyInitializer())
                 .build()
@@ -228,22 +274,8 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin.collections", "List")
-                        .parameterizedBy(when (arg.array) {
-                            is AnyOfApiType -> ClassName(modelPackageName, "AnyOfTodo")
-                            is ArrayApiType -> when(val sub = arg.array.array) {
-                                is AnyOfApiType -> ClassName(modelPackageName, "AnyOfTodo")
-                                is ArrayApiType -> TODO("recursive")
-                                is StringApiType -> stringType
-                                is IntApiType -> intType
-                                is BooleanApiType -> booleanType
-                                is ReferenceApiType -> ClassName(modelPackageName, sub.reference)
-                            }
-                            is StringApiType -> stringType
-                            is IntApiType -> intType
-                            is BooleanApiType -> booleanType
-                            is ReferenceApiType -> ClassName(modelPackageName, arg.array.reference)
-                        })
+                    type = listType
+                        .parameterizedBy(arg.generic())
                         .copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
@@ -254,8 +286,7 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = booleanType
-                        .copy(nullable = nullable)
+                    type = booleanType.copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
                 .initializer(propertyInitializer())
@@ -265,8 +296,7 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin", "Double")
-                        .copy(nullable = nullable)
+                    type = doubleType.copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
                 .initializer(propertyInitializer())
@@ -276,7 +306,7 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = if (description.contains("64-bit")) longType.copy(nullable = nullable)
+                    type = if (arg.isActuallyLong()) longType.copy(nullable = nullable)
                     else intType.copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
@@ -287,8 +317,7 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = ClassName(modelPackageName, arg.reference)
-                        .copy(nullable = nullable)
+                    type = ClassName(modelPackageName, arg.reference).copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
                 .initializer(propertyInitializer())
@@ -298,14 +327,12 @@ private fun Argument.asPropertySpec(): PropertySpec {
             PropertySpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin", "String")
-                        .copy(nullable = nullable)
+                    type = stringType.copy(nullable = nullable)
                 )
                 .addKdoc(description.asKdoc())
                 .initializer(propertyInitializer())
                 .build()
     }
-}
 
 private fun Argument.asParameterSpec(): ParameterSpec {
     return when (val arg = this) {
@@ -313,8 +340,11 @@ private fun Argument.asParameterSpec(): ParameterSpec {
             ParameterSpec
                 .builder(
                     name = name,
-                    type = ClassName(modelPackageName, arg.className())
-                        .copy(nullable = nullable)
+                    type = ClassName(modelPackageName, when (name) {
+                        "from_chat_id" -> "ChatId"
+                        "photo", "png_sticker" -> "InputFile"
+                        else -> arg.className()
+                    }).copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
                 .build()
@@ -323,23 +353,8 @@ private fun Argument.asParameterSpec(): ParameterSpec {
             ParameterSpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin.collections", "List")
-                        .parameterizedBy(when (arg.array) {
-                            is AnyOfApiType -> ClassName(modelPackageName, "AnyOfTodo")
-                            is ArrayApiType -> when (val sub = arg.array.array) {
-                                is AnyOfApiType -> ClassName(modelPackageName, "AnyOfTodo")
-                                is ArrayApiType -> TODO("recursive")
-                                is StringApiType -> stringType
-                                is IntApiType -> intType
-                                is BooleanApiType -> booleanType
-                                is ReferenceApiType -> ClassName(modelPackageName, sub.reference)
-                            }
-
-                            is StringApiType -> stringType
-                            is IntApiType -> intType
-                            is BooleanApiType -> booleanType
-                            is ReferenceApiType -> ClassName(modelPackageName, arg.array.reference)
-                        })
+                    type = listType
+                        .parameterizedBy(arg.generic())
                         .copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
@@ -349,18 +364,17 @@ private fun Argument.asParameterSpec(): ParameterSpec {
             ParameterSpec
                 .builder(
                     name = name,
-                    type = booleanType
-                        .copy(nullable = nullable)
+                    type = booleanType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
+                .apply { if (arg.default != null) defaultValue("%L", arg.default) }
                 .build()
 
         is FloatArgument ->
             ParameterSpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin", "Double")
-                        .copy(nullable = nullable)
+                    type = doubleType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
                 .build()
@@ -369,18 +383,18 @@ private fun Argument.asParameterSpec(): ParameterSpec {
             ParameterSpec
                 .builder(
                     name = name,
-                    type = if (description.contains("64-bit")) longType.copy(nullable = nullable)
+                    type = if (arg.isActuallyLong()) longType.copy(nullable = nullable)
                     else intType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
+                .apply { if (arg.default != null) defaultValue("%L", arg.default) }
                 .build()
 
         is ReferenceArgument ->
             ParameterSpec
                 .builder(
                     name = name,
-                    type = ClassName(modelPackageName, arg.reference)
-                        .copy(nullable = nullable)
+                    type = ClassName(modelPackageName, arg.reference).copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
                 .build()
@@ -389,10 +403,41 @@ private fun Argument.asParameterSpec(): ParameterSpec {
             ParameterSpec
                 .builder(
                     name = name,
-                    type = ClassName("kotlin", "String")
-                        .copy(nullable = nullable)
+                    type = stringType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
+                .apply { if (arg.default != null) defaultValue("%S", arg.default) }
                 .build()
     }
 }
+
+private fun IntArgument.isActuallyLong(): Boolean =
+    when {
+        name == "file_size" -> true
+        name == "user_id" -> true
+        name.contains("chat_id") -> true
+        description.contains("64-bit") -> true
+        description.contains("Unix time", ignoreCase = true) -> true
+        else -> false
+    }
+
+private fun Method.toFileSpec(): FileSpec =
+    FileSpec.builder(methodPackageName, name.camelToTitle())
+        .addType(
+            TypeSpec.classBuilder(name.camelToTitle())
+                .addAnnotation(serializableAnnotation)
+                .apply {
+                    arguments?.let {
+                        addModifiers(KModifier.DATA)
+                            .primaryConstructor(
+                                FunSpec.constructorBuilder()
+                                    .addParameters(arguments.map(Argument::asParameterSpec))
+                                    .build()
+                            )
+                            .addProperties(arguments.map(Argument::asPropertySpec))
+                    }
+                }
+                .addKdoc(CodeBlock.of(description.asKdoc()))
+                .build()
+        )
+        .build()

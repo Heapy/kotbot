@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.model
 
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -32,5 +33,5 @@ public data class VideoNote(
   /**
    * *Optional*. File size in bytes
    */
-  public val file_size: Int? = null,
+  public val file_size: Long? = null,
 )

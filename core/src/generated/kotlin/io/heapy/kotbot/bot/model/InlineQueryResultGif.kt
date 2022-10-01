@@ -6,14 +6,14 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+ * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the animation.
  */
 @Serializable
 public data class InlineQueryResultGif(
   /**
    * Type of the result, must be *gif*
    */
-  public val type: String,
+  public val type: String = "gif",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -41,7 +41,7 @@ public data class InlineQueryResultGif(
   /**
    * *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
    */
-  public val thumb_mime_type: String? = null,
+  public val thumb_mime_type: String? = "image/jpeg",
   /**
    * *Optional*. Title for the result
    */
@@ -55,7 +55,7 @@ public data class InlineQueryResultGif(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

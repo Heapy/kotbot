@@ -6,14 +6,14 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+ * Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the audio.
  */
 @Serializable
 public data class InlineQueryResultAudio(
   /**
    * Type of the result, must be *audio*
    */
-  public val type: String,
+  public val type: String = "audio",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -35,7 +35,7 @@ public data class InlineQueryResultAudio(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

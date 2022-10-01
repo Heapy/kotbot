@@ -12,9 +12,9 @@ public data class PassportElementErrorFiles(
   /**
    * Error source, must be *files*
    */
-  public val source: String,
+  public val source: String = "files",
   /**
-   * The section of the user's Telegram Passport which has the issue, one of “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
+   * The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
    */
   public val type: String,
   /**

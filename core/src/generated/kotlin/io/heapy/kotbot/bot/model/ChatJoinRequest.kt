@@ -1,6 +1,6 @@
 package io.heapy.kotbot.bot.model
 
-import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -20,7 +20,7 @@ public data class ChatJoinRequest(
   /**
    * Date the request was sent in Unix time
    */
-  public val date: Int,
+  public val date: Long,
   /**
    * *Optional*. Bio of the user.
    */

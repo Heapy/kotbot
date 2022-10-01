@@ -5,14 +5,14 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+ * Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the photo.
  */
 @Serializable
 public data class InlineQueryResultCachedPhoto(
   /**
    * Type of the result, must be *photo*
    */
-  public val type: String,
+  public val type: String = "photo",
   /**
    * Unique identifier for this result, 1-64 bytes
    */
@@ -38,7 +38,7 @@ public data class InlineQueryResultCachedPhoto(
    */
   public val parse_mode: String? = null,
   /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**

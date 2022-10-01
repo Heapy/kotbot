@@ -34,13 +34,6 @@ public object ChatMemberSerializer : JsonContentPolymorphicSerializer<ChatMember
         }
 }
 
-public object InlineQueryResultSerializer : JsonContentPolymorphicSerializer<InlineQueryResult>(InlineQueryResult::class) {
-    override fun selectDeserializer(element: JsonElement): KSerializer<out InlineQueryResult> =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown InlineQueryResult type: $type")
-        }
-}
-
 public object InputMediaSerializer : JsonContentPolymorphicSerializer<InputMedia>(InputMedia::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out InputMedia> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
@@ -53,18 +46,25 @@ public object InputMediaSerializer : JsonContentPolymorphicSerializer<InputMedia
         }
 }
 
+public object InlineQueryResultSerializer : JsonContentPolymorphicSerializer<InlineQueryResult>(InlineQueryResult::class) {
+    override fun selectDeserializer(
+        element: JsonElement,
+    ): KSerializer<out InlineQueryResult> =
+        TODO("No need to deserialize InlineQueryResult entity")
+}
+
 public object InputMessageContentSerializer : JsonContentPolymorphicSerializer<InputMessageContent>(InputMessageContent::class) {
-    override fun selectDeserializer(element: JsonElement): KSerializer<out InputMessageContent> =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown argument type: $type")
-        }
+    override fun selectDeserializer(
+        element: JsonElement,
+    ): KSerializer<out InputMessageContent> =
+        TODO("No need to deserialize InputMessageContent entity")
 }
 
 public object MenuButtonSerializer : JsonContentPolymorphicSerializer<MenuButton>(MenuButton::class) {
-    override fun selectDeserializer(element: JsonElement): KSerializer<out MenuButton> =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
-            else -> error("Unknown argument type: $type")
-        }
+    override fun selectDeserializer(
+        element: JsonElement,
+    ): KSerializer<out MenuButton> =
+        TODO("No need to deserialize MenuButton entity")
 }
 
 public object PassportElementErrorSerializer : JsonContentPolymorphicSerializer<PassportElementError>(PassportElementError::class) {
@@ -79,7 +79,7 @@ public object ChatIdSerializer : JsonContentPolymorphicSerializer<ChatId>(ChatId
         element.jsonPrimitive.let { jsonPrimitive ->
             when {
                 jsonPrimitive.isString -> StringChatId.serializer()
-                jsonPrimitive.content.toLongOrNull() != null -> IntChatId.serializer()
+                jsonPrimitive.content.toLongOrNull() != null -> LongChatId.serializer()
                 else -> error("Unknown argument type: ${jsonPrimitive.content}")
             }
         }

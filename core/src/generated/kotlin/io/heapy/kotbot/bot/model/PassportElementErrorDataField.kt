@@ -11,9 +11,9 @@ public data class PassportElementErrorDataField(
   /**
    * Error source, must be *data*
    */
-  public val source: String,
+  public val source: String = "data",
   /**
-   * The section of the user's Telegram Passport which has the error, one of “personal\_details”, “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “address”
+   * The section of the user's Telegram Passport which has the error, one of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”
    */
   public val type: String,
   /**

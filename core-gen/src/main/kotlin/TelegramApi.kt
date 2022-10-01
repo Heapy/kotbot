@@ -1,20 +1,8 @@
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-
-fun main() {
-    // https://ark0f.github.io/tg-bot-api/custom.json
-    val apiJson = {}::class.java
-        .getResource("custom.json")
-        ?.readText()
-        ?: error("custom.json not found")
-
-    Json.decodeFromString(TelegramApi.serializer(), apiJson)
-        .generate()
-}
 
 @Serializable
 data class TelegramApi(
@@ -166,7 +154,7 @@ val Argument.nullable: Boolean get() = !required
 
 @Serializable
 data class ReferenceArgument(
-    override val type: String,
+    override val type: String = "reference",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -175,7 +163,7 @@ data class ReferenceArgument(
 
 @Serializable
 data class IntArgument(
-    override val type: String,
+    override val type: String = "integer",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -186,7 +174,7 @@ data class IntArgument(
 
 @Serializable
 data class BooleanArgument(
-    override val type: String,
+    override val type: String = "bool",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -195,7 +183,7 @@ data class BooleanArgument(
 
 @Serializable
 data class StringArgument(
-    override val type: String,
+    override val type: String = "string",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -207,7 +195,7 @@ data class StringArgument(
 
 @Serializable
 data class ArrayArgument(
-    override val type: String,
+    override val type: String = "array",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -216,7 +204,7 @@ data class ArrayArgument(
 
 @Serializable
 data class FloatArgument(
-    override val type: String,
+    override val type: String = "float",
     override val name: String,
     override val description: String,
     override val required: Boolean,
@@ -224,7 +212,7 @@ data class FloatArgument(
 
 @Serializable
 data class AnyOfArgument(
-    override val type: String,
+    override val type: String = "any_of",
     override val name: String,
     override val description: String,
     override val required: Boolean,

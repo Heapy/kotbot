@@ -6,14 +6,14 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the venue.
+ * Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input_message_content* to send a message with the specified content instead of the venue.
  */
 @Serializable
 public data class InlineQueryResultVenue(
   /**
    * Type of the result, must be *venue*
    */
-  public val type: String,
+  public val type: String = "venue",
   /**
    * Unique identifier for this result, 1-64 Bytes
    */
@@ -39,7 +39,7 @@ public data class InlineQueryResultVenue(
    */
   public val foursquare_id: String? = null,
   /**
-   * *Optional*. Foursquare type of the venue, if known. (For example, “arts\_entertainment/default”, “arts\_entertainment/aquarium” or “food/icecream”.)
+   * *Optional*. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
    */
   public val foursquare_type: String? = null,
   /**

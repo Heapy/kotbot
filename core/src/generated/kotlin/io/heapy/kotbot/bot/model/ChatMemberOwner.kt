@@ -12,7 +12,7 @@ public data class ChatMemberOwner(
   /**
    * The member's status in the chat, always “creator”
    */
-  public val status: String,
+  public val status: String = "creator",
   /**
    * Information about the user
    */

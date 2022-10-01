@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class BotCommandScopeAllChatAdministrators(
   /**
-   * Scope type, must be *all\_chat\_administrators*
+   * Scope type, must be *all_chat_administrators*
    */
-  public val type: String,
+  public val type: String = "all_chat_administrators",
 ) : BotCommandScope
