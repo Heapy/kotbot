@@ -1,7 +1,7 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.model.IntChatId
+import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.StringChatId
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -25,7 +25,7 @@ class ChatIdTest {
     fun `test deserialization long type`() {
         val obj = Json.decodeFromString(ChatIdTestObj.serializer(), """{"chat_id": 1}""")
 
-        assertEquals(ChatIdTestObj(IntChatId(1)), obj)
+        assertEquals(ChatIdTestObj(LongChatId(1)), obj)
     }
 
     @Test
@@ -37,7 +37,7 @@ class ChatIdTest {
 
     @Test
     fun `test serialization long type`() {
-        val json = Json.encodeToString(ChatIdTestObj.serializer(), ChatIdTestObj(IntChatId(1)))
+        val json = Json.encodeToString(ChatIdTestObj.serializer(), ChatIdTestObj(LongChatId(1)))
 
         assertEquals("""{"chat_id":1}""", json)
     }
