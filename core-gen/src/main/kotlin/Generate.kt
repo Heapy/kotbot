@@ -54,6 +54,7 @@ private val basePackageName = "io.heapy.kotbot.bot"
 private val modelPackageName = "$basePackageName.model"
 private val methodPackageName = "$basePackageName.method"
 
+private val botMethodType = ClassName("io.heapy.kotbot.bot", "Method")
 private val jvmInlineAnnotation = ClassName("kotlin.jvm", "JvmInline")
 private val serializableAnnotation = ClassName("kotlinx.serialization", "Serializable")
 private val listType = ClassName("kotlin.collections", "List")
@@ -244,7 +245,7 @@ private fun ArrayArgument.generic(): TypeName {
 
 private fun ApiType.generic(): TypeName {
     return when (val type = this) {
-        is AnyOfApiType -> TODO()
+        is AnyOfApiType -> ClassName("kotlin", "Any").also { println("AnyOfApiType: $type") }
         is BooleanApiType -> booleanType
         is IntApiType -> intType
         is ReferenceApiType -> ClassName(modelPackageName, type.reference)
@@ -437,6 +438,7 @@ private fun Method.toFileSpec(): FileSpec =
                             .addProperties(arguments.map(Argument::asPropertySpec))
                     }
                 }
+                .addSuperinterface(botMethodType.parameterizedBy(return_type.generic()))
                 .addKdoc(CodeBlock.of(description.asKdoc()))
                 .build()
         )
