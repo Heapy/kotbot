@@ -38,7 +38,7 @@ public data class EditMessageMedia(
    */
   public val media: InputMedia,
   /**
-   * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+   * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<MessageOrTrue> {

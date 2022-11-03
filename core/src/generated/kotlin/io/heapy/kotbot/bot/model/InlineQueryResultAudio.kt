@@ -47,7 +47,7 @@ public data class InlineQueryResultAudio(
    */
   public val audio_duration: Int? = null,
   /**
-   * *Optional*. [Inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating) attached to the message
+   * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
   /**

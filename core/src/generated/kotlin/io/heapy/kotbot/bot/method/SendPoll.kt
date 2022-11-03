@@ -93,7 +93,7 @@ public data class SendPoll(
    */
   public val allow_sending_without_reply: Boolean? = null,
   /**
-   * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), [custom reply keyboard](https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+   * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
    */
   public val reply_markup: ReplyMarkup? = null,
 ) : Method<Message> {

@@ -47,7 +47,7 @@ public data class User(
    */
   public val can_join_groups: Boolean? = null,
   /**
-   * *Optional*. *True*, if [privacy mode](https://core.telegram.org/bots#privacy-mode) is disabled for the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+   * *Optional*. *True*, if [privacy mode](https://core.telegram.org/bots/features#privacy-mode) is disabled for the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
    */
   public val can_read_all_group_messages: Boolean? = null,
   /**

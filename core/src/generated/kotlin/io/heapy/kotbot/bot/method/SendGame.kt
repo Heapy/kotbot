@@ -46,7 +46,7 @@ public data class SendGame(
    */
   public val allow_sending_without_reply: Boolean? = null,
   /**
-   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
+   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<Message> {

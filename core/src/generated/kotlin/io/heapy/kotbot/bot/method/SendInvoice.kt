@@ -128,7 +128,7 @@ public data class SendInvoice(
    */
   public val allow_sending_without_reply: Boolean? = null,
   /**
-   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating). If empty, one 'Pay `total price`' button will be shown. If not empty, the first button must be a Pay button.
+   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay `total price`' button will be shown. If not empty, the first button must be a Pay button.
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<Message> {

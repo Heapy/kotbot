@@ -28,7 +28,7 @@ public data class StopPoll(
    */
   public val message_id: Int,
   /**
-   * A JSON-serialized object for a new message [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+   * A JSON-serialized object for a new message [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<Poll> {

@@ -33,7 +33,7 @@ public data class StopMessageLiveLocation(
    */
   public val inline_message_id: String? = null,
   /**
-   * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+   * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<MessageOrTrue> {

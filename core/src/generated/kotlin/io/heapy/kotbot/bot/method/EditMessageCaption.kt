@@ -47,7 +47,7 @@ public data class EditMessageCaption(
    */
   public val caption_entities: List<MessageEntity>? = null,
   /**
-   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
+   * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<MessageOrTrue> {
