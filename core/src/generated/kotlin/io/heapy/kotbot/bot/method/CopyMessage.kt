@@ -1,13 +1,22 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.MessageEntity
+import io.heapy.kotbot.bot.model.MessageId
 import io.heapy.kotbot.bot.model.ReplyMarkup
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct_option_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
@@ -58,4 +67,22 @@ public data class CopyMessage(
    * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), [custom reply keyboard](https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from the user.
    */
   public val reply_markup: ReplyMarkup? = null,
-)
+) : Method<MessageId> {
+  public override suspend fun Kotbot.execute(): MessageId = requestForJson(
+    name = "copyMessage",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@CopyMessage
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<MessageId>> =
+        Response.serializer(MessageId.serializer())
+  }
+}

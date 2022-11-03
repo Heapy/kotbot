@@ -1,10 +1,19 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
+import io.heapy.kotbot.bot.model.MessageOrTrue
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.String
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
@@ -27,4 +36,22 @@ public data class EditMessageReplyMarkup(
    * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
-)
+) : Method<MessageOrTrue> {
+  public override suspend fun Kotbot.execute(): MessageOrTrue = requestForJson(
+    name = "editMessageReplyMarkup",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@EditMessageReplyMarkup
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<MessageOrTrue>> =
+        Response.serializer(MessageOrTrue.serializer())
+  }
+}

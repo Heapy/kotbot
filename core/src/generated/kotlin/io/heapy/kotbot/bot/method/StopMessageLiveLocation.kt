@@ -1,10 +1,19 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
+import io.heapy.kotbot.bot.model.MessageOrTrue
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.String
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to stop updating a live location message before *live_period* expires. On success, if the message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
@@ -27,4 +36,22 @@ public data class StopMessageLiveLocation(
    * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating).
    */
   public val reply_markup: InlineKeyboardMarkup? = null,
-)
+) : Method<MessageOrTrue> {
+  public override suspend fun Kotbot.execute(): MessageOrTrue = requestForJson(
+    name = "stopMessageLiveLocation",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@StopMessageLiveLocation
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<MessageOrTrue>> =
+        Response.serializer(MessageOrTrue.serializer())
+  }
+}

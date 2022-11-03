@@ -43,35 +43,35 @@ sealed interface ApiType
 
 @Serializable
 data class BooleanApiType(
-    val type: String,
+    val type: String = "bool",
     val default: Boolean? = null,
 ) : ApiType
 
 @Serializable
 data class ReferenceApiType(
-    val type: String,
+    val type: String = "reference",
     val reference: String,
 ) : ApiType
 
 @Serializable
 data class ArrayApiType(
-    val type: String,
+    val type: String = "array",
     val array: ApiType,
 ) : ApiType
 
 @Serializable
 data class StringApiType(
-    val type: String,
+    val type: String = "string",
 ) : ApiType
 
 @Serializable
 data class IntApiType(
-    val type: String,
+    val type: String = "integer",
 ) : ApiType
 
 @Serializable
 data class AnyOfApiType(
-    val type: String,
+    val type: String = "any_of",
     val any_of: List<ApiType>,
 ) : ApiType
 
@@ -129,7 +129,7 @@ data class PropertiesObject(
     override val name: String,
     val description: String,
     val documentation_link: String,
-    val type: String,
+    val type: String = "properties",
     val properties: List<Argument>,
 ) : Object
 
@@ -138,7 +138,7 @@ data class AnyOfObject(
     override val name: String,
     val description: String,
     val documentation_link: String,
-    val type: String,
+    val type: String = "any_of",
     val any_of: List<ApiType>,
 ) : Object
 

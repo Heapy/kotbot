@@ -1,5 +1,8 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.method.DeleteMessage
+import io.heapy.kotbot.bot.method.GetMe
+import io.heapy.kotbot.bot.model.LongChatId
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import java.lang.System.getenv
@@ -18,7 +21,7 @@ suspend fun main() {
             println("Update $it")
             try {
                 kotbot.execute(DeleteMessage(
-                    chat_id = it.message?.chat?.id!!.toString(),
+                    chat_id = LongChatId(it.message?.chat?.id!!),
                     message_id = it.message?.message_id!!
                 ))
             } catch (e: Exception) {

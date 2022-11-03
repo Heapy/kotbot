@@ -1,8 +1,17 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
+import kotlin.Boolean
 import kotlin.String
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can_set_sticker_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
@@ -17,4 +26,22 @@ public data class SetChatStickerSet(
    * Name of the sticker set to be set as the group sticker set
    */
   public val sticker_set_name: String,
-)
+) : Method<Boolean> {
+  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+    name = "setChatStickerSet",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@SetChatStickerSet
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
+  }
+}

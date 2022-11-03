@@ -1,7 +1,8 @@
 package io.heapy.kotbot
 
-import io.heapy.kotbot.bot.BanChatMember
-import io.heapy.kotbot.bot.DeleteMessage
+import io.heapy.kotbot.bot.method.BanChatMember
+import io.heapy.kotbot.bot.method.DeleteMessage
+import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.model.User
@@ -21,7 +22,13 @@ inline fun Update.anyText(body: (String, Message) -> Unit) {
 val User.info: String get() = "@$username/id:$id"
 
 val Message.delete: DeleteMessage
-    get() = DeleteMessage(chat.id.toString(), message_id)
+    get() = DeleteMessage(
+        chat_id = LongChatId(chat.id),
+        message_id = message_id,
+    )
 
 val Message.banFrom: BanChatMember
-    get() = BanChatMember(chat.id.toString(), from!!.id)
+    get() = BanChatMember(
+        chat_id = LongChatId(chat.id),
+        user_id = from!!.id,
+    )

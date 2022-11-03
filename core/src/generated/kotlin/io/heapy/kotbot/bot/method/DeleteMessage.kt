@@ -1,8 +1,17 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
+import kotlin.Boolean
 import kotlin.Int
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to delete a message, including service messages, with the following limitations:  
@@ -25,4 +34,22 @@ public data class DeleteMessage(
    * Identifier of the message to delete
    */
   public val message_id: Int,
-)
+) : Method<Boolean> {
+  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+    name = "deleteMessage",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@DeleteMessage
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
+  }
+}

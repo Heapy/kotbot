@@ -1,9 +1,18 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.PassportElementError
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
+import kotlin.Boolean
 import kotlin.Long
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns *True* on success.
@@ -20,4 +29,22 @@ public data class SetPassportDataErrors(
    * A JSON-serialized array describing the errors
    */
   public val errors: List<PassportElementError>,
-)
+) : Method<Boolean> {
+  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+    name = "setPassportDataErrors",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@SetPassportDataErrors
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
+  }
+}

@@ -45,7 +45,11 @@ fun TelegramApi.generate() {
         .distinct()
         .map(AnyOfArgument::toFileSpec)
 
-    (anyOfArgumentsFiles + objectsFiles + methodFiles).forEach {
+    val anyOfApiTypeFiles = methods.toAnyOfApiTypes()
+        .distinct()
+        .map(AnyOfApiType::toFileSpec)
+
+    (anyOfApiTypeFiles + anyOfArgumentsFiles + objectsFiles + methodFiles).forEach {
         it.writeTo(Path("core", "src", "generated", "kotlin"))
     }
 }
@@ -55,8 +59,12 @@ private val modelPackageName = "$basePackageName.model"
 private val methodPackageName = "$basePackageName.method"
 
 private val botMethodType = ClassName("io.heapy.kotbot.bot", "Method")
+private val kotbotType = ClassName("io.heapy.kotbot.bot", "Kotbot")
+private val responseType = ClassName("io.heapy.kotbot.bot", "Response")
 private val jvmInlineAnnotation = ClassName("kotlin.jvm", "JvmInline")
 private val serializableAnnotation = ClassName("kotlinx.serialization", "Serializable")
+private val kSerializerType = ClassName("kotlinx.serialization", "KSerializer")
+private val listSerializerType = ClassName("kotlinx.serialization.builtins", "ListSerializer")
 private val listType = ClassName("kotlin.collections", "List")
 private val stringType = ClassName("kotlin", "String")
 private val booleanType = ClassName("kotlin", "Boolean")
@@ -64,8 +72,25 @@ private val intType = ClassName("kotlin", "Int")
 private val longType = ClassName("kotlin", "Long")
 private val doubleType = ClassName("kotlin", "Double")
 
+private val knownApiTypes = mapOf(
+    AnyOfApiType(
+        any_of = listOf(
+            ReferenceApiType(
+                reference = "Message",
+            ),
+            BooleanApiType(
+                default = true,
+            )
+        )
+    ) to ClassName(modelPackageName, "MessageOrTrue"),
+)
+
 private fun PropertiesObject.toAnyOfArguments() =
     properties.filterIsInstance<AnyOfArgument>()
+
+private fun List<Method>.toAnyOfApiTypes() =
+    map { it.return_type }
+        .filterIsInstance<AnyOfApiType>()
 
 private fun AnyOfArgument.toFileSpec() =
     FileSpec.builder(modelPackageName, className())
@@ -144,6 +169,67 @@ private fun AnyOfArgument.toFileSpec() =
             }
         }
         .build()
+
+private fun AnyOfApiType.toFileSpec() =
+    knownApiTypes[this]?.let { className ->
+        FileSpec.builder(className.packageName, className.simpleName)
+            .addType(
+                TypeSpec.interfaceBuilder(className.simpleName)
+                    .addModifiers(KModifier.SEALED)
+                    .addAnnotation(
+                        AnnotationSpec.builder(serializableAnnotation)
+                            .addMember("with = %T::class", ClassName(basePackageName, "${className.simpleName}Serializer"))
+                            .build()
+                    )
+                    .build()
+            )
+            .apply {
+                when (className.simpleName) {
+                    "MessageOrTrue" -> {
+                        addType(
+                            TypeSpec.classBuilder("MessageValue")
+                                .addModifiers(KModifier.VALUE)
+                                .addAnnotation(JvmInline::class)
+                                .addAnnotation(serializableAnnotation)
+                                .addSuperinterface(className)
+                                .addProperty(
+                                    PropertySpec.builder("value", ClassName(modelPackageName, "Message"))
+                                        .initializer("value")
+                                        .build()
+                                )
+                                .primaryConstructor(
+                                    FunSpec.constructorBuilder()
+                                        .addParameter("value", ClassName(modelPackageName, "Message"))
+                                        .build()
+                                )
+                                .build()
+                        )
+
+                        addType(
+                            TypeSpec.classBuilder("BooleanValue")
+                                .addModifiers(KModifier.VALUE)
+                                .addAnnotation(JvmInline::class)
+                                .addAnnotation(serializableAnnotation)
+                                .addSuperinterface(className)
+                                .addProperty(
+                                    PropertySpec.builder("value", booleanType)
+                                        .initializer("value")
+                                        .build()
+                                )
+                                .primaryConstructor(
+                                    FunSpec.constructorBuilder()
+                                        .addParameter("value", booleanType)
+                                        .build()
+                                )
+                                .build()
+                        )
+                    }
+
+                    else -> error("Unsupported type $className")
+                }
+            }
+            .build()
+    } ?: error("Unknown type $this")
 
 private fun Object.toFileSpec(
     supertypes: Map<String, String>,
@@ -230,7 +316,7 @@ private fun String.asKdoc(): String =
 
 private fun ArrayArgument.generic(): TypeName {
     return when (val type = array) {
-        is AnyOfApiType -> ClassName(modelPackageName, when(name) {
+        is AnyOfApiType -> ClassName(modelPackageName, when (name) {
             "media" -> "InputMedia"
             else -> name.snakeToTitle()
         })
@@ -245,7 +331,7 @@ private fun ArrayArgument.generic(): TypeName {
 
 private fun ApiType.generic(): TypeName {
     return when (val type = this) {
-        is AnyOfApiType -> ClassName("kotlin", "Any").also { println("AnyOfApiType: $type") }
+        is AnyOfApiType -> knownApiTypes[type] ?: error("Unknown type $type")
         is BooleanApiType -> booleanType
         is IntApiType -> intType
         is ReferenceApiType -> ClassName(modelPackageName, type.reference)
@@ -422,8 +508,23 @@ private fun IntArgument.isActuallyLong(): Boolean =
         else -> false
     }
 
+private fun ApiType.serializer(): CodeBlock {
+    return when (val type = this) {
+        is AnyOfApiType -> knownApiTypes[type]?.let { CodeBlock.of("%T.serializer()", it) }
+            ?: error("Unknown type $type")
+        is BooleanApiType -> CodeBlock.of("%T.serializer()", booleanType)
+        is IntApiType -> CodeBlock.of("%T.serializer()", intType)
+        is ReferenceApiType -> CodeBlock.of("%T.serializer()", ClassName(modelPackageName, type.reference))
+        is StringApiType -> CodeBlock.of("%T.serializer()", stringType)
+        is ArrayApiType -> CodeBlock.of("%T(%L)", listSerializerType, type.array.serializer())
+    }
+}
+
 private fun Method.toFileSpec(): FileSpec =
     FileSpec.builder(methodPackageName, name.camelToTitle())
+        .addImport("io.heapy.kotbot.bot", "requestForJson", "unwrap")
+        .addImport("io.ktor.client.statement", "bodyAsText")
+        .addImport("kotlinx.serialization.builtins", "serializer")
         .addType(
             TypeSpec.classBuilder(name.camelToTitle())
                 .addAnnotation(serializableAnnotation)
@@ -440,6 +541,60 @@ private fun Method.toFileSpec(): FileSpec =
                 }
                 .addSuperinterface(botMethodType.parameterizedBy(return_type.generic()))
                 .addKdoc(CodeBlock.of(description.asKdoc()))
+                .addFunction(
+                    FunSpec.builder("execute")
+                        .addModifiers(
+                            KModifier.OVERRIDE,
+                            KModifier.SUSPEND,
+                        )
+                        .receiver(kotbotType)
+                        .returns(return_type.generic())
+                        .addCode(
+                            CodeBlock.builder()
+                                .add("return requestForJson(\n")
+                                .indent()
+                                    .add("name = %S,\n", name)
+                                    .add("serialize = {\n")
+                                    .indent()
+                                        .add("json.encodeToString(\n")
+                                        .indent()
+                                            .add("serializer(),\n")
+                                            .add("this@%N\n", name.camelToTitle())
+                                        .unindent()
+                                        .add(")\n")
+                                    .unindent()
+                                    .add("},\n")
+                                    .add("deserialize = {\n")
+                                    .indent()
+                                        .add("json.decodeFromString(deserializer, it.bodyAsText()).unwrap()\n")
+                                    .unindent()
+                                    .add("}\n")
+                                .unindent()
+                                .add(")\n")
+                                .build()
+                        )
+                        .build()
+                )
+                .addType(
+                    TypeSpec.companionObjectBuilder()
+                        .addProperty(
+                            PropertySpec
+                                .builder(
+                                    "deserializer",
+                                    kSerializerType.parameterizedBy(
+                                        responseType.parameterizedBy(return_type.generic())
+                                    ),
+                                )
+                                .initializer(
+                                    CodeBlock.of(
+                                        "Response.serializer(%L)",
+                                        return_type.serializer()
+                                    )
+                                )
+                                .build()
+                        )
+                        .build()
+                )
                 .build()
         )
         .build()

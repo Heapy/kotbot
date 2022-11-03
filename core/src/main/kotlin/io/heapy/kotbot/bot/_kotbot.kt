@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.method.GetUpdates
 import io.heapy.kotbot.bot.model.Update
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO

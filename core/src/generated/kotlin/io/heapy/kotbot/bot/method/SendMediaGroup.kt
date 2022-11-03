@@ -1,11 +1,21 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InputMedia
+import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Messages](https://core.telegram.org/bots/api/#message) that were sent is returned.
@@ -36,4 +46,22 @@ public data class SendMediaGroup(
    * Pass *True* if the message should be sent even if the specified replied-to message is not found
    */
   public val allow_sending_without_reply: Boolean? = null,
-)
+) : Method<List<Message>> {
+  public override suspend fun Kotbot.execute(): List<Message> = requestForJson(
+    name = "sendMediaGroup",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@SendMediaGroup
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<List<Message>>> =
+        Response.serializer(ListSerializer(Message.serializer()))
+  }
+}

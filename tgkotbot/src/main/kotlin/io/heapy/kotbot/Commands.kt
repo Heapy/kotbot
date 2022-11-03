@@ -3,7 +3,8 @@ package io.heapy.kotbot
 import io.heapy.kotbot.Command.Access
 import io.heapy.kotbot.Command.Context
 import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.bot.SendMessage
+import io.heapy.kotbot.bot.method.SendMessage
+import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.model.Message
 
@@ -52,7 +53,7 @@ class HelloWorldCommand : Command {
         update: Update,
     ) {
         kotbot.executeSafely(SendMessage(
-            chat_id = update.cmdMessage.chat.id.toString(),
+            chat_id = LongChatId(update.cmdMessage.chat.id),
             text = update.cmdMessage.textWithoutCommand ?: "Hello, world!"
         ))
         kotbot.executeSafely(update.cmdMessage.delete)
@@ -69,7 +70,7 @@ class ChatInfoCommand : Command {
         update: Update,
     ) {
         kotbot.executeSafely(SendMessage(
-            chat_id = update.cmdMessage.chat.id.toString(),
+            chat_id = LongChatId(update.cmdMessage.chat.id),
             text = """
                 Chat id: ${update.cmdMessage.chat.id}
             """.trimIndent()
@@ -108,11 +109,11 @@ class PostToForumCommand(
     ) {
         update.cmdMessage.textWithoutCommand?.let { message ->
             val forumMessage = kotbot.executeSafely(SendMessage(
-                chat_id = forum.toString(),
+                chat_id = LongChatId(forum),
                 text = message
             ))
             kotbot.executeSafely(SendMessage(
-                chat_id = update.cmdMessage.chat.id.toString(),
+                chat_id = LongChatId(update.cmdMessage.chat.id),
                 text = "Message posted to forum: https://t.me/kotlin_forum/${forumMessage?.message_id}"
             ))
             return
@@ -120,7 +121,7 @@ class PostToForumCommand(
 
         post_text?.let { text ->
             kotbot.executeSafely(SendMessage(
-                chat_id = update.cmdMessage.chat.id.toString(),
+                chat_id = LongChatId(update.cmdMessage.chat.id),
                 text = text,
                 parse_mode = "MarkdownV2",
             ))
@@ -147,11 +148,11 @@ class SendMessageFromBotCommand(
     ) {
         update.cmdMessage.textWithoutCommand?.let { text ->
             kotbot.executeSafely(SendMessage(
-                chat_id = id.toString(),
+                chat_id = LongChatId(id),
                 text = text
             ))
             kotbot.executeSafely(SendMessage(
-                chat_id = admin.toString(),
+                chat_id = LongChatId(admin),
                 text = """
                     ${update.cmdMessage.from?.username} sent following message to chat $name:
                     $text
@@ -172,7 +173,7 @@ class StartCommand : Command {
     ) {
         start_text?.let { text ->
             kotbot.executeSafely(SendMessage(
-                chat_id = update.cmdMessage.chat.id.toString(),
+                chat_id = LongChatId(update.cmdMessage.chat.id),
                 text = text,
                 parse_mode = "MarkdownV2",
             ))

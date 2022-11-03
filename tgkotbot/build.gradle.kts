@@ -46,7 +46,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
         languageVersion = "1.7"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
-            "-Xopt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlin.RequiresOptIn",
             "-Xcontext-receivers",
         )
     }

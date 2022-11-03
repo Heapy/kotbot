@@ -1,11 +1,20 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyMarkup
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
@@ -40,4 +49,22 @@ public data class SendDice(
    * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), [custom reply keyboard](https://core.telegram.org/bots#keyboards), instructions to remove reply keyboard or to force a reply from the user.
    */
   public val reply_markup: ReplyMarkup? = null,
-)
+) : Method<Message> {
+  public override suspend fun Kotbot.execute(): Message = requestForJson(
+    name = "sendDice",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@SendDice
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<Message>> =
+        Response.serializer(Message.serializer())
+  }
+}

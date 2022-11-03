@@ -1,11 +1,19 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.InlineQueryResult
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to send answers to an inline query. On success, *True* is returned.  
@@ -43,4 +51,22 @@ public data class AnswerInlineQuery(
    * *Example:* An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a [*switch_inline*](https://core.telegram.org/bots/api/#inlinekeyboardmarkup) button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities.
    */
   public val switch_pm_parameter: String? = null,
-)
+) : Method<Boolean> {
+  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+    name = "answerInlineQuery",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@AnswerInlineQuery
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<Boolean>> =
+        Response.serializer(Boolean.serializer())
+  }
+}

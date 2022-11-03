@@ -1,11 +1,19 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.LabeledPrice
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to create a link for an invoice. Returns the created invoice link as *String* on success.
@@ -92,4 +100,22 @@ public data class CreateInvoiceLink(
    * Pass *True* if the final price depends on the shipping method
    */
   public val is_flexible: Boolean? = null,
-)
+) : Method<String> {
+  public override suspend fun Kotbot.execute(): String = requestForJson(
+    name = "createInvoiceLink",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@CreateInvoiceLink
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<String>> =
+        Response.serializer(String.serializer())
+  }
+}

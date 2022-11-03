@@ -4,6 +4,7 @@ import io.heapy.kotbot.bot.model.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -89,5 +90,13 @@ public object ThumbSerializer : JsonContentPolymorphicSerializer<Thumb>(Thumb::c
     override fun selectDeserializer(element: JsonElement): KSerializer<out Thumb> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             else -> error("Unknown argument type: $type")
+        }
+}
+
+public object MessageOrTrueSerializer : JsonContentPolymorphicSerializer<MessageOrTrue>(MessageOrTrue::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out MessageOrTrue> =
+        when (element) {
+            is JsonPrimitive -> BooleanValue.serializer()
+            else -> MessageValue.serializer()
         }
 }

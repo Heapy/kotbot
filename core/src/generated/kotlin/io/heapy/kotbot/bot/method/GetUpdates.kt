@@ -1,9 +1,19 @@
 package io.heapy.kotbot.bot.method
 
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.Method
+import io.heapy.kotbot.bot.Response
+import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.requestForJson
+import io.heapy.kotbot.bot.unwrap
+import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 
 /**
  * Use this method to receive incoming updates using long polling ([wiki](https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of [Update](https://core.telegram.org/bots/api/#update) objects.
@@ -28,4 +38,22 @@ public data class GetUpdates(
    * Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
    */
   public val allowed_updates: List<String>? = null,
-)
+) : Method<List<Update>> {
+  public override suspend fun Kotbot.execute(): List<Update> = requestForJson(
+    name = "getUpdates",
+    serialize = {
+      json.encodeToString(
+        serializer(),
+        this@GetUpdates
+      )
+    },
+    deserialize = {
+      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+    }
+  )
+
+  public companion object {
+    public val deserializer: KSerializer<Response<List<Update>>> =
+        Response.serializer(ListSerializer(Update.serializer()))
+  }
+}
