@@ -17,26 +17,26 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class DeleteStickerFromSet(
-  /**
-   * File identifier of the sticker
-   */
-  public val sticker: String,
+    /**
+     * File identifier of the sticker
+     */
+    public val sticker: String,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "deleteStickerFromSet",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@DeleteStickerFromSet
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "deleteStickerFromSet",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@DeleteStickerFromSet
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

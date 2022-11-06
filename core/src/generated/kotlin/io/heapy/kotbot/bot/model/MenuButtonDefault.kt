@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class MenuButtonDefault(
-  /**
-   * Type of the button, must be *default*
-   */
-  public val type: String = "default",
+    /**
+     * Type of the button, must be *default*
+     */
+    public val type: String = "default",
 ) : MenuButton

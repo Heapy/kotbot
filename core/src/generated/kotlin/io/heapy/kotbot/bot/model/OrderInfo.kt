@@ -8,20 +8,20 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class OrderInfo(
-  /**
-   * *Optional*. User name
-   */
-  public val name: String? = null,
-  /**
-   * *Optional*. User's phone number
-   */
-  public val phone_number: String? = null,
-  /**
-   * *Optional*. User email
-   */
-  public val email: String? = null,
-  /**
-   * *Optional*. User shipping address
-   */
-  public val shipping_address: ShippingAddress? = null,
+    /**
+     * *Optional*. User name
+     */
+    public val name: String? = null,
+    /**
+     * *Optional*. User's phone number
+     */
+    public val phone_number: String? = null,
+    /**
+     * *Optional*. User email
+     */
+    public val email: String? = null,
+    /**
+     * *Optional*. User shipping address
+     */
+    public val shipping_address: ShippingAddress? = null,
 )

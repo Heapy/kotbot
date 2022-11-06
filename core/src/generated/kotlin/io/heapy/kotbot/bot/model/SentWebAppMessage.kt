@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class SentWebAppMessage(
-  /**
-   * *Optional*. Identifier of the sent inline message. Available only if there is an [inline keyboard](https://core.telegram.org/bots/api/#inlinekeyboardmarkup) attached to the message.
-   */
-  public val inline_message_id: String? = null,
+    /**
+     * *Optional*. Identifier of the sent inline message. Available only if there is an [inline keyboard](https://core.telegram.org/bots/api/#inlinekeyboardmarkup) attached to the message.
+     */
+    public val inline_message_id: String? = null,
 )

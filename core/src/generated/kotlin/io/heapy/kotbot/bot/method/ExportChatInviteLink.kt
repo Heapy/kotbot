@@ -17,26 +17,26 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class ExportChatInviteLink(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
 ) : Method<String> {
-  public override suspend fun Kotbot.execute(): String = requestForJson(
-    name = "exportChatInviteLink",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@ExportChatInviteLink
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): String = requestForJson(
+        name = "exportChatInviteLink",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@ExportChatInviteLink
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<String>> =
-        Response.serializer(String.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<String>> =
+                Response.serializer(String.serializer())
+    }
 }

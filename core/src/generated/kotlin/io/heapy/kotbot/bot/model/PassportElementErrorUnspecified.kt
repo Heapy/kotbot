@@ -8,20 +8,20 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class PassportElementErrorUnspecified(
-  /**
-   * Error source, must be *unspecified*
-   */
-  public val source: String = "unspecified",
-  /**
-   * Type of element of the user's Telegram Passport which has the issue
-   */
-  public val type: String,
-  /**
-   * Base64-encoded element hash
-   */
-  public val element_hash: String,
-  /**
-   * Error message
-   */
-  public val message: String,
+    /**
+     * Error source, must be *unspecified*
+     */
+    public val source: String = "unspecified",
+    /**
+     * Type of element of the user's Telegram Passport which has the issue
+     */
+    public val type: String,
+    /**
+     * Base64-encoded element hash
+     */
+    public val element_hash: String,
+    /**
+     * Error message
+     */
+    public val message: String,
 ) : PassportElementError

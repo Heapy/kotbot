@@ -18,30 +18,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class SetStickerPositionInSet(
-  /**
-   * File identifier of the sticker
-   */
-  public val sticker: String,
-  /**
-   * New sticker position in the set, zero-based
-   */
-  public val position: Int,
+    /**
+     * File identifier of the sticker
+     */
+    public val sticker: String,
+    /**
+     * New sticker position in the set, zero-based
+     */
+    public val position: Int,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "setStickerPositionInSet",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@SetStickerPositionInSet
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "setStickerPositionInSet",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@SetStickerPositionInSet
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

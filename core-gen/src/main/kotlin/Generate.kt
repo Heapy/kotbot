@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
@@ -17,7 +18,7 @@ import kotlin.io.path.Path
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
-        .getResource("custom.json")
+        .getResource("api630.json")
         ?.readText()
         ?: error("custom.json not found")
 
@@ -94,6 +95,7 @@ private fun List<Method>.toAnyOfApiTypes() =
 
 private fun AnyOfArgument.toFileSpec() =
     FileSpec.builder(modelPackageName, className())
+        .kotbotIndent()
         .addType(
             TypeSpec.interfaceBuilder(className())
                 .addModifiers(KModifier.SEALED)
@@ -173,6 +175,7 @@ private fun AnyOfArgument.toFileSpec() =
 private fun AnyOfApiType.toFileSpec() =
     knownApiTypes[this]?.let { className ->
         FileSpec.builder(className.packageName, className.simpleName)
+            .kotbotIndent()
             .addType(
                 TypeSpec.interfaceBuilder(className.simpleName)
                     .addModifiers(KModifier.SEALED)
@@ -235,6 +238,7 @@ private fun Object.toFileSpec(
     supertypes: Map<String, String>,
 ): FileSpec {
     return FileSpec.builder(modelPackageName, name)
+        .kotbotIndent()
         .addType(when (val obj = this) {
             is AnyOfObject -> TypeSpec.interfaceBuilder(obj.name)
                 .addModifiers(KModifier.SEALED)
@@ -509,22 +513,28 @@ private fun IntArgument.isActuallyLong(): Boolean =
     }
 
 private fun ApiType.serializer(): CodeBlock {
+    val serializer = MemberName("kotlinx.serialization.builtins", "serializer")
+
     return when (val type = this) {
         is AnyOfApiType -> knownApiTypes[type]?.let { CodeBlock.of("%T.serializer()", it) }
             ?: error("Unknown type $type")
-        is BooleanApiType -> CodeBlock.of("%T.serializer()", booleanType)
-        is IntApiType -> CodeBlock.of("%T.serializer()", intType)
+        is BooleanApiType -> CodeBlock.of("%T.%M()", booleanType, serializer)
+        is IntApiType -> CodeBlock.of("%T.%M()", intType, serializer)
         is ReferenceApiType -> CodeBlock.of("%T.serializer()", ClassName(modelPackageName, type.reference))
-        is StringApiType -> CodeBlock.of("%T.serializer()", stringType)
+        is StringApiType -> CodeBlock.of("%T.%M()", stringType, serializer)
         is ArrayApiType -> CodeBlock.of("%T(%L)", listSerializerType, type.array.serializer())
     }
 }
 
+private fun FileSpec.Builder.kotbotIndent(): FileSpec.Builder {
+    return indent("    ")
+}
+
 private fun Method.toFileSpec(): FileSpec =
     FileSpec.builder(methodPackageName, name.camelToTitle())
+        .kotbotIndent()
         .addImport("io.heapy.kotbot.bot", "requestForJson", "unwrap")
         .addImport("io.ktor.client.statement", "bodyAsText")
-        .addImport("kotlinx.serialization.builtins", "serializer")
         .addType(
             TypeSpec.classBuilder(name.camelToTitle())
                 .addAnnotation(serializableAnnotation)
@@ -568,7 +578,7 @@ private fun Method.toFileSpec(): FileSpec =
                                     .indent()
                                         .add("json.decodeFromString(deserializer, it.bodyAsText()).unwrap()\n")
                                     .unindent()
-                                    .add("}\n")
+                                    .add("},\n")
                                 .unindent()
                                 .add(")\n")
                                 .build()

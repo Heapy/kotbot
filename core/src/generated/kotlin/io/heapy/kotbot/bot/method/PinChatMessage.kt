@@ -18,34 +18,34 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class PinChatMessage(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Identifier of a message to pin
-   */
-  public val message_id: Int,
-  /**
-   * Pass *True* if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
-   */
-  public val disable_notification: Boolean? = null,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Identifier of a message to pin
+     */
+    public val message_id: Int,
+    /**
+     * Pass *True* if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
+     */
+    public val disable_notification: Boolean? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "pinChatMessage",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@PinChatMessage
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "pinChatMessage",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@PinChatMessage
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class BotCommandScopeAllPrivateChats(
-  /**
-   * Scope type, must be *all_private_chats*
-   */
-  public val type: String = "all_private_chats",
+    /**
+     * Scope type, must be *all_private_chats*
+     */
+    public val type: String = "all_private_chats",
 ) : BotCommandScope

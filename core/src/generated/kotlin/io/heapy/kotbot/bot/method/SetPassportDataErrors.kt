@@ -21,30 +21,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class SetPassportDataErrors(
-  /**
-   * User identifier
-   */
-  public val user_id: Long,
-  /**
-   * A JSON-serialized array describing the errors
-   */
-  public val errors: List<PassportElementError>,
+    /**
+     * User identifier
+     */
+    public val user_id: Long,
+    /**
+     * A JSON-serialized array describing the errors
+     */
+    public val errors: List<PassportElementError>,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "setPassportDataErrors",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@SetPassportDataErrors
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "setPassportDataErrors",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@SetPassportDataErrors
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

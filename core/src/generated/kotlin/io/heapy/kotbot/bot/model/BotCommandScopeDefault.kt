@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class BotCommandScopeDefault(
-  /**
-   * Scope type, must be *default*
-   */
-  public val type: String = "default",
+    /**
+     * Scope type, must be *default*
+     */
+    public val type: String = "default",
 ) : BotCommandScope

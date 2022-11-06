@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class PollAnswer(
-  /**
-   * Unique poll identifier
-   */
-  public val poll_id: String,
-  /**
-   * The user, who changed the answer to the poll
-   */
-  public val user: User,
-  /**
-   * 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
-   */
-  public val option_ids: List<Int>,
+    /**
+     * Unique poll identifier
+     */
+    public val poll_id: String,
+    /**
+     * The user, who changed the answer to the poll
+     */
+    public val user: User,
+    /**
+     * 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
+     */
+    public val option_ids: List<Int>,
 )

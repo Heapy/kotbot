@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class BotCommand(
-  /**
-   * Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
-   */
-  public val command: String,
-  /**
-   * Description of the command; 1-256 characters.
-   */
-  public val description: String,
+    /**
+     * Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
+     */
+    public val command: String,
+    /**
+     * Description of the command; 1-256 characters.
+     */
+    public val description: String,
 )

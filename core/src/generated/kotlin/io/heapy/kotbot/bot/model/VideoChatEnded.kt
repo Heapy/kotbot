@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class VideoChatEnded(
-  /**
-   * Video chat duration in seconds
-   */
-  public val duration: Int,
+    /**
+     * Video chat duration in seconds
+     */
+    public val duration: Int,
 )

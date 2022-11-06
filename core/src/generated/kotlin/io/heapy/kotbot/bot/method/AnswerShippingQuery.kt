@@ -19,38 +19,38 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class AnswerShippingQuery(
-  /**
-   * Unique identifier for the query to be answered
-   */
-  public val shipping_query_id: String,
-  /**
-   * Pass *True* if delivery to the specified address is possible and *False* if there are any problems (for example, if delivery to the specified address is not possible)
-   */
-  public val ok: Boolean,
-  /**
-   * Required if *ok* is *True*. A JSON-serialized array of available shipping options.
-   */
-  public val shipping_options: List<ShippingOption>? = null,
-  /**
-   * Required if *ok* is *False*. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
-   */
-  public val error_message: String? = null,
+    /**
+     * Unique identifier for the query to be answered
+     */
+    public val shipping_query_id: String,
+    /**
+     * Pass *True* if delivery to the specified address is possible and *False* if there are any problems (for example, if delivery to the specified address is not possible)
+     */
+    public val ok: Boolean,
+    /**
+     * Required if *ok* is *True*. A JSON-serialized array of available shipping options.
+     */
+    public val shipping_options: List<ShippingOption>? = null,
+    /**
+     * Required if *ok* is *False*. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
+     */
+    public val error_message: String? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "answerShippingQuery",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@AnswerShippingQuery
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "answerShippingQuery",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@AnswerShippingQuery
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

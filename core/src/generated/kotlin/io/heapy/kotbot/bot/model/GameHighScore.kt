@@ -8,16 +8,16 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class GameHighScore(
-  /**
-   * Position in high score table for the game
-   */
-  public val position: Int,
-  /**
-   * User
-   */
-  public val user: User,
-  /**
-   * Score
-   */
-  public val score: Int,
+    /**
+     * Position in high score table for the game
+     */
+    public val position: Int,
+    /**
+     * User
+     */
+    public val user: User,
+    /**
+     * Score
+     */
+    public val score: Int,
 )

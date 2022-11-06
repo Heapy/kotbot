@@ -9,20 +9,20 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ChatMemberOwner(
-  /**
-   * The member's status in the chat, always “creator”
-   */
-  public val status: String = "creator",
-  /**
-   * Information about the user
-   */
-  public val user: User,
-  /**
-   * *True*, if the user's presence in the chat is hidden
-   */
-  public val is_anonymous: Boolean,
-  /**
-   * *Optional*. Custom title for this user
-   */
-  public val custom_title: String? = null,
+    /**
+     * The member's status in the chat, always “creator”
+     */
+    public val status: String = "creator",
+    /**
+     * Information about the user
+     */
+    public val user: User,
+    /**
+     * *True*, if the user's presence in the chat is hidden
+     */
+    public val is_anonymous: Boolean,
+    /**
+     * *Optional*. Custom title for this user
+     */
+    public val custom_title: String? = null,
 ) : ChatMember

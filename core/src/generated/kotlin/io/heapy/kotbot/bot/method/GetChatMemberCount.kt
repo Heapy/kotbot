@@ -17,25 +17,25 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class GetChatMemberCount(
-  /**
-   * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
+    /**
+     * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
 ) : Method<Int> {
-  public override suspend fun Kotbot.execute(): Int = requestForJson(
-    name = "getChatMemberCount",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@GetChatMemberCount
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Int = requestForJson(
+        name = "getChatMemberCount",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@GetChatMemberCount
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Int>> = Response.serializer(Int.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Int>> = Response.serializer(Int.serializer())
+    }
 }

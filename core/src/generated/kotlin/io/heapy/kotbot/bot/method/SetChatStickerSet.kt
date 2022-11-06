@@ -18,30 +18,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class SetChatStickerSet(
-  /**
-   * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Name of the sticker set to be set as the group sticker set
-   */
-  public val sticker_set_name: String,
+    /**
+     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Name of the sticker set to be set as the group sticker set
+     */
+    public val sticker_set_name: String,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "setChatStickerSet",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@SetChatStickerSet
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "setChatStickerSet",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@SetChatStickerSet
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

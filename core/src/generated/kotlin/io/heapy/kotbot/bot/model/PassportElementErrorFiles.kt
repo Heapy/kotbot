@@ -9,20 +9,20 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class PassportElementErrorFiles(
-  /**
-   * Error source, must be *files*
-   */
-  public val source: String = "files",
-  /**
-   * The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
-   */
-  public val type: String,
-  /**
-   * List of base64-encoded file hashes
-   */
-  public val file_hashes: List<String>,
-  /**
-   * Error message
-   */
-  public val message: String,
+    /**
+     * Error source, must be *files*
+     */
+    public val source: String = "files",
+    /**
+     * The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+     */
+    public val type: String,
+    /**
+     * List of base64-encoded file hashes
+     */
+    public val file_hashes: List<String>,
+    /**
+     * Error message
+     */
+    public val message: String,
 ) : PassportElementError

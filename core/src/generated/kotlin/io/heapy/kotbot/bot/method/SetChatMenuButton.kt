@@ -18,30 +18,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class SetChatMenuButton(
-  /**
-   * Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
-   */
-  public val chat_id: Long? = null,
-  /**
-   * A JSON-serialized object for the bot's new menu button. Defaults to [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
-   */
-  public val menu_button: MenuButton? = null,
+    /**
+     * Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
+     */
+    public val chat_id: Long? = null,
+    /**
+     * A JSON-serialized object for the bot's new menu button. Defaults to [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
+     */
+    public val menu_button: MenuButton? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "setChatMenuButton",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@SetChatMenuButton
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "setChatMenuButton",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@SetChatMenuButton
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

@@ -18,34 +18,34 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class UnbanChatMember(
-  /**
-   * Unique identifier for the target group or username of the target supergroup or channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Unique identifier of the target user
-   */
-  public val user_id: Long,
-  /**
-   * Do nothing if the user is not banned
-   */
-  public val only_if_banned: Boolean? = null,
+    /**
+     * Unique identifier for the target group or username of the target supergroup or channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Unique identifier of the target user
+     */
+    public val user_id: Long,
+    /**
+     * Do nothing if the user is not banned
+     */
+    public val only_if_banned: Boolean? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "unbanChatMember",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@UnbanChatMember
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "unbanChatMember",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@UnbanChatMember
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

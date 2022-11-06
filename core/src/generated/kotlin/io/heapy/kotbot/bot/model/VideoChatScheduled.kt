@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class VideoChatScheduled(
-  /**
-   * Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
-   */
-  public val start_date: Long,
+    /**
+     * Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
+     */
+    public val start_date: Long,
 )

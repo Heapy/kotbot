@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class BotCommandScopeChatAdministrators(
-  /**
-   * Scope type, must be *chat_administrators*
-   */
-  public val type: String = "chat_administrators",
-  /**
-   * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
-   */
-  public val chat_id: ChatId,
+    /**
+     * Scope type, must be *chat_administrators*
+     */
+    public val type: String = "chat_administrators",
+    /**
+     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     */
+    public val chat_id: ChatId,
 ) : BotCommandScope

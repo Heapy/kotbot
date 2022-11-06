@@ -10,24 +10,24 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class PhotoSize(
-  /**
-   * Identifier for this file, which can be used to download or reuse the file
-   */
-  public val file_id: String,
-  /**
-   * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
-   */
-  public val file_unique_id: String,
-  /**
-   * Photo width
-   */
-  public val width: Int,
-  /**
-   * Photo height
-   */
-  public val height: Int,
-  /**
-   * *Optional*. File size in bytes
-   */
-  public val file_size: Long? = null,
+    /**
+     * Identifier for this file, which can be used to download or reuse the file
+     */
+    public val file_id: String,
+    /**
+     * Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     */
+    public val file_unique_id: String,
+    /**
+     * Photo width
+     */
+    public val width: Int,
+    /**
+     * Photo height
+     */
+    public val height: Int,
+    /**
+     * *Optional*. File size in bytes
+     */
+    public val file_size: Long? = null,
 )

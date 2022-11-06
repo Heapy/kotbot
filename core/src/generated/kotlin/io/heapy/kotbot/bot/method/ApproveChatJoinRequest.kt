@@ -18,30 +18,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class ApproveChatJoinRequest(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Unique identifier of the target user
-   */
-  public val user_id: Long,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Unique identifier of the target user
+     */
+    public val user_id: Long,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "approveChatJoinRequest",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@ApproveChatJoinRequest
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "approveChatJoinRequest",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@ApproveChatJoinRequest
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

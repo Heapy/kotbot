@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class VideoChatParticipantsInvited(
-  /**
-   * New members that were invited to the video chat
-   */
-  public val users: List<User>,
+    /**
+     * New members that were invited to the video chat
+     */
+    public val users: List<User>,
 )

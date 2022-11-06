@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class InlineKeyboardMarkup(
-  /**
-   * Array of button rows, each represented by an Array of [InlineKeyboardButton](https://core.telegram.org/bots/api/#inlinekeyboardbutton) objects
-   */
-  public val inline_keyboard: List<List<InlineKeyboardButton>>,
+    /**
+     * Array of button rows, each represented by an Array of [InlineKeyboardButton](https://core.telegram.org/bots/api/#inlinekeyboardbutton) objects
+     */
+    public val inline_keyboard: List<List<InlineKeyboardButton>>,
 )

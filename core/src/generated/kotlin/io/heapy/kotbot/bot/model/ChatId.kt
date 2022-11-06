@@ -12,11 +12,11 @@ public sealed interface ChatId
 @JvmInline
 @Serializable
 public value class LongChatId(
-  public val `value`: Long,
+    public val `value`: Long,
 ) : ChatId
 
 @JvmInline
 @Serializable
 public value class StringChatId(
-  public val `value`: String,
+    public val `value`: String,
 ) : ChatId

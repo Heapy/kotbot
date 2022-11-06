@@ -8,16 +8,16 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ProximityAlertTriggered(
-  /**
-   * User that triggered the alert
-   */
-  public val traveler: User,
-  /**
-   * User that set the alert
-   */
-  public val watcher: User,
-  /**
-   * The distance between the users
-   */
-  public val distance: Int,
+    /**
+     * User that triggered the alert
+     */
+    public val traveler: User,
+    /**
+     * User that set the alert
+     */
+    public val watcher: User,
+    /**
+     * The distance between the users
+     */
+    public val distance: Int,
 )

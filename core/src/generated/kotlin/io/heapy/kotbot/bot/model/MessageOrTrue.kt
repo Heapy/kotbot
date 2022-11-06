@@ -11,11 +11,11 @@ public sealed interface MessageOrTrue
 @JvmInline
 @Serializable
 public value class MessageValue(
-  public val `value`: Message,
+    public val `value`: Message,
 ) : MessageOrTrue
 
 @JvmInline
 @Serializable
 public value class BooleanValue(
-  public val `value`: Boolean,
+    public val `value`: Boolean,
 ) : MessageOrTrue

@@ -20,44 +20,44 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class AnswerCallbackQuery(
-  /**
-   * Unique identifier for the query to be answered
-   */
-  public val callback_query_id: String,
-  /**
-   * Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
-   */
-  public val text: String? = null,
-  /**
-   * If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *false*.
-   */
-  public val show_alert: Boolean? = false,
-  /**
-   * URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.  
-   *
-   * Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
-   */
-  public val url: String? = null,
-  /**
-   * The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
-   */
-  public val cache_time: Int? = 0,
+    /**
+     * Unique identifier for the query to be answered
+     */
+    public val callback_query_id: String,
+    /**
+     * Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+     */
+    public val text: String? = null,
+    /**
+     * If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *false*.
+     */
+    public val show_alert: Boolean? = false,
+    /**
+     * URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.  
+     *
+     * Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
+     */
+    public val url: String? = null,
+    /**
+     * The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
+     */
+    public val cache_time: Int? = 0,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "answerCallbackQuery",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@AnswerCallbackQuery
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "answerCallbackQuery",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@AnswerCallbackQuery
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

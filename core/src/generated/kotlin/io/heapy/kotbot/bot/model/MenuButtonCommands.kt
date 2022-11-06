@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class MenuButtonCommands(
-  /**
-   * Type of the button, must be *commands*
-   */
-  public val type: String = "commands",
+    /**
+     * Type of the button, must be *commands*
+     */
+    public val type: String = "commands",
 ) : MenuButton

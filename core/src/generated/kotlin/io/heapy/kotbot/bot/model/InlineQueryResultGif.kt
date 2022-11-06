@@ -10,60 +10,60 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class InlineQueryResultGif(
-  /**
-   * Type of the result, must be *gif*
-   */
-  public val type: String = "gif",
-  /**
-   * Unique identifier for this result, 1-64 bytes
-   */
-  public val id: String,
-  /**
-   * A valid URL for the GIF file. File size must not exceed 1MB
-   */
-  public val gif_url: String,
-  /**
-   * *Optional*. Width of the GIF
-   */
-  public val gif_width: Int? = null,
-  /**
-   * *Optional*. Height of the GIF
-   */
-  public val gif_height: Int? = null,
-  /**
-   * *Optional*. Duration of the GIF in seconds
-   */
-  public val gif_duration: Int? = null,
-  /**
-   * URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-   */
-  public val thumb_url: String,
-  /**
-   * *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
-   */
-  public val thumb_mime_type: String? = "image/jpeg",
-  /**
-   * *Optional*. Title for the result
-   */
-  public val title: String? = null,
-  /**
-   * *Optional*. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
-   */
-  public val caption: String? = null,
-  /**
-   * *Optional*. Mode for parsing entities in the caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
-   */
-  public val parse_mode: String? = null,
-  /**
-   * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
-   */
-  public val caption_entities: List<MessageEntity>? = null,
-  /**
-   * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
-   */
-  public val reply_markup: InlineKeyboardMarkup? = null,
-  /**
-   * *Optional*. Content of the message to be sent instead of the GIF animation
-   */
-  public val input_message_content: InputMessageContent? = null,
+    /**
+     * Type of the result, must be *gif*
+     */
+    public val type: String = "gif",
+    /**
+     * Unique identifier for this result, 1-64 bytes
+     */
+    public val id: String,
+    /**
+     * A valid URL for the GIF file. File size must not exceed 1MB
+     */
+    public val gif_url: String,
+    /**
+     * *Optional*. Width of the GIF
+     */
+    public val gif_width: Int? = null,
+    /**
+     * *Optional*. Height of the GIF
+     */
+    public val gif_height: Int? = null,
+    /**
+     * *Optional*. Duration of the GIF in seconds
+     */
+    public val gif_duration: Int? = null,
+    /**
+     * URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
+     */
+    public val thumb_url: String,
+    /**
+     * *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+     */
+    public val thumb_mime_type: String? = "image/jpeg",
+    /**
+     * *Optional*. Title for the result
+     */
+    public val title: String? = null,
+    /**
+     * *Optional*. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
+     */
+    public val caption: String? = null,
+    /**
+     * *Optional*. Mode for parsing entities in the caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
+     */
+    public val parse_mode: String? = null,
+    /**
+     * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
+     */
+    public val caption_entities: List<MessageEntity>? = null,
+    /**
+     * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
+     */
+    public val reply_markup: InlineKeyboardMarkup? = null,
+    /**
+     * *Optional*. Content of the message to be sent instead of the GIF animation
+     */
+    public val input_message_content: InputMessageContent? = null,
 ) : InlineQueryResult

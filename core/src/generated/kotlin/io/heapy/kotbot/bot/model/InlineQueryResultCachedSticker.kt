@@ -8,24 +8,24 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class InlineQueryResultCachedSticker(
-  /**
-   * Type of the result, must be *sticker*
-   */
-  public val type: String = "sticker",
-  /**
-   * Unique identifier for this result, 1-64 bytes
-   */
-  public val id: String,
-  /**
-   * A valid file identifier of the sticker
-   */
-  public val sticker_file_id: String,
-  /**
-   * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
-   */
-  public val reply_markup: InlineKeyboardMarkup? = null,
-  /**
-   * *Optional*. Content of the message to be sent instead of the sticker
-   */
-  public val input_message_content: InputMessageContent? = null,
+    /**
+     * Type of the result, must be *sticker*
+     */
+    public val type: String = "sticker",
+    /**
+     * Unique identifier for this result, 1-64 bytes
+     */
+    public val id: String,
+    /**
+     * A valid file identifier of the sticker
+     */
+    public val sticker_file_id: String,
+    /**
+     * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
+     */
+    public val reply_markup: InlineKeyboardMarkup? = null,
+    /**
+     * *Optional*. Content of the message to be sent instead of the sticker
+     */
+    public val input_message_content: InputMessageContent? = null,
 ) : InlineQueryResult

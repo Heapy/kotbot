@@ -16,6 +16,7 @@ import kotlinx.serialization.builtins.serializer
 /**
  * Use this method to delete a message, including service messages, with the following limitations:  
  * \- A message can only be deleted if it was sent less than 48 hours ago.  
+ * \- Service messages about a supergroup, channel, or forum topic creation can't be deleted.  
  * \- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.  
  * \- Bots can delete outgoing messages in private chats, groups, and supergroups.  
  * \- Bots can delete incoming messages in private chats.  
@@ -26,30 +27,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class DeleteMessage(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Identifier of the message to delete
-   */
-  public val message_id: Int,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Identifier of the message to delete
+     */
+    public val message_id: Int,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "deleteMessage",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@DeleteMessage
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "deleteMessage",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@DeleteMessage
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

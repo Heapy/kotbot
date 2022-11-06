@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class MessageId(
-  /**
-   * Unique message identifier
-   */
-  public val message_id: Int,
+    /**
+     * Unique message identifier
+     */
+    public val message_id: Int,
 )

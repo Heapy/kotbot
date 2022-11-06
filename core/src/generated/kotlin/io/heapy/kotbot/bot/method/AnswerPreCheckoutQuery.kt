@@ -17,34 +17,34 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class AnswerPreCheckoutQuery(
-  /**
-   * Unique identifier for the query to be answered
-   */
-  public val pre_checkout_query_id: String,
-  /**
-   * Specify *True* if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use *False* if there are any problems.
-   */
-  public val ok: Boolean,
-  /**
-   * Required if *ok* is *False*. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
-   */
-  public val error_message: String? = null,
+    /**
+     * Unique identifier for the query to be answered
+     */
+    public val pre_checkout_query_id: String,
+    /**
+     * Specify *True* if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use *False* if there are any problems.
+     */
+    public val ok: Boolean,
+    /**
+     * Required if *ok* is *False*. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
+     */
+    public val error_message: String? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "answerPreCheckoutQuery",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@AnswerPreCheckoutQuery
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "answerPreCheckoutQuery",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@AnswerPreCheckoutQuery
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

@@ -11,11 +11,11 @@ public sealed interface Thumb
 @JvmInline
 @Serializable
 public value class InputFileThumb(
-  public val `value`: InputFile,
+    public val `value`: InputFile,
 ) : Thumb
 
 @JvmInline
 @Serializable
 public value class StringThumb(
-  public val `value`: String,
+    public val `value`: String,
 ) : Thumb

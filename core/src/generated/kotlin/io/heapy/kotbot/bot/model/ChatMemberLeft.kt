@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ChatMemberLeft(
-  /**
-   * The member's status in the chat, always “left”
-   */
-  public val status: String = "left",
-  /**
-   * Information about the user
-   */
-  public val user: User,
+    /**
+     * The member's status in the chat, always “left”
+     */
+    public val status: String = "left",
+    /**
+     * Information about the user
+     */
+    public val user: User,
 ) : ChatMember

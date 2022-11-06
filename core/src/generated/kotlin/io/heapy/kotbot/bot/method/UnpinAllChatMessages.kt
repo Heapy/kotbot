@@ -17,26 +17,26 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class UnpinAllChatMessages(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "unpinAllChatMessages",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@UnpinAllChatMessages
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "unpinAllChatMessages",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@UnpinAllChatMessages
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

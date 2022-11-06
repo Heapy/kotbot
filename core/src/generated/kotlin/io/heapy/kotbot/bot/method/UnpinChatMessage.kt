@@ -18,30 +18,30 @@ import kotlinx.serialization.builtins.serializer
  */
 @Serializable
 public data class UnpinChatMessage(
-  /**
-   * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-   */
-  public val chat_id: ChatId,
-  /**
-   * Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
-   */
-  public val message_id: Int? = null,
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
+    public val chat_id: ChatId,
+    /**
+     * Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
+     */
+    public val message_id: Int? = null,
 ) : Method<Boolean> {
-  public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-    name = "unpinChatMessage",
-    serialize = {
-      json.encodeToString(
-        serializer(),
-        this@UnpinChatMessage
-      )
-    },
-    deserialize = {
-      json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-    }
-  )
+    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
+        name = "unpinChatMessage",
+        serialize = {
+            json.encodeToString(
+                serializer(),
+                this@UnpinChatMessage
+            )
+        },
+        deserialize = {
+            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
+        },
+    )
 
-  public companion object {
-    public val deserializer: KSerializer<Response<Boolean>> =
-        Response.serializer(Boolean.serializer())
-  }
+    public companion object {
+        public val deserializer: KSerializer<Response<Boolean>> =
+                Response.serializer(Boolean.serializer())
+    }
 }

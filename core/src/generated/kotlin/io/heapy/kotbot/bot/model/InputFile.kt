@@ -10,5 +10,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @JvmInline
 public value class InputFile(
-  public val `value`: String,
+    public val `value`: String,
 )

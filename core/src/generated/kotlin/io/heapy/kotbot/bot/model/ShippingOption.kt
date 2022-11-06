@@ -9,16 +9,16 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ShippingOption(
-  /**
-   * Shipping option identifier
-   */
-  public val id: String,
-  /**
-   * Option title
-   */
-  public val title: String,
-  /**
-   * List of price portions
-   */
-  public val prices: List<LabeledPrice>,
+    /**
+     * Shipping option identifier
+     */
+    public val id: String,
+    /**
+     * Option title
+     */
+    public val title: String,
+    /**
+     * List of price portions
+     */
+    public val prices: List<LabeledPrice>,
 )
