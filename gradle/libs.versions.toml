@@ -2,6 +2,7 @@
 coroutines = "1.6.4"
 flyway = "9.3.0"
 hikari = "5.0.1"
+jsoup = "1.15.3"
 junit = "5.9.0"
 kotlin = "1.7.20"
 ktor = "2.1.1"
@@ -14,6 +15,8 @@ serialization = "1.4.0"
 
 [libraries]
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 

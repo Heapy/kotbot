@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.serialization)
     implementation(libs.kotlinpoet)
+    implementation(libs.jsoup)
 }
 
 repositories {
