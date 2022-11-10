@@ -12,8 +12,8 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
-import kotlinx.serialization.json.Json
 import kotlin.io.path.Path
+import kotlinx.serialization.json.Json
 
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
@@ -27,13 +27,10 @@ fun main() {
 }
 
 fun TelegramApi.generate() {
-    val supertypeMapping = objects.filterIsInstance<AnyOfObject>()
+    val supertypeMapping = objects
+        .filterIsInstance<AnyOfObject>()
         .flatMap { anyOf ->
-            anyOf.any_of
-                .map { apiType -> apiType as ReferenceApiType }
-                .map { apiType -> apiType.reference }
-                .associateWith { anyOf.name }
-                .map { it.key to it.value }
+            anyOf.any_of.map { (it as ReferenceApiType).reference to anyOf.name }
         }
         .toMap()
 
