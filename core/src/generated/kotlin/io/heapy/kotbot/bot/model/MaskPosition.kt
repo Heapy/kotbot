@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class MaskPosition(
     /**
-     * The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
+     * The part of the face relative to which the mask should be placed. One of "forehead", "eyes", "mouth", or "chin".
      */
     public val point: String,
     /**

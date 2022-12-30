@@ -42,15 +42,15 @@ public data class SendPoll(
     /**
      * *True*, if the poll needs to be anonymous, defaults to *True*
      */
-    public val is_anonymous: Boolean? = true,
+    public val is_anonymous: Boolean? = null,
     /**
-     * Poll type, “quiz” or “regular”, defaults to “regular”
+     * Poll type, "quiz" or "regular", defaults to "regular"
      */
-    public val type: String? = "regular",
+    public val type: String? = null,
     /**
      * *True*, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to *False*
      */
-    public val allows_multiple_answers: Boolean? = false,
+    public val allows_multiple_answers: Boolean? = null,
     /**
      * 0-based identifier of the correct answer option, required for polls in quiz mode
      */

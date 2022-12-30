@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatMemberAdministrator(
     /**
-     * The member's status in the chat, always “administrator”
+     * The member's status in the chat, always "administrator"
      */
     public val status: String = "administrator",
     /**

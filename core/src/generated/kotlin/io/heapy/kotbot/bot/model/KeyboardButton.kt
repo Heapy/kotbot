@@ -26,7 +26,7 @@ public data class KeyboardButton(
      */
     public val request_poll: KeyboardButtonPollType? = null,
     /**
-     * *Optional*. If specified, the described [Web App](https://core.telegram.org/bots/webapps) will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+     * *Optional*. If specified, the described [Web App](https://core.telegram.org/bots/webapps) will be launched when the button is pressed. The Web App will be able to send a "web_app_data" service message. Available in private chats only.
      */
     public val web_app: WebAppInfo? = null,
 )

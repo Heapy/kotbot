@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatMemberOwner(
     /**
-     * The member's status in the chat, always “creator”
+     * The member's status in the chat, always "creator"
      */
     public val status: String = "creator",
     /**

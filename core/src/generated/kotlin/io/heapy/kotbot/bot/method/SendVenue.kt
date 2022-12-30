@@ -50,7 +50,7 @@ public data class SendVenue(
      */
     public val foursquare_id: String? = null,
     /**
-     * Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+     * Foursquare type of the venue, if known. (For example, "arts_entertainment/default", "arts_entertainment/aquarium" or "food/icecream".)
      */
     public val foursquare_type: String? = null,
     /**

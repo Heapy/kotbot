@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatInviteLink(
     /**
-     * The invite link. If the link was created by another chat administrator, then the second part of the link will be replaced with “…”.
+     * The invite link. If the link was created by another chat administrator, then the second part of the link will be replaced with "…".
      */
     public val invite_link: String,
     /**

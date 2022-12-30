@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatMemberRestricted(
     /**
-     * The member's status in the chat, always “restricted”
+     * The member's status in the chat, always "restricted"
      */
     public val status: String = "restricted",
     /**

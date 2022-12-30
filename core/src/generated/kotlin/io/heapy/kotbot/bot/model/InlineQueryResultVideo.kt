@@ -25,7 +25,7 @@ public data class InlineQueryResultVideo(
      */
     public val video_url: String,
     /**
-     * MIME type of the content of the video URL, “text/html” or “video/mp4”
+     * MIME type of the content of the video URL, "text/html" or "video/mp4"
      */
     public val mime_type: String,
     /**

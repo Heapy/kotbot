@@ -39,7 +39,7 @@ public data class InlineQueryResultDocument(
      */
     public val document_url: String,
     /**
-     * MIME type of the content of the file, either “application/pdf” or “application/zip”
+     * MIME type of the content of the file, either "application/pdf" or "application/zip"
      */
     public val mime_type: String,
     /**

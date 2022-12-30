@@ -39,7 +39,7 @@ public data class InlineQueryResultVenue(
      */
     public val foursquare_id: String? = null,
     /**
-     * *Optional*. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+     * *Optional*. Foursquare type of the venue, if known. (For example, "arts_entertainment/default", "arts_entertainment/aquarium" or "food/icecream".)
      */
     public val foursquare_type: String? = null,
     /**

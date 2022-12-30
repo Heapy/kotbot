@@ -62,7 +62,7 @@ public data class Update(
      */
     public val my_chat_member: ChatMemberUpdated? = null,
     /**
-     * *Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat_member” in the list of *allowed_updates* to receive these updates.
+     * *Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify "chat_member" in the list of *allowed_updates* to receive these updates.
      */
     public val chat_member: ChatMemberUpdated? = null,
     /**

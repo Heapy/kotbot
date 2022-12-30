@@ -49,7 +49,7 @@ public data class SendAnimation(
      */
     public val height: Int? = null,
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files)
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files)
      */
     public val thumb: Thumb? = null,
     /**
@@ -64,6 +64,10 @@ public data class SendAnimation(
      * A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse_mode*
      */
     public val caption_entities: List<MessageEntity>? = null,
+    /**
+     * Pass *True* if the photo needs to be covered with a spoiler animation
+     */
+    public val has_spoiler: Boolean? = null,
     /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */

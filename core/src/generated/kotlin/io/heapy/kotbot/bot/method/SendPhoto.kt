@@ -48,6 +48,10 @@ public data class SendPhoto(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * Pass *True* if the photo needs to be covered with a spoiler animation
+     */
+    public val has_spoiler: Boolean? = null,
+    /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
     public val disable_notification: Boolean? = null,

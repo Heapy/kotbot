@@ -17,7 +17,7 @@ public data class Chat(
      */
     public val id: Long,
     /**
-     * Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+     * Type of chat, can be either "private", "group", "supergroup" or "channel"
      */
     public val type: String,
     /**
@@ -96,6 +96,14 @@ public data class Chat(
      * *Optional*. The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
      */
     public val message_auto_delete_time: Int? = null,
+    /**
+     * *Optional*. *True*, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+     */
+    public val has_aggressive_anti_spam_enabled: Boolean? = null,
+    /**
+     * *Optional*. *True*, if non-administrators can only get the list of bots and administrators in the chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+     */
+    public val has_hidden_members: Boolean? = null,
     /**
      * *Optional*. *True*, if messages from the chat can't be forwarded to other chats. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
      */

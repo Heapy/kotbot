@@ -25,7 +25,7 @@ public data class Venue(
      */
     public val foursquare_id: String? = null,
     /**
-     * *Optional*. Foursquare type of the venue. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+     * *Optional*. Foursquare type of the venue. (For example, "arts_entertainment/default", "arts_entertainment/aquarium" or "food/icecream".)
      */
     public val foursquare_type: String? = null,
     /**

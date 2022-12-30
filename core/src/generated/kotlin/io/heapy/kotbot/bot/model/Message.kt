@@ -141,6 +141,10 @@ public data class Message(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * *Optional*. *True*, if the message media is covered by a spoiler animation
+     */
+    public val has_media_spoiler: Boolean? = null,
+    /**
      * *Optional*. Message is a shared contact, information about the contact
      */
     public val contact: Contact? = null,
@@ -225,6 +229,10 @@ public data class Message(
      */
     public val connected_website: String? = null,
     /**
+     * *Optional*. Service message: the user allowed the bot added to the attachment menu to write messages
+     */
+    public val write_access_allowed: WriteAccessAllowed? = null,
+    /**
      * *Optional*. Telegram Passport data
      */
     public val passport_data: PassportData? = null,
@@ -237,6 +245,10 @@ public data class Message(
      */
     public val forum_topic_created: ForumTopicCreated? = null,
     /**
+     * *Optional*. Service message: forum topic edited
+     */
+    public val forum_topic_edited: ForumTopicEdited? = null,
+    /**
      * *Optional*. Service message: forum topic closed
      */
     public val forum_topic_closed: ForumTopicClosed? = null,
@@ -244,6 +256,14 @@ public data class Message(
      * *Optional*. Service message: forum topic reopened
      */
     public val forum_topic_reopened: ForumTopicReopened? = null,
+    /**
+     * *Optional*. Service message: the 'General' forum topic hidden
+     */
+    public val general_forum_topic_hidden: GeneralForumTopicHidden? = null,
+    /**
+     * *Optional*. Service message: the 'General' forum topic unhidden
+     */
+    public val general_forum_topic_unhidden: GeneralForumTopicUnhidden? = null,
     /**
      * *Optional*. Service message: video chat scheduled
      */

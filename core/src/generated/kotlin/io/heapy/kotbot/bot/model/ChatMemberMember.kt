@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatMemberMember(
     /**
-     * The member's status in the chat, always “member”
+     * The member's status in the chat, always "member"
      */
     public val status: String = "member",
     /**

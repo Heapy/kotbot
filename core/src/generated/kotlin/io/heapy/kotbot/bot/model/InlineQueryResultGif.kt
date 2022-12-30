@@ -39,7 +39,7 @@ public data class InlineQueryResultGif(
      */
     public val thumb_url: String,
     /**
-     * *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+     * *Optional*. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg"
      */
     public val thumb_mime_type: String? = "image/jpeg",
     /**

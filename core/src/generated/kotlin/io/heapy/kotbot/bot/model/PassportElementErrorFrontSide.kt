@@ -13,7 +13,7 @@ public data class PassportElementErrorFrontSide(
      */
     public val source: String = "front_side",
     /**
-     * The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
+     * The section of the user's Telegram Passport which has the issue, one of "passport", "driver_license", "identity_card", "internal_passport"
      */
     public val type: String,
     /**

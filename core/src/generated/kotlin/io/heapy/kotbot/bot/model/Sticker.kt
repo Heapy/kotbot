@@ -20,7 +20,7 @@ public data class Sticker(
      */
     public val file_unique_id: String,
     /**
-     * Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. The type of the sticker is independent from its format, which is determined by the fields *is_animated* and *is_video*.
+     * Type of the sticker, currently one of "regular", "mask", "custom_emoji". The type of the sticker is independent from its format, which is determined by the fields *is_animated* and *is_video*.
      */
     public val type: String,
     /**

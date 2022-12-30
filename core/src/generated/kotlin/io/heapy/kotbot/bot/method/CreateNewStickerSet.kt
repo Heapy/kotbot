@@ -45,7 +45,7 @@ public data class CreateNewStickerSet(
      */
     public val webm_sticker: InputFile? = null,
     /**
-     * Type of stickers in the set, pass “regular” or “mask”. Custom emoji sticker sets can't be created via the Bot API at the moment. By default, a regular sticker set is created.
+     * Type of stickers in the set, pass "regular" or "mask". Custom emoji sticker sets can't be created via the Bot API at the moment. By default, a regular sticker set is created.
      */
     public val sticker_type: String? = null,
     /**

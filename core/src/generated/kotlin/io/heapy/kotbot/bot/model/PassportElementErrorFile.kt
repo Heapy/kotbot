@@ -13,7 +13,7 @@ public data class PassportElementErrorFile(
      */
     public val source: String = "file",
     /**
-     * The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+     * The section of the user's Telegram Passport which has the issue, one of "utility_bill", "bank_statement", "rental_agreement", "passport_registration", "temporary_registration"
      */
     public val type: String,
     /**

@@ -37,7 +37,7 @@ public data class Poll(
      */
     public val is_anonymous: Boolean,
     /**
-     * Poll type, currently can be “regular” or “quiz”
+     * Poll type, currently can be "regular" or "quiz"
      */
     public val type: String,
     /**

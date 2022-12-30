@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
-        .getResource("api630.json")
+        .getResource("api640.json")
         ?.readText()
         ?: error("custom.json not found")
 
@@ -311,6 +311,10 @@ private fun String.camelToTitle(): String = replaceFirstChar(Char::uppercaseChar
  */
 private fun String.asKdoc(): String =
     replace("\\_", "_")
+        .replace("\\>", ">")
+        .replace("\\<", "<")
+        .replace("“", "\"")
+        .replace("”", "\"")
         .replace(' ', '·')
         .replace("»", "&raquo;")
         .replace("«", "&laquo;")

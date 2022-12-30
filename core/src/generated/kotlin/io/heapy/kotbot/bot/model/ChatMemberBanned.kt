@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatMemberBanned(
     /**
-     * The member's status in the chat, always “kicked”
+     * The member's status in the chat, always "kicked"
      */
     public val status: String = "kicked",
     /**

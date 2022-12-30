@@ -13,7 +13,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
 /**
- * Use this method to get information about a member of a chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
+ * Use this method to get information about a member of a chat. The method is guaranteed to work only if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
  */
 @Serializable
 public data class GetChatMember(

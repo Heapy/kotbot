@@ -13,7 +13,7 @@ public data class PassportElementErrorReverseSide(
      */
     public val source: String = "reverse_side",
     /**
-     * The section of the user's Telegram Passport which has the issue, one of “driver_license”, “identity_card”
+     * The section of the user's Telegram Passport which has the issue, one of "driver_license", "identity_card"
      */
     public val type: String,
     /**
