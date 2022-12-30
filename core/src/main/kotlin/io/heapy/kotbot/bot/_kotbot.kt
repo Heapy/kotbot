@@ -62,7 +62,7 @@ public suspend fun Kotbot.receiveUpdates(
             offset = updates.maxByOrNull { it.update_id }?.update_id ?: offset
 
             updates.forEach { update ->
-                LOGGER.debug("Received update: {}", update)
+                log.debug("Received update: {}", update)
                 emit(update)
             }
         }
@@ -135,4 +135,4 @@ internal suspend inline fun <Response> Kotbot.requestForJson(
 private inline fun <reified T : Any> logger(): Logger =
     LoggerFactory.getLogger(T::class.java)
 
-private val LOGGER = logger<Kotbot>()
+private val log = logger<Kotbot>()

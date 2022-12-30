@@ -146,10 +146,10 @@ open class ApplicationFactory {
         server.start()
         kotlinChatsBot.start()
 
-        LOGGER.info("Application started.")
+        log.info("Application started.")
     }
 
     companion object {
-        private val LOGGER = logger<ApplicationFactory>()
+        private val log = logger<ApplicationFactory>()
     }
 }

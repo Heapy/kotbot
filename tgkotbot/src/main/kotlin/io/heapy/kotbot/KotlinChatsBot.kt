@@ -50,7 +50,7 @@ class KotlinChatsBot(
 
                 return true
             } catch (e: Exception) {
-                LOGGER.error("Exception in command. Update: {}", update, e)
+                log.error("Exception in command. Update: {}", update, e)
             }
         }
 
@@ -82,7 +82,7 @@ class KotlinChatsBot(
                         }
                     }
                 } catch (e: Exception) {
-                    LOGGER.error("Exception in rule {}", rule, e)
+                    log.error("Exception in rule {}", rule, e)
                     recordRuleFailure(rule)
                     listOf()
                 }
@@ -112,7 +112,7 @@ class KotlinChatsBot(
     }
 }
 
-private val LOGGER = logger<KotlinChatsBot>()
+private val log = logger<KotlinChatsBot>()
 
 internal suspend fun <Response> Kotbot.executeSafely(
     method: Method<Response>
@@ -120,7 +120,7 @@ internal suspend fun <Response> Kotbot.executeSafely(
     return try {
         execute(method)
     } catch (e: Exception) {
-        LOGGER.error("Method {} failed: {}", method, e.message, e)
+        log.error("Method {} failed: {}", method, e.message, e)
         null
     }
 }
