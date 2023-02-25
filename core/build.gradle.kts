@@ -1,4 +1,5 @@
-@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
+import org.jetbrains.kotlin.config.LanguageVersion
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
@@ -26,8 +27,8 @@ repositories {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "11"
-        languageVersion = "1.7"
+        jvmTarget = "17"
+        languageVersion = LanguageVersion.KOTLIN_2_0.versionString
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
             "-opt-in=kotlin.RequiresOptIn"
