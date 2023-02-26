@@ -1,3 +1,4 @@
+@file:JvmName("Playground")
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.method.DeleteMessage
@@ -5,11 +6,12 @@ import io.heapy.kotbot.bot.method.GetMe
 import io.heapy.kotbot.bot.model.LongChatId
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import java.lang.System.getenv
 
 suspend fun main() {
+    val dotenv = dotenv()
+
     val kotbot = Kotbot(
-        token = getenv("KOTBOT_TOKEN"),
+        token = dotenv.getValue("KOTBOT_TOKEN"),
     )
 
     val me = kotbot.execute(GetMe())

@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.LabeledPrice
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -100,22 +96,13 @@ public data class CreateInvoiceLink(
      * Pass *True* if the final price depends on the shipping method
      */
     public val is_flexible: Boolean? = null,
-) : Method<String> {
-    public override suspend fun Kotbot.execute(): String = requestForJson(
-        name = "createInvoiceLink",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@CreateInvoiceLink
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<String>> =
+) : Method<CreateInvoiceLink, String> by Companion {
+    public companion object : Method<CreateInvoiceLink, String> {
+        override val _deserializer: KSerializer<Response<String>> =
                 Response.serializer(String.serializer())
+
+        override val _serializer: KSerializer<CreateInvoiceLink> = serializer()
+
+        override val _name: String = "createInvoiceLink"
     }
 }

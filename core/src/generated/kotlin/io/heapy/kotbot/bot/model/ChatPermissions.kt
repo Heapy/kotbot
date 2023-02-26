@@ -9,23 +9,43 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ChatPermissions(
     /**
-     * *Optional*. *True*, if the user is allowed to send text messages, contacts, locations and venues
+     * *Optional*. *True*, if the user is allowed to send text messages, contacts, invoices, locations and venues
      */
     public val can_send_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+     * *Optional*. *True*, if the user is allowed to send audios
      */
-    public val can_send_media_messages: Boolean? = null,
+    public val can_send_audios: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to send polls, implies can_send_messages
+     * *Optional*. *True*, if the user is allowed to send documents
+     */
+    public val can_send_documents: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to send photos
+     */
+    public val can_send_photos: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to send videos
+     */
+    public val can_send_videos: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to send video notes
+     */
+    public val can_send_video_notes: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to send voice notes
+     */
+    public val can_send_voice_notes: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to send polls
      */
     public val can_send_polls: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to send animations, games, stickers and use inline bots, implies can_send_media_messages
+     * *Optional*. *True*, if the user is allowed to send animations, games, stickers and use inline bots
      */
     public val can_send_other_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to add web page previews to their messages, implies can_send_media_messages
+     * *Optional*. *True*, if the user is allowed to add web page previews to their messages
      */
     public val can_add_web_page_previews: Boolean? = null,
     /**

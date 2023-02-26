@@ -31,7 +31,7 @@ public data class InlineQueryResultVideo(
     /**
      * URL of the thumbnail (JPEG only) for the video
      */
-    public val thumb_url: String,
+    public val thumbnail_url: String,
     /**
      * Title for the result
      */

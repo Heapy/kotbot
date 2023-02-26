@@ -17,12 +17,20 @@ dependencies {
     implementation(libs.ktor.client)
 
     testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.mockk)
     testImplementation(libs.logback)
 }
 
 repositories {
     mavenCentral()
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+        vendor.set(JvmVendorSpec.BELLSOFT)
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {

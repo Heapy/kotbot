@@ -1,13 +1,10 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.Chat
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
@@ -20,22 +17,13 @@ public data class GetChat(
      * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
-) : Method<Chat> {
-    public override suspend fun Kotbot.execute(): Chat = requestForJson(
-        name = "getChat",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetChat
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Chat>> =
+) : Method<GetChat, Chat> by Companion {
+    public companion object : Method<GetChat, Chat> {
+        override val _deserializer: KSerializer<Response<Chat>> =
                 Response.serializer(Chat.serializer())
+
+        override val _serializer: KSerializer<GetChat> = serializer()
+
+        override val _name: String = "getChat"
     }
 }

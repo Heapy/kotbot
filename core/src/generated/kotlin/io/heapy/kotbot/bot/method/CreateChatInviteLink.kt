@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.ChatInviteLink
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -40,22 +36,13 @@ public data class CreateChatInviteLink(
      * *True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member_limit* can't be specified
      */
     public val creates_join_request: Boolean? = null,
-) : Method<ChatInviteLink> {
-    public override suspend fun Kotbot.execute(): ChatInviteLink = requestForJson(
-        name = "createChatInviteLink",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@CreateChatInviteLink
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<ChatInviteLink>> =
+) : Method<CreateChatInviteLink, ChatInviteLink> by Companion {
+    public companion object : Method<CreateChatInviteLink, ChatInviteLink> {
+        override val _deserializer: KSerializer<Response<ChatInviteLink>> =
                 Response.serializer(ChatInviteLink.serializer())
+
+        override val _serializer: KSerializer<CreateChatInviteLink> = serializer()
+
+        override val _name: String = "createChatInviteLink"
     }
 }

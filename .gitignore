@@ -9,3 +9,4 @@ build
 
 # Configuration
 /tgkotbot/src/main/resources/application.conf
+.env

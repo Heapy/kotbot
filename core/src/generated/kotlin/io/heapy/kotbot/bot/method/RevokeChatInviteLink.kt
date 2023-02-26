@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.ChatInviteLink
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -25,22 +21,13 @@ public data class RevokeChatInviteLink(
      * The invite link to revoke
      */
     public val invite_link: String,
-) : Method<ChatInviteLink> {
-    public override suspend fun Kotbot.execute(): ChatInviteLink = requestForJson(
-        name = "revokeChatInviteLink",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@RevokeChatInviteLink
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<ChatInviteLink>> =
+) : Method<RevokeChatInviteLink, ChatInviteLink> by Companion {
+    public companion object : Method<RevokeChatInviteLink, ChatInviteLink> {
+        override val _deserializer: KSerializer<Response<ChatInviteLink>> =
                 Response.serializer(ChatInviteLink.serializer())
+
+        override val _serializer: KSerializer<RevokeChatInviteLink> = serializer()
+
+        override val _name: String = "revokeChatInviteLink"
     }
 }

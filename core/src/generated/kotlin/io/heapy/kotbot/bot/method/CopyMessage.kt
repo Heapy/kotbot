@@ -1,15 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.MessageId
 import io.heapy.kotbot.bot.model.ReplyMarkup
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -70,22 +66,13 @@ public data class CopyMessage(
      * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
-) : Method<MessageId> {
-    public override suspend fun Kotbot.execute(): MessageId = requestForJson(
-        name = "copyMessage",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@CopyMessage
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<MessageId>> =
+) : Method<CopyMessage, MessageId> by Companion {
+    public companion object : Method<CopyMessage, MessageId> {
+        override val _deserializer: KSerializer<Response<MessageId>> =
                 Response.serializer(MessageId.serializer())
+
+        override val _serializer: KSerializer<CopyMessage> = serializer()
+
+        override val _name: String = "copyMessage"
     }
 }

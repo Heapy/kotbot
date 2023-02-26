@@ -33,7 +33,7 @@ public data class Animation(
     /**
      * *Optional*. Animation thumbnail as defined by sender
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
     /**
      * *Optional*. Original animation filename as defined by sender
      */

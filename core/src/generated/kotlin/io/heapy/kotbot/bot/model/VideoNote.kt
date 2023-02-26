@@ -29,7 +29,7 @@ public data class VideoNote(
     /**
      * *Optional*. Video thumbnail
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
     /**
      * *Optional*. File size in bytes
      */

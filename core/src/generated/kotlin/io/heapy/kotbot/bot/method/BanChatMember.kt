@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -34,22 +31,13 @@ public data class BanChatMember(
      * Pass *True* to delete all messages from the chat for the user that is being removed. If *False*, the user will be able to see messages in the group that were sent before the user was removed. Always *True* for supergroups and channels.
      */
     public val revoke_messages: Boolean? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "banChatMember",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@BanChatMember
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<BanChatMember, Boolean> by Companion {
+    public companion object : Method<BanChatMember, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<BanChatMember> = serializer()
+
+        override val _name: String = "banChatMember"
     }
 }

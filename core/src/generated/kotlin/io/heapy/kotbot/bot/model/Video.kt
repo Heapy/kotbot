@@ -33,7 +33,7 @@ public data class Video(
     /**
      * *Optional*. Video thumbnail
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
     /**
      * *Optional*. Original filename as defined by sender
      */

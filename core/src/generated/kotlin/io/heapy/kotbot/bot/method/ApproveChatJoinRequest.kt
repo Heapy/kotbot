@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -26,22 +23,13 @@ public data class ApproveChatJoinRequest(
      * Unique identifier of the target user
      */
     public val user_id: Long,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "approveChatJoinRequest",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@ApproveChatJoinRequest
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<ApproveChatJoinRequest, Boolean> by Companion {
+    public companion object : Method<ApproveChatJoinRequest, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<ApproveChatJoinRequest> = serializer()
+
+        override val _name: String = "approveChatJoinRequest"
     }
 }

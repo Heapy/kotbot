@@ -19,6 +19,7 @@ flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
 
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 

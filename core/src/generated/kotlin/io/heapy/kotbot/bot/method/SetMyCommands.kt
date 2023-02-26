@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.BotCommand
 import io.heapy.kotbot.bot.model.BotCommandScope
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
@@ -32,22 +28,13 @@ public data class SetMyCommands(
      * A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
      */
     public val language_code: String? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "setMyCommands",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetMyCommands
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<SetMyCommands, Boolean> by Companion {
+    public companion object : Method<SetMyCommands, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<SetMyCommands> = serializer()
+
+        override val _name: String = "setMyCommands"
     }
 }

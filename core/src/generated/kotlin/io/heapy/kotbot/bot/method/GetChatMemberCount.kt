@@ -1,13 +1,10 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Int
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -21,21 +18,13 @@ public data class GetChatMemberCount(
      * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
-) : Method<Int> {
-    public override suspend fun Kotbot.execute(): Int = requestForJson(
-        name = "getChatMemberCount",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetChatMemberCount
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
+) : Method<GetChatMemberCount, Int> by Companion {
+    public companion object : Method<GetChatMemberCount, Int> {
+        override val _deserializer: KSerializer<Response<Int>> =
+                Response.serializer(Int.serializer())
 
-    public companion object {
-        public val deserializer: KSerializer<Response<Int>> = Response.serializer(Int.serializer())
+        override val _serializer: KSerializer<GetChatMemberCount> = serializer()
+
+        override val _name: String = "getChatMemberCount"
     }
 }

@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.StickerSet
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -20,22 +16,13 @@ public data class GetStickerSet(
      * Name of the sticker set
      */
     public val name: String,
-) : Method<StickerSet> {
-    public override suspend fun Kotbot.execute(): StickerSet = requestForJson(
-        name = "getStickerSet",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetStickerSet
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<StickerSet>> =
+) : Method<GetStickerSet, StickerSet> by Companion {
+    public companion object : Method<GetStickerSet, StickerSet> {
+        override val _deserializer: KSerializer<Response<StickerSet>> =
                 Response.serializer(StickerSet.serializer())
+
+        override val _serializer: KSerializer<GetStickerSet> = serializer()
+
+        override val _name: String = "getStickerSet"
     }
 }

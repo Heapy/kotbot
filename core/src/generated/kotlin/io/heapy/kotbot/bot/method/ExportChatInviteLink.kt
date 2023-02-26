@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -21,22 +17,13 @@ public data class ExportChatInviteLink(
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
-) : Method<String> {
-    public override suspend fun Kotbot.execute(): String = requestForJson(
-        name = "exportChatInviteLink",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@ExportChatInviteLink
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<String>> =
+) : Method<ExportChatInviteLink, String> by Companion {
+    public companion object : Method<ExportChatInviteLink, String> {
+        override val _deserializer: KSerializer<Response<String>> =
                 Response.serializer(String.serializer())
+
+        override val _serializer: KSerializer<ExportChatInviteLink> = serializer()
+
+        override val _name: String = "exportChatInviteLink"
     }
 }

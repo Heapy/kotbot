@@ -42,7 +42,7 @@ public data class Sticker(
     /**
      * *Optional*. Sticker thumbnail in the .WEBP or .JPG format
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
     /**
      * *Optional*. Emoji associated with the sticker
      */
@@ -63,6 +63,10 @@ public data class Sticker(
      * *Optional*. For custom emoji stickers, unique identifier of the custom emoji
      */
     public val custom_emoji_id: String? = null,
+    /**
+     * *Optional*. *True*, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places
+     */
+    public val needs_repainting: Boolean? = null,
     /**
      * *Optional*. File size in bytes
      */

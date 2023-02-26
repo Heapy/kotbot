@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.File
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -20,22 +16,13 @@ public data class GetFile(
      * File identifier to get information about
      */
     public val file_id: String,
-) : Method<File> {
-    public override suspend fun Kotbot.execute(): File = requestForJson(
-        name = "getFile",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetFile
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<File>> =
+) : Method<GetFile, File> by Companion {
+    public companion object : Method<GetFile, File> {
+        override val _deserializer: KSerializer<Response<File>> =
                 Response.serializer(File.serializer())
+
+        override val _serializer: KSerializer<GetFile> = serializer()
+
+        override val _name: String = "getFile"
     }
 }

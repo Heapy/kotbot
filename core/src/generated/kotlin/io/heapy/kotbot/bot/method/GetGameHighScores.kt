@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.GameHighScore
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
@@ -38,22 +34,13 @@ public data class GetGameHighScores(
      * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
      */
     public val inline_message_id: String? = null,
-) : Method<List<GameHighScore>> {
-    public override suspend fun Kotbot.execute(): List<GameHighScore> = requestForJson(
-        name = "getGameHighScores",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetGameHighScores
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<List<GameHighScore>>> =
+) : Method<GetGameHighScores, List<GameHighScore>> by Companion {
+    public companion object : Method<GetGameHighScores, List<GameHighScore>> {
+        override val _deserializer: KSerializer<Response<List<GameHighScore>>> =
                 Response.serializer(ListSerializer(GameHighScore.serializer()))
+
+        override val _serializer: KSerializer<GetGameHighScores> = serializer()
+
+        override val _name: String = "getGameHighScores"
     }
 }

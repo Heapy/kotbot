@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.UserProfilePhotos
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
@@ -29,22 +26,13 @@ public data class GetUserProfilePhotos(
      * Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
      */
     public val limit: Int? = 100,
-) : Method<UserProfilePhotos> {
-    public override suspend fun Kotbot.execute(): UserProfilePhotos = requestForJson(
-        name = "getUserProfilePhotos",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetUserProfilePhotos
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<UserProfilePhotos>> =
+) : Method<GetUserProfilePhotos, UserProfilePhotos> by Companion {
+    public companion object : Method<GetUserProfilePhotos, UserProfilePhotos> {
+        override val _deserializer: KSerializer<Response<UserProfilePhotos>> =
                 Response.serializer(UserProfilePhotos.serializer())
+
+        override val _serializer: KSerializer<GetUserProfilePhotos> = serializer()
+
+        override val _name: String = "getUserProfilePhotos"
     }
 }

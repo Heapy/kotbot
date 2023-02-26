@@ -14,6 +14,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
@@ -33,15 +34,8 @@ public data class Kotbot(
     },
     public val json: Json = Json {
         ignoreUnknownKeys = true
-    }
+    },
 )
-
-public suspend inline fun <Response> Kotbot.execute(
-    method: Method<Response>
-): Response =
-    with(method) {
-        execute()
-    }
 
 public suspend fun Kotbot.receiveUpdates(
     timeout: Int = 50,
@@ -69,8 +63,32 @@ public suspend fun Kotbot.receiveUpdates(
     }
 }
 
-public interface Method<Response> {
-    public suspend fun Kotbot.execute(): Response
+public suspend inline fun <Request : Method<Request, Result>, Result> Kotbot.execute(
+    method: Request,
+): Result =
+    requestForJson(
+        name = method._name,
+        serialize = {
+            json
+                .encodeToString(
+                    method._serializer,
+                    method,
+                )
+        },
+        deserialize = {
+            json
+                .decodeFromString(
+                    method._deserializer,
+                    it.bodyAsText(),
+                )
+                .unwrap()
+        },
+    )
+
+public interface Method<Request, Result> {
+    public val _serializer: KSerializer<Request>
+    public val _deserializer: KSerializer<Response<Result>>
+    public val _name: String
 }
 
 @Serializable
@@ -88,7 +106,7 @@ public data class ResponseParameters(
     public val retry_after: Int? = null,
 )
 
-internal fun <T> Response<T>.unwrap(): T {
+public fun <T> Response<T>.unwrap(): T {
     if (ok) {
         return result ?: throw KotbotException("Response is ok but result is null")
     } else {
@@ -114,10 +132,10 @@ public class KotbotException(
     message: String,
 ) : RuntimeException(message)
 
-internal suspend inline fun <Response> Kotbot.requestForJson(
+public suspend inline fun <Response> Kotbot.requestForJson(
     name: String,
     serialize: () -> String,
-    deserialize: (HttpResponse) -> Response
+    deserialize: (HttpResponse) -> Response,
 ): Response {
     val response = httpClient
         .post("$baseUrl$token/$name") {

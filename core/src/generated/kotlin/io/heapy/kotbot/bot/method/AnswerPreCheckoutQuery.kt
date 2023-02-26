@@ -1,11 +1,7 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.String
 import kotlinx.serialization.KSerializer
@@ -29,22 +25,13 @@ public data class AnswerPreCheckoutQuery(
      * Required if *ok* is *False*. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
      */
     public val error_message: String? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "answerPreCheckoutQuery",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@AnswerPreCheckoutQuery
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<AnswerPreCheckoutQuery, Boolean> by Companion {
+    public companion object : Method<AnswerPreCheckoutQuery, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<AnswerPreCheckoutQuery> = serializer()
+
+        override val _name: String = "answerPreCheckoutQuery"
     }
 }

@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
-        .getResource("api640.json")
+        .getResource("api670.json")
         ?.readText()
         ?: error("custom.json not found")
 
@@ -534,11 +534,13 @@ private fun FileSpec.Builder.kotbotIndent(): FileSpec.Builder {
 private fun Method.toFileSpec(): FileSpec =
     FileSpec.builder(methodPackageName, name.camelToTitle())
         .kotbotIndent()
-        .addImport("io.heapy.kotbot.bot", "requestForJson", "unwrap")
-        .addImport("io.ktor.client.statement", "bodyAsText")
         .addType(
             TypeSpec.classBuilder(name.camelToTitle())
                 .addAnnotation(serializableAnnotation)
+                .addSuperinterface(botMethodType.parameterizedBy(
+                    ClassName(methodPackageName, name.camelToTitle()),
+                    return_type.generic(),
+                ), delegate = CodeBlock.of("Companion"))
                 .apply {
                     arguments?.let {
                         addModifiers(KModifier.DATA)
@@ -550,56 +552,60 @@ private fun Method.toFileSpec(): FileSpec =
                             .addProperties(arguments.map(Argument::asPropertySpec))
                     }
                 }
-                .addSuperinterface(botMethodType.parameterizedBy(return_type.generic()))
                 .addKdoc(CodeBlock.of(description.asKdoc()))
-                .addFunction(
-                    FunSpec.builder("execute")
-                        .addModifiers(
-                            KModifier.OVERRIDE,
-                            KModifier.SUSPEND,
-                        )
-                        .receiver(kotbotType)
-                        .returns(return_type.generic())
-                        .addCode(
-                            CodeBlock.builder()
-                                .add("return requestForJson(\n")
-                                .indent()
-                                    .add("name = %S,\n", name)
-                                    .add("serialize = {\n")
-                                    .indent()
-                                        .add("json.encodeToString(\n")
-                                        .indent()
-                                            .add("serializer(),\n")
-                                            .add("this@%N\n", name.camelToTitle())
-                                        .unindent()
-                                        .add(")\n")
-                                    .unindent()
-                                    .add("},\n")
-                                    .add("deserialize = {\n")
-                                    .indent()
-                                        .add("json.decodeFromString(deserializer, it.bodyAsText()).unwrap()\n")
-                                    .unindent()
-                                    .add("},\n")
-                                .unindent()
-                                .add(")\n")
-                                .build()
-                        )
-                        .build()
-                )
                 .addType(
                     TypeSpec.companionObjectBuilder()
+                        .addSuperinterface(botMethodType.parameterizedBy(
+                            ClassName(methodPackageName, name.camelToTitle()),
+                            return_type.generic(),
+                        ))
                         .addProperty(
                             PropertySpec
                                 .builder(
-                                    "deserializer",
+                                    "_deserializer",
                                     kSerializerType.parameterizedBy(
                                         responseType.parameterizedBy(return_type.generic())
                                     ),
                                 )
+                                .addModifiers(KModifier.OVERRIDE)
                                 .initializer(
                                     CodeBlock.of(
                                         "Response.serializer(%L)",
                                         return_type.serializer()
+                                    )
+                                )
+                                .build()
+                        )
+                        .addProperty(
+                            PropertySpec
+                                .builder(
+                                    "_serializer",
+                                    kSerializerType.parameterizedBy(
+                                        ClassName(
+                                            methodPackageName,
+                                            name.camelToTitle(),
+                                        )
+                                    ),
+                                )
+                                .addModifiers(KModifier.OVERRIDE)
+                                .initializer(
+                                    CodeBlock.of(
+                                        "serializer()",
+                                    )
+                                )
+                                .build()
+                        )
+                        .addProperty(
+                            PropertySpec
+                                .builder(
+                                    "_name",
+                                    stringType,
+                                )
+                                .addModifiers(KModifier.OVERRIDE)
+                                .initializer(
+                                    CodeBlock.of(
+                                        "%S",
+                                        name
                                     )
                                 )
                                 .build()

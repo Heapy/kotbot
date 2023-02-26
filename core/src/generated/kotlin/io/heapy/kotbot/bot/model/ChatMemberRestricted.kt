@@ -23,6 +23,46 @@ public data class ChatMemberRestricted(
      */
     public val is_member: Boolean,
     /**
+     * *True*, if the user is allowed to send text messages, contacts, invoices, locations and venues
+     */
+    public val can_send_messages: Boolean,
+    /**
+     * *True*, if the user is allowed to send audios
+     */
+    public val can_send_audios: Boolean,
+    /**
+     * *True*, if the user is allowed to send documents
+     */
+    public val can_send_documents: Boolean,
+    /**
+     * *True*, if the user is allowed to send photos
+     */
+    public val can_send_photos: Boolean,
+    /**
+     * *True*, if the user is allowed to send videos
+     */
+    public val can_send_videos: Boolean,
+    /**
+     * *True*, if the user is allowed to send video notes
+     */
+    public val can_send_video_notes: Boolean,
+    /**
+     * *True*, if the user is allowed to send voice notes
+     */
+    public val can_send_voice_notes: Boolean,
+    /**
+     * *True*, if the user is allowed to send polls
+     */
+    public val can_send_polls: Boolean,
+    /**
+     * *True*, if the user is allowed to send animations, games, stickers and use inline bots
+     */
+    public val can_send_other_messages: Boolean,
+    /**
+     * *True*, if the user is allowed to add web page previews to their messages
+     */
+    public val can_add_web_page_previews: Boolean,
+    /**
      * *True*, if the user is allowed to change the chat title, photo and other settings
      */
     public val can_change_info: Boolean,
@@ -38,26 +78,6 @@ public data class ChatMemberRestricted(
      * *True*, if the user is allowed to create forum topics
      */
     public val can_manage_topics: Boolean,
-    /**
-     * *True*, if the user is allowed to send text messages, contacts, locations and venues
-     */
-    public val can_send_messages: Boolean,
-    /**
-     * *True*, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes
-     */
-    public val can_send_media_messages: Boolean,
-    /**
-     * *True*, if the user is allowed to send polls
-     */
-    public val can_send_polls: Boolean,
-    /**
-     * *True*, if the user is allowed to send animations, games, stickers and use inline bots
-     */
-    public val can_send_other_messages: Boolean,
-    /**
-     * *True*, if the user is allowed to add web page previews to their messages
-     */
-    public val can_add_web_page_previews: Boolean,
     /**
      * Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
      */

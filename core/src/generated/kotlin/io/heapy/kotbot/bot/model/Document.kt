@@ -20,7 +20,7 @@ public data class Document(
     /**
      * *Optional*. Document thumbnail as defined by sender
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
     /**
      * *Optional*. Original filename as defined by sender
      */

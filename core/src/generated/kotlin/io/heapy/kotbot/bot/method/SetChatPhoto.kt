@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InputFile
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -26,22 +23,13 @@ public data class SetChatPhoto(
      * New chat photo, uploaded using multipart/form-data
      */
     public val photo: InputFile,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "setChatPhoto",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetChatPhoto
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<SetChatPhoto, Boolean> by Companion {
+    public companion object : Method<SetChatPhoto, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<SetChatPhoto> = serializer()
+
+        override val _name: String = "setChatPhoto"
     }
 }

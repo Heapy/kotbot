@@ -1,11 +1,7 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -42,22 +38,13 @@ public data class AnswerCallbackQuery(
      * The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
      */
     public val cache_time: Int? = 0,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "answerCallbackQuery",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@AnswerCallbackQuery
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<AnswerCallbackQuery, Boolean> by Companion {
+    public companion object : Method<AnswerCallbackQuery, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<AnswerCallbackQuery> = serializer()
+
+        override val _name: String = "answerCallbackQuery"
     }
 }

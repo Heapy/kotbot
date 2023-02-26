@@ -29,7 +29,7 @@ public data class ChatAdministratorRights(
      */
     public val can_restrict_members: Boolean,
     /**
-     * *True*, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+     * *True*, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
      */
     public val can_promote_members: Boolean,
     /**

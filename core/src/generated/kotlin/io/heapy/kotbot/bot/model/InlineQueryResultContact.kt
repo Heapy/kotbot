@@ -44,13 +44,13 @@ public data class InlineQueryResultContact(
     /**
      * *Optional*. Url of the thumbnail for the result
      */
-    public val thumb_url: String? = null,
+    public val thumbnail_url: String? = null,
     /**
      * *Optional*. Thumbnail width
      */
-    public val thumb_width: Int? = null,
+    public val thumbnail_width: Int? = null,
     /**
      * *Optional*. Thumbnail height
      */
-    public val thumb_height: Int? = null,
+    public val thumbnail_height: Int? = null,
 ) : InlineQueryResult

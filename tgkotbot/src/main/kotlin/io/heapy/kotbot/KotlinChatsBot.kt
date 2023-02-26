@@ -37,7 +37,7 @@ class KotlinChatsBot(
     }
 
     internal suspend fun findAndExecuteCommand(update: Update): Boolean {
-        // Command accepts text only in message, no update message supported
+        // Command accepts text only in a message, no update message supported
         update.message?.text?.run {
             try {
                 val command = commands.find { command ->

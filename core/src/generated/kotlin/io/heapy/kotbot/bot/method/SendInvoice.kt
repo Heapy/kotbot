@@ -1,15 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.LabeledPrice
 import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -134,22 +130,13 @@ public data class SendInvoice(
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay `total price`' button will be shown. If not empty, the first button must be a Pay button.
      */
     public val reply_markup: InlineKeyboardMarkup? = null,
-) : Method<Message> {
-    public override suspend fun Kotbot.execute(): Message = requestForJson(
-        name = "sendInvoice",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendInvoice
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Message>> =
+) : Method<SendInvoice, Message> by Companion {
+    public companion object : Method<SendInvoice, Message> {
+        override val _deserializer: KSerializer<Response<Message>> =
                 Response.serializer(Message.serializer())
+
+        override val _serializer: KSerializer<SendInvoice> = serializer()
+
+        override val _name: String = "sendInvoice"
     }
 }

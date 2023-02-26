@@ -1,3 +1,5 @@
+@file:JvmName("Parse")
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -13,6 +15,9 @@ fun main() {
         "api620",
         "api630",
         "api640",
+        "api650",
+        "api660",
+        "api670",
     ).forEach { v ->
         val input = rootPath.resolve(v).readText()
         val output = processVersion(input)

@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -28,29 +24,20 @@ public data class EditForumTopic(
      */
     public val message_thread_id: Int,
     /**
-     * New topic name, 0-128 characters. If not specififed or empty, the current name of the topic will be kept
+     * New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
      */
     public val name: String? = null,
     /**
      * New unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
      */
     public val icon_custom_emoji_id: String? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "editForumTopic",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@EditForumTopic
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<EditForumTopic, Boolean> by Companion {
+    public companion object : Method<EditForumTopic, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<EditForumTopic> = serializer()
+
+        override val _name: String = "editForumTopic"
     }
 }

@@ -45,5 +45,5 @@ public data class Audio(
     /**
      * *Optional*. Thumbnail of the album cover to which the music file belongs
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
 )

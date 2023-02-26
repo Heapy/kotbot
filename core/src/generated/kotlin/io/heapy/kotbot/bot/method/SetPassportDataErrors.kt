@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.PassportElementError
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Long
+import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -29,22 +26,13 @@ public data class SetPassportDataErrors(
      * A JSON-serialized array describing the errors
      */
     public val errors: List<PassportElementError>,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "setPassportDataErrors",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetPassportDataErrors
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<SetPassportDataErrors, Boolean> by Companion {
+    public companion object : Method<SetPassportDataErrors, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<SetPassportDataErrors> = serializer()
+
+        override val _name: String = "setPassportDataErrors"
     }
 }

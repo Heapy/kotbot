@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.BotCommand
 import io.heapy.kotbot.bot.model.BotCommandScope
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.KSerializer
@@ -27,22 +23,13 @@ public data class GetMyCommands(
      * A two-letter ISO 639-1 language code or an empty string
      */
     public val language_code: String? = null,
-) : Method<List<BotCommand>> {
-    public override suspend fun Kotbot.execute(): List<BotCommand> = requestForJson(
-        name = "getMyCommands",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetMyCommands
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<List<BotCommand>>> =
+) : Method<GetMyCommands, List<BotCommand>> by Companion {
+    public companion object : Method<GetMyCommands, List<BotCommand>> {
+        override val _deserializer: KSerializer<Response<List<BotCommand>>> =
                 Response.serializer(ListSerializer(BotCommand.serializer()))
+
+        override val _serializer: KSerializer<GetMyCommands> = serializer()
+
+        override val _name: String = "getMyCommands"
     }
 }

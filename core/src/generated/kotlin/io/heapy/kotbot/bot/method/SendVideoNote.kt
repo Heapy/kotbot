@@ -1,18 +1,15 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyMarkup
-import io.heapy.kotbot.bot.model.Thumb
+import io.heapy.kotbot.bot.model.Thumbnail
 import io.heapy.kotbot.bot.model.VideoNote
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
@@ -44,7 +41,7 @@ public data class SendVideoNote(
     /**
      * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files)
      */
-    public val thumb: Thumb? = null,
+    public val thumbnail: Thumbnail? = null,
     /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
@@ -65,22 +62,13 @@ public data class SendVideoNote(
      * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
-) : Method<Message> {
-    public override suspend fun Kotbot.execute(): Message = requestForJson(
-        name = "sendVideoNote",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendVideoNote
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Message>> =
+) : Method<SendVideoNote, Message> by Companion {
+    public companion object : Method<SendVideoNote, Message> {
+        override val _deserializer: KSerializer<Response<Message>> =
                 Response.serializer(Message.serializer())
+
+        override val _serializer: KSerializer<SendVideoNote> = serializer()
+
+        override val _name: String = "sendVideoNote"
     }
 }

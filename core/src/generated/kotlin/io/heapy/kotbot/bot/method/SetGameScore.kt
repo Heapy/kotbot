@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.MessageOrTrue
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -47,22 +43,13 @@ public data class SetGameScore(
      * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
      */
     public val inline_message_id: String? = null,
-) : Method<MessageOrTrue> {
-    public override suspend fun Kotbot.execute(): MessageOrTrue = requestForJson(
-        name = "setGameScore",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetGameScore
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<MessageOrTrue>> =
+) : Method<SetGameScore, MessageOrTrue> by Companion {
+    public companion object : Method<SetGameScore, MessageOrTrue> {
+        override val _deserializer: KSerializer<Response<MessageOrTrue>> =
                 Response.serializer(MessageOrTrue.serializer())
+
+        override val _serializer: KSerializer<SetGameScore> = serializer()
+
+        override val _name: String = "setGameScore"
     }
 }

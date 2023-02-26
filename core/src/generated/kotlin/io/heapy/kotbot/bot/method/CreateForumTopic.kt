@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.ForumTopic
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.KSerializer
@@ -34,22 +30,13 @@ public data class CreateForumTopic(
      * Unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers.
      */
     public val icon_custom_emoji_id: String? = null,
-) : Method<ForumTopic> {
-    public override suspend fun Kotbot.execute(): ForumTopic = requestForJson(
-        name = "createForumTopic",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@CreateForumTopic
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<ForumTopic>> =
+) : Method<CreateForumTopic, ForumTopic> by Companion {
+    public companion object : Method<CreateForumTopic, ForumTopic> {
+        override val _deserializer: KSerializer<Response<ForumTopic>> =
                 Response.serializer(ForumTopic.serializer())
+
+        override val _serializer: KSerializer<CreateForumTopic> = serializer()
+
+        override val _name: String = "createForumTopic"
     }
 }

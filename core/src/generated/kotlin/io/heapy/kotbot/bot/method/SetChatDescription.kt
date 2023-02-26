@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.String
 import kotlinx.serialization.KSerializer
@@ -26,22 +22,13 @@ public data class SetChatDescription(
      * New chat description, 0-255 characters
      */
     public val description: String? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "setChatDescription",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetChatDescription
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<SetChatDescription, Boolean> by Companion {
+    public companion object : Method<SetChatDescription, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<SetChatDescription> = serializer()
+
+        override val _name: String = "setChatDescription"
     }
 }

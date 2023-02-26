@@ -1,13 +1,10 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.MenuButton
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
@@ -20,22 +17,13 @@ public data class GetChatMenuButton(
      * Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
      */
     public val chat_id: Long? = null,
-) : Method<MenuButton> {
-    public override suspend fun Kotbot.execute(): MenuButton = requestForJson(
-        name = "getChatMenuButton",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetChatMenuButton
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<MenuButton>> =
+) : Method<GetChatMenuButton, MenuButton> by Companion {
+    public companion object : Method<GetChatMenuButton, MenuButton> {
+        override val _deserializer: KSerializer<Response<MenuButton>> =
                 Response.serializer(MenuButton.serializer())
+
+        override val _serializer: KSerializer<GetChatMenuButton> = serializer()
+
+        override val _name: String = "getChatMenuButton"
     }
 }

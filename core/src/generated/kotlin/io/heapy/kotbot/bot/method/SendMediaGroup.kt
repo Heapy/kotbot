@@ -1,16 +1,13 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InputMedia
 import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -49,22 +46,13 @@ public data class SendMediaGroup(
      * Pass *True* if the message should be sent even if the specified replied-to message is not found
      */
     public val allow_sending_without_reply: Boolean? = null,
-) : Method<List<Message>> {
-    public override suspend fun Kotbot.execute(): List<Message> = requestForJson(
-        name = "sendMediaGroup",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendMediaGroup
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<List<Message>>> =
+) : Method<SendMediaGroup, List<Message>> by Companion {
+    public companion object : Method<SendMediaGroup, List<Message>> {
+        override val _deserializer: KSerializer<Response<List<Message>>> =
                 Response.serializer(ListSerializer(Message.serializer()))
+
+        override val _serializer: KSerializer<SendMediaGroup> = serializer()
+
+        override val _name: String = "sendMediaGroup"
     }
 }

@@ -1,13 +1,10 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -21,22 +18,13 @@ public data class LeaveChat(
      * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "leaveChat",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@LeaveChat
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<LeaveChat, Boolean> by Companion {
+    public companion object : Method<LeaveChat, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<LeaveChat> = serializer()
+
+        override val _name: String = "leaveChat"
     }
 }

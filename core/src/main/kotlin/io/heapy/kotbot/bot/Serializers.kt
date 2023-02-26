@@ -86,8 +86,8 @@ public object ChatIdSerializer : JsonContentPolymorphicSerializer<ChatId>(ChatId
         }
 }
 
-public object ThumbSerializer : JsonContentPolymorphicSerializer<Thumb>(Thumb::class) {
-    override fun selectDeserializer(element: JsonElement): KSerializer<out Thumb> =
+public object ThumbnailSerializer : JsonContentPolymorphicSerializer<Thumbnail>(Thumbnail::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out Thumbnail> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             else -> error("Unknown argument type: $type")
         }

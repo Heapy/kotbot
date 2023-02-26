@@ -1,13 +1,9 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -52,22 +48,13 @@ public data class SendGame(
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
      */
     public val reply_markup: InlineKeyboardMarkup? = null,
-) : Method<Message> {
-    public override suspend fun Kotbot.execute(): Message = requestForJson(
-        name = "sendGame",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendGame
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Message>> =
+) : Method<SendGame, Message> by Companion {
+    public companion object : Method<SendGame, Message> {
+        override val _deserializer: KSerializer<Response<Message>> =
                 Response.serializer(Message.serializer())
+
+        override val _serializer: KSerializer<SendGame> = serializer()
+
+        override val _name: String = "sendGame"
     }
 }

@@ -41,6 +41,13 @@ repositories {
     mavenCentral()
 }
 
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+        vendor.set(JvmVendorSpec.BELLSOFT)
+    }
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "17"

@@ -1,14 +1,11 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -55,7 +52,7 @@ public data class PromoteChatMember(
      */
     public val can_restrict_members: Boolean? = null,
     /**
-     * Pass *True* if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)
+     * Pass *True* if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)
      */
     public val can_promote_members: Boolean? = null,
     /**
@@ -74,22 +71,13 @@ public data class PromoteChatMember(
      * Pass *True* if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
      */
     public val can_manage_topics: Boolean? = null,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "promoteChatMember",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@PromoteChatMember
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<PromoteChatMember, Boolean> by Companion {
+    public companion object : Method<PromoteChatMember, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<PromoteChatMember> = serializer()
+
+        override val _name: String = "promoteChatMember"
     }
 }

@@ -25,7 +25,7 @@ public data class InlineQueryResultPhoto(
     /**
      * URL of the thumbnail for the photo
      */
-    public val thumb_url: String,
+    public val thumbnail_url: String,
     /**
      * *Optional*. Width of the photo
      */

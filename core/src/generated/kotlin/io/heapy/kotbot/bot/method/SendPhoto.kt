@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
@@ -8,9 +7,6 @@ import io.heapy.kotbot.bot.model.InputFile
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.ReplyMarkup
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -71,22 +67,13 @@ public data class SendPhoto(
      * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
-) : Method<Message> {
-    public override suspend fun Kotbot.execute(): Message = requestForJson(
-        name = "sendPhoto",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendPhoto
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Message>> =
+) : Method<SendPhoto, Message> by Companion {
+    public companion object : Method<SendPhoto, Message> {
+        override val _deserializer: KSerializer<Response<Message>> =
                 Response.serializer(Message.serializer())
+
+        override val _serializer: KSerializer<SendPhoto> = serializer()
+
+        override val _name: String = "sendPhoto"
     }
 }

@@ -1,12 +1,8 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -31,22 +27,13 @@ public data class SetChatAdministratorCustomTitle(
      * New custom title for the administrator; 0-16 characters, emoji are not allowed
      */
     public val custom_title: String,
-) : Method<Boolean> {
-    public override suspend fun Kotbot.execute(): Boolean = requestForJson(
-        name = "setChatAdministratorCustomTitle",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SetChatAdministratorCustomTitle
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Boolean>> =
+) : Method<SetChatAdministratorCustomTitle, Boolean> by Companion {
+    public companion object : Method<SetChatAdministratorCustomTitle, Boolean> {
+        override val _deserializer: KSerializer<Response<Boolean>> =
                 Response.serializer(Boolean.serializer())
+
+        override val _serializer: KSerializer<SetChatAdministratorCustomTitle> = serializer()
+
+        override val _name: String = "setChatAdministratorCustomTitle"
     }
 }

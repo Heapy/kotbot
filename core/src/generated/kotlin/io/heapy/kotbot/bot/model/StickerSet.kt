@@ -37,5 +37,5 @@ public data class StickerSet(
     /**
      * *Optional*. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
      */
-    public val thumb: PhotoSize? = null,
+    public val thumbnail: PhotoSize? = null,
 )

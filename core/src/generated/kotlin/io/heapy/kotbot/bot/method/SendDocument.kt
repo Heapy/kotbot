@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
@@ -8,10 +7,7 @@ import io.heapy.kotbot.bot.model.Document
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.ReplyMarkup
-import io.heapy.kotbot.bot.model.Thumb
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
+import io.heapy.kotbot.bot.model.Thumbnail
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -39,7 +35,7 @@ public data class SendDocument(
     /**
      * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files)
      */
-    public val thumb: Thumb? = null,
+    public val thumbnail: Thumbnail? = null,
     /**
      * Document caption (may also be used when resending documents by *file_id*), 0-1024 characters after entities parsing
      */
@@ -76,22 +72,13 @@ public data class SendDocument(
      * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
-) : Method<Message> {
-    public override suspend fun Kotbot.execute(): Message = requestForJson(
-        name = "sendDocument",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@SendDocument
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<Message>> =
+) : Method<SendDocument, Message> by Companion {
+    public companion object : Method<SendDocument, Message> {
+        override val _deserializer: KSerializer<Response<Message>> =
                 Response.serializer(Message.serializer())
+
+        override val _serializer: KSerializer<SendDocument> = serializer()
+
+        override val _name: String = "sendDocument"
     }
 }

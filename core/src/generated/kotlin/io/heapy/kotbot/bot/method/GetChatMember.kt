@@ -1,19 +1,16 @@
 package io.heapy.kotbot.bot.method
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.ChatMember
-import io.heapy.kotbot.bot.requestForJson
-import io.heapy.kotbot.bot.unwrap
-import io.ktor.client.statement.bodyAsText
 import kotlin.Long
+import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
 /**
- * Use this method to get information about a member of a chat. The method is guaranteed to work only if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
+ * Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
  */
 @Serializable
 public data class GetChatMember(
@@ -25,22 +22,13 @@ public data class GetChatMember(
      * Unique identifier of the target user
      */
     public val user_id: Long,
-) : Method<ChatMember> {
-    public override suspend fun Kotbot.execute(): ChatMember = requestForJson(
-        name = "getChatMember",
-        serialize = {
-            json.encodeToString(
-                serializer(),
-                this@GetChatMember
-            )
-        },
-        deserialize = {
-            json.decodeFromString(deserializer, it.bodyAsText()).unwrap()
-        },
-    )
-
-    public companion object {
-        public val deserializer: KSerializer<Response<ChatMember>> =
+) : Method<GetChatMember, ChatMember> by Companion {
+    public companion object : Method<GetChatMember, ChatMember> {
+        override val _deserializer: KSerializer<Response<ChatMember>> =
                 Response.serializer(ChatMember.serializer())
+
+        override val _serializer: KSerializer<GetChatMember> = serializer()
+
+        override val _name: String = "getChatMember"
     }
 }

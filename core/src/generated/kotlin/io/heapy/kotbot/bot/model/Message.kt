@@ -225,6 +225,14 @@ public data class Message(
      */
     public val successful_payment: SuccessfulPayment? = null,
     /**
+     * *Optional*. Service message: a user was shared with the bot
+     */
+    public val user_shared: UserShared? = null,
+    /**
+     * *Optional*. Service message: a chat was shared with the bot
+     */
+    public val chat_shared: ChatShared? = null,
+    /**
      * *Optional*. The domain name of the website on which the user has logged in. [More about Telegram Login &raquo;](https://core.telegram.org/widgets/login)
      */
     public val connected_website: String? = null,
