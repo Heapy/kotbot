@@ -5,6 +5,50 @@ create and set up a bot, please consult our Introduction to Bots and Bot FAQ.
 
 > Subscribe to @BotNews to be the first to know about the latest updates and join the discussion in @BotTalk
 
+#### March 9, 2023
+
+Bot API 6.6
+
+* Added the ability to set different bot descriptions for different user languages using the method setMyDescription.
+* Added the ability to get the current bot description in the given language as the class BotDescription using the
+  method getMyDescription.
+* Added the ability to set different bot short descriptions for different user languages using the method
+  setMyShortDescription.
+* Added the ability to get the current bot short description in the given language as the class BotShortDescription
+  using the method getMyShortDescription.
+* Added the parameter emoji to the method sendSticker to specify an emoji for just uploaded stickers.
+* Added support for the creation of custom emoji sticker sets in createNewStickerSet.
+* Added the parameter needs_repainting to the method createNewStickerSet to automatically change the color of emoji
+  based on context (e.g., use text color in messages, accent color in statuses, etc.).
+* Added the field needs_repainting to the class Sticker.
+* Replaced the parameters png_sticker, tgs_sticker, webm_sticker, emojis and mask_position in the method addStickerToSet
+  with the parameter sticker of the type InputSticker.
+* Added support for the creation of sticker sets with multiple initial stickers in createNewStickerSet by replacing the
+  parameters png_sticker, tgs_sticker, webm_sticker, emojis and mask_position with the parameters stickers and
+  sticker_format.
+* Added support for .WEBP files in createNewStickerSet and addStickerToSet.
+* Added support for .WEBP, .TGS, and .WEBM files in uploadStickerFile by replacing the parameter png_sticker in the
+  method uploadStickerFile with the parameters sticker and sticker_format.
+* Added the ability to specify search keywords for stickers added to sticker sets.
+* Added the method setCustomEmojiStickerSetThumbnail for editing the thumbnail of custom emoji sticker sets created by
+  the bot.
+* Added the method setStickerSetTitle for editing the title of sticker sets created by the bot.
+* Added the method deleteStickerSet for complete deletion of a given sticker set that was created by the bot.
+* Added the method setStickerEmojiList for changing the list of emoji associated with a sticker.
+* Added the method setStickerKeywords for changing the search keywords assigned to a sticker.
+* Added the method setStickerMaskPosition for changing the mask position of a mask sticker.
+* Renamed the field thumb in the classes Animation, Audio, Document, Sticker, Video, VideoNote, InputMediaAnimation,
+  InputMediaAudio, InputMediaDocument, InputMediaVideo, StickerSet to thumbnail.
+* Renamed the parameter thumb in the methods sendAnimation, sendAudio, sendDocument, sendVideo, sendVideoNote to
+  thumbnail.
+* Renamed the method setStickerSetThumb to setStickerSetThumbnail and its parameter thumb to thumbnail.
+* Renamed the fields thumb_url, thumb_width, and thumb_height in the classes InlineQueryResultArticle,
+  InlineQueryResultContact, InlineQueryResultDocument, InlineQueryResultLocation, and InlineQueryResultVenue to
+  thumbnail_url, thumbnail_width, and thumbnail_height respectively.
+* Renamed the field thumb_url in the classes InlineQueryResultPhoto and InlineQueryResultVideo to thumbnail_url.
+* Renamed the fields thumb_url and thumb_mime_type in the classes InlineQueryResultGif, and InlineQueryResultMpeg4Gif to
+  thumbnail_url and thumbnail_mime_type respectively.
+
 #### February 3, 2023
 
 Bot API 6.5
@@ -65,34 +109,6 @@ Bot API 6.3
   sendInvoice, sendGame, sendMediaGroup, copyMessage, forwardMessage to support sending of messages to a forum topic.
 * Added support for Multiple Usernames via the field active_usernames in the class Chat.
 * Added the field emoji_status_custom_emoji_id to the class Chat.
-
-#### August 12, 2022
-
-Bot API 6.2
-
-Custom Emoji Support
-
-* Added the MessageEntity type “custom_emoji”.
-* Added the field custom_emoji_id to the class MessageEntity for “custom_emoji” entities.
-* Added the method getCustomEmojiStickers.
-* Added the fields type and custom_emoji_id to the class Sticker.
-* Added the field sticker_type to the class StickerSet, describing the type of stickers in the set.
-* The field contains_masks has been removed from the documentation of the class StickerSet. The field is still returned
-  in the object for backward compatibility, but new bots should use the field sticker_type instead.
-* Added the parameter sticker_type to the method createNewStickerSet.
-* The parameter contains_masks has been removed from the documentation of the method createNewStickerSet. The parameter
-  will still work for backward compatibility, but new bots should use the parameter sticker_type instead.
-
-Web App Improvements
-
-* Added the field isClosingConfirmationEnabled and the methods enableClosingConfirmation, disableClosingConfirmation,
-  showPopup, showAlert, showConfirm to the class WebApp.
-* Added the field is_premium to the class WebAppUser.
-* Added the event popupClosed.
-
-Other Changes
-
-* Added the field has_restricted_voice_and_video_messages to the class Chat to support the new setting.
 
 See earlier changes »
 
@@ -194,7 +210,7 @@ Use this method to receive incoming updates using long polling (wiki). Returns a
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 |  |
-| offset | Integer | Optional | Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten. |
+| offset | Integer | Optional | Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten. |
 | limit | Integer | Optional | Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100. |
 | timeout | Integer | Optional | Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only. |
 | allowed_updates | Array of String | Optional | A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time. |
@@ -450,7 +466,7 @@ This object represents an animation file (GIF or H.264/MPEG-4 AVC video without 
 | width | Integer | Video width as defined by sender |
 | height | Integer | Video height as defined by sender |
 | duration | Integer | Duration of the video in seconds as defined by sender |
-| thumb | PhotoSize | Optional. Animation thumbnail as defined by sender |
+| thumbnail | PhotoSize | Optional. Animation thumbnail as defined by sender |
 | file_name | String | Optional. Original animation filename as defined by sender |
 | mime_type | String | Optional. MIME type of the file as defined by sender |
 | file_size | Integer | Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value. |
@@ -470,7 +486,7 @@ This object represents an audio file to be treated as music by the Telegram clie
 | file_name | String | Optional. Original filename as defined by sender |
 | mime_type | String | Optional. MIME type of the file as defined by sender |
 | file_size | Integer | Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value. |
-| thumb | PhotoSize | Optional. Thumbnail of the album cover to which the music file belongs |
+| thumbnail | PhotoSize | Optional. Thumbnail of the album cover to which the music file belongs |
 
 #### Document
 
@@ -481,7 +497,7 @@ This object represents a general file (as opposed to photos, voice messages and 
 |  |
 | file_id | String | Identifier for this file, which can be used to download or reuse the file |
 | file_unique_id | String | Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file. |
-| thumb | PhotoSize | Optional. Document thumbnail as defined by sender |
+| thumbnail | PhotoSize | Optional. Document thumbnail as defined by sender |
 | file_name | String | Optional. Original filename as defined by sender |
 | mime_type | String | Optional. MIME type of the file as defined by sender |
 | file_size | Integer | Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value. |
@@ -498,7 +514,7 @@ This object represents a video file.
 | width | Integer | Video width as defined by sender |
 | height | Integer | Video height as defined by sender |
 | duration | Integer | Duration of the video in seconds as defined by sender |
-| thumb | PhotoSize | Optional. Video thumbnail |
+| thumbnail | PhotoSize | Optional. Video thumbnail |
 | file_name | String | Optional. Original filename as defined by sender |
 | mime_type | String | Optional. MIME type of the file as defined by sender |
 | file_size | Integer | Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value. |
@@ -514,7 +530,7 @@ This object represents a video message (available in Telegram apps as of v.4.0).
 | file_unique_id | String | Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file. |
 | length | Integer | Video width and height (diameter of the video message) as defined by sender |
 | duration | Integer | Duration of the video in seconds as defined by sender |
-| thumb | PhotoSize | Optional. Video thumbnail |
+| thumbnail | PhotoSize | Optional. Video thumbnail |
 | file_size | Integer | Optional. File size in bytes |
 
 #### Voice
@@ -827,7 +843,7 @@ unsupported message.
 #### KeyboardButtonRequestUser
 
 This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared
-with the bot when the corresponding button is pressed.
+with the bot when the corresponding button is pressed. More about requesting users »
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -839,7 +855,7 @@ with the bot when the corresponding button is pressed.
 #### KeyboardButtonRequestChat
 
 This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared
-with the bot when the corresponding button is pressed.
+with the bot when the corresponding button is pressed. More about requesting chats »
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -1310,6 +1326,24 @@ Represents the scope of bot commands, covering a specific member of a group or s
 | chat_id | Integer or String | Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) |
 | user_id | Integer | Unique identifier of the target user |
 
+#### BotDescription
+
+This object represents the bot's description.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| description | String | The bot's description |
+
+#### BotShortDescription
+
+This object represents the bot's short description.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| short_description | String | The bot's short description |
+
 #### MenuButton
 
 This object describes the bot's menu button in a private chat. It should be one of
@@ -1393,7 +1427,7 @@ Represents a video to be sent.
 |  |
 | type | String | Type of the result, must be video |
 | media | String | File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » |
-| thumb | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional. Caption of the video to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the video caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1412,7 +1446,7 @@ Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be
 |  |
 | type | String | Type of the result, must be animation |
 | media | String | File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » |
-| thumb | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the animation caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1430,7 +1464,7 @@ Represents an audio file to be treated as music to be sent.
 |  |
 | type | String | Type of the result, must be audio |
 | media | String | File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » |
-| thumb | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional. Caption of the audio to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the audio caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1447,7 +1481,7 @@ Represents a general file to be sent.
 |  |
 | type | String | Type of the result, must be document |
 | media | String | File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » |
-| thumb | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional. Caption of the document to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the document caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1724,7 +1758,7 @@ For sending voice messages, use the sendVoice method instead.
 | duration | Integer | Optional | Duration of the audio in seconds |
 | performer | String | Optional | Performer |
 | title | String | Optional | Track name |
-| thumb | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | disable_notification | Boolean | Optional | Sends the message silently. Users will receive a notification with no sound. |
 | protect_content | Boolean | Optional | Protects the contents of the sent message from forwarding and saving |
 | reply_to_message_id | Integer | Optional | If the message is a reply, ID of the original message |
@@ -1742,7 +1776,7 @@ type of up to 50 MB in size, this limit may be changed in the future.
 | chat_id | Integer or String | Yes | Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
 | message_thread_id | Integer | Optional | Unique identifier for the target message thread (topic) of the forum; for forum supergroups only |
 | document | InputFile or String | Yes | File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files » |
-| thumb | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional | Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing |
 | parse_mode | String | Optional | Mode for parsing entities in the document caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional | A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1768,7 +1802,7 @@ changed in the future.
 | duration | Integer | Optional | Duration of sent video in seconds |
 | width | Integer | Optional | Video width |
 | height | Integer | Optional | Video height |
-| thumb | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional | Video caption (may also be used when resending videos by file_id), 0-1024 characters after entities parsing |
 | parse_mode | String | Optional | Mode for parsing entities in the video caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional | A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1794,7 +1828,7 @@ returned. Bots can currently send animation files of up to 50 MB in size, this l
 | duration | Integer | Optional | Duration of sent animation in seconds |
 | width | Integer | Optional | Animation width |
 | height | Integer | Optional | Animation height |
-| thumb | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | caption | String | Optional | Animation caption (may also be used when resending animation by file_id), 0-1024 characters after entities parsing |
 | parse_mode | String | Optional | Mode for parsing entities in the animation caption. See formatting options for more details. |
 | caption_entities | Array of MessageEntity | Optional | A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode |
@@ -1841,7 +1875,7 @@ messages. On success, the sent Message is returned.
 | video_note | InputFile or String | Yes | Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending video notes by a URL is currently unsupported |
 | duration | Integer | Optional | Duration of sent video in seconds |
 | length | Integer | Optional | Video width and height, i.e. diameter of the video message |
-| thumb | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
+| thumbnail | InputFile or String | Optional | Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » |
 | disable_notification | Boolean | Optional | Sends the message silently. Users will receive a notification with no sound. |
 | protect_content | Boolean | Optional | Protects the contents of the sent message from forwarding and saving |
 | reply_to_message_id | Integer | Optional | If the message is a reply, ID of the original message |
@@ -1884,38 +1918,6 @@ Use this method to send point on the map. On success, the sent Message is return
 | reply_to_message_id | Integer | Optional | If the message is a reply, ID of the original message |
 | allow_sending_without_reply | Boolean | Optional | Pass True if the message should be sent even if the specified replied-to message is not found |
 | reply_markup | InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply | Optional | Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. |
-
-#### editMessageLiveLocation
-
-Use this method to edit live location messages. A location can be edited until its live_period expires or editing is
-explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message,
-the edited Message is returned, otherwise True is returned.
-
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-|  |
-| chat_id | Integer or String | Optional | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
-| message_id | Integer | Optional | Required if inline_message_id is not specified. Identifier of the message to edit |
-| inline_message_id | String | Optional | Required if chat_id and message_id are not specified. Identifier of the inline message |
-| latitude | Float number | Yes | Latitude of new location |
-| longitude | Float number | Yes | Longitude of new location |
-| horizontal_accuracy | Float number | Optional | The radius of uncertainty for the location, measured in meters; 0-1500 |
-| heading | Integer | Optional | Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified. |
-| proximity_alert_radius | Integer | Optional | The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified. |
-| reply_markup | InlineKeyboardMarkup | Optional | A JSON-serialized object for a new inline keyboard. |
-
-#### stopMessageLiveLocation
-
-Use this method to stop updating a live location message before live_period expires. On success, if the message is not
-an inline message, the edited Message is returned, otherwise True is returned.
-
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-|  |
-| chat_id | Integer or String | Optional | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
-| message_id | Integer | Optional | Required if inline_message_id is not specified. Identifier of the message with live location to stop |
-| inline_message_id | String | Optional | Required if chat_id and message_id are not specified. Identifier of the inline message |
-| reply_markup | InlineKeyboardMarkup | Optional | A JSON-serialized object for a new inline keyboard. |
 
 #### sendVenue
 
@@ -2581,6 +2583,47 @@ BotCommand objects. If commands aren't set, an empty list is returned.
 | scope | BotCommandScope | Optional | A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault. |
 | language_code | String | Optional | A two-letter ISO 639-1 language code or an empty string |
 
+#### setMyDescription
+
+Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns
+True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| description | String | Optional | New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language. |
+| language_code | String | Optional | A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description. |
+
+#### getMyDescription
+
+Use this method to get the current bot description for the given user language. Returns BotDescription on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| language_code | String | Optional | A two-letter ISO 639-1 language code or an empty string |
+
+#### setMyShortDescription
+
+Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together
+with the link when users share the bot. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| short_description | String | Optional | New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language. |
+| language_code | String | Optional | A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description. |
+
+#### getMyShortDescription
+
+Use this method to get the current bot short description for the given user language. Returns BotShortDescription on
+success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| language_code | String | Optional | A two-letter ISO 639-1 language code or an empty string |
+
 #### setChatMenuButton
 
 Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success.
@@ -2684,6 +2727,38 @@ otherwise True is returned.
 | media | InputMedia | Yes | A JSON-serialized object for a new media content of the message |
 | reply_markup | InlineKeyboardMarkup | Optional | A JSON-serialized object for a new inline keyboard. |
 
+#### editMessageLiveLocation
+
+Use this method to edit live location messages. A location can be edited until its live_period expires or editing is
+explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message,
+the edited Message is returned, otherwise True is returned.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| chat_id | Integer or String | Optional | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
+| message_id | Integer | Optional | Required if inline_message_id is not specified. Identifier of the message to edit |
+| inline_message_id | String | Optional | Required if chat_id and message_id are not specified. Identifier of the inline message |
+| latitude | Float number | Yes | Latitude of new location |
+| longitude | Float number | Yes | Longitude of new location |
+| horizontal_accuracy | Float number | Optional | The radius of uncertainty for the location, measured in meters; 0-1500 |
+| heading | Integer | Optional | Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified. |
+| proximity_alert_radius | Integer | Optional | The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified. |
+| reply_markup | InlineKeyboardMarkup | Optional | A JSON-serialized object for a new inline keyboard. |
+
+#### stopMessageLiveLocation
+
+Use this method to stop updating a live location message before live_period expires. On success, if the message is not
+an inline message, the edited Message is returned, otherwise True is returned.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| chat_id | Integer or String | Optional | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
+| message_id | Integer | Optional | Required if inline_message_id is not specified. Identifier of the message with live location to stop |
+| inline_message_id | String | Optional | Required if chat_id and message_id are not specified. Identifier of the inline message |
+| reply_markup | InlineKeyboardMarkup | Optional | A JSON-serialized object for a new inline keyboard. |
+
 #### editMessageReplyMarkup
 
 Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message,
@@ -2742,12 +2817,13 @@ This object represents a sticker.
 | height | Integer | Sticker height |
 | is_animated | Boolean | True, if the sticker is animated |
 | is_video | Boolean | True, if the sticker is a video sticker |
-| thumb | PhotoSize | Optional. Sticker thumbnail in the .WEBP or .JPG format |
+| thumbnail | PhotoSize | Optional. Sticker thumbnail in the .WEBP or .JPG format |
 | emoji | String | Optional. Emoji associated with the sticker |
 | set_name | String | Optional. Name of the sticker set to which the sticker belongs |
 | premium_animation | File | Optional. For premium regular stickers, premium animation for the sticker |
 | mask_position | MaskPosition | Optional. For mask stickers, the position where the mask should be placed |
 | custom_emoji_id | String | Optional. For custom emoji stickers, unique identifier of the custom emoji |
+| needs_repainting | True | Optional. True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places |
 | file_size | Integer | Optional. File size in bytes |
 
 #### StickerSet
@@ -2763,7 +2839,7 @@ This object represents a sticker set.
 | is_animated | Boolean | True, if the sticker set contains animated stickers |
 | is_video | Boolean | True, if the sticker set contains video stickers |
 | stickers | Array of Sticker | List of all set stickers |
-| thumb | PhotoSize | Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format |
+| thumbnail | PhotoSize | Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format |
 
 #### MaskPosition
 
@@ -2777,6 +2853,18 @@ This object describes the position on faces where a mask should be placed by def
 | y_shift | Float number | Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position. |
 | scale | Float number | Mask scaling coefficient. For example, 2.0 means double size. |
 
+#### InputSticker
+
+This object describes a sticker to be added to a sticker set.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| sticker | InputFile or String | The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files » |
+| emoji_list | Array of String | List of 1-20 emoji associated with the sticker |
+| mask_position | MaskPosition | Optional. Position where the mask should be placed on faces. For “mask” stickers only. |
+| keywords | Array of String | Optional. List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only. |
+
 #### sendSticker
 
 Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
@@ -2786,7 +2874,8 @@ Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On
 |  |
 | chat_id | Integer or String | Yes | Unique identifier for the target chat or username of the target channel (in the format @channelusername) |
 | message_thread_id | Integer | Optional | Unique identifier for the target message thread (topic) of the forum; for forum supergroups only |
-| sticker | InputFile or String | Yes | Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files » |
+| sticker | InputFile or String | Yes | Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files ». Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL. |
+| emoji | String | Optional | Emoji associated with the sticker; only for just uploaded stickers |
 | disable_notification | Boolean | Optional | Sends the message silently. Users will receive a notification with no sound. |
 | protect_content | Boolean | Optional | Protects the contents of the sent message from forwarding and saving |
 | reply_to_message_id | Integer | Optional | If the message is a reply, ID of the original message |
@@ -2814,19 +2903,20 @@ objects.
 
 #### uploadStickerFile
 
-Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods (
-can be used multiple times). Returns the uploaded File on success.
+Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (
+the file can be used multiple times). Returns the uploaded File on success.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 |  |
 | user_id | Integer | Yes | User identifier of sticker file owner |
-| png_sticker | InputFile | Yes | PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. More information on Sending Files » |
+| sticker | InputFile | Yes | A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. More information on Sending Files » |
+| sticker_format | String | Yes | Format of the sticker, must be one of “static”, “animated”, “video” |
 
 #### createNewStickerSet
 
 Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created.
-You must use exactly one of the fields png_sticker, tgs_sticker, or webm_sticker. Returns True on success.
+Returns True on success.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -2834,29 +2924,23 @@ You must use exactly one of the fields png_sticker, tgs_sticker, or webm_sticker
 | user_id | Integer | Yes | User identifier of created sticker set owner |
 | name | String | Yes | Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters. |
 | title | String | Yes | Sticker set title, 1-64 characters |
-| png_sticker | InputFile or String | Optional | PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files » |
-| tgs_sticker | InputFile | Optional | TGS animation with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#animated-sticker-requirements for technical requirements |
-| webm_sticker | InputFile | Optional | WEBM video with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#video-sticker-requirements for technical requirements |
-| sticker_type | String | Optional | Type of stickers in the set, pass “regular” or “mask”. Custom emoji sticker sets can't be created via the Bot API at the moment. By default, a regular sticker set is created. |
-| emojis | String | Yes | One or more emoji corresponding to the sticker |
-| mask_position | MaskPosition | Optional | A JSON-serialized object for position where the mask should be placed on faces |
+| stickers | Array of InputSticker | Yes | A JSON-serialized list of 1-50 initial stickers to be added to the sticker set |
+| sticker_format | String | Yes | Format of stickers in the set, must be one of “static”, “animated”, “video” |
+| sticker_type | String | Optional | Type of stickers in the set, pass “regular”, “mask”, or “custom_emoji”. By default, a regular sticker set is created. |
+| needs_repainting | Boolean | Optional | Pass True if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only |
 
 #### addStickerToSet
 
-Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker,
-tgs_sticker, or webm_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker
-sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
+Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format
+of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can
+have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 |  |
 | user_id | Integer | Yes | User identifier of sticker set owner |
 | name | String | Yes | Sticker set name |
-| png_sticker | InputFile or String | Optional | PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files » |
-| tgs_sticker | InputFile | Optional | TGS animation with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#animated-sticker-requirements for technical requirements |
-| webm_sticker | InputFile | Optional | WEBM video with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#video-sticker-requirements for technical requirements |
-| emojis | String | Yes | One or more emoji corresponding to the sticker |
-| mask_position | MaskPosition | Optional | A JSON-serialized object for position where the mask should be placed on faces |
+| sticker | InputSticker | Yes | A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed. |
 
 #### setStickerPositionInSet
 
@@ -2877,17 +2961,79 @@ Use this method to delete a sticker from a set created by the bot. Returns True 
 |  |
 | sticker | String | Yes | File identifier of the sticker |
 
-#### setStickerSetThumb
+#### setStickerEmojiList
 
-Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only.
-Video thumbnails can be set only for video sticker sets only. Returns True on success.
+Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a
+sticker set created by the bot. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| sticker | String | Yes | File identifier of the sticker |
+| emoji_list | Array of String | Yes | A JSON-serialized list of 1-20 emoji associated with the sticker |
+
+#### setStickerKeywords
+
+Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a
+sticker set created by the bot. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| sticker | String | Yes | File identifier of the sticker |
+| keywords | Array of String | Optional | A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters |
+
+#### setStickerMaskPosition
+
+Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created
+by the bot. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| sticker | String | Yes | File identifier of the sticker |
+| mask_position | MaskPosition | Optional | A JSON-serialized object with the position where the mask should be placed on faces. Omit the parameter to remove the mask position. |
+
+#### setStickerSetTitle
+
+Use this method to set the title of a created sticker set. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| name | String | Yes | Sticker set name |
+| title | String | Yes | Sticker set title, 1-64 characters |
+
+#### setStickerSetThumbnail
+
+Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the
+format of the stickers in the set. Returns True on success.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 |  |
 | name | String | Yes | Sticker set name |
 | user_id | Integer | Yes | User identifier of the sticker set owner |
-| thumb | InputFile or String | Optional | A PNG image with the thumbnail, must be up to 128 kilobytes in size and have width and height exactly 100px, or a TGS animation with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements, or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated sticker set thumbnails can't be uploaded via HTTP URL. |
+| thumbnail | InputFile or String | Optional | A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. |
+
+#### setCustomEmojiStickerSetThumbnail
+
+Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| name | String | Yes | Sticker set name |
+| custom_emoji_id | String | Optional | Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail. |
+
+#### deleteStickerSet
+
+Use this method to delete a sticker set that was created by the bot. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| name | String | Yes | Sticker set name |
 
 ### Inline mode
 
@@ -2971,9 +3117,9 @@ Represents a link to an article or web page.
 | url | String | Optional. URL of the result |
 | hide_url | Boolean | Optional. Pass True if you don't want the URL to be shown in the message |
 | description | String | Optional. Short description of the result |
-| thumb_url | String | Optional. Url of the thumbnail for the result |
-| thumb_width | Integer | Optional. Thumbnail width |
-| thumb_height | Integer | Optional. Thumbnail height |
+| thumbnail_url | String | Optional. Url of the thumbnail for the result |
+| thumbnail_width | Integer | Optional. Thumbnail width |
+| thumbnail_height | Integer | Optional. Thumbnail height |
 
 #### InlineQueryResultPhoto
 
@@ -2986,7 +3132,7 @@ can use input_message_content to send a message with the specified content inste
 | type | String | Type of the result, must be photo |
 | id | String | Unique identifier for this result, 1-64 bytes |
 | photo_url | String | A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB |
-| thumb_url | String | URL of the thumbnail for the photo |
+| thumbnail_url | String | URL of the thumbnail for the photo |
 | photo_width | Integer | Optional. Width of the photo |
 | photo_height | Integer | Optional. Height of the photo |
 | title | String | Optional. Title for the result |
@@ -3012,8 +3158,8 @@ animation.
 | gif_width | Integer | Optional. Width of the GIF |
 | gif_height | Integer | Optional. Height of the GIF |
 | gif_duration | Integer | Optional. Duration of the GIF in seconds |
-| thumb_url | String | URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result |
-| thumb_mime_type | String | Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg” |
+| thumbnail_url | String | URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result |
+| thumbnail_mime_type | String | Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg” |
 | title | String | Optional. Title for the result |
 | caption | String | Optional. Caption of the GIF file to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the caption. See formatting options for more details. |
@@ -3036,8 +3182,8 @@ the specified content instead of the animation.
 | mpeg4_width | Integer | Optional. Video width |
 | mpeg4_height | Integer | Optional. Video height |
 | mpeg4_duration | Integer | Optional. Video duration in seconds |
-| thumb_url | String | URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result |
-| thumb_mime_type | String | Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg” |
+| thumbnail_url | String | URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result |
+| thumbnail_mime_type | String | Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg” |
 | title | String | Optional. Title for the result |
 | caption | String | Optional. Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the caption. See formatting options for more details. |
@@ -3062,7 +3208,7 @@ input_message_content.
 | id | String | Unique identifier for this result, 1-64 bytes |
 | video_url | String | A valid URL for the embedded video player or video file |
 | mime_type | String | MIME type of the content of the video URL, “text/html” or “video/mp4” |
-| thumb_url | String | URL of the thumbnail (JPEG only) for the video |
+| thumbnail_url | String | URL of the thumbnail (JPEG only) for the video |
 | title | String | Title for the result |
 | caption | String | Optional. Caption of the video to be sent, 0-1024 characters after entities parsing |
 | parse_mode | String | Optional. Mode for parsing entities in the video caption. See formatting options for more details. |
@@ -3138,9 +3284,9 @@ can use input_message_content to send a message with the specified content inste
 | description | String | Optional. Short description of the result |
 | reply_markup | InlineKeyboardMarkup | Optional. Inline keyboard attached to the message |
 | input_message_content | InputMessageContent | Optional. Content of the message to be sent instead of the file |
-| thumb_url | String | Optional. URL of the thumbnail (JPEG only) for the file |
-| thumb_width | Integer | Optional. Thumbnail width |
-| thumb_height | Integer | Optional. Thumbnail height |
+| thumbnail_url | String | Optional. URL of the thumbnail (JPEG only) for the file |
+| thumbnail_width | Integer | Optional. Thumbnail width |
+| thumbnail_height | Integer | Optional. Thumbnail height |
 
 Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 
@@ -3163,9 +3309,9 @@ input_message_content to send a message with the specified content instead of th
 | proximity_alert_radius | Integer | Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified. |
 | reply_markup | InlineKeyboardMarkup | Optional. Inline keyboard attached to the message |
 | input_message_content | InputMessageContent | Optional. Content of the message to be sent instead of the location |
-| thumb_url | String | Optional. Url of the thumbnail for the result |
-| thumb_width | Integer | Optional. Thumbnail width |
-| thumb_height | Integer | Optional. Thumbnail height |
+| thumbnail_url | String | Optional. Url of the thumbnail for the result |
+| thumbnail_width | Integer | Optional. Thumbnail width |
+| thumbnail_height | Integer | Optional. Thumbnail height |
 
 Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 
@@ -3189,9 +3335,9 @@ send a message with the specified content instead of the venue.
 | google_place_type | String | Optional. Google Places type of the venue. (See supported types.) |
 | reply_markup | InlineKeyboardMarkup | Optional. Inline keyboard attached to the message |
 | input_message_content | InputMessageContent | Optional. Content of the message to be sent instead of the venue |
-| thumb_url | String | Optional. Url of the thumbnail for the result |
-| thumb_width | Integer | Optional. Thumbnail width |
-| thumb_height | Integer | Optional. Thumbnail height |
+| thumbnail_url | String | Optional. Url of the thumbnail for the result |
+| thumbnail_width | Integer | Optional. Thumbnail width |
+| thumbnail_height | Integer | Optional. Thumbnail height |
 
 Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 
@@ -3211,9 +3357,9 @@ input_message_content to send a message with the specified content instead of th
 | vcard | String | Optional. Additional data about the contact in the form of a vCard, 0-2048 bytes |
 | reply_markup | InlineKeyboardMarkup | Optional. Inline keyboard attached to the message |
 | input_message_content | InputMessageContent | Optional. Content of the message to be sent instead of the contact |
-| thumb_url | String | Optional. Url of the thumbnail for the result |
-| thumb_width | Integer | Optional. Thumbnail width |
-| thumb_height | Integer | Optional. Thumbnail height |
+| thumbnail_url | String | Optional. Url of the thumbnail for the result |
+| thumbnail_width | Integer | Optional. Thumbnail width |
+| thumbnail_height | Integer | Optional. Thumbnail height |
 
 Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 
