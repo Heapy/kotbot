@@ -53,6 +53,10 @@ public data class Chat(
      */
     public val emoji_status_custom_emoji_id: String? = null,
     /**
+     * *Optional*. Expiration date of the emoji status of the other party in a private chat, if any. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+     */
+    public val emoji_status_expiration_date: Int? = null,
+    /**
      * *Optional*. Bio of the other party in a private chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
      */
     public val bio: String? = null,

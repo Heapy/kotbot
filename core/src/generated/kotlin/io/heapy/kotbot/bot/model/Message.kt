@@ -121,6 +121,10 @@ public data class Message(
      */
     public val sticker: Sticker? = null,
     /**
+     * *Optional*. Message is a forwarded story
+     */
+    public val story: Story? = null,
+    /**
      * *Optional*. Message is a video, information about the video
      */
     public val video: Video? = null,

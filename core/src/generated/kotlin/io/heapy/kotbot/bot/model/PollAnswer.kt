@@ -15,11 +15,15 @@ public data class PollAnswer(
      */
     public val poll_id: String,
     /**
-     * The user, who changed the answer to the poll
+     * *Optional*. The chat that changed the answer to the poll, if the voter is anonymous
      */
-    public val user: User,
+    public val voter_chat: Chat? = null,
     /**
-     * 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
+     * *Optional*. The user that changed the answer to the poll, if the voter isn't anonymous
+     */
+    public val user: User? = null,
+    /**
+     * 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
      */
     public val option_ids: List<Int>,
 )
