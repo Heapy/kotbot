@@ -14,6 +14,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -35,6 +36,7 @@ public data class Kotbot(
     public val json: Json = kotbotJson,
 )
 
+@OptIn(ExperimentalSerializationApi::class)
 public val kotbotJson: Json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
