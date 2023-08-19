@@ -5,6 +5,23 @@ create and set up a bot, please consult our Introduction to Bots and Bot FAQ.
 
 > Subscribe to @BotNews to be the first to know about the latest updates and join the discussion in @BotTalk
 
+#### April 21, 2023
+
+Bot API 6.7
+
+* Added support for launching Web Apps from inline query results by replacing the parameters switch_pm_text and
+  switch_pm_parameter of the method answerInlineQuery with the parameter button of type InlineQueryResultsButton.
+* Added the field web_app_name to the class WriteAccessAllowed.
+* Added the field switch_inline_query_chosen_chat of the type SwitchInlineQueryChosenChat to the class
+  InlineKeyboardButton, which allows bots to switch to inline mode in a chosen chat of the given type.
+* Added the field via_chat_folder_invite_link to the class ChatMemberUpdated.
+* Added the ability to set different bot names for different user languages using the method setMyName.
+* Added the ability to get the current bot name in the given language as the class BotName using the method getMyName.
+* Added the ability to change bot settings from the bot's profile in official Telegram apps, including the ability to
+  set animated profile photos.
+* Added the ability to specify custom emoji entities using HTML and MarkdownV2 formatting options for bots that
+  purchased additional usernames on Fragment.
+
 #### March 9, 2023
 
 Bot API 6.6
@@ -62,53 +79,6 @@ Bot API 6.5
   can_send_voice_notes for different media types.
 * Added the parameter use_independent_chat_permissions to the methods restrictChatMember and setChatPermissions.
 * Added the field user_chat_id to the class ChatJoinRequest.
-
-#### December 30, 2022
-
-Bot API 6.4
-
-* Added the field is_persistent to the class ReplyKeyboardMarkup, allowing to control when the keyboard is shown.
-* Added the parameter has_spoiler to the methods sendPhoto, sendVideo, and sendAnimation.
-* Added the field has_spoiler to the classes InputMediaPhoto, InputMediaVideo, and InputMediaAnimation.
-* Added the field has_media_spoiler to the class Message.
-* The parameters name and icon_custom_emoji_id of the method editForumTopic are now optional. If they are omitted, the
-  existing values are kept.
-* Added the classes ForumTopicEdited, GeneralForumTopicHidden, GeneralForumTopicUnhidden, and WriteAccessAllowed and the
-  fields forum_topic_edited, general_forum_topic_hidden, general_forum_topic_unhidden, and write_access_allowed to the
-  class Message.
-* Added the methods editGeneralForumTopic, closeGeneralForumTopic, reopenGeneralForumTopic, hideGeneralForumTopic,
-  unhideGeneralForumTopic for managing the General topic in forums.
-* Added the parameter message_thread_id to the method sendChatAction for sending chat actions to a specific message
-  thread or a forum topic.
-* Added the field has_hidden_members to the class Chat. Note that the method getChatMember is only guaranteed to work if
-  the bot is an administrator in the chat.
-* Added the field has_aggressive_anti_spam_enabled to the class Chat.
-* Added Web App events qrTextReceived and clipboardTextReceived.
-* Added the field platform to the class WebApp.
-* Added the methods showScanQrPopup, closeScanQrPopup, and readTextFromClipboard to the class WebApp.
-* Added the parameter options to the method openLink of the class WebApp.
-
-#### November 5, 2022
-
-Bot API 6.3
-
-* Added support for Topics in Groups.
-* Added the field is_forum to the class Chat.
-* Added the fields is_topic_message and message_thread_id to the class Message to allow detection of messages belonging
-  to a forum topic and their message thread identifier.
-* Added the classes ForumTopicCreated, ForumTopicClosed, and ForumTopicReopened and the fields forum_topic_created,
-  forum_topic_closed, and forum_topic_reopened to the class Message. Note that service messages about forum topic
-  creation can't be deleted with the deleteMessage method.
-* Added the field can_manage_topics to the classes ChatAdministratorRights, ChatPermissions, ChatMemberAdministrator,
-  and ChatMemberRestricted.
-* Added the parameter can_manage_topics to the method promoteChatMember.
-* Added the methods createForumTopic, editForumTopic, closeForumTopic, reopenForumTopic, deleteForumTopic,
-  unpinAllForumTopicMessages, and getForumTopicIconStickers for forum topic management.
-* Added the parameter message_thread_id to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio,
-  sendDocument, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendPoll, sendDice,
-  sendInvoice, sendGame, sendMediaGroup, copyMessage, forwardMessage to support sending of messages to a forum topic.
-* Added support for Multiple Usernames via the field active_usernames in the class Chat.
-* Added the field emoji_status_custom_emoji_id to the class Chat.
 
 See earlier changes »
 
@@ -732,8 +702,13 @@ KeyboardButtonRequestChat button.
 
 #### WriteAccessAllowed
 
-This object represents a service message about a user allowing a bot added to the attachment menu to write messages.
-Currently holds no information.
+This object represents a service message about a user allowing a bot to write messages after adding the bot to the
+attachment menu or launching a Web App from a link.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| web_app_name | String | Optional. Name of the Web App which was launched from a link |
 
 #### VideoChatScheduled
 
@@ -914,8 +889,9 @@ This object represents one button of an inline keyboard. You must use exactly on
 | callback_data | String | Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes |
 | web_app | WebAppInfo | Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. |
 | login_url | LoginUrl | Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget. |
-| switch_inline_query | String | Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen. |
+| switch_inline_query | String | Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. |
 | switch_inline_query_current_chat | String | Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. |
+| switch_inline_query_chosen_chat | SwitchInlineQueryChosenChat | Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field |
 | callback_game | CallbackGame | Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row. |
 | pay | Boolean | Optional. Specify True, to send a Pay button. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages. |
 
@@ -937,6 +913,20 @@ Telegram apps support these buttons as of version 5.7.
 | forward_text | String | Optional. New text of the button in forwarded messages. |
 | bot_username | String | Optional. Username of a bot, which will be used for user authorization. See Setting up a bot for more details. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details. |
 | request_write_access | Boolean | Optional. Pass True to request the permission for your bot to send messages to the user. |
+
+#### SwitchInlineQueryChosenChat
+
+This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional
+default inline query.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| query | String | Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted |
+| allow_user_chats | Boolean | Optional. True, if private chats with users can be chosen |
+| allow_bot_chats | Boolean | Optional. True, if private chats with bots can be chosen |
+| allow_group_chats | Boolean | Optional. True, if group and supergroup chats can be chosen |
+| allow_channel_chats | Boolean | Optional. True, if channel chats can be chosen |
 
 #### CallbackQuery
 
@@ -1148,6 +1138,7 @@ This object represents changes in the status of a chat member.
 | old_chat_member | ChatMember | Previous information about the chat member |
 | new_chat_member | ChatMember | New information about the chat member |
 | invite_link | ChatInviteLink | Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only. |
+| via_chat_folder_invite_link | Boolean | Optional. True, if the user joined the chat via a chat folder invite link |
 
 #### ChatJoinRequest
 
@@ -1325,6 +1316,15 @@ Represents the scope of bot commands, covering a specific member of a group or s
 | type | String | Scope type, must be chat_member |
 | chat_id | Integer or String | Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) |
 | user_id | Integer | Unique identifier of the target user |
+
+#### BotName
+
+This object represents the bot's name.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| name | String | The bot's name |
 
 #### BotDescription
 
@@ -1601,6 +1601,7 @@ __underline__
 *bold _italic bold ~italic bold strikethrough ||italic bold strikethrough spoiler||~ __underline italic bold___ bold*
 [inline URL](http://www.example.com/)
 [inline mention of a user](tg://user?id=123456789)
+![](tg://emoji?id=5368324170671202286)
 `inline fixed-width code`
 
 ```
@@ -1617,13 +1618,18 @@ Please note:
   case it is treated as an ordinary character and not a part of the markup. This implies that '\' character usually must
   be escaped with a preceding '\' character.
 * Inside pre and code entities, all '`' and '\' characters must be escaped with a preceding '\' character.
-* Inside (...) part of inline link definition, all ')' and '\' must be escaped with a preceding '\' character.
+* Inside the (...) part of the inline link and custom emoji definition, all ')' and '\' must be escaped with a
+  preceding '\' character.
 * In all other places
   characters '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!' must be escaped
   with the preceding character '\'.
 * In case of ambiguity between italic and underline entities __ is always greadily treated from left to right as
   beginning or end of underline entity, so instead of ___italic underline___ use ___italic underline_\r__, where \r is a
   character with code 13, which will be ignored.
+* A valid emoji must be provided as an alternative value for the custom emoji. The emoji will be shown instead of the
+  custom emoji in places where a custom emoji cannot be displayed (e.g., system notifications) or if the message is
+  forwarded by a non-premium user. It is recommended to use the emoji from the emoji field of the custom emoji sticker.
+* Custom emoji entities can only be used by bots that purchased additional usernames on Fragment.
 
 ###### HTML style
 
@@ -1638,6 +1644,7 @@ To use this mode, pass HTML in the parse_mode field. The following tags are curr
 spoiler</span></s> <u>underline italic bold</u></i> bold</b>
 <a href="http://www.example.com/">inline URL</a>
 <a href="tg://user?id=123456789">inline mention of a user</a>
+<tg-emoji emoji-id="5368324170671202286"></tg-emoji>
 <code>inline fixed-width code</code>
 <pre>pre-formatted fixed-width code block</pre>
 <pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>
@@ -1652,6 +1659,10 @@ Please note:
 * The API currently supports only the following named HTML entities: &lt;, &gt;, &amp; and &quot;.
 * Use nested pre and code tags, to define programming language for pre entity.
 * Programming language can't be specified for standalone code tags.
+* A valid emoji must be used as the content of the tg-emoji tag. The emoji will be shown instead of the custom emoji in
+  places where a custom emoji cannot be displayed (e.g., system notifications) or if the message is forwarded by a
+  non-premium user. It is recommended to use the emoji from the emoji field of the custom emoji sticker.
+* Custom emoji entities can only be used by bots that purchased additional usernames on Fragment.
 
 ###### Markdown style
 
@@ -2583,6 +2594,25 @@ BotCommand objects. If commands aren't set, an empty list is returned.
 | scope | BotCommandScope | Optional | A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault. |
 | language_code | String | Optional | A two-letter ISO 639-1 language code or an empty string |
 
+#### setMyName
+
+Use this method to change the bot's name. Returns True on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| name | String | Optional | New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language. |
+| language_code | String | Optional | A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name. |
+
+#### getMyName
+
+Use this method to get the current bot name for the given user language. Returns BotName on success.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |
+| language_code | String | Optional | A two-letter ISO 639-1 language code or an empty string |
+
 #### setMyDescription
 
 Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns
@@ -3069,10 +3099,20 @@ allowed.
 | inline_query_id | String | Yes | Unique identifier for the answered query |
 | results | Array of InlineQueryResult | Yes | A JSON-serialized array of results for the inline query |
 | cache_time | Integer | Optional | The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300. |
-| is_personal | Boolean | Optional | Pass True if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query |
+| is_personal | Boolean | Optional | Pass True if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query. |
 | next_offset | String | Optional | Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don't support pagination. Offset length can't exceed 64 bytes. |
-| switch_pm_text | String | Optional | If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter |
-| switch_pm_parameter | String | Optional | Deep-linking parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed. Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities. |
+| button | InlineQueryResultsButton | Optional | A JSON-serialized object describing a button to be shown above inline query results |
+
+#### InlineQueryResultsButton
+
+This object represents a button to be shown above inline query results. You must use exactly one of the optional fields.
+
+| Field | Type | Description |
+| --- | --- | --- |
+|  |
+| text | String | Label text on the button |
+| web_app | WebAppInfo | Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method switchInlineQuery inside the Web App. |
+| start_parameter | String | Optional. Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed. Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities. |
 
 #### InlineQueryResult
 
