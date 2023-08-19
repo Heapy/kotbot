@@ -6,4 +6,5 @@ include(
     "core",
     "core-gen",
     "tgkotbot",
+    "tgkotbot-dataops",
 )

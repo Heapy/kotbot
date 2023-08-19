@@ -32,10 +32,14 @@ public data class Kotbot(
             requestTimeout = 60_000
         }
     },
-    public val json: Json = Json {
-        ignoreUnknownKeys = true
-    },
+    public val json: Json = kotbotJson,
 )
+
+public val kotbotJson: Json = Json {
+    ignoreUnknownKeys = true
+    encodeDefaults = true
+    explicitNulls = false
+}
 
 public suspend fun Kotbot.receiveUpdates(
     timeout: Int = 50,
@@ -150,7 +154,7 @@ public suspend inline fun <Response> Kotbot.requestForJson(
     }
 }
 
-private inline fun <reified T : Any> logger(): Logger =
+internal inline fun <reified T : Any> logger(): Logger =
     LoggerFactory.getLogger(T::class.java)
 
 private val log = logger<Kotbot>()

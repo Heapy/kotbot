@@ -1,50 +1,70 @@
 package io.heapy.kotbot
 
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.configuration.CasConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
 
 interface Rule {
-    fun validate(update: Update): Flow<Method<*>>
+    suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    )
 }
 
-private val LOGGER = logger<Rule>()
+class Actions {
+    private val actions = mutableSetOf<Method<*, *>>()
+
+    suspend fun <Request : Method<Request, Result>, Result> runIfNew(
+        action: Request,
+        block: suspend (Request) -> Unit,
+    ) {
+        if (action !in actions) {
+            actions += action
+            block(action)
+        }
+    }
+}
+
+private val log = logger<Rule>()
 
 class DeleteJoinRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
+
         update.message?.let { message ->
             if (!message.new_chat_members.isNullOrEmpty()) {
-                LOGGER.info("Delete joined users message ${message.new_chat_members}")
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    log.info("Delete joined users message ${message.new_chat_members}")
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 }
 
 class DeleteHelloRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
-                LOGGER.info("Delete hello message ${message.text} from ${message.from?.info}")
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    log.info("Delete hello message ${message.text} from ${message.from?.info}")
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 
     companion object {
@@ -57,18 +77,22 @@ class DeleteHelloRule : Rule {
 }
 
 class LongTimeNoSeeRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
-                LOGGER.info("Delete spam ${message.text} from ${message.from?.info}")
-                return flowOf(
-                    message.delete,
-                    message.banFrom,
-                )
+                log.info("Delete spam ${message.text} from ${message.from?.info}")
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
+                actions.runIfNew(message.banFrom) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 
     companion object {
@@ -81,18 +105,22 @@ class LongTimeNoSeeRule : Rule {
 }
 
 class KasperskyCareersRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyText { text, message ->
             if (strings.contains(text.lowercase())) {
-                LOGGER.info("Delete spam ${message.text} from ${message.from?.info}")
-                return flowOf(
-                    message.delete,
-                    message.banFrom,
-                )
+                log.info("Delete spam ${message.text} from ${message.from?.info}")
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
+                actions.runIfNew(message.banFrom) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 
     companion object {
@@ -103,19 +131,21 @@ class KasperskyCareersRule : Rule {
 }
 
 class DeleteSwearingRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyText { text, message ->
             val normalizedText = text.lowercase()
             val isSwearing = strings.any { normalizedText.contains(it) }
             if (isSwearing) {
-                LOGGER.info("Delete message with swearing ${message.text} from ${message.from?.info}")
-                return flowOf(
-                    message.delete,
-                )
+                log.info("Delete message with swearing ${message.text} from ${message.from?.info}")
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 
     companion object {
@@ -130,23 +160,27 @@ class DeleteSwearingRule : Rule {
 }
 
 class DeleteSpamRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyText { text, message ->
             val kick = shorteners.any { shorter ->
                 text.contains(shorter)
             }
 
             if (kick) {
-                LOGGER.info("Delete message with shortened link $text from ${message.from?.info}")
+                log.info("Delete message with shortened link $text from ${message.from?.info}")
 
-                return flowOf(
-                    message.delete,
-                    message.banFrom,
-                )
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
+                actions.runIfNew(message.banFrom) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 
     companion object {
@@ -165,18 +199,20 @@ class DeleteSpamRule : Rule {
  * Rule to remove messages with attached audio.
  */
 class DeleteVoiceMessageRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyMessage?.let { message ->
             if (message.voice != null) {
-                LOGGER.info("Delete voice message from ${message.from?.info}.")
+                log.info("Delete voice message from ${message.from?.info}.")
 
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 }
 
@@ -184,18 +220,20 @@ class DeleteVoiceMessageRule : Rule {
  * Rule to remove messages with attached audio.
  */
 class DeleteVideoNoteRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyMessage?.let { message ->
             if (message.video_note != null) {
-                LOGGER.info("Delete video note message from ${message.from?.info}.")
+                log.info("Delete video note message from ${message.from?.info}.")
 
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 }
 
@@ -204,23 +242,29 @@ class DeleteVideoNoteRule : Rule {
  * It's not covered by chat settings, since they don't apply on admins
  */
 class DeleteStickersRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyMessage?.let { message ->
             if (message.sticker != null) {
-                LOGGER.info("Delete sticker-message from ${message.from?.info}.")
+                log.info("Delete sticker-message from ${message.from?.info}.")
 
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 }
 
 class DeletePropagandaRule : Rule {
-    override fun validate(update: Update): Flow<Method<*>> {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyMessage?.let { message ->
             val hasOffensiveText = listOfNotNull(
                 message.from?.first_name,
@@ -231,15 +275,13 @@ class DeletePropagandaRule : Rule {
             }
 
             if (hasOffensiveText) {
-                LOGGER.info("Delete flag-message from ${message.from?.info}.")
+                log.info("Delete flag-message from ${message.from?.info}.")
 
-                return flowOf(
-                    message.delete,
-                )
+                actions.runIfNew(message.delete) {
+                    kotbot.executeSafely(it)
+                }
             }
         }
-
-        return emptyFlow()
     }
 }
 
@@ -247,20 +289,28 @@ class CombotCasRule(
     private val client: HttpClient,
     private val casConfiguration: CasConfiguration,
 ) : Rule {
-    override fun validate(update: Update): Flow<Method<*>> = flow {
+    override suspend fun validate(
+        kotbot: Kotbot,
+        update: Update,
+        actions: Actions,
+    ) {
         update.anyMessage?.let { message ->
             val userId = message.from!!.id
             if (!casConfiguration.allowlist.contains(userId)) {
                 val response = client.get("https://api.cas.chat/check?user_id=$userId").body<CasResponse>()
                 if (response.ok) {
-                    LOGGER.info("User ${message.from?.info} is CAS banned")
-                    emit(message.delete)
-                    emit(message.banFrom)
+                    log.info("User ${message.from?.info} is CAS banned")
+                    actions.runIfNew(message.delete) {
+                        kotbot.executeSafely(it)
+                    }
+                    actions.runIfNew(message.banFrom) {
+                        kotbot.executeSafely(it)
+                    }
                 } else {
-                    LOGGER.info("User ${message.from?.info} is NOT CAS banned")
+                    log.info("User ${message.from?.info} is NOT CAS banned")
                 }
             } else {
-                LOGGER.info("User ${message.from?.info} is in CAS allowlist")
+                log.info("User ${message.from?.info} is in CAS allowlist")
             }
         }
     }

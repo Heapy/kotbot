@@ -359,6 +359,9 @@ class KotbotTest {
     }
 
     companion object {
+        private var offset: Int? = null
+        private val log = logger<KotbotTest>()
+
         private val env = dotenv()
 
         private val kotbot = Kotbot(
@@ -373,13 +376,26 @@ class KotbotTest {
         @JvmStatic
         @BeforeAll
         fun setUp() = runBlocking {
+            log.info("Drain updates")
+
+            kotbot
+                .execute(
+                    GetUpdates(
+                        limit = 100,
+                        timeout = 0,
+                    )
+                )
+                .also {
+                    log.info("Drained updates: {}", it.size)
+                }
+
             kotbot.execute(
                 SendMessage(
                     chat_id = qaUserId.chatId,
                     text = """
                         *Kotbot smoke test started\!*
-        
-                        Job: [${env["CI_JOB_ID"]}](${env["CI_JOB_URL"]})
+                        
+                        Github run [${env["GITHUB_RUN_ID"]}](${env["GITHUB_SERVER_URL"]}/${env["GITHUB_REPOSITORY"]}/actions/runs/${env["GITHUB_RUN_ID"]})
                     """.trimIndent(),
                     parse_mode = "MarkdownV2",
                     disable_web_page_preview = true,
@@ -396,10 +412,10 @@ class KotbotTest {
                     SendMessage(
                         chat_id = qaUserId.chatId,
                         text = """
-                        *Kotbot smoke test finished\!*
-        
-                        Job: [${env.get("CI_JOB_ID")}](${env["CI_JOB_URL"]})
-                    """.trimIndent(),
+                            *Kotbot smoke test finished\!*
+                            
+                            Github run [${env["GITHUB_RUN_ID"]}](${env["GITHUB_SERVER_URL"]}/${env["GITHUB_REPOSITORY"]}/actions/runs/${env["GITHUB_RUN_ID"]})
+                        """.trimIndent(),
                         parse_mode = "MarkdownV2",
                         disable_web_page_preview = true
                     )
@@ -417,10 +433,14 @@ class KotbotTest {
             kotbot
                 .execute(
                     GetUpdates(
-                        offset = null,
+                        offset = offset,
                         allowed_updates = listOf("callback_query")
                     )
                 )
+                .onEach {
+                    offset = it.update_id + 1
+                    println("Received update: ${it.update_id}")
+                }
                 .find {
                     (it.callback_query?.message?.message_id == message.message_id) &&
                             (it.callback_query?.from?.id == qaUserId)

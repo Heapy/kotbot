@@ -14,7 +14,6 @@ import io.micrometer.core.instrument.Tags
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
 
 class KotlinChatsBot(
     private val kotbot: Kotbot,
@@ -42,8 +41,8 @@ class KotlinChatsBot(
             try {
                 val command = commands.find { command ->
                     command.name == update.name
-                        && command.context == update.context
-                        && command.access.isAllowed(update.access)
+                            && command.context == update.context
+                            && command.access.isAllowed(update.access)
                 } ?: return false
 
                 command.execute(kotbot, update)
@@ -72,25 +71,10 @@ class KotlinChatsBot(
         get() = message?.text?.split(' ')?.getOrNull(0)
 
     internal suspend fun executeRules(update: Update) {
-        rules
-            .map { rule -> rule to rule.validate(update) }
-            .flatMap { (rule, flow) ->
-                try {
-                    flow.toList().also { actions ->
-                        if (actions.isNotEmpty()) {
-                            recordRuleTrigger(rule)
-                        }
-                    }
-                } catch (e: Exception) {
-                    log.error("Exception in rule {}", rule, e)
-                    recordRuleFailure(rule)
-                    listOf()
-                }
-            }
-            .distinct()
-            .forEach {
-                kotbot.executeSafely(it)
-            }
+        val actions = Actions()
+        return rules.forEach { rule ->
+            rule.validate(kotbot, update, actions)
+        }
     }
 
     internal fun recordRuleTrigger(rule: Rule) {
@@ -114,9 +98,9 @@ class KotlinChatsBot(
 
 private val log = logger<KotlinChatsBot>()
 
-internal suspend fun <Response> Kotbot.executeSafely(
-    method: Method<Response>
-): Response? {
+internal suspend fun <Request : Method<Request, Result>, Result> Kotbot.executeSafely(
+    method: Request,
+): Result? {
     return try {
         execute(method)
     } catch (e: Exception) {
