@@ -27,16 +27,25 @@ fun main() {
 }
 
 fun TelegramApi.generate() {
-    val supertypeMapping = objects
+    val objectSupertypeMapping = objects
         .filterIsInstance<AnyOfObject>()
         .flatMap { anyOf ->
             anyOf.any_of.map { (it as ReferenceApiType).reference to anyOf.name }
         }
         .toMap()
 
-    val methodFiles = methods.map(Method::toFileSpec)
+    val methodSupertypeMapping = methods.flatMap { it.arguments ?: emptyList() }
+        .filterIsInstance<AnyOfArgument>()
+        .flatMap { anyOf ->
+            anyOf.any_of
+                .filterIsInstance<ReferenceApiType>()
+                .map { it.reference to anyOf.name.snakeToTitle() }
+        }
+        .toMap()
 
-    val objectsFiles = objects.map { it.toFileSpec(supertypeMapping) }
+    val methodFiles = methods.map { it.toFileSpec() }
+
+    val objectsFiles = objects.map { it.toFileSpec(objectSupertypeMapping + methodSupertypeMapping) }
 
     val anyOfArgumentsFiles = objects.filterIsInstance<PropertiesObject>()
         .flatMap(PropertiesObject::toAnyOfArguments)

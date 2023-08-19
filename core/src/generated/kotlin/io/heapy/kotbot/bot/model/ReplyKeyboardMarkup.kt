@@ -36,4 +36,4 @@ public data class ReplyKeyboardMarkup(
      * *Example:* A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
      */
     public val selective: Boolean? = null,
-)
+) : ReplyMarkup
