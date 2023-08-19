@@ -36,7 +36,7 @@ private fun resolveEnv(root: Path): Path? {
         if (envPath.exists()) {
             envPath
         } else {
-            if (envPath.contains(envPath.resolve(".git"))) {
+            if (envPath.parent.resolve(".git").exists()) {
                 null
             } else {
                 resolveEnv(root = root.parent)
