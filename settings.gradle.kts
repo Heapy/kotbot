@@ -7,4 +7,5 @@ include(
     "core-gen",
     "tgkotbot",
     "tgkotbot-dataops",
+    "tgkotbot-database",
 )
