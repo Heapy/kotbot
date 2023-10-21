@@ -24,7 +24,7 @@ public data class BanChatMember(
      */
     public val user_id: Long,
     /**
-     * Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
+     * Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
      */
     public val until_date: Long? = null,
     /**

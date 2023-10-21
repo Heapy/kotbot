@@ -13,7 +13,7 @@ public data class ChatAdministratorRights(
      */
     public val is_anonymous: Boolean,
     /**
-     * *True*, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+     * *True*, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
      */
     public val can_manage_chat: Boolean,
     /**
@@ -25,7 +25,7 @@ public data class ChatAdministratorRights(
      */
     public val can_manage_video_chats: Boolean,
     /**
-     * *True*, if the administrator can restrict, ban or unban chat members
+     * *True*, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
      */
     public val can_restrict_members: Boolean,
     /**
@@ -41,7 +41,7 @@ public data class ChatAdministratorRights(
      */
     public val can_invite_users: Boolean,
     /**
-     * *Optional*. *True*, if the administrator can post in the channel; channels only
+     * *Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; channels only
      */
     public val can_post_messages: Boolean? = null,
     /**
@@ -52,6 +52,18 @@ public data class ChatAdministratorRights(
      * *Optional*. *True*, if the user is allowed to pin messages; groups and supergroups only
      */
     public val can_pin_messages: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the administrator can post stories in the channel; channels only
+     */
+    public val can_post_stories: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the administrator can edit stories posted by other users; channels only
+     */
+    public val can_edit_stories: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the administrator can delete stories posted by other users; channels only
+     */
+    public val can_delete_stories: Boolean? = null,
     /**
      * *Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
      */

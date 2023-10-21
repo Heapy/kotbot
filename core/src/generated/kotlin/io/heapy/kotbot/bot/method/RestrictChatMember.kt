@@ -33,7 +33,7 @@ public data class RestrictChatMember(
      */
     public val use_independent_chat_permissions: Boolean? = null,
     /**
-     * Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+     * Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
      */
     public val until_date: Long? = null,
 ) : Method<RestrictChatMember, Boolean> by Companion {
