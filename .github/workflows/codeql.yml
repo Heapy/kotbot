@@ -36,7 +36,8 @@ jobs:
         java-version: "17"
         distribution: "liberica"
     - uses: gradle/gradle-build-action@v2
-    - run: ./gradlew build -x test
+    - run: echo "kotlin.daemon.jvmargs=-Xmx1g" >> gradle.properties
+    - run: ./gradlew build -x test -x distTar
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
