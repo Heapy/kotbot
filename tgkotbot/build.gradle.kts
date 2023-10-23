@@ -11,8 +11,13 @@ application {
     mainClass.set("io.heapy.kotbot.Application")
 }
 
+tasks.distZip {
+    enabled = false
+}
+
 dependencies {
     implementation(projects.core)
+    implementation(projects.tgkotbotDatabase)
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)
@@ -28,10 +33,6 @@ dependencies {
     implementation(libs.ktor.client.content.negation)
     implementation(libs.ktor.server)
     implementation(libs.ktor.server.content.negation)
-
-    implementation(libs.flyway)
-    implementation(libs.postgresql)
-    implementation(libs.hikari)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
