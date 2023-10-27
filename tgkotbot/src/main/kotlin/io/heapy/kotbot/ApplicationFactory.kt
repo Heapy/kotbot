@@ -1,19 +1,37 @@
 package io.heapy.kotbot
 
 import com.typesafe.config.ConfigFactory
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.configuration.Configuration
+import io.heapy.kotbot.dao.UpdateDao
+import io.heapy.kotbot.dao.UserContextDao
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.KtorServer
 import io.heapy.kotbot.web.Server
+import io.heapy.kotbot.web.routes.DatabaseHealthCheck
+import io.heapy.kotbot.web.routes.CombinedHealthCheck
+import io.heapy.kotbot.web.routes.PingHealthCheck
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
+import io.micrometer.core.instrument.binder.db.MetricsDSLContext
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.json.Json
+import org.jooq.DSLContext
+import org.jooq.SQLDialect
+import org.jooq.impl.DSL
+import org.postgresql.ds.PGSimpleDataSource
+import java.lang.management.ManagementFactory
+import kotlin.concurrent.thread
 
 open class ApplicationFactory {
     @OptIn(ExperimentalSerializationApi::class)
@@ -25,6 +43,39 @@ open class ApplicationFactory {
         createPrometheusMeterRegistry(
             configuration = configuration.metrics
         )
+    }
+
+    open val updateDao by lazy {
+        UpdateDao()
+    }
+
+    open val userContextDao by lazy {
+        UserContextDao()
+    }
+
+    open val dslContext: DSLContext by lazy {
+        System.setProperty("org.jooq.no-logo", "true")
+        System.setProperty("org.jooq.no-tips", "true")
+        MetricsDSLContext.withMetrics(
+            DSL.using(hikariDataSource, SQLDialect.POSTGRES),
+            prometheusMeterRegistry,
+            emptyList(),
+        )
+    }
+
+    open val hikariConfig: HikariConfig by lazy {
+        HikariConfig().apply {
+            dataSourceClassName = PGSimpleDataSource::class.qualifiedName
+            username = configuration.jdbc.user
+            password = configuration.jdbc.password
+            dataSourceProperties["databaseName"] = configuration.jdbc.database
+            dataSourceProperties["serverName"] = configuration.jdbc.host
+            dataSourceProperties["portNumber"] = configuration.jdbc.port
+        }
+    }
+
+    open val hikariDataSource: HikariDataSource by lazy {
+        HikariDataSource(hikariConfig)
     }
 
     open val httpClient: HttpClient by lazy {
@@ -91,11 +142,18 @@ open class ApplicationFactory {
     open val server: Server by lazy {
         KtorServer(
             metricsScrapper = prometheusMeterRegistry::scrape,
+            healthCheck = healthCheck,
         )
     }
 
-    open val userContextStore: UserContextStore by lazy {
-        UserContextStore(
+    open val healthCheck by lazy {
+        CombinedHealthCheck(
+            healthChecks = listOf(
+                PingHealthCheck(),
+                DatabaseHealthCheck(
+                    dataSource = hikariDataSource,
+                ),
+            )
         )
     }
 
@@ -107,6 +165,10 @@ open class ApplicationFactory {
         Kotbot(
             token = configuration.bot.token,
         )
+    }
+
+    open val applicationScope by lazy {
+        CoroutineScope(Dispatchers.Default)
     }
 
     open val kotlinChatsBot: KotlinChatsBot by lazy {
@@ -138,18 +200,37 @@ open class ApplicationFactory {
                 )
             ),
             meterRegistry = prometheusMeterRegistry,
-            admins = configuration.groups.admins.flatMap { it.value }
+            admins = configuration.groups.admins.flatMap { it.value },
+            updateDao = updateDao,
+            dslContext = dslContext,
+            applicationScope = applicationScope,
         )
     }
 
+    open val main by lazy {
+        CompletableDeferred<Unit>()
+    }
+
     open suspend fun start() {
+        Runtime.getRuntime().addShutdownHook(thread(start = false) {
+            log.info("Shutdown hook called.")
+            applicationScope.cancel("Shutdown hook called.")
+            main.complete(Unit)
+        })
+
         server.start()
         kotlinChatsBot.start()
 
-        log.info("Application started.")
+        log.info("Application started in ${uptime}ms.")
+
+        main.await()
+        log.info("Main gracefully stopped.")
     }
 
     companion object {
         private val log = logger<ApplicationFactory>()
     }
 }
+
+private inline val uptime: Long
+    get() = ManagementFactory.getRuntimeMXBean().uptime

@@ -9,11 +9,16 @@ import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.execute
 import io.heapy.kotbot.bot.receiveUpdates
+import io.heapy.kotbot.dao.UpdateDao
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.jooq.DSLContext
 
 class KotlinChatsBot(
     private val kotbot: Kotbot,
@@ -22,17 +27,36 @@ class KotlinChatsBot(
     private val filter: Filter,
     private val meterRegistry: MeterRegistry,
     private val admins: List<Long>,
+    private val applicationScope: CoroutineScope,
+    private val updateDao: UpdateDao,
+    private val dslContext: DSLContext,
 ) {
     suspend fun start() {
         kotbot.receiveUpdates()
             .filter(filter::predicate)
             .onEach { update ->
+                saveUpdateAsync(update)
                 val result = findAndExecuteCommand(update)
                 if (!result) {
                     executeRules(update)
                 }
             }
-            .collect()
+            .launchIn(applicationScope)
+            .invokeOnCompletion { cause ->
+                log.error("Updates completed", cause)
+            }
+    }
+
+    private val job = SupervisorJob()
+
+    private fun saveUpdateAsync(update: Update) = CoroutineScope(job).launch {
+        saveUpdate(update)
+    }
+
+    private fun saveUpdate(update: Update) = with(dslContext) {
+        updateDao.saveRawUpdate(
+            kotbot.json.encodeToString(Update.serializer(), update),
+        )
     }
 
     internal suspend fun findAndExecuteCommand(update: Update): Boolean {

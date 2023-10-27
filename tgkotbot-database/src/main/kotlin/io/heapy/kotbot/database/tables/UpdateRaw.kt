@@ -13,6 +13,7 @@ import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.Identity
 import org.jooq.JSONB
 import org.jooq.Name
 import org.jooq.Record
@@ -66,7 +67,7 @@ open class UpdateRaw(
     /**
      * The column <code>public.update_raw.id</code>.
      */
-    val ID: TableField<UpdateRawRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "")
+    val ID: TableField<UpdateRawRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "")
 
     /**
      * The column <code>public.update_raw.created</code>.
@@ -98,6 +99,7 @@ open class UpdateRaw(
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, UpdateRawRecord>): this(Internal.createPathAlias(child, key), child, key, UPDATE_RAW, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIdentity(): Identity<UpdateRawRecord, Long?> = super.getIdentity() as Identity<UpdateRawRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<UpdateRawRecord> = UPDATE_RAW_PK
     override fun `as`(alias: String): UpdateRaw = UpdateRaw(DSL.name(alias), this)
     override fun `as`(alias: Name): UpdateRaw = UpdateRaw(alias, this)

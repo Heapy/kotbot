@@ -1,4 +1,4 @@
-package io.heapy.kotbot
+package io.heapy.kotbot.dao
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,8 +17,7 @@ data class Status(
     val expires: Long,
 )
 
-class UserContextStore(
-) {
+class UserContextDao {
     suspend fun get(
         id: Long,
     ): UserContext? = withContext(Dispatchers.IO) {

@@ -9,6 +9,7 @@ data class Configuration(
     val cas: CasConfiguration,
     val metrics: MetricsConfiguration,
     val groups: KnownChatsConfiguration,
+    val jdbc: JdbcConfiguration,
 )
 
 @Serializable
@@ -30,3 +31,11 @@ data class KnownChatsConfiguration(
     val admins: Map<String, List<Long>>,
 )
 
+@Serializable
+data class JdbcConfiguration(
+    val user: String,
+    val password: String,
+    val database: String,
+    val host: String,
+    val port: Int,
+)

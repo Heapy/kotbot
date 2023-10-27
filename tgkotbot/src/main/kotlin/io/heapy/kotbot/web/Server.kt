@@ -1,5 +1,6 @@
 package io.heapy.kotbot.web
 
+import io.heapy.kotbot.web.routes.HealthCheck
 import io.heapy.kotbot.web.routes.events
 import io.heapy.kotbot.web.routes.health
 import io.heapy.kotbot.web.routes.metrics
@@ -13,6 +14,7 @@ interface Server {
 
 class KtorServer(
     private val metricsScrapper: () -> String,
+    private val healthCheck: HealthCheck,
 ) : Server {
     override fun start() {
         val server = embeddedServer(CIO, port = 8080) {
@@ -20,7 +22,7 @@ class KtorServer(
 
             routing {
                 events()
-                health()
+                health(healthCheck)
                 metrics(metricsScrapper)
             }
         }

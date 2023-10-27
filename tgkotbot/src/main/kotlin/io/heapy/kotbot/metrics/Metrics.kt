@@ -19,7 +19,7 @@ data class MetricsConfiguration(
 
 fun createPrometheusMeterRegistry(
     configuration: MetricsConfiguration,
-    prometheusConfig: PrometheusConfig = PrometheusConfig.DEFAULT
+    prometheusConfig: PrometheusConfig = PrometheusConfig.DEFAULT,
 ): PrometheusMeterRegistry {
     return PrometheusMeterRegistry(prometheusConfig).also {
         it.config().meterFilter(PrometheusRenameFilter())
@@ -36,7 +36,7 @@ fun createPrometheusMeterRegistry(
 }
 
 private fun commonTags(
-    configuration: MetricsConfiguration
+    configuration: MetricsConfiguration,
 ): List<Tag> {
     return configuration.tags
         .map { (k, v) -> Tag.of(k, v) }

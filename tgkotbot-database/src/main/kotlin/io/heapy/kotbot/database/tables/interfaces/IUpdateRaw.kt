@@ -15,7 +15,7 @@ import org.jooq.JSONB
  */
 @Suppress("UNCHECKED_CAST")
 interface IUpdateRaw : Serializable {
-    val id: Long
+    val id: Long?
     val created: LocalDateTime
     val update: JSONB
 }

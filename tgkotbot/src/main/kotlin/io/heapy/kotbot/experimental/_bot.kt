@@ -57,7 +57,7 @@ data class ChannelChat(
     val name: String,
 ) : Chat
 
-object UserChat : Chat
+data object UserChat : Chat
 
 class ChatConfigurationBuilder : ChatConfiguration {
     override var chat: Chat = UserChat

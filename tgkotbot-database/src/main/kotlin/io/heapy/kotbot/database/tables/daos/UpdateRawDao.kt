@@ -27,13 +27,13 @@ open class UpdateRawDao(configuration: Configuration?) : DAOImpl<UpdateRawRecord
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.UpdateRaw): Long = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.UpdateRaw): Long? = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.UpdateRaw> = fetchRange(UpdateRaw.UPDATE_RAW.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.UpdateRaw> = fetchRange(UpdateRaw.UPDATE_RAW.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

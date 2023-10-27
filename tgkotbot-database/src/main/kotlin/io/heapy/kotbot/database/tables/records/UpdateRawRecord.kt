@@ -23,9 +23,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class UpdateRawRecord private constructor() : UpdatableRecordImpl<UpdateRawRecord>(UpdateRaw.UPDATE_RAW), Record3<Long?, LocalDateTime?, JSONB?>, IUpdateRaw {
 
-    open override var id: Long
+    open override var id: Long?
         set(value): Unit = set(0, value)
-        get(): Long = get(0) as Long
+        get(): Long? = get(0) as Long?
 
     open override var created: LocalDateTime
         set(value): Unit = set(1, value)
@@ -50,10 +50,10 @@ open class UpdateRawRecord private constructor() : UpdatableRecordImpl<UpdateRaw
     override fun field1(): Field<Long?> = UpdateRaw.UPDATE_RAW.ID
     override fun field2(): Field<LocalDateTime?> = UpdateRaw.UPDATE_RAW.CREATED
     override fun field3(): Field<JSONB?> = UpdateRaw.UPDATE_RAW.UPDATE
-    override fun component1(): Long = id
+    override fun component1(): Long? = id
     override fun component2(): LocalDateTime = created
     override fun component3(): JSONB = update
-    override fun value1(): Long = id
+    override fun value1(): Long? = id
     override fun value2(): LocalDateTime = created
     override fun value3(): JSONB = update
 
@@ -93,7 +93,7 @@ open class UpdateRawRecord private constructor() : UpdatableRecordImpl<UpdateRaw
     /**
      * Create a detached, initialised UpdateRawRecord
      */
-    constructor(id: Long, created: LocalDateTime, update: JSONB): this() {
+    constructor(id: Long? = null, created: LocalDateTime, update: JSONB): this() {
         this.id = id
         this.created = created
         this.update = update

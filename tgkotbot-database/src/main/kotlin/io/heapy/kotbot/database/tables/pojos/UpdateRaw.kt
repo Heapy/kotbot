@@ -16,7 +16,7 @@ import org.jooq.JSONB
  */
 @Suppress("UNCHECKED_CAST")
 data class UpdateRaw(
-    override val id: Long,
+    override val id: Long? = null,
     override val created: LocalDateTime,
     override val update: JSONB
 ): IUpdateRaw {
@@ -29,7 +29,11 @@ data class UpdateRaw(
         if (this::class != other::class)
             return false
         val o: UpdateRaw = other as UpdateRaw
-        if (this.id != o.id)
+        if (this.id == null) {
+            if (o.id != null)
+                return false
+        }
+        else if (this.id != o.id)
             return false
         if (this.created != o.created)
             return false
@@ -41,7 +45,7 @@ data class UpdateRaw(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + this.id.hashCode()
+        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
         result = prime * result + this.created.hashCode()
         result = prime * result + this.update.hashCode()
         return result
