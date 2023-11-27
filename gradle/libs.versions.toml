@@ -1,17 +1,17 @@
 [versions]
 coroutines = "1.7.3"
-flyway = "10.0.1"
+flyway = "10.1.0"
 hikari = "5.1.0"
 jooq = "3.18.7"
-jsoup = "1.16.2"
+jsoup = "1.17.1"
 junit = "5.10.1"
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 ktor = "2.3.6"
 logback = "1.4.11"
 micrometer = "1.12.0"
 mockk = "1.13.8"
 poet = "1.15.1"
-postgresql = "42.6.0"
+postgresql = "42.7.0"
 serialization = "1.6.1"
 
 [libraries]
