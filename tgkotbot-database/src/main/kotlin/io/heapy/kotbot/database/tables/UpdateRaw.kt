@@ -9,24 +9,28 @@ import io.heapy.kotbot.database.keys.UPDATE_RAW_PK
 import io.heapy.kotbot.database.tables.records.UpdateRawRecord
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
+
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.JSONB
 import org.jooq.Name
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -37,19 +41,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class UpdateRaw(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, UpdateRawRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, UpdateRawRecord>?,
+    parentPath: InverseForeignKey<out Record, UpdateRawRecord>?,
     aliased: Table<UpdateRawRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<UpdateRawRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -79,8 +87,9 @@ open class UpdateRaw(
      */
     val UPDATE: TableField<UpdateRawRecord, JSONB?> = createField(DSL.name("update"), SQLDataType.JSONB.nullable(false), this, "")
 
-    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.update_raw</code> table reference
@@ -96,14 +105,12 @@ open class UpdateRaw(
      * Create a <code>public.update_raw</code> table reference
      */
     constructor(): this(DSL.name("update_raw"), null)
-
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, UpdateRawRecord>): this(Internal.createPathAlias(child, key), child, key, UPDATE_RAW, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIdentity(): Identity<UpdateRawRecord, Long?> = super.getIdentity() as Identity<UpdateRawRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<UpdateRawRecord> = UPDATE_RAW_PK
     override fun `as`(alias: String): UpdateRaw = UpdateRaw(DSL.name(alias), this)
     override fun `as`(alias: Name): UpdateRaw = UpdateRaw(alias, this)
-    override fun `as`(alias: Table<*>): UpdateRaw = UpdateRaw(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): UpdateRaw = UpdateRaw(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -118,21 +125,55 @@ open class UpdateRaw(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): UpdateRaw = UpdateRaw(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, LocalDateTime?, JSONB?> = super.fieldsRow() as Row3<Long?, LocalDateTime?, JSONB?>
+    override fun rename(name: Table<*>): UpdateRaw = UpdateRaw(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, LocalDateTime?, JSONB?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): UpdateRaw = UpdateRaw(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, LocalDateTime?, JSONB?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): UpdateRaw = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): UpdateRaw = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): UpdateRaw = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): UpdateRaw = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): UpdateRaw = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): UpdateRaw = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): UpdateRaw = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): UpdateRaw = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): UpdateRaw = where(DSL.notExists(select))
 }

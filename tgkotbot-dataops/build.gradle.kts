@@ -8,7 +8,7 @@ repositories {
 
 dependencies {
     implementation(libs.jooq.codegen)
-    implementation(libs.flyway)
+    implementation(libs.flyway.database.postgresql)
     implementation(libs.postgresql)
     implementation(libs.logback)
 }
