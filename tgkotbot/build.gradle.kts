@@ -18,6 +18,7 @@ tasks.distZip {
 dependencies {
     implementation(projects.core)
     implementation(projects.tgkotbotDatabase)
+    implementation(projects.tgkotbotDataops)
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)

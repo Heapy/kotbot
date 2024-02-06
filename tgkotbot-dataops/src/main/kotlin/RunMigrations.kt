@@ -1,6 +1,7 @@
 @file:JvmName("RunMigrations")
 
 import org.flywaydb.core.Flyway
+import javax.sql.DataSource
 
 fun main() {
     val env = System.getenv()
@@ -19,6 +20,18 @@ fun main() {
             pgUser,
             pgPassword
         )
+        .loggers("slf4j")
+        .load()
+        .migrate()
+}
+
+fun runMigrations(
+    dataSource: DataSource,
+) {
+    Flyway
+        .configure()
+        .locations("classpath:migrations")
+        .dataSource(dataSource)
         .loggers("slf4j")
         .load()
         .migrate()

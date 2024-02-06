@@ -30,6 +30,7 @@ import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.postgresql.ds.PGSimpleDataSource
+import runMigrations
 import java.lang.management.ManagementFactory
 import kotlin.concurrent.thread
 
@@ -212,6 +213,7 @@ open class ApplicationFactory {
     }
 
     open suspend fun start() {
+        runMigrations(hikariDataSource)
         Runtime.getRuntime().addShutdownHook(thread(start = false) {
             log.info("Shutdown hook called.")
             applicationScope.cancel("Shutdown hook called.")
