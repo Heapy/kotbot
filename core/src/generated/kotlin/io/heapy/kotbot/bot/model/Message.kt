@@ -29,37 +29,21 @@ public data class Message(
      */
     public val sender_chat: Chat? = null,
     /**
-     * Date the message was sent in Unix time
+     * *Optional*. If the sender of the message boosted the chat, the number of boosts added by the user
+     */
+    public val sender_boost_count: Int? = null,
+    /**
+     * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
      */
     public val date: Long,
     /**
-     * Conversation the message belongs to
+     * Chat the message belongs to
      */
     public val chat: Chat,
     /**
-     * *Optional*. For forwarded messages, sender of the original message
+     * *Optional*. Information about the original message for forwarded messages
      */
-    public val forward_from: User? = null,
-    /**
-     * *Optional*. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
-     */
-    public val forward_from_chat: Chat? = null,
-    /**
-     * *Optional*. For messages forwarded from channels, identifier of the original message in the channel
-     */
-    public val forward_from_message_id: Int? = null,
-    /**
-     * *Optional*. For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present
-     */
-    public val forward_signature: String? = null,
-    /**
-     * *Optional*. Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
-     */
-    public val forward_sender_name: String? = null,
-    /**
-     * *Optional*. For forwarded messages, date the original message was sent in Unix time
-     */
-    public val forward_date: Long? = null,
+    public val forward_origin: MessageOrigin? = null,
     /**
      * *Optional*. *True*, if the message is sent to a forum topic
      */
@@ -69,9 +53,21 @@ public data class Message(
      */
     public val is_automatic_forward: Boolean? = null,
     /**
-     * *Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
+     * *Optional*. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
      */
     public val reply_to_message: Message? = null,
+    /**
+     * *Optional*. Information about the message that is being replied to, which may come from another chat or forum topic
+     */
+    public val external_reply: ExternalReplyInfo? = null,
+    /**
+     * *Optional*. For replies that quote part of the original message, the quoted part of the message
+     */
+    public val quote: TextQuote? = null,
+    /**
+     * *Optional*. For replies to a story, the original story
+     */
+    public val reply_to_story: Story? = null,
     /**
      * *Optional*. Bot through which the message was sent
      */
@@ -100,6 +96,10 @@ public data class Message(
      * *Optional*. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
      */
     public val entities: List<MessageEntity>? = null,
+    /**
+     * *Optional*. Options used for link preview generation for the message, if it is a text message and link preview options were changed
+     */
+    public val link_preview_options: LinkPreviewOptions? = null,
     /**
      * *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
      */
@@ -217,9 +217,9 @@ public data class Message(
      */
     public val migrate_from_chat_id: Long? = null,
     /**
-     * *Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply_to_message* fields even if it is itself a reply.
+     * *Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
      */
-    public val pinned_message: Message? = null,
+    public val pinned_message: MaybeInaccessibleMessage? = null,
     /**
      * *Optional*. Message is an invoice for a [payment](https://core.telegram.org/bots/api/#payments), information about the invoice. [More about payments &raquo;](https://core.telegram.org/bots/api/#payments)
      */
@@ -229,9 +229,9 @@ public data class Message(
      */
     public val successful_payment: SuccessfulPayment? = null,
     /**
-     * *Optional*. Service message: a user was shared with the bot
+     * *Optional*. Service message: users were shared with the bot
      */
-    public val user_shared: UserShared? = null,
+    public val users_shared: UsersShared? = null,
     /**
      * *Optional*. Service message: a chat was shared with the bot
      */
@@ -252,6 +252,10 @@ public data class Message(
      * *Optional*. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
      */
     public val proximity_alert_triggered: ProximityAlertTriggered? = null,
+    /**
+     * *Optional*. Service message: user boosted the chat
+     */
+    public val boost_added: ChatBoostAdded? = null,
     /**
      * *Optional*. Service message: forum topic created
      */
@@ -277,6 +281,22 @@ public data class Message(
      */
     public val general_forum_topic_unhidden: GeneralForumTopicUnhidden? = null,
     /**
+     * *Optional*. Service message: a scheduled giveaway was created
+     */
+    public val giveaway_created: GiveawayCreated? = null,
+    /**
+     * *Optional*. The message is a scheduled giveaway message
+     */
+    public val giveaway: Giveaway? = null,
+    /**
+     * *Optional*. A giveaway with public winners was completed
+     */
+    public val giveaway_winners: GiveawayWinners? = null,
+    /**
+     * *Optional*. Service message: a giveaway without public winners was completed
+     */
+    public val giveaway_completed: GiveawayCompleted? = null,
+    /**
      * *Optional*. Service message: video chat scheduled
      */
     public val video_chat_scheduled: VideoChatScheduled? = null,
@@ -300,4 +320,4 @@ public data class Message(
      * *Optional*. Inline keyboard attached to the message. `login_url` buttons are represented as ordinary `url` buttons.
      */
     public val reply_markup: InlineKeyboardMarkup? = null,
-)
+) : MaybeInaccessibleMessage

@@ -4,9 +4,9 @@ import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
+import io.heapy.kotbot.bot.model.LinkPreviewOptions
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.MessageOrTrue
-import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
@@ -43,9 +43,9 @@ public data class EditMessageText(
      */
     public val entities: List<MessageEntity>? = null,
     /**
-     * Disables link previews for links in this message
+     * Link preview generation options for the message
      */
-    public val disable_web_page_preview: Boolean? = null,
+    public val link_preview_options: LinkPreviewOptions? = null,
     /**
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
      */

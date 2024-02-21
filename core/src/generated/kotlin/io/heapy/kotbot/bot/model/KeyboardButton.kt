@@ -5,7 +5,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * This object represents one button of the reply keyboard. For simple text buttons, *String* can be used instead of this object to specify the button text. The optional fields *web_app*, *request_user*, *request_chat*, *request_contact*, *request_location*, and *request_poll* are mutually exclusive.
+ * This object represents one button of the reply keyboard. For simple text buttons, *String* can be used instead of this object to specify the button text. The optional fields *web_app*, *request_users*, *request_chat*, *request_contact*, *request_location*, and *request_poll* are mutually exclusive.
  */
 @Serializable
 public data class KeyboardButton(
@@ -14,9 +14,9 @@ public data class KeyboardButton(
      */
     public val text: String,
     /**
-     * *Optional.* If specified, pressing the button will open a list of suitable users. Tapping on any user will send their identifier to the bot in a "user_shared" service message. Available in private chats only.
+     * *Optional.* If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a "users_shared" service message. Available in private chats only.
      */
-    public val request_user: KeyboardButtonRequestUser? = null,
+    public val request_users: KeyboardButtonRequestUsers? = null,
     /**
      * *Optional.* If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a "chat_shared" service message. Available in private chats only.
      */

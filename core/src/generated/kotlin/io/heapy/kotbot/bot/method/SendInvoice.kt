@@ -6,6 +6,7 @@ import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.LabeledPrice
 import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.ReplyParameters
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -119,13 +120,9 @@ public data class SendInvoice(
      */
     public val protect_content: Boolean? = null,
     /**
-     * If the message is a reply, ID of the original message
+     * Description of the message to reply to
      */
-    public val reply_to_message_id: Int? = null,
-    /**
-     * Pass *True* if the message should be sent even if the specified replied-to message is not found
-     */
-    public val allow_sending_without_reply: Boolean? = null,
+    public val reply_parameters: ReplyParameters? = null,
     /**
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay `total price`' button will be shown. If not empty, the first button must be a Pay button.
      */

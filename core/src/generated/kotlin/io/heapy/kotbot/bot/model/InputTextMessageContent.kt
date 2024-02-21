@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
@@ -23,7 +22,7 @@ public data class InputTextMessageContent(
      */
     public val entities: List<MessageEntity>? = null,
     /**
-     * *Optional*. Disables link previews for links in the sent message
+     * *Optional*. Link preview generation options for the message
      */
-    public val disable_web_page_preview: Boolean? = null,
+    public val link_preview_options: LinkPreviewOptions? = null,
 ) : InputMessageContent

@@ -17,9 +17,9 @@ public data class CallbackQuery(
      */
     public val from: User,
     /**
-     * *Optional*. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
+     * *Optional*. Message sent by the bot with the callback button that originated the query
      */
-    public val message: Message? = null,
+    public val message: MaybeInaccessibleMessage? = null,
     /**
      * *Optional*. Identifier of the message sent via the bot in inline mode, that originated the query.
      */

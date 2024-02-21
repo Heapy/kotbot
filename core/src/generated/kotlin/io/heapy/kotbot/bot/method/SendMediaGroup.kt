@@ -5,6 +5,7 @@ import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InputMedia
 import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.ReplyParameters
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -39,13 +40,9 @@ public data class SendMediaGroup(
      */
     public val protect_content: Boolean? = null,
     /**
-     * If the messages are a reply, ID of the original message
+     * Description of the message to reply to
      */
-    public val reply_to_message_id: Int? = null,
-    /**
-     * Pass *True* if the message should be sent even if the specified replied-to message is not found
-     */
-    public val allow_sending_without_reply: Boolean? = null,
+    public val reply_parameters: ReplyParameters? = null,
 ) : Method<SendMediaGroup, List<Message>> by Companion {
     public companion object : Method<SendMediaGroup, List<Message>> {
         override val _deserializer: KSerializer<Response<List<Message>>> =

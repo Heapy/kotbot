@@ -3,9 +3,11 @@ package io.heapy.kotbot.bot.method
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.model.LinkPreviewOptions
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.ReplyMarkup
+import io.heapy.kotbot.bot.model.ReplyParameters
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
@@ -39,9 +41,9 @@ public data class SendMessage(
      */
     public val entities: List<MessageEntity>? = null,
     /**
-     * Disables link previews for links in this message
+     * Link preview generation options for the message
      */
-    public val disable_web_page_preview: Boolean? = null,
+    public val link_preview_options: LinkPreviewOptions? = null,
     /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
@@ -51,13 +53,9 @@ public data class SendMessage(
      */
     public val protect_content: Boolean? = null,
     /**
-     * If the message is a reply, ID of the original message
+     * Description of the message to reply to
      */
-    public val reply_to_message_id: Int? = null,
-    /**
-     * Pass *True* if the message should be sent even if the specified replied-to message is not found
-     */
-    public val allow_sending_without_reply: Boolean? = null,
+    public val reply_parameters: ReplyParameters? = null,
     /**
      * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
      */

@@ -28,7 +28,7 @@ public data class PromoteChatMember(
      */
     public val is_anonymous: Boolean? = null,
     /**
-     * Pass *True* if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+     * Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
      */
     public val can_manage_chat: Boolean? = null,
     /**
@@ -56,6 +56,18 @@ public data class PromoteChatMember(
      */
     public val can_invite_users: Boolean? = null,
     /**
+     * Pass *True* if the administrator can post stories to the chat
+     */
+    public val can_post_stories: Boolean? = null,
+    /**
+     * Pass *True* if the administrator can edit stories posted by other users
+     */
+    public val can_edit_stories: Boolean? = null,
+    /**
+     * Pass *True* if the administrator can delete stories posted by other users
+     */
+    public val can_delete_stories: Boolean? = null,
+    /**
      * Pass *True* if the administrator can post messages in the channel, or access channel statistics; channels only
      */
     public val can_post_messages: Boolean? = null,
@@ -67,18 +79,6 @@ public data class PromoteChatMember(
      * Pass *True* if the administrator can pin messages, supergroups only
      */
     public val can_pin_messages: Boolean? = null,
-    /**
-     * Pass *True* if the administrator can post stories in the channel; channels only
-     */
-    public val can_post_stories: Boolean? = null,
-    /**
-     * Pass *True* if the administrator can edit stories posted by other users; channels only
-     */
-    public val can_edit_stories: Boolean? = null,
-    /**
-     * Pass *True* if the administrator can delete stories posted by other users; channels only
-     */
-    public val can_delete_stories: Boolean? = null,
     /**
      * Pass *True* if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
      */

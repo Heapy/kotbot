@@ -215,7 +215,9 @@ class KotbotTest {
             SendMessage(
                 chat_id = qaUserId.chatId,
                 text = "Link with no preview: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                disable_web_page_preview = true,
+                link_preview_options = LinkPreviewOptions(
+                    is_disabled = true,
+                ),
                 reply_markup = verificationInlineKeyboard,
             )
         ).verify()
@@ -228,7 +230,9 @@ class KotbotTest {
             SendMessage(
                 chat_id = qaUserId.chatId,
                 text = "Link with a preview: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                disable_web_page_preview = false,
+                link_preview_options = LinkPreviewOptions(
+                    is_disabled = false,
+                ),
                 reply_markup = verificationInlineKeyboard,
             )
         ).verify()
@@ -273,7 +277,9 @@ class KotbotTest {
             SendMessage(
                 chat_id = qaUserId.chatId,
                 text = "This is a reply",
-                reply_to_message_id = message.message_id,
+                reply_parameters = ReplyParameters(
+                    message_id = message.message_id,
+                ),
                 reply_markup = verificationInlineKeyboard,
             )
         ).verify()
@@ -398,7 +404,9 @@ class KotbotTest {
                         Github run [${env["GITHUB_RUN_ID"]}](${env["GITHUB_SERVER_URL"]}/${env["GITHUB_REPOSITORY"]}/actions/runs/${env["GITHUB_RUN_ID"]})
                     """.trimIndent(),
                     parse_mode = "MarkdownV2",
-                    disable_web_page_preview = true,
+                    link_preview_options = LinkPreviewOptions(
+                        is_disabled = true,
+                    ),
                 )
             )
             Unit
@@ -417,7 +425,9 @@ class KotbotTest {
                             Github run [${env["GITHUB_RUN_ID"]}](${env["GITHUB_SERVER_URL"]}/${env["GITHUB_REPOSITORY"]}/actions/runs/${env["GITHUB_RUN_ID"]})
                         """.trimIndent(),
                         parse_mode = "MarkdownV2",
-                        disable_web_page_preview = true
+                        link_preview_options = LinkPreviewOptions(
+                            is_disabled = true,
+                        ),
                     )
                 )
             } finally {
@@ -442,8 +452,16 @@ class KotbotTest {
                     println("Received update: ${it.update_id}")
                 }
                 .find {
-                    (it.callback_query?.message?.message_id == message.message_id) &&
-                            (it.callback_query?.from?.id == qaUserId)
+                    val callbackMessage = it.callback_query?.message
+                    when {
+                        callbackMessage is InaccessibleMessage
+                                && callbackMessage.message_id == message.message_id
+                                && it.callback_query?.from?.id == qaUserId -> true
+                        callbackMessage is Message
+                                && callbackMessage.message_id == message.message_id
+                                && it.callback_query?.from?.id == qaUserId -> true
+                        else -> false
+                    }
                 }
                 ?.let { update ->
                     assertTrue(

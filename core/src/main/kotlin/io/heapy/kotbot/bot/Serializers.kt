@@ -100,3 +100,41 @@ public object MessageOrTrueSerializer : JsonContentPolymorphicSerializer<Message
             else -> MessageValue.serializer()
         }
 }
+
+public object ReactionTypeSerializer : JsonContentPolymorphicSerializer<ReactionType>(ReactionType::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out ReactionType> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "emoji" -> ReactionTypeEmoji.serializer()
+            "custom_emoji" -> ReactionTypeCustomEmoji.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class MaybeInaccessibleMessageSerializer : JsonContentPolymorphicSerializer<MaybeInaccessibleMessage>(MaybeInaccessibleMessage::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out MaybeInaccessibleMessage> =
+        when (element.jsonObject["date"]?.jsonPrimitive?.content) {
+            "0" -> InaccessibleMessage.serializer()
+            else -> Message.serializer()
+        }
+}
+
+public class ChatBoostSourceSerializer : JsonContentPolymorphicSerializer<ChatBoostSource>(ChatBoostSource::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out ChatBoostSource> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "premium" -> ChatBoostSourcePremium.serializer()
+            "gift_code" -> ChatBoostSourceGiftCode.serializer()
+            "giveaway" -> ChatBoostSourceGiveaway.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class MessageOriginSerializer : JsonContentPolymorphicSerializer<MessageOrigin>(MessageOrigin::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out MessageOrigin> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "user" -> MessageOriginUser.serializer()
+            "hidden_user" -> MessageOriginHiddenUser.serializer()
+            "chat" -> MessageOriginChat.serializer()
+            "channel" -> MessageOriginChannel.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}

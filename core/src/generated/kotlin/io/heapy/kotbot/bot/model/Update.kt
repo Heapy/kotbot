@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Update(
     /**
-     * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using [webhooks](https://core.telegram.org/bots/api/#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+     * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you're using [webhooks](https://core.telegram.org/bots/api/#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
      */
     public val update_id: Int,
     /**
@@ -18,7 +18,7 @@ public data class Update(
      */
     public val message: Message? = null,
     /**
-     * *Optional*. New version of a message that is known to the bot and was edited
+     * *Optional*. New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
      */
     public val edited_message: Message? = null,
     /**
@@ -26,9 +26,17 @@ public data class Update(
      */
     public val channel_post: Message? = null,
     /**
-     * *Optional*. New version of a channel post that is known to the bot and was edited
+     * *Optional*. New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
      */
     public val edited_channel_post: Message? = null,
+    /**
+     * *Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed_updates* to receive these updates. The update isn't received for reactions set by bots.
+     */
+    public val message_reaction: MessageReactionUpdated? = null,
+    /**
+     * *Optional*. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify `"message_reaction_count"` in the list of *allowed_updates* to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.
+     */
+    public val message_reaction_count: MessageReactionCountUpdated? = null,
     /**
      * *Optional*. New incoming [inline](https://core.telegram.org/bots/api/#inline-mode) query
      */
@@ -50,7 +58,7 @@ public data class Update(
      */
     public val pre_checkout_query: PreCheckoutQuery? = null,
     /**
-     * *Optional*. New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+     * *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
      */
     public val poll: Poll? = null,
     /**
@@ -62,11 +70,19 @@ public data class Update(
      */
     public val my_chat_member: ChatMemberUpdated? = null,
     /**
-     * *Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify "chat_member" in the list of *allowed_updates* to receive these updates.
+     * *Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify `"chat_member"` in the list of *allowed_updates* to receive these updates.
      */
     public val chat_member: ChatMemberUpdated? = null,
     /**
      * *Optional*. A request to join the chat has been sent. The bot must have the *can_invite_users* administrator right in the chat to receive these updates.
      */
     public val chat_join_request: ChatJoinRequest? = null,
+    /**
+     * *Optional*. A chat boost was added or changed. The bot must be an administrator in the chat to receive these updates.
+     */
+    public val chat_boost: ChatBoostUpdated? = null,
+    /**
+     * *Optional*. A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
+     */
+    public val removed_chat_boost: ChatBoostRemoved? = null,
 )
