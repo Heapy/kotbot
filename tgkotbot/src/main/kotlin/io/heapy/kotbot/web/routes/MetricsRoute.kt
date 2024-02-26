@@ -10,7 +10,7 @@ import io.ktor.util.KtorDsl
 
 @KtorDsl
 fun Routing.metrics(scrape: () -> String) {
-    get("/api/metrics") {
+    get("/metrics") {
         call.respondText(text = scrape(), contentType = ContentType004)
     }
 }

@@ -11,7 +11,7 @@ import javax.sql.DataSource
 
 @KtorDsl
 fun Routing.health(check: HealthCheck) {
-    get("/api/health") {
+    get("/healthcheck") {
         when (val response = check.doCheck()) {
             is Ok -> call.respond(HttpStatusCode.OK, response)
             is Neok -> call.respond(HttpStatusCode.ServiceUnavailable, response)
