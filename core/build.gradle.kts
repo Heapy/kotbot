@@ -28,14 +28,14 @@ repositories {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
         languageVersion = LanguageVersion.KOTLIN_2_0.versionString
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-progressive",
