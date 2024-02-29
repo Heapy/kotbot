@@ -120,7 +120,8 @@ public class MaybeInaccessibleMessageSerializer : JsonContentPolymorphicSerializ
 
 public class ChatBoostSourceSerializer : JsonContentPolymorphicSerializer<ChatBoostSource>(ChatBoostSource::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out ChatBoostSource> =
-        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+        when (val type = element.jsonObject["source"]?.jsonPrimitive?.content) {
+
             "premium" -> ChatBoostSourcePremium.serializer()
             "gift_code" -> ChatBoostSourceGiftCode.serializer()
             "giveaway" -> ChatBoostSourceGiveaway.serializer()
