@@ -31,7 +31,7 @@ class KnownChatsFilter(
     override suspend fun predicate(update: Update): Boolean {
         return isWellKnown(update).also { wellKnown ->
             if (!wellKnown && !isBlocked(update)) {
-                LOGGER.error("Don't process update $update since it's not part of chat family.")
+                log.error("Don't process update $update since it's not part of chat family.")
             }
         }
     }
@@ -65,6 +65,6 @@ class KnownChatsFilter(
     }
 
     companion object {
-        private val LOGGER = logger<KnownChatsFilter>()
+        private val log = logger<KnownChatsFilter>()
     }
 }

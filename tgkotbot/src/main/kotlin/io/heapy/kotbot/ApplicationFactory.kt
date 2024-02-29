@@ -10,19 +10,16 @@ import io.heapy.kotbot.dao.UserContextDao
 import io.heapy.kotbot.metrics.createPrometheusMeterRegistry
 import io.heapy.kotbot.web.KtorServer
 import io.heapy.kotbot.web.Server
-import io.heapy.kotbot.web.routes.DatabaseHealthCheck
 import io.heapy.kotbot.web.routes.CombinedHealthCheck
+import io.heapy.kotbot.web.routes.DatabaseHealthCheck
 import io.heapy.kotbot.web.routes.PingHealthCheck
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
 import io.micrometer.core.instrument.binder.db.MetricsDSLContext
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.json.Json
@@ -32,6 +29,7 @@ import org.jooq.impl.DSL
 import org.postgresql.ds.PGSimpleDataSource
 import runMigrations
 import java.lang.management.ManagementFactory
+import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
 open class ApplicationFactory {
@@ -46,8 +44,16 @@ open class ApplicationFactory {
         )
     }
 
+    open val ioDispatcher: CoroutineDispatcher by lazy {
+        val factory = Thread.ofVirtual().name("VT-IO").factory()
+        Executors.newFixedThreadPool(64, factory)
+            .asCoroutineDispatcher()
+    }
+
     open val updateDao by lazy {
-        UpdateDao()
+        UpdateDao(
+            ioDispatcher = ioDispatcher,
+        )
     }
 
     open val userContextDao by lazy {
@@ -205,11 +211,12 @@ open class ApplicationFactory {
             updateDao = updateDao,
             dslContext = dslContext,
             applicationScope = applicationScope,
+            main = main,
         )
     }
 
     open val main by lazy {
-        CompletableDeferred<Unit>()
+        CompletableDeferred<String>()
     }
 
     open suspend fun start() {
@@ -217,7 +224,7 @@ open class ApplicationFactory {
         Runtime.getRuntime().addShutdownHook(thread(start = false) {
             log.info("Shutdown hook called.")
             applicationScope.cancel("Shutdown hook called.")
-            main.complete(Unit)
+            main.complete("Shutdown hook called.")
         })
 
         server.start()
@@ -225,8 +232,8 @@ open class ApplicationFactory {
 
         log.info("Application started in ${uptime}ms.")
 
-        main.await()
-        log.info("Main gracefully stopped.")
+        val message = main.await()
+        log.info("Main gracefully stopped: {}", message)
     }
 
     companion object {

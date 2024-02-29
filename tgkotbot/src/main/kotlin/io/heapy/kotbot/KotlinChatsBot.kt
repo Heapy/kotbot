@@ -6,18 +6,16 @@ import io.heapy.kotbot.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.Method
-import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.execute
+import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.receiveUpdates
 import io.heapy.kotbot.dao.UpdateDao
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tags
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.jooq.DSLContext
 
 class KotlinChatsBot(
@@ -30,6 +28,7 @@ class KotlinChatsBot(
     private val applicationScope: CoroutineScope,
     private val updateDao: UpdateDao,
     private val dslContext: DSLContext,
+    private val main: CompletableDeferred<String>,
 ) {
     suspend fun start() {
         kotbot.receiveUpdates()
@@ -43,7 +42,11 @@ class KotlinChatsBot(
             }
             .launchIn(applicationScope)
             .invokeOnCompletion { cause ->
-                log.error("Updates completed", cause)
+                when (cause) {
+                    null -> main.complete("Updates completed")
+                    is CancellationException -> main.complete("Updates cancelled")
+                    else -> main.cancel("Updates failed", cause)
+                }
             }
     }
 
@@ -53,7 +56,7 @@ class KotlinChatsBot(
         saveUpdate(update)
     }
 
-    private fun saveUpdate(update: Update) = with(dslContext) {
+    private suspend fun saveUpdate(update: Update) = with(dslContext) {
         updateDao.saveRawUpdate(
             kotbot.json.encodeToString(Update.serializer(), update),
         )
