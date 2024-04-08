@@ -1,8 +1,8 @@
 [versions]
 coroutines = "1.8.0"
-flyway = "10.10.0"
+flyway = "10.11.0"
 hikari = "5.1.0"
-jooq = "3.19.6"
+jooq = "3.19.7"
 jsoup = "1.17.2"
 junit = "5.10.2"
 kotlin = "2.0.0-Beta5"
