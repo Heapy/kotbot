@@ -33,10 +33,6 @@ public data class CreateNewStickerSet(
      */
     public val stickers: List<InputSticker>,
     /**
-     * Format of stickers in the set, must be one of "static", "animated", "video"
-     */
-    public val sticker_format: String,
-    /**
      * Type of stickers in the set, pass "regular", "mask", or "custom_emoji". By default, a regular sticker set is created.
      */
     public val sticker_type: String? = null,

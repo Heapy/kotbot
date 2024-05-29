@@ -30,7 +30,7 @@ public data class ForwardMessages(
      */
     public val from_chat_id: ChatId,
     /**
-     * Identifiers of 1-100 messages in the chat *from_chat_id* to forward. The identifiers must be specified in a strictly increasing order.
+     * A JSON-serialized list of 1-100 identifiers of messages in the chat *from_chat_id* to forward. The identifiers must be specified in a strictly increasing order.
      */
     public val message_ids: List<Int>,
     /**

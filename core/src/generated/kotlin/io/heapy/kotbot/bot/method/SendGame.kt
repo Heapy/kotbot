@@ -18,6 +18,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SendGame(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat
      */
     public val chat_id: Long,
@@ -37,6 +41,10 @@ public data class SendGame(
      * Protects the contents of the sent message from forwarding and saving
      */
     public val protect_content: Boolean? = null,
+    /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    public val message_effect_id: String? = null,
     /**
      * Description of the message to reply to
      */

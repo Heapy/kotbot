@@ -167,6 +167,7 @@ data class IntArgument(
     override val name: String,
     override val description: String,
     override val required: Boolean,
+    val enumeration: List<Int>? = null,
     val default: Int? = null,
     val min: Int? = null,
     val max: Int? = null,

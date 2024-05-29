@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.method
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.model.InputPollOption
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.ReplyMarkup
@@ -21,6 +22,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SendPoll(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
@@ -33,9 +38,17 @@ public data class SendPoll(
      */
     public val question: String,
     /**
-     * A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
+     * Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
      */
-    public val options: List<String>,
+    public val question_parse_mode: String? = null,
+    /**
+     * A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question_parse_mode*
+     */
+    public val question_entities: List<MessageEntity>? = null,
+    /**
+     * A JSON-serialized list of 2-10 answer options
+     */
+    public val options: List<InputPollOption>,
     /**
      * *True*, if the poll needs to be anonymous, defaults to *True*
      */
@@ -61,7 +74,7 @@ public data class SendPoll(
      */
     public val explanation_parse_mode: String? = null,
     /**
-     * A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of *parse_mode*
+     * A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation_parse_mode*
      */
     public val explanation_entities: List<MessageEntity>? = null,
     /**
@@ -85,11 +98,15 @@ public data class SendPoll(
      */
     public val protect_content: Boolean? = null,
     /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    public val message_effect_id: String? = null,
+    /**
      * Description of the message to reply to
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendPoll, Message> by Companion {

@@ -37,11 +37,11 @@ public data class User(
     /**
      * *Optional*. *True*, if this user is a Telegram Premium user
      */
-    public val is_premium: Boolean? = null,
+    public val is_premium: Boolean? = true,
     /**
      * *Optional*. *True*, if this user added the bot to the attachment menu
      */
-    public val added_to_attachment_menu: Boolean? = null,
+    public val added_to_attachment_menu: Boolean? = true,
     /**
      * *Optional*. *True*, if the bot can be invited to groups. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
@@ -54,4 +54,8 @@ public data class User(
      * *Optional*. *True*, if the bot supports inline queries. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val supports_inline_queries: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val can_connect_to_business: Boolean? = null,
 )

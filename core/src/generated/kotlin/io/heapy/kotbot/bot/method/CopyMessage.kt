@@ -48,6 +48,10 @@ public data class CopyMessage(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * Pass *True*, if the caption must be shown above the message media. Ignored if a new caption isn't specified.
+     */
+    public val show_caption_above_media: Boolean? = null,
+    /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
     public val disable_notification: Boolean? = null,
@@ -60,7 +64,7 @@ public data class CopyMessage(
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<CopyMessage, MessageId> by Companion {

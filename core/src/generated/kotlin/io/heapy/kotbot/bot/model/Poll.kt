@@ -21,6 +21,10 @@ public data class Poll(
      */
     public val question: String,
     /**
+     * *Optional*. Special entities that appear in the *question*. Currently, only custom emoji entities are allowed in poll questions
+     */
+    public val question_entities: List<MessageEntity>? = null,
+    /**
      * List of poll options
      */
     public val options: List<PollOption>,

@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SuccessfulPayment(
     /**
-     * Three-letter ISO 4217 [currency](https://core.telegram.org/bots/payments#supported-currencies) code
+     * Three-letter ISO 4217 [currency](https://core.telegram.org/bots/payments#supported-currencies) code, or "XTR" for payments in [Telegram Stars](https://t.me/BotNews/90)
      */
     public val currency: String,
     /**

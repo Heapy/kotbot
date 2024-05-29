@@ -10,13 +10,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Location(
     /**
-     * Longitude as defined by sender
-     */
-    public val longitude: Double,
-    /**
      * Latitude as defined by sender
      */
     public val latitude: Double,
+    /**
+     * Longitude as defined by sender
+     */
+    public val longitude: Double,
     /**
      * *Optional*. The radius of uncertainty for the location, measured in meters; 0-1500
      */

@@ -6,6 +6,7 @@ import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.MessageOrTrue
+import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
@@ -41,6 +42,10 @@ public data class EditMessageCaption(
      * A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse_mode*
      */
     public val caption_entities: List<MessageEntity>? = null,
+    /**
+     * Pass *True*, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+     */
+    public val show_caption_above_media: Boolean? = null,
     /**
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
      */

@@ -14,6 +14,10 @@ public data class InputSticker(
      */
     public val sticker: Sticker,
     /**
+     * Format of the added sticker, must be one of "static" for a **.WEBP** or **.PNG** image, "animated" for a **.TGS** animation, "video" for a **WEBM** video
+     */
+    public val format: String,
+    /**
      * List of 1-20 emoji associated with the sticker
      */
     public val emoji_list: List<String>,

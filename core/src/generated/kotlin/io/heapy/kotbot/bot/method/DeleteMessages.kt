@@ -21,7 +21,7 @@ public data class DeleteMessages(
      */
     public val chat_id: ChatId,
     /**
-     * Identifiers of 1-100 messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
+     * A JSON-serialized list of 1-100 identifiers of messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
      */
     public val message_ids: List<Int>,
 ) : Method<DeleteMessages, Boolean> by Companion {

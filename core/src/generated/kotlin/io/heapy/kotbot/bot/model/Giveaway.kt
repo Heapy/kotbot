@@ -27,11 +27,11 @@ public data class Giveaway(
     /**
      * *Optional*. *True*, if only users who join the chats after the giveaway started should be eligible to win
      */
-    public val only_new_members: Boolean? = null,
+    public val only_new_members: Boolean? = true,
     /**
      * *Optional*. *True*, if the list of giveaway winners will be visible to everyone
      */
-    public val has_public_winners: Boolean? = null,
+    public val has_public_winners: Boolean? = true,
     /**
      * *Optional*. Description of additional giveaway prize
      */

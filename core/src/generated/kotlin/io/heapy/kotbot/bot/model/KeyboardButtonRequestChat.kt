@@ -5,7 +5,7 @@ import kotlin.Int
 import kotlinx.serialization.Serializable
 
 /**
- * This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. [More about requesting chats &raquo;](https://core.telegram.org/bots/features#chat-and-user-selection)
+ * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the chat if appropriate. [More about requesting chats &raquo;](https://core.telegram.org/bots/features#chat-and-user-selection).
  */
 @Serializable
 public data class KeyboardButtonRequestChat(
@@ -41,4 +41,16 @@ public data class KeyboardButtonRequestChat(
      * *Optional*. Pass *True* to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
      */
     public val bot_is_member: Boolean? = null,
+    /**
+     * *Optional*. Pass *True* to request the chat's title
+     */
+    public val request_title: Boolean? = null,
+    /**
+     * *Optional*. Pass *True* to request the chat's username
+     */
+    public val request_username: Boolean? = null,
+    /**
+     * *Optional*. Pass *True* to request the chat's photo
+     */
+    public val request_photo: Boolean? = null,
 )

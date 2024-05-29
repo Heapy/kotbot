@@ -33,9 +33,17 @@ public data class Message(
      */
     public val sender_boost_count: Int? = null,
     /**
+     * *Optional*. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
+     */
+    public val sender_business_bot: User? = null,
+    /**
      * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
      */
     public val date: Long,
+    /**
+     * *Optional*. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+     */
+    public val business_connection_id: String? = null,
     /**
      * Chat the message belongs to
      */
@@ -47,11 +55,11 @@ public data class Message(
     /**
      * *Optional*. *True*, if the message is sent to a forum topic
      */
-    public val is_topic_message: Boolean? = null,
+    public val is_topic_message: Boolean? = true,
     /**
      * *Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
      */
-    public val is_automatic_forward: Boolean? = null,
+    public val is_automatic_forward: Boolean? = true,
     /**
      * *Optional*. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
      */
@@ -79,7 +87,11 @@ public data class Message(
     /**
      * *Optional*. *True*, if the message can't be forwarded
      */
-    public val has_protected_content: Boolean? = null,
+    public val has_protected_content: Boolean? = true,
+    /**
+     * *Optional*. True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
+     */
+    public val is_from_offline: Boolean? = true,
     /**
      * *Optional*. The unique identifier of a media message group this message belongs to
      */
@@ -100,6 +112,10 @@ public data class Message(
      * *Optional*. Options used for link preview generation for the message, if it is a text message and link preview options were changed
      */
     public val link_preview_options: LinkPreviewOptions? = null,
+    /**
+     * *Optional*. Unique identifier of the message effect added to the message
+     */
+    public val effect_id: String? = null,
     /**
      * *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
      */
@@ -145,9 +161,13 @@ public data class Message(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * *Optional*. True, if the caption must be shown above the message media
+     */
+    public val show_caption_above_media: Boolean? = true,
+    /**
      * *Optional*. *True*, if the message media is covered by a spoiler animation
      */
-    public val has_media_spoiler: Boolean? = null,
+    public val has_media_spoiler: Boolean? = true,
     /**
      * *Optional*. Message is a shared contact, information about the contact
      */
@@ -191,19 +211,19 @@ public data class Message(
     /**
      * *Optional*. Service message: the chat photo was deleted
      */
-    public val delete_chat_photo: Boolean? = null,
+    public val delete_chat_photo: Boolean? = true,
     /**
      * *Optional*. Service message: the group has been created
      */
-    public val group_chat_created: Boolean? = null,
+    public val group_chat_created: Boolean? = true,
     /**
      * *Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
      */
-    public val supergroup_chat_created: Boolean? = null,
+    public val supergroup_chat_created: Boolean? = true,
     /**
      * *Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
      */
-    public val channel_chat_created: Boolean? = null,
+    public val channel_chat_created: Boolean? = true,
     /**
      * *Optional*. Service message: auto-delete timer settings changed in the chat
      */
@@ -256,6 +276,10 @@ public data class Message(
      * *Optional*. Service message: user boosted the chat
      */
     public val boost_added: ChatBoostAdded? = null,
+    /**
+     * *Optional*. Service message: chat background set
+     */
+    public val chat_background_set: ChatBackground? = null,
     /**
      * *Optional*. Service message: forum topic created
      */

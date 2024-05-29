@@ -20,11 +20,15 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class SendChatAction(
     /**
+     * Unique identifier of the business connection on behalf of which the action will be sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
     /**
-     * Unique identifier for the target message thread; supergroups only
+     * Unique identifier for the target message thread; for supergroups only
      */
     public val message_thread_id: Int? = null,
     /**

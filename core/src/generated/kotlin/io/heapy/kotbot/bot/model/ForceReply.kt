@@ -5,14 +5,14 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice [privacy mode](https://core.telegram.org/bots/features#privacy-mode).
+ * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice [privacy mode](https://core.telegram.org/bots/features#privacy-mode). Not supported in channels and for messages sent on behalf of a Telegram Business account.
  */
 @Serializable
 public data class ForceReply(
     /**
      * Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
      */
-    public val force_reply: Boolean,
+    public val force_reply: Boolean = true,
     /**
      * *Optional*. The placeholder to be shown in the input field when the reply is active; 1-64 characters
      */

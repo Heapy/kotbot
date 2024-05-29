@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
-        .getResource("api710.json")
+        .getResource("api740.json")
         ?.readText()
         ?: error("custom.json not found")
 

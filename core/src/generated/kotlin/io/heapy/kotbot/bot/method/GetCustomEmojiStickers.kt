@@ -15,7 +15,7 @@ import kotlinx.serialization.builtins.ListSerializer
 @Serializable
 public data class GetCustomEmojiStickers(
     /**
-     * List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+     * A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
      */
     public val custom_emoji_ids: List<String>,
 ) : Method<GetCustomEmojiStickers, List<Sticker>> by Companion {

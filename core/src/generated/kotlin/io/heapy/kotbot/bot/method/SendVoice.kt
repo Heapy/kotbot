@@ -16,10 +16,14 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as [Audio](https://core.telegram.org/bots/api/#audio) or [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as [Audio](https://core.telegram.org/bots/api/#audio) or [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
  */
 @Serializable
 public data class SendVoice(
+    /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    public val business_connection_id: String? = null,
     /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
@@ -57,11 +61,15 @@ public data class SendVoice(
      */
     public val protect_content: Boolean? = null,
     /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    public val message_effect_id: String? = null,
+    /**
      * Description of the message to reply to
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendVoice, Message> by Companion {

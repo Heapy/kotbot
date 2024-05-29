@@ -45,7 +45,7 @@ public data class ChatAdministratorRights(
      */
     public val can_post_stories: Boolean,
     /**
-     * *True*, if the administrator can edit stories posted by other users
+     * *True*, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
      */
     public val can_edit_stories: Boolean,
     /**
@@ -53,19 +53,19 @@ public data class ChatAdministratorRights(
      */
     public val can_delete_stories: Boolean,
     /**
-     * *Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; channels only
+     * *Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; for channels only
      */
     public val can_post_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the administrator can edit messages of other users and can pin messages; channels only
+     * *Optional*. *True*, if the administrator can edit messages of other users and can pin messages; for channels only
      */
     public val can_edit_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to pin messages; groups and supergroups only
+     * *Optional*. *True*, if the user is allowed to pin messages; for groups and supergroups only
      */
     public val can_pin_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+     * *Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
      */
     public val can_manage_topics: Boolean? = null,
 )

@@ -26,7 +26,7 @@ public data class SetMessageReaction(
      */
     public val message_id: Int,
     /**
-     * New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+     * A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
      */
     public val reaction: List<ReactionType>? = null,
     /**

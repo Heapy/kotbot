@@ -2,11 +2,7 @@ package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.model.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JsonContentPolymorphicSerializer
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.*
 
 public object BotCommandScopeSerializer : JsonContentPolymorphicSerializer<BotCommandScope>(BotCommandScope::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out BotCommandScope> =
@@ -47,14 +43,16 @@ public object InputMediaSerializer : JsonContentPolymorphicSerializer<InputMedia
         }
 }
 
-public object InlineQueryResultSerializer : JsonContentPolymorphicSerializer<InlineQueryResult>(InlineQueryResult::class) {
+public object InlineQueryResultSerializer :
+    JsonContentPolymorphicSerializer<InlineQueryResult>(InlineQueryResult::class) {
     override fun selectDeserializer(
         element: JsonElement,
     ): KSerializer<out InlineQueryResult> =
         TODO("No need to deserialize InlineQueryResult entity")
 }
 
-public object InputMessageContentSerializer : JsonContentPolymorphicSerializer<InputMessageContent>(InputMessageContent::class) {
+public object InputMessageContentSerializer :
+    JsonContentPolymorphicSerializer<InputMessageContent>(InputMessageContent::class) {
     override fun selectDeserializer(
         element: JsonElement,
     ): KSerializer<out InputMessageContent> =
@@ -68,7 +66,8 @@ public object MenuButtonSerializer : JsonContentPolymorphicSerializer<MenuButton
         TODO("No need to deserialize MenuButton entity")
 }
 
-public object PassportElementErrorSerializer : JsonContentPolymorphicSerializer<PassportElementError>(PassportElementError::class) {
+public object PassportElementErrorSerializer :
+    JsonContentPolymorphicSerializer<PassportElementError>(PassportElementError::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out PassportElementError> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             else -> error("Unknown argument type: $type")
@@ -110,7 +109,8 @@ public object ReactionTypeSerializer : JsonContentPolymorphicSerializer<Reaction
         }
 }
 
-public class MaybeInaccessibleMessageSerializer : JsonContentPolymorphicSerializer<MaybeInaccessibleMessage>(MaybeInaccessibleMessage::class) {
+public class MaybeInaccessibleMessageSerializer :
+    JsonContentPolymorphicSerializer<MaybeInaccessibleMessage>(MaybeInaccessibleMessage::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out MaybeInaccessibleMessage> =
         when (element.jsonObject["date"]?.jsonPrimitive?.content) {
             "0" -> InaccessibleMessage.serializer()
@@ -136,6 +136,27 @@ public class MessageOriginSerializer : JsonContentPolymorphicSerializer<MessageO
             "hidden_user" -> MessageOriginHiddenUser.serializer()
             "chat" -> MessageOriginChat.serializer()
             "channel" -> MessageOriginChannel.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class BackgroundFillSerializer : JsonContentPolymorphicSerializer<BackgroundFill>(BackgroundFill::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out BackgroundFill> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "solid" -> BackgroundFillSolid.serializer()
+            "gradient" -> BackgroundFillGradient.serializer()
+            "freeform_gradient" -> BackgroundFillFreeformGradient.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class BackgroundTypeSerializer : JsonContentPolymorphicSerializer<BackgroundType>(BackgroundType::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out BackgroundType> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "chat_theme" -> BackgroundTypeChatTheme.serializer()
+            "fill" -> BackgroundTypeFill.serializer()
+            "pattern" -> BackgroundTypePattern.serializer()
+            "wallpaper" -> BackgroundTypeWallpaper.serializer()
             else -> error("Unknown argument type: $type")
         }
 }

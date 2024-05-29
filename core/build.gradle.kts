@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.config.LanguageVersion
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
@@ -34,10 +32,8 @@ kotlin {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "21"
-        languageVersion = LanguageVersion.KOTLIN_2_0.versionString
-        freeCompilerArgs = freeCompilerArgs + listOf(
+    compilerOptions {
+        freeCompilerArgs.addAll(
             "-progressive",
             "-opt-in=kotlin.RequiresOptIn"
         )

@@ -34,6 +34,10 @@ public data class ChatMemberUpdated(
      */
     public val invite_link: ChatInviteLink? = null,
     /**
+     * *Optional*. True, if the user joined the chat after sending a direct join request without using an invite link and being approved by an administrator
+     */
+    public val via_join_request: Boolean? = null,
+    /**
      * *Optional*. True, if the user joined the chat via a chat folder invite link
      */
     public val via_chat_folder_invite_link: Boolean? = null,

@@ -22,6 +22,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SendVideo(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
@@ -62,6 +66,10 @@ public data class SendVideo(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * Pass *True*, if the caption must be shown above the message media
+     */
+    public val show_caption_above_media: Boolean? = null,
+    /**
      * Pass *True* if the video needs to be covered with a spoiler animation
      */
     public val has_spoiler: Boolean? = null,
@@ -78,11 +86,15 @@ public data class SendVideo(
      */
     public val protect_content: Boolean? = null,
     /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    public val message_effect_id: String? = null,
+    /**
      * Description of the message to reply to
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendVideo, Message> by Companion {

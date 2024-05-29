@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.model
 
+import kotlin.Boolean
 import kotlin.String
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
@@ -37,6 +38,10 @@ public data class InlineQueryResultCachedMpeg4Gif(
      * *Optional*. List of special entities that appear in the caption, which can be specified instead of *parse_mode*
      */
     public val caption_entities: List<MessageEntity>? = null,
+    /**
+     * *Optional*. Pass *True*, if the caption must be shown above the message media
+     */
+    public val show_caption_above_media: Boolean? = null,
     /**
      * *Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
      */

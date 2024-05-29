@@ -47,11 +47,11 @@ public data class GiveawayWinners(
     /**
      * *Optional*. *True*, if only users who had joined the chats after the giveaway started were eligible to win
      */
-    public val only_new_members: Boolean? = null,
+    public val only_new_members: Boolean? = true,
     /**
      * *Optional*. *True*, if the giveaway was canceled because the payment for it was refunded
      */
-    public val was_refunded: Boolean? = null,
+    public val was_refunded: Boolean? = true,
     /**
      * *Optional*. Description of additional giveaway prize
      */

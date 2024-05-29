@@ -36,6 +36,10 @@ public data class InputMediaVideo(
      */
     public val caption_entities: List<MessageEntity>? = null,
     /**
+     * *Optional*. Pass *True*, if the caption must be shown above the message media
+     */
+    public val show_caption_above_media: Boolean? = null,
+    /**
      * *Optional*. Video width
      */
     public val width: Int? = null,

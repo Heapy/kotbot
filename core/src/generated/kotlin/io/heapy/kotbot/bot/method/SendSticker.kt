@@ -19,6 +19,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SendSticker(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
@@ -27,7 +31,7 @@ public data class SendSticker(
      */
     public val message_thread_id: Int? = null,
     /**
-     * Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files). Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL.
+     * Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files). Video and animated stickers can't be sent via an HTTP URL.
      */
     public val sticker: Sticker,
     /**
@@ -43,11 +47,15 @@ public data class SendSticker(
      */
     public val protect_content: Boolean? = null,
     /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    public val message_effect_id: String? = null,
+    /**
      * Description of the message to reply to
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendSticker, Message> by Companion {

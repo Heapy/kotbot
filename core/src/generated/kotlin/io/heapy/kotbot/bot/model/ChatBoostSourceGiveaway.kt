@@ -25,5 +25,5 @@ public data class ChatBoostSourceGiveaway(
     /**
      * *Optional*. True, if the giveaway was completed, but there was no user to win the prize
      */
-    public val is_unclaimed: Boolean? = null,
+    public val is_unclaimed: Boolean? = true,
 ) : ChatBoostSource

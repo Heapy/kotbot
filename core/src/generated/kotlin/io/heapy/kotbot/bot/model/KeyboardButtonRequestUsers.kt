@@ -5,7 +5,7 @@ import kotlin.Int
 import kotlinx.serialization.Serializable
 
 /**
- * This object defines the criteria used to request suitable users. The identifiers of the selected users will be shared with the bot when the corresponding button is pressed. [More about requesting users &raquo;](https://core.telegram.org/bots/features#chat-and-user-selection)
+ * This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. [More about requesting users &raquo;](https://core.telegram.org/bots/features#chat-and-user-selection)
  */
 @Serializable
 public data class KeyboardButtonRequestUsers(
@@ -25,4 +25,16 @@ public data class KeyboardButtonRequestUsers(
      * *Optional*. The maximum number of users to be selected; 1-10. Defaults to 1.
      */
     public val max_quantity: Int? = 1,
+    /**
+     * *Optional*. Pass *True* to request the users' first and last names
+     */
+    public val request_name: Boolean? = null,
+    /**
+     * *Optional*. Pass *True* to request the users' usernames
+     */
+    public val request_username: Boolean? = null,
+    /**
+     * *Optional*. Pass *True* to request the users' photos
+     */
+    public val request_photo: Boolean? = null,
 )

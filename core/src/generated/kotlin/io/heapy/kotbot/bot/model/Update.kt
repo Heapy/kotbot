@@ -30,6 +30,22 @@ public data class Update(
      */
     public val edited_channel_post: Message? = null,
     /**
+     * *Optional*. The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
+     */
+    public val business_connection: BusinessConnection? = null,
+    /**
+     * *Optional*. New message from a connected business account
+     */
+    public val business_message: Message? = null,
+    /**
+     * *Optional*. New version of a message from a connected business account
+     */
+    public val edited_business_message: Message? = null,
+    /**
+     * *Optional*. Messages were deleted from a connected business account
+     */
+    public val deleted_business_messages: BusinessMessagesDeleted? = null,
+    /**
      * *Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed_updates* to receive these updates. The update isn't received for reactions set by bots.
      */
     public val message_reaction: MessageReactionUpdated? = null,

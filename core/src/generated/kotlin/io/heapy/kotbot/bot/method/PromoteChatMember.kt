@@ -60,7 +60,7 @@ public data class PromoteChatMember(
      */
     public val can_post_stories: Boolean? = null,
     /**
-     * Pass *True* if the administrator can edit stories posted by other users
+     * Pass *True* if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
      */
     public val can_edit_stories: Boolean? = null,
     /**
@@ -68,19 +68,19 @@ public data class PromoteChatMember(
      */
     public val can_delete_stories: Boolean? = null,
     /**
-     * Pass *True* if the administrator can post messages in the channel, or access channel statistics; channels only
+     * Pass *True* if the administrator can post messages in the channel, or access channel statistics; for channels only
      */
     public val can_post_messages: Boolean? = null,
     /**
-     * Pass *True* if the administrator can edit messages of other users and can pin messages; channels only
+     * Pass *True* if the administrator can edit messages of other users and can pin messages; for channels only
      */
     public val can_edit_messages: Boolean? = null,
     /**
-     * Pass *True* if the administrator can pin messages, supergroups only
+     * Pass *True* if the administrator can pin messages; for supergroups only
      */
     public val can_pin_messages: Boolean? = null,
     /**
-     * Pass *True* if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
+     * Pass *True* if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
      */
     public val can_manage_topics: Boolean? = null,
 ) : Method<PromoteChatMember, Boolean> by Companion {
