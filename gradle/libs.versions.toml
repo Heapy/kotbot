@@ -1,6 +1,6 @@
 [versions]
 coroutines = "1.8.1"
-flyway = "10.16.0"
+flyway = "10.17.0"
 hikari = "5.1.0"
 jooq = "3.19.10"
 jsoup = "1.18.1"
