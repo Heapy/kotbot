@@ -31,15 +31,6 @@ kotlin {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-progressive",
-            "-opt-in=kotlin.RequiresOptIn"
-        )
-    }
-}
-
 tasks.test {
     useJUnitPlatform()
 }

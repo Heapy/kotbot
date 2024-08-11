@@ -20,13 +20,3 @@ kotlin {
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
 }
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-progressive",
-            "-opt-in=kotlin.RequiresOptIn",
-            "-Xcontext-receivers",
-        )
-    }
-}

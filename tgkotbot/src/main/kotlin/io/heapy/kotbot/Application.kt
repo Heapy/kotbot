@@ -1,7 +1,10 @@
 @file:JvmName("Application")
+
 package io.heapy.kotbot
 
-suspend fun main() {
-    ApplicationFactory().start()
-}
+import io.heapy.kotbot.bot.createApplicationModule
 
+suspend fun main() {
+    createApplicationModule {}
+        .start()
+}

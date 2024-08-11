@@ -2,6 +2,7 @@ plugins {
     application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 application {
@@ -27,6 +28,9 @@ dependencies {
 
     implementation(libs.micrometer.prometheus)
 
+    ksp(libs.komok.di)
+    implementation(libs.komok.di.lib)
+
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client)
     implementation(libs.ktor.client.content.negation)
@@ -51,8 +55,6 @@ kotlin {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     compilerOptions {
         freeCompilerArgs.addAll(
-            "-progressive",
-            "-opt-in=kotlin.RequiresOptIn",
             "-Xcontext-receivers",
         )
     }

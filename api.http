@@ -1,2 +1,5 @@
-# Healthcheck
-GET http://localhost:8080/api/health
+### Healthcheck
+GET http://localhost:8080/healthcheck
+
+### Metrics
+GET http://localhost:8080/metrics
