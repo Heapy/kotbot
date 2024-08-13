@@ -4,9 +4,15 @@
 package io.heapy.kotbot.database.tables.references
 
 
+import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
 
+
+/**
+ * The table <code>public.telegram_user</code>.
+ */
+val TELEGRAM_USER: TelegramUser = TelegramUser.TELEGRAM_USER
 
 /**
  * The table <code>public.update_raw</code>.

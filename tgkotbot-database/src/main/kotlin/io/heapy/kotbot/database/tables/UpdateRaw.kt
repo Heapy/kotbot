@@ -89,7 +89,7 @@ open class UpdateRaw(
 
     private constructor(alias: Name, aliased: Table<UpdateRawRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<UpdateRawRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.update_raw</code> table reference
@@ -130,7 +130,7 @@ open class UpdateRaw(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): UpdateRaw = UpdateRaw(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): UpdateRaw = UpdateRaw(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -140,12 +140,12 @@ open class UpdateRaw(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): UpdateRaw = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): UpdateRaw = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): UpdateRaw = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): UpdateRaw = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

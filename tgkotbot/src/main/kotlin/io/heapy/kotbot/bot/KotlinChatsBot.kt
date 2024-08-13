@@ -12,7 +12,6 @@ import io.heapy.kotbot.bot.rules.Actions
 import io.heapy.kotbot.bot.rules.Rule
 import io.heapy.kotbot.infra.logger
 import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.core.instrument.Tags
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn

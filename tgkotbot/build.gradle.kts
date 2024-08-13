@@ -21,15 +21,17 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)
-    implementation(libs.kotlin.serialization)
+    implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.serialization.hocon)
 
     implementation(libs.logback)
 
     implementation(libs.micrometer.prometheus)
 
-    ksp(libs.komok.di)
-    implementation(libs.komok.di.lib)
+    ksp(libs.komok.tech.di)
+    implementation(libs.komok.tech.di.lib)
+    implementation(libs.komok.tech.config)
+    implementation(libs.komok.tech.dotenv)
 
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client)
@@ -39,6 +41,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.coroutines.test)
 }
 
 repositories {
@@ -61,5 +64,13 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("ManualTest")
+    }
+}
+
+val manualTests by tasks.registering(Test::class) {
+    useJUnitPlatform {
+        includeTags("ManualTest")
+    }
 }

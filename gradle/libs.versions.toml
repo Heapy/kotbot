@@ -5,7 +5,7 @@ hikari = "5.1.0"
 jooq = "3.19.10"
 jsoup = "1.18.1"
 junit = "5.10.3"
-komok = "1.0.4"
+komok = "1.0.5"
 kotlin = "2.0.20-RC"
 ksp = "2.0.20-RC-1.0.24"
 ktor = "2.3.12"
@@ -32,11 +32,13 @@ hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlin-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "serialization" }
 
-komok-di = { module = "io.heapy.komok:komok-tech-di", version.ref = "komok" }
-komok-di-lib = { module = "io.heapy.komok:komok-tech-di-lib", version.ref = "komok" }
+komok-tech-di = { module = "io.heapy.komok:komok-tech-di", version.ref = "komok" }
+komok-tech-di-lib = { module = "io.heapy.komok:komok-tech-di-lib", version.ref = "komok" }
+komok-tech-dotenv = { module = "io.heapy.komok:komok-tech-dotenv", version.ref = "komok" }
+komok-tech-config = { module = "io.heapy.komok:komok-tech-config", version.ref = "komok" }
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "poet" }
 

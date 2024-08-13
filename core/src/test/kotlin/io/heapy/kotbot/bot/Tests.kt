@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.komok.tech.dotenv.dotenv
 import io.heapy.kotbot.bot.method.*
 import io.heapy.kotbot.bot.model.*
 import kotlinx.coroutines.delay

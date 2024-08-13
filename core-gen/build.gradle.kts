@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlin.serialization)
+    implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlinpoet)
     implementation(libs.jsoup)
 }

@@ -1,6 +1,7 @@
 @file:JvmName("Playground")
 package io.heapy.kotbot.bot
 
+import io.heapy.komok.tech.dotenv.dotenv
 import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.GetMe
 import io.heapy.kotbot.bot.model.LongChatId

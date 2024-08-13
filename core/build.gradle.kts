@@ -10,7 +10,7 @@ kotlin {
 dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.coroutines)
-    implementation(libs.kotlin.serialization)
+    implementation(libs.kotlin.serialization.json)
 
     implementation(libs.ktor.client)
 
@@ -18,6 +18,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.mockk)
     testImplementation(libs.logback)
+    testImplementation(libs.komok.tech.dotenv)
 }
 
 repositories {

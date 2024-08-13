@@ -4,6 +4,7 @@
 package io.heapy.kotbot.database
 
 
+import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
 import kotlin.collections.List
@@ -27,6 +28,11 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     }
 
     /**
+     * The table <code>public.telegram_user</code>.
+     */
+    val TELEGRAM_USER: TelegramUser get() = TelegramUser.TELEGRAM_USER
+
+    /**
      * The table <code>public.update_raw</code>.
      */
     val UPDATE_RAW: UpdateRaw get() = UpdateRaw.UPDATE_RAW
@@ -34,6 +40,7 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
+        TelegramUser.TELEGRAM_USER,
         UpdateRaw.UPDATE_RAW
     )
 }

@@ -3,9 +3,7 @@ package io.heapy.kotbot.bot.rules
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.infra.HttpClientModule
 import io.heapy.kotbot.infra.configuration.CasConfiguration
-import io.heapy.kotbot.infra.configuration.ConfigurationModule
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.hocon.Hocon
+import io.heapy.komok.tech.config.ConfigurationModule
 
 @Module
 open class RulesModule(
@@ -55,11 +53,12 @@ open class RulesModule(
         )
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     open val casConfiguration: CasConfiguration by lazy {
-        Hocon.decodeFromConfig(
-            CasConfiguration.serializer(),
-            configurationModule.config.getConfig("cas"),
-        )
+        configurationModule
+            .config
+            .read(
+                deserializer = CasConfiguration.serializer(),
+                path = "cas",
+            )
     }
 }

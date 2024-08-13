@@ -1,15 +1,17 @@
 package io.heapy.kotbot.bot.commands
 
+import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.banFrom
 import io.heapy.kotbot.bot.commands.Command.Access
 import io.heapy.kotbot.bot.commands.Command.Context
-import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.bot.method.SendMessage
-import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.bot.model.Update
-import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.delete
 import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.method.SendMessage
+import io.heapy.kotbot.bot.model.LongChatId
+import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.infra.logger
+import io.heapy.kotbot.infra.openai.GptService
 import io.heapy.kotbot.infra.readResource
 
 interface Command {
@@ -57,12 +59,14 @@ class ChatInfoCommand : Command {
         kotbot: Kotbot,
         update: Update,
     ) {
-        kotbot.executeSafely(SendMessage(
-            chat_id = LongChatId(update.cmdMessage.chat.id),
-            text = """
+        kotbot.executeSafely(
+            SendMessage(
+                chat_id = LongChatId(update.cmdMessage.chat.id),
+                text = """
                 Chat id: ${update.cmdMessage.chat.id}
             """.trimIndent()
-        ))
+            )
+        )
         kotbot.executeSafely(update.cmdMessage.delete)
     }
 }
@@ -97,17 +101,21 @@ class SendMessageFromBotCommand(
         update: Update,
     ) {
         update.cmdMessage.textWithoutCommand?.let { text ->
-            kotbot.executeSafely(SendMessage(
-                chat_id = LongChatId(id),
-                text = text
-            ))
-            kotbot.executeSafely(SendMessage(
-                chat_id = LongChatId(admin),
-                text = """
+            kotbot.executeSafely(
+                SendMessage(
+                    chat_id = LongChatId(id),
+                    text = text
+                )
+            )
+            kotbot.executeSafely(
+                SendMessage(
+                    chat_id = LongChatId(admin),
+                    text = """
                     ${update.cmdMessage.from?.username} sent following message to chat $name:
                     $text
                 """.trimIndent()
-            ))
+                )
+            )
         }
     }
 }
@@ -122,15 +130,69 @@ class StartCommand : Command {
         update: Update,
     ) {
         start_text?.let { text ->
-            kotbot.executeSafely(SendMessage(
-                chat_id = LongChatId(update.cmdMessage.chat.id),
-                text = text,
-                parse_mode = "MarkdownV2",
-            ))
+            kotbot.executeSafely(
+                SendMessage(
+                    chat_id = LongChatId(update.cmdMessage.chat.id),
+                    text = text,
+                    parse_mode = "MarkdownV2",
+                )
+            )
         }
     }
 
     companion object {
         private val start_text = readResource("start.txt")
+    }
+}
+
+class GptCommand(
+    private val gptService: GptService,
+) : Command {
+    override val name: String = "/gpt"
+    override val context: Context = Context.GROUP_CHAT
+    override val access: Access = Access.ADMIN
+
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        val text = update.message?.textWithoutCommand
+        val replyText = update.message?.reply_to_message?.text
+
+        val prompt = text
+            ?: replyText
+            ?: run {
+                log.info("")
+                return
+            }
+
+        val response = gptService
+            .complete(
+                prompt = prompt,
+            )
+
+        val escaped = response
+            .replace(".", "\\.")
+            .replace("!", "\\!")
+            .replace("(", "\\(")
+            .replace(")", "\\)")
+            .replace("-", "\\-")
+            .replace("@kotlin_lang", "@kotlin\\_lang")
+            .replace("@kotlin_start", "@kotlin\\_start")
+
+        log.info("GPT response: {}", response)
+        log.info("Escaped response: {}", escaped)
+
+        kotbot.executeSafely(
+            SendMessage(
+                chat_id = LongChatId(update.cmdMessage.chat.id),
+                text = escaped,
+                parse_mode = "MarkdownV2",
+            )
+        )
+    }
+
+    private companion object {
+        private val log = logger<GptCommand>()
     }
 }
