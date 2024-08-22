@@ -159,10 +159,12 @@ class GptCommand(
         val text = update.message?.textWithoutCommand
         val replyText = update.message?.reply_to_message?.text
 
+        val threadId = update.message?.message_thread_id
+
         val prompt = text
             ?: replyText
             ?: run {
-                log.info("")
+                log.info("No text to process")
                 return
             }
 
@@ -186,6 +188,7 @@ class GptCommand(
         kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(update.cmdMessage.chat.id),
+                message_thread_id = threadId,
                 text = escaped,
                 parse_mode = "MarkdownV2",
             )
