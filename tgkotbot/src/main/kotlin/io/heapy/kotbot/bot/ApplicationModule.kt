@@ -37,7 +37,7 @@ open class ApplicationModule(
         ) {
             log.info("Shutdown hook called.")
             autoClosableModule.close()
-            applicationScopeModule.applicationScope.cancel()
+            applicationScopeModule.applicationJob.complete()
         })
 
         serverModule.server.start()

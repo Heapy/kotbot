@@ -20,19 +20,17 @@ open class KotlinChatBotModule(
     private val metricsModule: MetricsModule,
     private val applicationScopeModule: ApplicationScopeModule,
     private val kotbotModule: KotbotModule,
-    private val kotlinChatBotConfigurationModule: KotlinChatBotConfigurationModule,
 ) {
     open val kotlinChatsBot: KotlinChatsBot by lazy {
         KotlinChatsBot(
             kotbot = kotbotModule.kotbot,
             rules = rulesModule.rules,
-            commands = commandsModule.commands,
             filter = filtersModule.filter,
             meterRegistry = metricsModule.meterRegistry,
-            admins = kotlinChatBotConfigurationModule.groupsConfiguration.admins.flatMap { it.value },
             updateDao = daoModule.updateDao,
             dslContext = jdbcModule.dslContext,
             applicationScope = applicationScopeModule.applicationScope,
+            commandResolver = commandsModule.commandResolver,
         )
     }
 }

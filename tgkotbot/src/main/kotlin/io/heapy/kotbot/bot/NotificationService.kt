@@ -13,7 +13,7 @@ class NotificationService(
         kotbot.execute(
             SendMessage(
                 chat_id = LongChatId(chatId),
-                text = message,
+                text = escapeMarkdownV2(message),
                 parse_mode = "MarkdownV2",
             )
         )
