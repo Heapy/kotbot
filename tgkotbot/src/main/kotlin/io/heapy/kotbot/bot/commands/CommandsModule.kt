@@ -37,6 +37,7 @@ open class CommandsModule(
             spamCommand,
             startCommand,
             closeTopicCommand,
+            reopenTopicCommand,
             renameTopicCommand,
             gptCommand,
         ) + sendMessageToGroupCommands
