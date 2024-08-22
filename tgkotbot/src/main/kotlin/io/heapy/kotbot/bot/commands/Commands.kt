@@ -1,14 +1,15 @@
 package io.heapy.kotbot.bot.commands
 
-import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.bot.banFrom
+import io.heapy.kotbot.bot.*
 import io.heapy.kotbot.bot.commands.Command.Access
 import io.heapy.kotbot.bot.commands.Command.Context
-import io.heapy.kotbot.bot.delete
 import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.method.DeleteMessage
+import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.bot.model.ReplyParameters
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.infra.logger
 import io.heapy.kotbot.infra.openai.GptService
@@ -158,8 +159,30 @@ class GptCommand(
     ) {
         val text = update.message?.textWithoutCommand
         val replyText = update.message?.reply_to_message?.text
-
         val threadId = update.message?.message_thread_id
+
+        kotbot.executeSafely(
+            DeleteMessage(
+                chat_id = LongChatId(update.cmdMessage.chat.id),
+                message_id = update.cmdMessage.message_id,
+            )
+        )
+
+        val replyParameters = update.message?.reply_to_message?.message_id?.let {
+            ReplyParameters(
+                message_id = it,
+            )
+        }
+
+        val message = kotbot.executeSafely(
+            SendMessage(
+                chat_id = LongChatId(update.cmdMessage.chat.id),
+                message_thread_id = threadId,
+                text = "Hey! You asked GPT to help, please wait...",
+                reply_parameters = replyParameters,
+                parse_mode = "MarkdownV2",
+            )
+        )
 
         val prompt = text
             ?: replyText
@@ -186,9 +209,9 @@ class GptCommand(
         log.info("Escaped response: {}", escaped)
 
         kotbot.executeSafely(
-            SendMessage(
+            EditMessageText(
                 chat_id = LongChatId(update.cmdMessage.chat.id),
-                message_thread_id = threadId,
+                message_id = message?.message_id,
                 text = escaped,
                 parse_mode = "MarkdownV2",
             )
