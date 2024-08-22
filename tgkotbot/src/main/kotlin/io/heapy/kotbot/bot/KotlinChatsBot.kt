@@ -79,7 +79,7 @@ class KotlinChatsBot(
             try {
                 val command = commands.find { command ->
                     command.name == update.name
-                            && command.context == update.context
+                            && update.context in command.context
                             && command.access.isAllowed(update.access)
                 } ?: return false
 

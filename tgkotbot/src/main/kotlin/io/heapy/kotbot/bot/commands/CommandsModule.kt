@@ -14,6 +14,7 @@ open class CommandsModule(
             chatInfoCommand,
             spamCommand,
             startCommand,
+            closeTopicCommand,
             gptCommand,
         ) + sendMessageToGroupCommands
     }
@@ -27,6 +28,8 @@ open class CommandsModule(
     open val chatInfoCommand: Command by lazy(::ChatInfoCommand)
 
     open val spamCommand: Command by lazy(::SpamCommand)
+
+    open val closeTopicCommand: Command by lazy(::CloseTopicCommand)
 
     open val startCommand: Command by lazy(::StartCommand)
 

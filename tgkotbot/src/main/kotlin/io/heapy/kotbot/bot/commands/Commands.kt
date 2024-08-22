@@ -4,9 +4,7 @@ import io.heapy.kotbot.bot.*
 import io.heapy.kotbot.bot.commands.Command.Access
 import io.heapy.kotbot.bot.commands.Command.Context
 import io.heapy.kotbot.bot.executeSafely
-import io.heapy.kotbot.bot.method.DeleteMessage
-import io.heapy.kotbot.bot.method.EditMessageText
-import io.heapy.kotbot.bot.method.SendMessage
+import io.heapy.kotbot.bot.method.*
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyParameters
@@ -14,10 +12,11 @@ import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.infra.logger
 import io.heapy.kotbot.infra.openai.GptService
 import io.heapy.kotbot.infra.readResource
+import kotlin.math.log
 
 interface Command {
     val name: String
-    val context: Context
+    val context: List<Context>
     val access: Access
 
     suspend fun execute(
@@ -53,7 +52,7 @@ interface Command {
 
 class ChatInfoCommand : Command {
     override val name = "/chat-info"
-    override val context = Context.GROUP_CHAT
+    override val context = listOf(Context.GROUP_CHAT, Context.USER_CHAT)
     override val access = Access.ADMIN
 
     override suspend fun execute(
@@ -72,10 +71,38 @@ class ChatInfoCommand : Command {
     }
 }
 
+class CloseTopicCommand : Command {
+    override val name = "/close"
+    override val context = listOf(Context.GROUP_CHAT)
+    override val access = Access.MODERATOR
+
+    override suspend fun execute(
+        kotbot: Kotbot,
+        update: Update,
+    ) {
+        val threadId = update.cmdMessage.message_thread_id
+
+        if (threadId != null) {
+            kotbot.executeSafely(
+                CloseForumTopic(
+                    chat_id = LongChatId(update.cmdMessage.chat.id),
+                    message_thread_id = threadId
+                )
+            )
+        } else {
+            log.info("No thread id to close")
+        }
+    }
+
+    private companion object {
+        private val log = logger<CloseTopicCommand>()
+    }
+}
+
 class SpamCommand : Command {
     override val name = "/spam"
-    override val context = Context.GROUP_CHAT
-    override val access = Access.ADMIN
+    override val context = listOf(Context.GROUP_CHAT)
+    override val access = Access.MODERATOR
 
     override suspend fun execute(
         kotbot: Kotbot,
@@ -94,7 +121,7 @@ class SendMessageFromBotCommand(
     override val name: String,
     val id: Long,
 ) : Command {
-    override val context = Context.USER_CHAT
+    override val context = listOf(Context.USER_CHAT)
     override val access = Access.ADMIN
 
     override suspend fun execute(
@@ -123,7 +150,7 @@ class SendMessageFromBotCommand(
 
 class StartCommand : Command {
     override val name = "/start"
-    override val context = Context.USER_CHAT
+    override val context = listOf(Context.USER_CHAT)
     override val access = Access.USER
 
     override suspend fun execute(
@@ -150,7 +177,7 @@ class GptCommand(
     private val gptService: GptService,
 ) : Command {
     override val name: String = "/gpt"
-    override val context: Context = Context.GROUP_CHAT
+    override val context = listOf(Context.GROUP_CHAT, Context.USER_CHAT)
     override val access: Access = Access.ADMIN
 
     override suspend fun execute(
