@@ -19,27 +19,27 @@ public data class Animation(
      */
     public val file_unique_id: String,
     /**
-     * Video width as defined by sender
+     * Video width as defined by the sender
      */
     public val width: Int,
     /**
-     * Video height as defined by sender
+     * Video height as defined by the sender
      */
     public val height: Int,
     /**
-     * Duration of the video in seconds as defined by sender
+     * Duration of the video in seconds as defined by the sender
      */
     public val duration: Int,
     /**
-     * *Optional*. Animation thumbnail as defined by sender
+     * *Optional*. Animation thumbnail as defined by the sender
      */
     public val thumbnail: PhotoSize? = null,
     /**
-     * *Optional*. Original animation filename as defined by sender
+     * *Optional*. Original animation filename as defined by the sender
      */
     public val file_name: String? = null,
     /**
-     * *Optional*. MIME type of the file as defined by sender
+     * *Optional*. MIME type of the file as defined by the sender
      */
     public val mime_type: String? = null,
     /**

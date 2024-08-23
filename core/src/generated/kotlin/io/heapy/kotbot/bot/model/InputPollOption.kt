@@ -5,7 +5,7 @@ import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
- * This object contains information about one answer option in a poll to send.
+ * This object contains information about one answer option in a poll to be sent.
  */
 @Serializable
 public data class InputPollOption(

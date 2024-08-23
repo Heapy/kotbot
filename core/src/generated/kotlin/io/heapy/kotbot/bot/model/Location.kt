@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Location(
     /**
-     * Latitude as defined by sender
+     * Latitude as defined by the sender
      */
     public val latitude: Double,
     /**
-     * Longitude as defined by sender
+     * Longitude as defined by the sender
      */
     public val longitude: Double,
     /**

@@ -58,4 +58,8 @@ public data class User(
      * *Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val can_connect_to_business: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the bot has a main Web App. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val has_main_web_app: Boolean? = null,
 )

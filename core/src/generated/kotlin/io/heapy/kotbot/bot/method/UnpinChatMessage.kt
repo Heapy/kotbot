@@ -16,11 +16,15 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class UnpinChatMessage(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be unpinned
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
     /**
-     * Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
+     * Identifier of the message to unpin. Required if *business_connection_id* is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
      */
     public val message_id: Int? = null,
 ) : Method<UnpinChatMessage, Boolean> by Companion {

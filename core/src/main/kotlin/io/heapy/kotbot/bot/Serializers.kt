@@ -48,7 +48,7 @@ public object InlineQueryResultSerializer :
     override fun selectDeserializer(
         element: JsonElement,
     ): KSerializer<out InlineQueryResult> =
-        TODO("No need to deserialize InlineQueryResult entity")
+        error("No need to deserialize InlineQueryResult entity")
 }
 
 public object InputMessageContentSerializer :
@@ -56,14 +56,14 @@ public object InputMessageContentSerializer :
     override fun selectDeserializer(
         element: JsonElement,
     ): KSerializer<out InputMessageContent> =
-        TODO("No need to deserialize InputMessageContent entity")
+        error("No need to deserialize InputMessageContent entity")
 }
 
 public object MenuButtonSerializer : JsonContentPolymorphicSerializer<MenuButton>(MenuButton::class) {
     override fun selectDeserializer(
         element: JsonElement,
     ): KSerializer<out MenuButton> =
-        TODO("No need to deserialize MenuButton entity")
+        error("No need to deserialize MenuButton entity")
 }
 
 public object PassportElementErrorSerializer :
@@ -157,6 +157,46 @@ public class BackgroundTypeSerializer : JsonContentPolymorphicSerializer<Backgro
             "fill" -> BackgroundTypeFill.serializer()
             "pattern" -> BackgroundTypePattern.serializer()
             "wallpaper" -> BackgroundTypeWallpaper.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class InputPaidMediaSerializer : JsonContentPolymorphicSerializer<InputPaidMedia>(InputPaidMedia::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out InputPaidMedia> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "photo" -> InputPaidMediaPhoto.serializer()
+            "video" -> InputPaidMediaVideo.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class PaidMediaSerializer : JsonContentPolymorphicSerializer<PaidMedia>(PaidMedia::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out PaidMedia> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "preview" -> PaidMediaPreview.serializer()
+            "photo" -> PaidMediaPhoto.serializer()
+            "video" -> PaidMediaVideo.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class RevenueWithdrawalStateSerializer : JsonContentPolymorphicSerializer<RevenueWithdrawalState>(RevenueWithdrawalState::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out RevenueWithdrawalState> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "failed" -> RevenueWithdrawalStateFailed.serializer()
+            "pending" -> RevenueWithdrawalStatePending.serializer()
+            "succeeded" -> RevenueWithdrawalStateSucceeded.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class TransactionPartnerSerializer : JsonContentPolymorphicSerializer<TransactionPartner>(TransactionPartner::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out TransactionPartner> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "user" -> TransactionPartnerUser.serializer()
+            "fragment" -> TransactionPartnerFragment.serializer()
+            "telegram_ads" -> TransactionPartnerTelegramAds.serializer()
+            "other" -> TransactionPartnerOther.serializer()
             else -> error("Unknown argument type: $type")
         }
 }

@@ -19,11 +19,11 @@ public data class Voice(
      */
     public val file_unique_id: String,
     /**
-     * Duration of the audio in seconds as defined by sender
+     * Duration of the audio in seconds as defined by the sender
      */
     public val duration: Int,
     /**
-     * *Optional*. MIME type of the file as defined by sender
+     * *Optional*. MIME type of the file as defined by the sender
      */
     public val mime_type: String? = null,
     /**

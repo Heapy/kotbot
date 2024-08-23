@@ -16,6 +16,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class StopPoll(
     /**
+     * Unique identifier of the business connection on behalf of which the message to be edited was sent
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,

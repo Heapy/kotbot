@@ -26,7 +26,7 @@ public data class PreCheckoutQuery(
      */
     public val total_amount: Int,
     /**
-     * Bot specified invoice payload
+     * Bot-specified invoice payload
      */
     public val invoice_payload: String,
     /**

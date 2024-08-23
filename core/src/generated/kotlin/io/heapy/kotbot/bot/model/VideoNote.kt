@@ -19,11 +19,11 @@ public data class VideoNote(
      */
     public val file_unique_id: String,
     /**
-     * Video width and height (diameter of the video message) as defined by sender
+     * Video width and height (diameter of the video message) as defined by the sender
      */
     public val length: Int,
     /**
-     * Duration of the video in seconds as defined by sender
+     * Duration of the video in seconds as defined by the sender
      */
     public val duration: Int,
     /**

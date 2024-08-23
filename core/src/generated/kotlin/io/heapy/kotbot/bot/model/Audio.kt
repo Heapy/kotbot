@@ -19,23 +19,23 @@ public data class Audio(
      */
     public val file_unique_id: String,
     /**
-     * Duration of the audio in seconds as defined by sender
+     * Duration of the audio in seconds as defined by the sender
      */
     public val duration: Int,
     /**
-     * *Optional*. Performer of the audio as defined by sender or by audio tags
+     * *Optional*. Performer of the audio as defined by the sender or by audio tags
      */
     public val performer: String? = null,
     /**
-     * *Optional*. Title of the audio as defined by sender or by audio tags
+     * *Optional*. Title of the audio as defined by the sender or by audio tags
      */
     public val title: String? = null,
     /**
-     * *Optional*. Original filename as defined by sender
+     * *Optional*. Original filename as defined by the sender
      */
     public val file_name: String? = null,
     /**
-     * *Optional*. MIME type of the file as defined by sender
+     * *Optional*. MIME type of the file as defined by the sender
      */
     public val mime_type: String? = null,
     /**

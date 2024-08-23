@@ -13,3 +13,6 @@ build
 # Configuration
 /tgkotbot/src/main/resources/application.conf
 .env
+
+# Publish
+publish.sh

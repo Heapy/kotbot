@@ -18,15 +18,15 @@ public data class Document(
      */
     public val file_unique_id: String,
     /**
-     * *Optional*. Document thumbnail as defined by sender
+     * *Optional*. Document thumbnail as defined by the sender
      */
     public val thumbnail: PhotoSize? = null,
     /**
-     * *Optional*. Original filename as defined by sender
+     * *Optional*. Original filename as defined by the sender
      */
     public val file_name: String? = null,
     /**
-     * *Optional*. MIME type of the file as defined by sender
+     * *Optional*. MIME type of the file as defined by the sender
      */
     public val mime_type: String? = null,
     /**

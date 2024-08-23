@@ -21,11 +21,11 @@ public data class Message(
      */
     public val message_thread_id: Int? = null,
     /**
-     * *Optional*. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+     * *Optional*. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
      */
     public val from: User? = null,
     /**
-     * *Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+     * *Optional*. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
      */
     public val sender_chat: Chat? = null,
     /**
@@ -129,6 +129,10 @@ public data class Message(
      */
     public val document: Document? = null,
     /**
+     * *Optional*. Message contains paid media; information about the paid media
+     */
+    public val paid_media: PaidMediaInfo? = null,
+    /**
      * *Optional*. Message is a photo, available sizes of the photo
      */
     public val photo: List<PhotoSize>? = null,
@@ -153,7 +157,7 @@ public data class Message(
      */
     public val voice: Voice? = null,
     /**
-     * *Optional*. Caption for the animation, audio, document, photo, video or voice
+     * *Optional*. Caption for the animation, audio, document, paid media, photo, video or voice
      */
     public val caption: String? = null,
     /**
@@ -248,6 +252,10 @@ public data class Message(
      * *Optional*. Message is a service message about a successful payment, information about the payment. [More about payments &raquo;](https://core.telegram.org/bots/api/#payments)
      */
     public val successful_payment: SuccessfulPayment? = null,
+    /**
+     * *Optional*. Message is a service message about a refunded payment, information about the payment. [More about payments &raquo;](https://core.telegram.org/bots/api/#payments)
+     */
+    public val refunded_payment: RefundedPayment? = null,
     /**
      * *Optional*. Service message: users were shared with the bot
      */

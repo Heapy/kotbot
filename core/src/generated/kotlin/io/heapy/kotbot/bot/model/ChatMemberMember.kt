@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.model
 
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -16,4 +17,8 @@ public data class ChatMemberMember(
      * Information about the user
      */
     public val user: User,
+    /**
+     * *Optional*. Date when the user's subscription will expire; Unix time
+     */
+    public val until_date: Long? = null,
 ) : ChatMember

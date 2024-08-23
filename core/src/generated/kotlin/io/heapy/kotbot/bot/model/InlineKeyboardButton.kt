@@ -18,7 +18,7 @@ public data class InlineKeyboardButton(
      */
     public val url: String? = null,
     /**
-     * *Optional*. Data to be sent in a [callback query](https://core.telegram.org/bots/api/#callbackquery) to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.
+     * *Optional*. Data to be sent in a [callback query](https://core.telegram.org/bots/api/#callbackquery) to the bot when the button is pressed, 1-64 bytes
      */
     public val callback_data: String? = null,
     /**

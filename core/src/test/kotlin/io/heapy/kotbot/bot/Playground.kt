@@ -5,7 +5,6 @@ import io.heapy.komok.tech.dotenv.dotenv
 import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.GetMe
 import io.heapy.kotbot.bot.model.LongChatId
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 suspend fun main() {
@@ -31,6 +30,5 @@ suspend fun main() {
                 println(e.message)
             }
         }
-        .collect()
 }
 

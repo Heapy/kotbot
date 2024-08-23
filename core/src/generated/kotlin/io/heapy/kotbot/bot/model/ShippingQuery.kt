@@ -17,7 +17,7 @@ public data class ShippingQuery(
      */
     public val from: User,
     /**
-     * Bot specified invoice payload
+     * Bot-specified invoice payload
      */
     public val invoice_payload: String,
     /**

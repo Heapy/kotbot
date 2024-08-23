@@ -16,6 +16,10 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class PinChatMessage(
     /**
+     * Unique identifier of the business connection on behalf of which the message will be pinned
+     */
+    public val business_connection_id: String? = null,
+    /**
      * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
      */
     public val chat_id: ChatId,
