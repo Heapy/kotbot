@@ -7,7 +7,12 @@ plugins {
 
 application {
     applicationName = "kotbot"
+    version
     mainClass.set("io.heapy.kotbot.Application")
+}
+
+tasks.distTar {
+    archiveFileName.set("kotbot.tar")
 }
 
 tasks.distZip {
