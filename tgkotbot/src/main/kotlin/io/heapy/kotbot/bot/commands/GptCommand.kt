@@ -50,7 +50,7 @@ class GptCommand(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
                 message_thread_id = threadId,
-                text = escapeMarkdownV2("Hey! You asked GPT to help, please wait..."),
+                text = escapeMarkdownV2("Hey! You asked GPT for help, please wait..."),
                 reply_parameters = replyParameters,
                 parse_mode = "MarkdownV2",
             )
@@ -58,7 +58,7 @@ class GptCommand(
 
         val response = gptService
             .complete(
-                prompt = prompt,
+                userPrompt = prompt,
             )
 
         val escaped = escapeMarkdownV2(response)
