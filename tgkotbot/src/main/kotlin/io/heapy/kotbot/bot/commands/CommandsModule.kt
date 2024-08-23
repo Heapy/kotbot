@@ -76,7 +76,7 @@ open class CommandsModule(
     open val sendMessageToGroupCommands by lazy {
         kotlinChatBotConfigurationModule.groupsConfiguration.allowedGroups.map { (name, id) ->
             SendMessageFromBotCommand(
-                admin = kotlinChatBotConfigurationModule.groupsConfiguration.adminPrivateGroup,
+                admin = kotlinChatBotConfigurationModule.groupsConfiguration.notificationChannel,
                 name = "/$name",
                 id = id,
             )

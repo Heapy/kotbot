@@ -1,15 +1,14 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.komok.tech.di.lib.Module
+import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 import io.heapy.kotbot.infra.lifecycle.AutoClosableModule
 import io.heapy.kotbot.infra.lifecycle.UptimeModule
-import io.heapy.kotbot.infra.logger
 import io.heapy.kotbot.infra.metrics.MetricsModule
 import io.heapy.kotbot.infra.metrics.MetricsReportersModule
 import io.heapy.kotbot.infra.web.ServerModule
-import kotlinx.coroutines.*
 import runMigrations
 import kotlin.concurrent.thread
 
@@ -37,7 +36,7 @@ open class ApplicationModule(
         ) {
             log.info("Shutdown hook called.")
             autoClosableModule.close()
-            applicationScopeModule.applicationJob.complete()
+            applicationScopeModule.applicationJob.cancel()
         })
 
         serverModule.server.start()
@@ -50,7 +49,5 @@ open class ApplicationModule(
         log.info("Application stopped.")
     }
 
-    companion object {
-        private val log = logger<ApplicationModule>()
-    }
+    private companion object : Logger()
 }

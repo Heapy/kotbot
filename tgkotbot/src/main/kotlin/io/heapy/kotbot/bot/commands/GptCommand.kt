@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.commands
 
+import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.escapeMarkdownV2
 import io.heapy.kotbot.bot.executeSafely
@@ -9,7 +10,6 @@ import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyParameters
 import io.heapy.kotbot.bot.model.Update
-import io.heapy.kotbot.infra.logger
 import io.heapy.kotbot.infra.openai.GptService
 
 class GptCommand(
@@ -38,6 +38,13 @@ class GptCommand(
             )
         }
 
+        val prompt = text
+            ?: replyText
+            ?: run {
+                log.info("No text to process")
+                return
+            }
+
         val sentMessage = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
@@ -47,13 +54,6 @@ class GptCommand(
                 parse_mode = "MarkdownV2",
             )
         )
-
-        val prompt = text
-            ?: replyText
-            ?: run {
-                log.info("No text to process")
-                return
-            }
 
         val response = gptService
             .complete(
@@ -75,7 +75,5 @@ class GptCommand(
         )
     }
 
-    private companion object {
-        private val log = logger<GptCommand>()
-    }
+    private companion object : Logger()
 }

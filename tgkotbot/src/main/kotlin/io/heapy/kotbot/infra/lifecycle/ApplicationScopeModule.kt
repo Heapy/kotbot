@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 @Module
 open class ApplicationScopeModule {
     open val applicationJob by lazy {
-        SupervisorJob()
+        Job()
     }
 
     open val applicationScope by lazy {

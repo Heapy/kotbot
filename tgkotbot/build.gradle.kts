@@ -31,6 +31,7 @@ dependencies {
     ksp(libs.komok.tech.di)
     implementation(libs.komok.tech.di.lib)
     implementation(libs.komok.tech.config)
+    implementation(libs.komok.tech.logging)
     implementation(libs.komok.tech.dotenv)
 
     implementation(libs.ktor.serialization)

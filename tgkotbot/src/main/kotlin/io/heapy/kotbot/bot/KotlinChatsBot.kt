@@ -1,34 +1,33 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.komok.tech.logging.Logger
+import io.heapy.komok.tech.logging.logger
 import io.heapy.kotbot.bot.commands.CommandResolver
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.dao.UpdateDao
 import io.heapy.kotbot.bot.filters.Filter
-import io.heapy.kotbot.bot.rules.Actions
-import io.heapy.kotbot.bot.rules.Rule
-import io.heapy.kotbot.infra.logger
+import io.heapy.kotbot.bot.rules.RuleExecutor
+import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.jooq.DSLContext
 
 class KotlinChatsBot(
     private val kotbot: Kotbot,
-    private val rules: List<Rule>,
     private val filter: Filter,
     private val meterRegistry: MeterRegistry,
     private val applicationScope: CoroutineScope,
     private val updateDao: UpdateDao,
-    private val dslContext: DSLContext,
     private val commandResolver: CommandResolver,
+    private val ruleExecutor: RuleExecutor,
 ) {
-    private val updateReceived = meterRegistry.counter("update.received")
-    private val updateFiltered = meterRegistry.counter("update.filtered")
-    private val updateSaved = meterRegistry.counter("update.saved")
-
     suspend fun start() {
+        val updateReceived = meterRegistry.counter("update.received")
+        val updateFiltered = meterRegistry.counter("update.filtered")
+        val updateSaved = meterRegistry.counter("update.saved")
+
         kotbot.receiveUpdates()
             .onEach {
                 updateReceived.increment()
@@ -41,12 +40,12 @@ class KotlinChatsBot(
                 }
             }
             .onEach { update ->
-                saveUpdateAsync(update)
+                saveUpdateAsync(updateSaved, update)
             }
             .onEach { update ->
                 val result = commandResolver.findAndExecuteCommand(update)
                 if (!result) {
-                    executeRules(update)
+                    ruleExecutor.executeRules(update)
                 }
             }
             .launchIn(applicationScope)
@@ -54,7 +53,7 @@ class KotlinChatsBot(
 
     private val job = SupervisorJob()
 
-    private fun saveUpdateAsync(update: Update) = CoroutineScope(job).launch {
+    private fun saveUpdateAsync(updateSaved: Counter, update: Update) = CoroutineScope(job).launch {
         try {
             saveUpdate(update)
             updateSaved.increment()
@@ -64,25 +63,20 @@ class KotlinChatsBot(
         }
     }
 
-    private suspend fun saveUpdate(update: Update) = with(dslContext) {
+    private suspend fun saveUpdate(update: Update) = updateDao.transaction {
         updateDao.saveRawUpdate(
             kotbot.json.encodeToString(Update.serializer(), update),
         )
     }
 
-    internal suspend fun executeRules(update: Update) {
-        val actions = Actions(meterRegistry)
-        return rules.forEach { rule ->
-            rule.validate(kotbot, update, actions)
-        }
-    }
+    private companion object : Logger()
 }
-
-private val log = logger<KotlinChatsBot>()
 
 internal suspend fun <Request : Method<Request, Result>, Result> Kotbot.executeSafely(
     method: Request,
 ): Result? {
+    val log = logger<Kotbot>()
+
     return try {
         execute(method)
     } catch (e: Exception) {

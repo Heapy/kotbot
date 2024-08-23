@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.commands.topic
 
+import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.NotificationService
 import io.heapy.kotbot.bot.commands.Command
@@ -8,7 +9,6 @@ import io.heapy.kotbot.bot.method.EditForumTopic
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.Update
-import io.heapy.kotbot.infra.logger
 
 class RenameTopicCommand(
     private val notificationService: NotificationService,
@@ -58,7 +58,5 @@ class RenameTopicCommand(
         }
     }
 
-    private companion object {
-        private val log = logger<RenameTopicCommand>()
-    }
+    private companion object : Logger()
 }

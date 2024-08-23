@@ -1,11 +1,11 @@
 package io.heapy.kotbot.bot.commands
 
+import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.commands.Command.Access.ADMIN
 import io.heapy.kotbot.bot.commands.Command.Access.USER
 import io.heapy.kotbot.bot.commands.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.bot.commands.Command.Context.USER_CHAT
 import io.heapy.kotbot.bot.model.Update
-import io.heapy.kotbot.infra.logger
 import kotlinx.coroutines.coroutineScope
 
 class CommandResolver(
@@ -65,7 +65,5 @@ class CommandResolver(
     private val Update.name: String?
         get() = message?.text?.split(' ')?.getOrNull(0)
 
-    private companion object {
-        private val log = logger<CommandResolver>()
-    }
+    private companion object : Logger()
 }

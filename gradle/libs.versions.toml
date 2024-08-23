@@ -5,9 +5,9 @@ hikari = "5.1.0"
 jooq = "3.19.11"
 jsoup = "1.18.1"
 junit = "5.11.0"
-komok = "1.0.5"
-kotlin = "2.0.20-RC2"
-ksp = "2.0.20-RC2-1.0.24"
+komok = "1.0.6"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.24"
 ktor = "2.3.12"
 logback = "1.5.7"
 micrometer = "1.13.3"
@@ -39,6 +39,7 @@ komok-tech-di = { module = "io.heapy.komok:komok-tech-di", version.ref = "komok"
 komok-tech-di-lib = { module = "io.heapy.komok:komok-tech-di-lib", version.ref = "komok" }
 komok-tech-dotenv = { module = "io.heapy.komok:komok-tech-dotenv", version.ref = "komok" }
 komok-tech-config = { module = "io.heapy.komok:komok-tech-config", version.ref = "komok" }
+komok-tech-logging = { module = "io.heapy.komok:komok-tech-logging", version.ref = "komok" }
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "poet" }
 

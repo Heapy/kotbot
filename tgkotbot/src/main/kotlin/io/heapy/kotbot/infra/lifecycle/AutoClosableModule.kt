@@ -1,7 +1,7 @@
 package io.heapy.kotbot.infra.lifecycle
 
 import io.heapy.komok.tech.di.lib.Module
-import io.heapy.kotbot.infra.logger
+import io.heapy.komok.tech.logging.Logger
 
 @Module
 open class AutoClosableModule : AutoCloseable {
@@ -32,7 +32,5 @@ open class AutoClosableModule : AutoCloseable {
             }
     }
 
-    private companion object {
-        private val log = logger<AutoClosableModule>()
-    }
+    private companion object : Logger()
 }

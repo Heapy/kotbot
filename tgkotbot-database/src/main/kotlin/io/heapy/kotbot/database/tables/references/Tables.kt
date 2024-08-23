@@ -4,10 +4,16 @@
 package io.heapy.kotbot.database.tables.references
 
 
+import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
 
+
+/**
+ * The table <code>public.garbage_messages</code>.
+ */
+val GARBAGE_MESSAGES: GarbageMessages = GarbageMessages.GARBAGE_MESSAGES
 
 /**
  * The table <code>public.telegram_user</code>.

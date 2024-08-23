@@ -7,17 +7,20 @@ package io.heapy.kotbot.database.tables
 import io.heapy.kotbot.database.Public
 import io.heapy.kotbot.database.enums.TelegramUserRole
 import io.heapy.kotbot.database.enums.TelegramUserStatus
+import io.heapy.kotbot.database.indexes.TELEGRAM_USER_TELEGRAM_ID_UINDEX
 import io.heapy.kotbot.database.keys.TELEGRAM_USER_PK
 import io.heapy.kotbot.database.tables.records.TelegramUserRecord
 
 import java.time.LocalDateTime
 
 import kotlin.collections.Collection
+import kotlin.collections.List
 
 import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.Index
 import org.jooq.InverseForeignKey
 import org.jooq.Name
 import org.jooq.PlainSQL
@@ -137,6 +140,7 @@ open class TelegramUser(
      */
     constructor(): this(DSL.name("telegram_user"), null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(TELEGRAM_USER_TELEGRAM_ID_UINDEX)
     override fun getIdentity(): Identity<TelegramUserRecord, Long?> = super.getIdentity() as Identity<TelegramUserRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<TelegramUserRecord> = TELEGRAM_USER_PK
     override fun `as`(alias: String): TelegramUser = TelegramUser(DSL.name(alias), this)

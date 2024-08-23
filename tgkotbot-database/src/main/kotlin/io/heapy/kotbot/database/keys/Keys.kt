@@ -4,8 +4,10 @@
 package io.heapy.kotbot.database.keys
 
 
+import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
+import io.heapy.kotbot.database.tables.records.GarbageMessagesRecord
 import io.heapy.kotbot.database.tables.records.TelegramUserRecord
 import io.heapy.kotbot.database.tables.records.UpdateRawRecord
 
@@ -19,5 +21,6 @@ import org.jooq.impl.Internal
 // UNIQUE and PRIMARY KEY definitions
 // -------------------------------------------------------------------------
 
+val GARBAGE_MESSAGES_PKEY: UniqueKey<GarbageMessagesRecord> = Internal.createUniqueKey(GarbageMessages.GARBAGE_MESSAGES, DSL.name("garbage_messages_pkey"), arrayOf(GarbageMessages.GARBAGE_MESSAGES.ID), true)
 val TELEGRAM_USER_PK: UniqueKey<TelegramUserRecord> = Internal.createUniqueKey(TelegramUser.TELEGRAM_USER, DSL.name("telegram_user_pk"), arrayOf(TelegramUser.TELEGRAM_USER.INTERNAL_ID), true)
 val UPDATE_RAW_PK: UniqueKey<UpdateRawRecord> = Internal.createUniqueKey(UpdateRaw.UPDATE_RAW, DSL.name("update_raw_pk"), arrayOf(UpdateRaw.UPDATE_RAW.ID), true)
