@@ -33,7 +33,7 @@ jobs:
           name: "Kotlin Application"
           path: "tgkotbot/build/distributions/"
       - name: "Untar files"
-        run: mkdir -p tgkotbot/build/install && tar -xvf tgkotbot/build/distributions/kotbot.tar -C $_
+        run: mkdir -p tgkotbot/build/install && tar -xvf tgkotbot/build/distributions/kotbot-*.tar -C $_
       - name: "Set up Docker Buildx"
         uses: docker/setup-buildx-action@v3
       - name: "Login to GHCR"
