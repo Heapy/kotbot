@@ -13,7 +13,7 @@ public data class InlineQueryResultCachedVideo(
     /**
      * Type of the result, must be *video*
      */
-    public val type: String = "video",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

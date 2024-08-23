@@ -12,7 +12,7 @@ public data class BackgroundTypeFill(
     /**
      * Type of the background, always "fill"
      */
-    public val type: String = "fill",
+    public val type: String,
     /**
      * The background fill
      */

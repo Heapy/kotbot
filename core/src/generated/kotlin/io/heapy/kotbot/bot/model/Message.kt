@@ -55,11 +55,11 @@ public data class Message(
     /**
      * *Optional*. *True*, if the message is sent to a forum topic
      */
-    public val is_topic_message: Boolean? = true,
+    public val is_topic_message: Boolean? = null,
     /**
      * *Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
      */
-    public val is_automatic_forward: Boolean? = true,
+    public val is_automatic_forward: Boolean? = null,
     /**
      * *Optional*. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further *reply_to_message* fields even if it itself is a reply.
      */
@@ -87,11 +87,11 @@ public data class Message(
     /**
      * *Optional*. *True*, if the message can't be forwarded
      */
-    public val has_protected_content: Boolean? = true,
+    public val has_protected_content: Boolean? = null,
     /**
      * *Optional*. True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
      */
-    public val is_from_offline: Boolean? = true,
+    public val is_from_offline: Boolean? = null,
     /**
      * *Optional*. The unique identifier of a media message group this message belongs to
      */
@@ -163,11 +163,11 @@ public data class Message(
     /**
      * *Optional*. True, if the caption must be shown above the message media
      */
-    public val show_caption_above_media: Boolean? = true,
+    public val show_caption_above_media: Boolean? = null,
     /**
      * *Optional*. *True*, if the message media is covered by a spoiler animation
      */
-    public val has_media_spoiler: Boolean? = true,
+    public val has_media_spoiler: Boolean? = null,
     /**
      * *Optional*. Message is a shared contact, information about the contact
      */
@@ -211,19 +211,19 @@ public data class Message(
     /**
      * *Optional*. Service message: the chat photo was deleted
      */
-    public val delete_chat_photo: Boolean? = true,
+    public val delete_chat_photo: Boolean? = null,
     /**
      * *Optional*. Service message: the group has been created
      */
-    public val group_chat_created: Boolean? = true,
+    public val group_chat_created: Boolean? = null,
     /**
      * *Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
      */
-    public val supergroup_chat_created: Boolean? = true,
+    public val supergroup_chat_created: Boolean? = null,
     /**
      * *Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
      */
-    public val channel_chat_created: Boolean? = true,
+    public val channel_chat_created: Boolean? = null,
     /**
      * *Optional*. Service message: auto-delete timer settings changed in the chat
      */

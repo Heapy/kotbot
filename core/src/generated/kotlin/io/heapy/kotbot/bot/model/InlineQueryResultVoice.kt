@@ -13,7 +13,7 @@ public data class InlineQueryResultVoice(
     /**
      * Type of the result, must be *voice*
      */
-    public val type: String = "voice",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

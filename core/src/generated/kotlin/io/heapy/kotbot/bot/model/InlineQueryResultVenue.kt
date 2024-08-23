@@ -13,7 +13,7 @@ public data class InlineQueryResultVenue(
     /**
      * Type of the result, must be *venue*
      */
-    public val type: String = "venue",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 Bytes
      */

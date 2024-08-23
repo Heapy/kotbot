@@ -12,7 +12,7 @@ public data class InlineQueryResultCachedDocument(
     /**
      * Type of the result, must be *document*
      */
-    public val type: String = "document",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

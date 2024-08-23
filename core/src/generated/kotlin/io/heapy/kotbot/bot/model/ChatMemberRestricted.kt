@@ -13,7 +13,7 @@ public data class ChatMemberRestricted(
     /**
      * The member's status in the chat, always "restricted"
      */
-    public val status: String = "restricted",
+    public val status: String,
     /**
      * Information about the user
      */

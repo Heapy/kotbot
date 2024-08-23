@@ -12,7 +12,7 @@ public data class ChatMemberBanned(
     /**
      * The member's status in the chat, always "kicked"
      */
-    public val status: String = "kicked",
+    public val status: String,
     /**
      * Information about the user
      */

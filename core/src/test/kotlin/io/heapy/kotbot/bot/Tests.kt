@@ -35,7 +35,7 @@ class KotbotTest {
                 ```
                 ${kotbot.execute(GetWebhookInfo())}
                 ```
-            """.trimIndent(),
+                """.trimIndent(),
                 parse_mode = "MarkdownV2",
                 reply_markup = verificationInlineKeyboard,
             )
@@ -54,7 +54,7 @@ class KotbotTest {
                 ```
                 ${kotbot.execute(GetMe())}
                 ```
-            """.trimIndent(),
+                """.trimIndent(),
                 parse_mode = "MarkdownV2",
                 reply_markup = verificationInlineKeyboard,
             )
@@ -118,7 +118,7 @@ class KotbotTest {
                     val name: String,
                 )
                 ```
-            """.trimIndent(),
+                """.trimIndent(),
                 parse_mode = "MarkdownV2",
                 reply_markup = verificationInlineKeyboard,
             )
@@ -155,7 +155,7 @@ class KotbotTest {
                     val name: String
                 )
                 ```
-            """.trimIndent(),
+                """.trimIndent(),
                 parse_mode = "Markdown",
                 reply_markup = verificationInlineKeyboard,
             )

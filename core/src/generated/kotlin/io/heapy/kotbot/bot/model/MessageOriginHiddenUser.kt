@@ -12,7 +12,7 @@ public data class MessageOriginHiddenUser(
     /**
      * Type of the message origin, always "hidden_user"
      */
-    public val type: String = "hidden_user",
+    public val type: String,
     /**
      * Date the message was sent originally in Unix time
      */

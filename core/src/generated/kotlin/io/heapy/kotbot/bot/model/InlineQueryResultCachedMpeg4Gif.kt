@@ -13,7 +13,7 @@ public data class InlineQueryResultCachedMpeg4Gif(
     /**
      * Type of the result, must be *mpeg4_gif*
      */
-    public val type: String = "mpeg4_gif",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

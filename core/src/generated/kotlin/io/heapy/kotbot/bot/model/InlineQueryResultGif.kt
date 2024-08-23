@@ -14,7 +14,7 @@ public data class InlineQueryResultGif(
     /**
      * Type of the result, must be *gif*
      */
-    public val type: String = "gif",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */
@@ -42,7 +42,7 @@ public data class InlineQueryResultGif(
     /**
      * *Optional*. MIME type of the thumbnail, must be one of "image/jpeg", "image/gif", or "video/mp4". Defaults to "image/jpeg"
      */
-    public val thumbnail_mime_type: String? = "image/jpeg",
+    public val thumbnail_mime_type: String? = null,
     /**
      * *Optional*. Title for the result
      */

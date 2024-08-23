@@ -12,7 +12,7 @@ public data class MessageOriginUser(
     /**
      * Type of the message origin, always "user"
      */
-    public val type: String = "user",
+    public val type: String,
     /**
      * Date the message was sent originally in Unix time
      */

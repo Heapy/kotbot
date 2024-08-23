@@ -13,7 +13,7 @@ public data class InlineQueryResultAudio(
     /**
      * Type of the result, must be *audio*
      */
-    public val type: String = "audio",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

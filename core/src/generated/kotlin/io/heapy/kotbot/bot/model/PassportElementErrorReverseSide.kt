@@ -11,7 +11,7 @@ public data class PassportElementErrorReverseSide(
     /**
      * Error source, must be *reverse_side*
      */
-    public val source: String = "reverse_side",
+    public val source: String,
     /**
      * The section of the user's Telegram Passport which has the issue, one of "driver_license", "identity_card"
      */

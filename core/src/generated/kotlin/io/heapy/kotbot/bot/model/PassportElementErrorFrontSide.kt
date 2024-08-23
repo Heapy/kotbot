@@ -11,7 +11,7 @@ public data class PassportElementErrorFrontSide(
     /**
      * Error source, must be *front_side*
      */
-    public val source: String = "front_side",
+    public val source: String,
     /**
      * The section of the user's Telegram Passport which has the issue, one of "passport", "driver_license", "identity_card", "internal_passport"
      */

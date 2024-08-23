@@ -13,7 +13,7 @@ public data class MessageOriginChannel(
     /**
      * Type of the message origin, always "channel"
      */
-    public val type: String = "channel",
+    public val type: String,
     /**
      * Date the message was sent originally in Unix time
      */

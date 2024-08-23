@@ -11,7 +11,7 @@ public data class ChatMemberMember(
     /**
      * The member's status in the chat, always "member"
      */
-    public val status: String = "member",
+    public val status: String,
     /**
      * Information about the user
      */

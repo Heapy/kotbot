@@ -11,7 +11,7 @@ public data class InlineQueryResultCachedSticker(
     /**
      * Type of the result, must be *sticker*
      */
-    public val type: String = "sticker",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

@@ -37,11 +37,11 @@ public data class User(
     /**
      * *Optional*. *True*, if this user is a Telegram Premium user
      */
-    public val is_premium: Boolean? = true,
+    public val is_premium: Boolean? = null,
     /**
      * *Optional*. *True*, if this user added the bot to the attachment menu
      */
-    public val added_to_attachment_menu: Boolean? = true,
+    public val added_to_attachment_menu: Boolean? = null,
     /**
      * *Optional*. *True*, if the bot can be invited to groups. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */

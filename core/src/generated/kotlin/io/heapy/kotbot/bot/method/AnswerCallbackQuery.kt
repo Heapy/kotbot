@@ -27,7 +27,7 @@ public data class AnswerCallbackQuery(
     /**
      * If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *false*.
      */
-    public val show_alert: Boolean? = false,
+    public val show_alert: Boolean? = null,
     /**
      * URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.  
      *
@@ -37,7 +37,7 @@ public data class AnswerCallbackQuery(
     /**
      * The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
      */
-    public val cache_time: Int? = 0,
+    public val cache_time: Int? = null,
 ) : Method<AnswerCallbackQuery, Boolean> by Companion {
     public companion object : Method<AnswerCallbackQuery, Boolean> {
         override val _deserializer: KSerializer<Response<Boolean>> =

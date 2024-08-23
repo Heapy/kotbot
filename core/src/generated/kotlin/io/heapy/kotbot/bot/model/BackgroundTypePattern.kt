@@ -13,7 +13,7 @@ public data class BackgroundTypePattern(
     /**
      * Type of the background, always "pattern"
      */
-    public val type: String = "pattern",
+    public val type: String,
     /**
      * Document with the pattern
      */
@@ -29,9 +29,9 @@ public data class BackgroundTypePattern(
     /**
      * *Optional*. *True*, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
      */
-    public val is_inverted: Boolean? = true,
+    public val is_inverted: Boolean? = null,
     /**
      * *Optional*. *True*, if the background moves slightly when the device is tilted
      */
-    public val is_moving: Boolean? = true,
+    public val is_moving: Boolean? = null,
 ) : BackgroundType

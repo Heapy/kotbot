@@ -12,7 +12,7 @@ public data class BackgroundFillGradient(
     /**
      * Type of the background fill, always "gradient"
      */
-    public val type: String = "gradient",
+    public val type: String,
     /**
      * Top color of the gradient in the RGB24 format
      */

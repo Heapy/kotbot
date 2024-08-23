@@ -13,7 +13,7 @@ public data class InlineQueryResultCachedPhoto(
     /**
      * Type of the result, must be *photo*
      */
-    public val type: String = "photo",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

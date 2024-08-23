@@ -11,5 +11,5 @@ public data class BotCommandScopeAllChatAdministrators(
     /**
      * Scope type, must be *all_chat_administrators*
      */
-    public val type: String = "all_chat_administrators",
+    public val type: String,
 ) : BotCommandScope

@@ -30,7 +30,8 @@ class GptCommand(
     ) {
         val text = message.textWithoutCommand
         val replyText = message.reply_to_message?.text
-        val threadId = message.message_thread_id
+        // Somehow message can have thread_id, even if it's not a forum
+        val threadId = message.message_thread_id?.takeIf { message.chat.is_forum == true }
 
         val replyParameters = message.reply_to_message?.message_id?.let {
             ReplyParameters(

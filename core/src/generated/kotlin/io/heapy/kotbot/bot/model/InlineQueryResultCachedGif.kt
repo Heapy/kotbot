@@ -13,7 +13,7 @@ public data class InlineQueryResultCachedGif(
     /**
      * Type of the result, must be *gif*
      */
-    public val type: String = "gif",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

@@ -13,7 +13,7 @@ public data class InlineQueryResultLocation(
     /**
      * Type of the result, must be *location*
      */
-    public val type: String = "location",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 Bytes
      */

@@ -11,7 +11,7 @@ public data class ReactionTypeCustomEmoji(
     /**
      * Type of the reaction, always "custom_emoji"
      */
-    public val type: String = "custom_emoji",
+    public val type: String,
     /**
      * Custom emoji identifier
      */

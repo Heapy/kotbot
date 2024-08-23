@@ -11,7 +11,7 @@ public data class BotCommandScopeChatAdministrators(
     /**
      * Scope type, must be *chat_administrators*
      */
-    public val type: String = "chat_administrators",
+    public val type: String,
     /**
      * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
      */

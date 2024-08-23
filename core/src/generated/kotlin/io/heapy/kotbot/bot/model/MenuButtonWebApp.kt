@@ -11,7 +11,7 @@ public data class MenuButtonWebApp(
     /**
      * Type of the button, must be *web_app*
      */
-    public val type: String = "web_app",
+    public val type: String,
     /**
      * Text on the button
      */

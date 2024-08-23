@@ -11,7 +11,7 @@ public data class ChatBoostSourcePremium(
     /**
      * Source of the boost, always "premium"
      */
-    public val source: String = "premium",
+    public val source: String,
     /**
      * User that boosted the chat
      */

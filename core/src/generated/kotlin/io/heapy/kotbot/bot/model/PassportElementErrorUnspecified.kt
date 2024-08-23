@@ -11,7 +11,7 @@ public data class PassportElementErrorUnspecified(
     /**
      * Error source, must be *unspecified*
      */
-    public val source: String = "unspecified",
+    public val source: String,
     /**
      * Type of element of the user's Telegram Passport which has the issue
      */

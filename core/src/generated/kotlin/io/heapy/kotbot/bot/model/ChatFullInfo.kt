@@ -39,7 +39,7 @@ public data class ChatFullInfo(
     /**
      * *Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
      */
-    public val is_forum: Boolean? = true,
+    public val is_forum: Boolean? = null,
     /**
      * Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See [accent colors](https://core.telegram.org/bots/api/#accent-colors) for more details.
      */
@@ -107,19 +107,19 @@ public data class ChatFullInfo(
     /**
      * *Optional*. *True*, if privacy settings of the other party in the private chat allows to use `tg://user?id=<user_id>` links only in chats with the user
      */
-    public val has_private_forwards: Boolean? = true,
+    public val has_private_forwards: Boolean? = null,
     /**
      * *Optional*. *True*, if the privacy settings of the other party restrict sending voice and video note messages in the private chat
      */
-    public val has_restricted_voice_and_video_messages: Boolean? = true,
+    public val has_restricted_voice_and_video_messages: Boolean? = null,
     /**
      * *Optional*. *True*, if users need to join the supergroup before they can send messages
      */
-    public val join_to_send_messages: Boolean? = true,
+    public val join_to_send_messages: Boolean? = null,
     /**
      * *Optional*. *True*, if all users directly joining the supergroup without using an invite link need to be approved by supergroup administrators
      */
-    public val join_by_request: Boolean? = true,
+    public val join_by_request: Boolean? = null,
     /**
      * *Optional*. Description, for groups, supergroups and channel chats
      */
@@ -151,19 +151,19 @@ public data class ChatFullInfo(
     /**
      * *Optional*. *True*, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators.
      */
-    public val has_aggressive_anti_spam_enabled: Boolean? = true,
+    public val has_aggressive_anti_spam_enabled: Boolean? = null,
     /**
      * *Optional*. *True*, if non-administrators can only get the list of bots and administrators in the chat
      */
-    public val has_hidden_members: Boolean? = true,
+    public val has_hidden_members: Boolean? = null,
     /**
      * *Optional*. *True*, if messages from the chat can't be forwarded to other chats
      */
-    public val has_protected_content: Boolean? = true,
+    public val has_protected_content: Boolean? = null,
     /**
      * *Optional*. *True*, if new chat members will have access to old messages; available only to chat administrators
      */
-    public val has_visible_history: Boolean? = true,
+    public val has_visible_history: Boolean? = null,
     /**
      * *Optional*. For supergroups, name of the group sticker set
      */
@@ -171,7 +171,7 @@ public data class ChatFullInfo(
     /**
      * *Optional*. *True*, if the bot can change the group sticker set
      */
-    public val can_set_sticker_set: Boolean? = true,
+    public val can_set_sticker_set: Boolean? = null,
     /**
      * *Optional*. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group.
      */

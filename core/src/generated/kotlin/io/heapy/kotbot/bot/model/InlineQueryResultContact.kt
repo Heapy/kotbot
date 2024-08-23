@@ -12,7 +12,7 @@ public data class InlineQueryResultContact(
     /**
      * Type of the result, must be *contact*
      */
-    public val type: String = "contact",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 Bytes
      */

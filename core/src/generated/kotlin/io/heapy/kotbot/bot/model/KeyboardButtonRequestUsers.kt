@@ -24,7 +24,7 @@ public data class KeyboardButtonRequestUsers(
     /**
      * *Optional*. The maximum number of users to be selected; 1-10. Defaults to 1.
      */
-    public val max_quantity: Int? = 1,
+    public val max_quantity: Int? = null,
     /**
      * *Optional*. Pass *True* to request the users' first and last names
      */

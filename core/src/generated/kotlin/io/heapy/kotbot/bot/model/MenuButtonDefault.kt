@@ -11,5 +11,5 @@ public data class MenuButtonDefault(
     /**
      * Type of the button, must be *default*
      */
-    public val type: String = "default",
+    public val type: String,
 ) : MenuButton

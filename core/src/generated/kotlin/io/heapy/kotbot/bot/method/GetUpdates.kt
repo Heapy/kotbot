@@ -22,11 +22,11 @@ public data class GetUpdates(
     /**
      * Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
      */
-    public val limit: Int? = 100,
+    public val limit: Int? = null,
     /**
      * Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
      */
-    public val timeout: Int? = 0,
+    public val timeout: Int? = null,
     /**
      * A JSON-serialized list of the update types you want your bot to receive. For example, specify `["message", "edited_channel_post", "callback_query"]` to only receive updates of these types. See [Update](https://core.telegram.org/bots/api/#update) for a complete list of available update types. Specify an empty list to receive all update types except *chat_member*, *message_reaction*, and *message_reaction_count* (default). If not specified, the previous setting will be used.  
      *

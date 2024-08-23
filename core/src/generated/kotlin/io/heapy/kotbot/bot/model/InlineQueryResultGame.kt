@@ -11,7 +11,7 @@ public data class InlineQueryResultGame(
     /**
      * Type of the result, must be *game*
      */
-    public val type: String = "game",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 bytes
      */

@@ -13,7 +13,7 @@ public data class InlineQueryResultArticle(
     /**
      * Type of the result, must be *article*
      */
-    public val type: String = "article",
+    public val type: String,
     /**
      * Unique identifier for this result, 1-64 Bytes
      */

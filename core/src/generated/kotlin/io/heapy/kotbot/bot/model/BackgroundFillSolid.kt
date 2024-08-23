@@ -12,7 +12,7 @@ public data class BackgroundFillSolid(
     /**
      * Type of the background fill, always "solid"
      */
-    public val type: String = "solid",
+    public val type: String,
     /**
      * The color of the background fill in the RGB24 format
      */

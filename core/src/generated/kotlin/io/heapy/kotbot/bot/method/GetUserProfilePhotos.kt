@@ -25,7 +25,7 @@ public data class GetUserProfilePhotos(
     /**
      * Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
      */
-    public val limit: Int? = 100,
+    public val limit: Int? = null,
 ) : Method<GetUserProfilePhotos, UserProfilePhotos> by Companion {
     public companion object : Method<GetUserProfilePhotos, UserProfilePhotos> {
         override val _deserializer: KSerializer<Response<UserProfilePhotos>> =

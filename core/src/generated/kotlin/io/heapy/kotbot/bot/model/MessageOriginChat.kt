@@ -12,7 +12,7 @@ public data class MessageOriginChat(
     /**
      * Type of the message origin, always "chat"
      */
-    public val type: String = "chat",
+    public val type: String,
     /**
      * Date the message was sent originally in Unix time
      */

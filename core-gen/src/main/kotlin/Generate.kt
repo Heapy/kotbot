@@ -468,7 +468,6 @@ private fun Argument.asParameterSpec(): ParameterSpec {
                     type = booleanType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
-                .apply { if (arg.default != null) defaultValue("%L", arg.default) }
                 .build()
 
         is FloatArgument ->
@@ -488,7 +487,6 @@ private fun Argument.asParameterSpec(): ParameterSpec {
                     else intType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
-                .apply { if (arg.default != null) defaultValue("%L", arg.default) }
                 .build()
 
         is ReferenceArgument ->
@@ -507,7 +505,6 @@ private fun Argument.asParameterSpec(): ParameterSpec {
                     type = stringType.copy(nullable = nullable)
                 )
                 .apply { if (nullable) defaultValue("null") }
-                .apply { if (arg.default != null) defaultValue("%S", arg.default) }
                 .build()
     }
 }

@@ -11,7 +11,7 @@ public data class ChatBoostSourceGiftCode(
     /**
      * Source of the boost, always "gift_code"
      */
-    public val source: String = "gift_code",
+    public val source: String,
     /**
      * User for which the gift code was created
      */

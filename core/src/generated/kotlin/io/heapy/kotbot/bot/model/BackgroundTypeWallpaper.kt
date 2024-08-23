@@ -13,7 +13,7 @@ public data class BackgroundTypeWallpaper(
     /**
      * Type of the background, always "wallpaper"
      */
-    public val type: String = "wallpaper",
+    public val type: String,
     /**
      * Document with the wallpaper
      */
@@ -25,9 +25,9 @@ public data class BackgroundTypeWallpaper(
     /**
      * *Optional*. *True*, if the wallpaper is downscaled to fit in a 450x450 square and then box-blurred with radius 12
      */
-    public val is_blurred: Boolean? = true,
+    public val is_blurred: Boolean? = null,
     /**
      * *Optional*. *True*, if the background moves slightly when the device is tilted
      */
-    public val is_moving: Boolean? = true,
+    public val is_moving: Boolean? = null,
 ) : BackgroundType

@@ -65,7 +65,7 @@ public data class ExternalReplyInfo(
     /**
      * *Optional*. *True*, if the message media is covered by a spoiler animation
      */
-    public val has_media_spoiler: Boolean? = true,
+    public val has_media_spoiler: Boolean? = null,
     /**
      * *Optional*. Message is a shared contact, information about the contact
      */

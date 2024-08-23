@@ -11,7 +11,7 @@ public data class BackgroundTypeChatTheme(
     /**
      * Type of the background, always "chat_theme"
      */
-    public val type: String = "chat_theme",
+    public val type: String,
     /**
      * Name of the chat theme, which is usually an emoji
      */

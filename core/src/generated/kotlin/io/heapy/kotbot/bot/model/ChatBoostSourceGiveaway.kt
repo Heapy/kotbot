@@ -13,7 +13,7 @@ public data class ChatBoostSourceGiveaway(
     /**
      * Source of the boost, always "giveaway"
      */
-    public val source: String = "giveaway",
+    public val source: String,
     /**
      * Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
      */
@@ -25,5 +25,5 @@ public data class ChatBoostSourceGiveaway(
     /**
      * *Optional*. True, if the giveaway was completed, but there was no user to win the prize
      */
-    public val is_unclaimed: Boolean? = true,
+    public val is_unclaimed: Boolean? = null,
 ) : ChatBoostSource
