@@ -19,7 +19,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: "Kotlin Application"
-          path: "tgkotbot/build/distributions/kotbot.tar"
+          path: "tgkotbot/build/distributions/kotbot-*.tar"
           retention-days: 1
   build-and-push-image:
     name: "Build Docker Image"
