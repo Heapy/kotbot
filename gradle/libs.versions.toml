@@ -5,7 +5,7 @@ hikari = "5.1.0"
 jooq = "3.19.11"
 jsoup = "1.18.1"
 junit = "5.11.0"
-komok = "1.0.6"
+komok = "1.0.7"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.24"
 ktor = "2.3.12"
@@ -14,7 +14,7 @@ micrometer = "1.13.3"
 mockk = "1.13.12"
 poet = "1.18.1"
 postgresql = "42.7.4"
-serialization = "1.7.1"
+serialization = "1.7.2"
 
 [libraries]
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
