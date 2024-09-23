@@ -14,7 +14,7 @@ micrometer = "1.13.4"
 mockk = "1.13.12"
 poet = "1.18.1"
 postgresql = "42.7.4"
-serialization = "1.7.2"
+serialization = "1.7.3"
 
 [libraries]
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
