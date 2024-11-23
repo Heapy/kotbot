@@ -36,7 +36,7 @@ public data class SendInvoice(
      */
     public val description: String,
     /**
-     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
      */
     public val payload: String,
     /**
@@ -119,6 +119,10 @@ public data class SendInvoice(
      * Protects the contents of the sent message from forwarding and saving
      */
     public val protect_content: Boolean? = null,
+    /**
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    public val allow_paid_broadcast: Boolean? = null,
     /**
      * Unique identifier of the message effect to be added to the message; for private chats only
      */

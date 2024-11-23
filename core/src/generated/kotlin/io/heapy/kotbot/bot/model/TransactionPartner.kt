@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
  * * [TransactionPartnerUser](https://core.telegram.org/bots/api/#transactionpartneruser)
  * * [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
  * * [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
+ * * [TransactionPartnerTelegramApi](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)
  * * [TransactionPartnerOther](https://core.telegram.org/bots/api/#transactionpartnerother)
  */
 @Serializable(with = TransactionPartnerSerializer::class)

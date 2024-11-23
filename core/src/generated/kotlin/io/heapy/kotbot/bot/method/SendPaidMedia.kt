@@ -29,13 +29,17 @@ public data class SendPaidMedia(
      */
     public val chat_id: ChatId,
     /**
-     * The number of Telegram Stars that must be paid to buy access to the media
+     * The number of Telegram Stars that must be paid to buy access to the media; 1-2500
      */
     public val star_count: Int,
     /**
      * A JSON-serialized array describing the media to be sent; up to 10 items
      */
     public val media: List<InputPaidMedia>,
+    /**
+     * Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
+     */
+    public val payload: String? = null,
     /**
      * Media caption, 0-1024 characters after entities parsing
      */
@@ -60,6 +64,10 @@ public data class SendPaidMedia(
      * Protects the contents of the sent message from forwarding and saving
      */
     public val protect_content: Boolean? = null,
+    /**
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    public val allow_paid_broadcast: Boolean? = null,
     /**
      * Description of the message to reply to
      */

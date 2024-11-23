@@ -44,6 +44,10 @@ public data class InlineKeyboardButton(
      */
     public val switch_inline_query_chosen_chat: SwitchInlineQueryChosenChat? = null,
     /**
+     * *Optional*. Description of the button that copies the specified text to the clipboard.
+     */
+    public val copy_text: CopyTextButton? = null,
+    /**
      * *Optional*. Description of the game that will be launched when the user presses the button.  
      *
      * **NOTE:** This type of button **must** always be the first button in the first row.

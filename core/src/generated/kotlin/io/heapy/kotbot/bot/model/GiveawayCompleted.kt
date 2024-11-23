@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.model
 
+import kotlin.Boolean
 import kotlin.Int
 import kotlinx.serialization.Serializable
 
@@ -20,4 +21,8 @@ public data class GiveawayCompleted(
      * *Optional*. Message with the giveaway that was completed, if it wasn't deleted
      */
     public val giveaway_message: Message? = null,
+    /**
+     * *Optional*. *True*, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.
+     */
+    public val is_star_giveaway: Boolean? = null,
 )

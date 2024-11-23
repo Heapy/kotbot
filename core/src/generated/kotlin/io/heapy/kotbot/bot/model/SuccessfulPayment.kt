@@ -1,6 +1,8 @@
 package io.heapy.kotbot.bot.model
 
+import kotlin.Boolean
 import kotlin.Int
+import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -21,6 +23,18 @@ public data class SuccessfulPayment(
      * Bot-specified invoice payload
      */
     public val invoice_payload: String,
+    /**
+     * *Optional*. Expiration date of the subscription, in Unix time; for recurring payments only
+     */
+    public val subscription_expiration_date: Long? = null,
+    /**
+     * *Optional*. True, if the payment is a recurring payment for a subscription
+     */
+    public val is_recurring: Boolean? = null,
+    /**
+     * *Optional*. True, if the payment is the first payment for a subscription
+     */
+    public val is_first_recurring: Boolean? = null,
     /**
      * *Optional*. Identifier of the shipping option chosen by the user
      */

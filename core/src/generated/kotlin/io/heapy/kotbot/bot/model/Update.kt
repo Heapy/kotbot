@@ -74,6 +74,10 @@ public data class Update(
      */
     public val pre_checkout_query: PreCheckoutQuery? = null,
     /**
+     * *Optional*. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+     */
+    public val purchased_paid_media: PaidMediaPurchased? = null,
+    /**
      * *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
      */
     public val poll: Poll? = null,

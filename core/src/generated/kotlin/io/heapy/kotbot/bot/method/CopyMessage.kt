@@ -60,6 +60,10 @@ public data class CopyMessage(
      */
     public val protect_content: Boolean? = null,
     /**
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    public val allow_paid_broadcast: Boolean? = null,
+    /**
      * Description of the message to reply to
      */
     public val reply_parameters: ReplyParameters? = null,

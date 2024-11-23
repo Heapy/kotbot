@@ -1,5 +1,3 @@
-import java.util.*
-
 plugins {
     signing
     `java-library`
@@ -16,7 +14,7 @@ java {
 val modules: Map<String, Map<String, String>> = mapOf(
     "core" to mapOf(
         "publishName" to "Telegram chat bot framework",
-        "publishDescription" to "Unopinionated and flexible framework for building Telegram chat bots",
+        "publishDescription" to "Unopinionated and flexible library for building Telegram chat bots",
     ),
 )
 

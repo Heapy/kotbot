@@ -37,7 +37,11 @@ public data class GiveawayWinners(
      */
     public val additional_chat_count: Int? = null,
     /**
-     * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for
+     * *Optional*. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+     */
+    public val prize_star_count: Int? = null,
+    /**
+     * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
      */
     public val premium_subscription_month_count: Int? = null,
     /**

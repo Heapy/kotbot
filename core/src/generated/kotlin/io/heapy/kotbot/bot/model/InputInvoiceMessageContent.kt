@@ -20,7 +20,7 @@ public data class InputInvoiceMessageContent(
      */
     public val description: String,
     /**
-     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
      */
     public val payload: String,
     /**
