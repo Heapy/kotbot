@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 fun main() {
     // https://ark0f.github.io/tg-bot-api/custom.json
     val apiJson = {}::class.java
-        .getResource("api800.json")
+        .getResource("api810.json")
         ?.readText()
         ?: error("custom.json not found")
 
@@ -66,7 +66,6 @@ private val modelPackageName = "$basePackageName.model"
 private val methodPackageName = "$basePackageName.method"
 
 private val botMethodType = ClassName("io.heapy.kotbot.bot", "Method")
-private val kotbotType = ClassName("io.heapy.kotbot.bot", "Kotbot")
 private val responseType = ClassName("io.heapy.kotbot.bot", "Response")
 private val jvmInlineAnnotation = ClassName("kotlin.jvm", "JvmInline")
 private val serializableAnnotation = ClassName("kotlinx.serialization", "Serializable")

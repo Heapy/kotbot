@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
  * This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
  *
  * * [TransactionPartnerUser](https://core.telegram.org/bots/api/#transactionpartneruser)
+ * * [TransactionPartnerAffiliateProgram](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
  * * [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
  * * [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
  * * [TransactionPartnerTelegramApi](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)

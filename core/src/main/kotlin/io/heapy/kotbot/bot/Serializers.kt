@@ -105,6 +105,7 @@ public object ReactionTypeSerializer : JsonContentPolymorphicSerializer<Reaction
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             "emoji" -> ReactionTypeEmoji.serializer()
             "custom_emoji" -> ReactionTypeCustomEmoji.serializer()
+            "paid" -> ReactionTypePaid.serializer()
             else -> error("Unknown argument type: $type")
         }
 }
@@ -121,7 +122,6 @@ public class MaybeInaccessibleMessageSerializer :
 public class ChatBoostSourceSerializer : JsonContentPolymorphicSerializer<ChatBoostSource>(ChatBoostSource::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out ChatBoostSource> =
         when (val type = element.jsonObject["source"]?.jsonPrimitive?.content) {
-
             "premium" -> ChatBoostSourcePremium.serializer()
             "gift_code" -> ChatBoostSourceGiftCode.serializer()
             "giveaway" -> ChatBoostSourceGiveaway.serializer()
@@ -194,8 +194,10 @@ public class TransactionPartnerSerializer : JsonContentPolymorphicSerializer<Tra
     override fun selectDeserializer(element: JsonElement): KSerializer<out TransactionPartner> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             "user" -> TransactionPartnerUser.serializer()
+            "affiliate_program" -> TransactionPartnerAffiliateProgram.serializer()
             "fragment" -> TransactionPartnerFragment.serializer()
             "telegram_ads" -> TransactionPartnerTelegramAds.serializer()
+            "telegram_api" -> TransactionPartnerTelegramApi.serializer()
             "other" -> TransactionPartnerOther.serializer()
             else -> error("Unknown argument type: $type")
         }

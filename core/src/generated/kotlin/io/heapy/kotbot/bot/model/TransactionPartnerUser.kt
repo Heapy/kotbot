@@ -19,6 +19,10 @@ public data class TransactionPartnerUser(
      */
     public val user: User,
     /**
+     * *Optional*. Information about the affiliate that received a commission via this transaction
+     */
+    public val affiliate: AffiliateInfo? = null,
+    /**
      * *Optional*. Bot-specified invoice payload
      */
     public val invoice_payload: String? = null,
