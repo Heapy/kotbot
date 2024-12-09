@@ -4,6 +4,7 @@
 package io.heapy.kotbot.database
 
 
+import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
@@ -29,6 +30,11 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     }
 
     /**
+     * The table <code>public.callback_data</code>.
+     */
+    val CALLBACK_DATA: CallbackData get() = CallbackData.CALLBACK_DATA
+
+    /**
      * The table <code>public.garbage_messages</code>.
      */
     val GARBAGE_MESSAGES: GarbageMessages get() = GarbageMessages.GARBAGE_MESSAGES
@@ -46,6 +52,7 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
+        CallbackData.CALLBACK_DATA,
         GarbageMessages.GARBAGE_MESSAGES,
         TelegramUser.TELEGRAM_USER,
         UpdateRaw.UPDATE_RAW

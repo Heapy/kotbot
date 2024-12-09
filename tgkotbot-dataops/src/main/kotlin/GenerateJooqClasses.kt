@@ -32,7 +32,10 @@ fun drop() {
 fun flyway() {
     Flyway
         .configure()
-        .locations("filesystem:./tgkotbot-dataops/src/main/resources/migrations")
+        .locations(
+            "filesystem:./tgkotbot-dataops/src/main/resources/migrations",
+            "filesystem:./tgkotbot-dataops/src/main/resources/init",
+        )
         .dataSource(
             "jdbc:postgresql://localhost:9577/kotbot",
             "kotbot",

@@ -4,11 +4,17 @@
 package io.heapy.kotbot.database.tables.references
 
 
+import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
 
+
+/**
+ * The table <code>public.callback_data</code>.
+ */
+val CALLBACK_DATA: CallbackData = CallbackData.CALLBACK_DATA
 
 /**
  * The table <code>public.garbage_messages</code>.
