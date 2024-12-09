@@ -1,4 +1,5 @@
 [versions]
+commonmark = "0.24.0"
 coroutines = "1.9.0"
 flyway = "11.0.1"
 hikari = "6.2.1"
@@ -17,6 +18,8 @@ postgresql = "42.7.4"
 serialization = "1.7.3"
 
 [libraries]
+commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark" }
+
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 jooq-core = { module = "org.jooq:jooq", version.ref = "jooq" }

@@ -7,7 +7,6 @@ plugins {
 
 application {
     applicationName = "kotbot"
-    version
     mainClass.set("io.heapy.kotbot.Application")
 }
 
@@ -32,6 +31,8 @@ dependencies {
     implementation(libs.logback)
 
     implementation(libs.micrometer.prometheus)
+
+    implementation(libs.commonmark)
 
     ksp(libs.komok.tech.di)
     implementation(libs.komok.tech.di.lib)
