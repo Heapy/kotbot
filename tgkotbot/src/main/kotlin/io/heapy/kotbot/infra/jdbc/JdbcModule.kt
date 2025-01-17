@@ -35,6 +35,12 @@ open class JdbcModule(
         )
     }
 
+    open val transactionProvider: TransactionProvider by lazy {
+        TransactionProvider(
+            dslContext = dslContext,
+        )
+    }
+
     open val hikariConfig by lazy {
         HikariConfig().apply {
             poolName = "kotbot-hikari-pool"
