@@ -41,7 +41,7 @@ public val kotbotJson: Json = Json {
     explicitNulls = false
 }
 
-public suspend fun Kotbot.receiveUpdates(
+public fun Kotbot.receiveUpdates(
     timeout: Int = 50,
     limit: Int = 100,
     allowedUpdates: List<String> = listOf(),
@@ -50,8 +50,10 @@ public suspend fun Kotbot.receiveUpdates(
 
     return flow {
         while (true) {
+            val currentOffset = offset?.let { it + 1 }
+            log.info("Receiving updates with offset $currentOffset")
             val updates = execute(GetUpdates(
-                offset = offset?.let { it + 1 },
+                offset = currentOffset,
                 limit = limit,
                 timeout = timeout,
                 allowed_updates = allowedUpdates,
