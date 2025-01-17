@@ -83,14 +83,14 @@ open class CallbackData(
     val DATA: TableField<CallbackDataRecord, JSONB?> = createField(DSL.name("data"), SQLDataType.JSONB.nullable(false), this, "")
 
     /**
-     * The column <code>public.callback_data.type</code>.
-     */
-    val TYPE: TableField<CallbackDataRecord, String?> = createField(DSL.name("type"), SQLDataType.VARCHAR(255).nullable(false), this, "")
-
-    /**
      * The column <code>public.callback_data.created</code>.
      */
     val CREATED: TableField<CallbackDataRecord, LocalDateTime?> = createField(DSL.name("created"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "")
+
+    /**
+     * The column <code>public.callback_data.consumed</code>.
+     */
+    val CONSUMED: TableField<CallbackDataRecord, Boolean?> = createField(DSL.name("consumed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "")
 
     private constructor(alias: Name, aliased: Table<CallbackDataRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<CallbackDataRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)

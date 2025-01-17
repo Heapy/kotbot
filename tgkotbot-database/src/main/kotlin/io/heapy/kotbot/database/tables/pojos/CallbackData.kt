@@ -19,8 +19,8 @@ import org.jooq.JSONB
 data class CallbackData(
     override val id: UUID? = null,
     override val `data`: JSONB,
-    override val type: String,
-    override val created: LocalDateTime
+    override val created: LocalDateTime,
+    override val consumed: Boolean? = null
 ): ICallbackData {
 
     override fun equals(other: Any?): Boolean {
@@ -39,9 +39,13 @@ data class CallbackData(
             return false
         if (this.`data` != o.`data`)
             return false
-        if (this.type != o.type)
-            return false
         if (this.created != o.created)
+            return false
+        if (this.consumed == null) {
+            if (o.consumed != null)
+                return false
+        }
+        else if (this.consumed != o.consumed)
             return false
         return true
     }
@@ -51,8 +55,8 @@ data class CallbackData(
         var result = 1
         result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
         result = prime * result + this.`data`.hashCode()
-        result = prime * result + this.type.hashCode()
         result = prime * result + this.created.hashCode()
+        result = prime * result + (if (this.consumed == null) 0 else this.consumed.hashCode())
         return result
     }
 
@@ -61,8 +65,8 @@ data class CallbackData(
 
         sb.append(id)
         sb.append(", ").append(`data`)
-        sb.append(", ").append(type)
         sb.append(", ").append(created)
+        sb.append(", ").append(consumed)
 
         sb.append(")")
         return sb.toString()

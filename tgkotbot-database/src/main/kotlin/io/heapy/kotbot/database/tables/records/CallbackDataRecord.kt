@@ -29,13 +29,13 @@ open class CallbackDataRecord private constructor() : UpdatableRecordImpl<Callba
         set(value): Unit = set(1, value)
         get(): JSONB = get(1) as JSONB
 
-    open override var type: String
-        set(value): Unit = set(2, value)
-        get(): String = get(2) as String
-
     open override var created: LocalDateTime
+        set(value): Unit = set(2, value)
+        get(): LocalDateTime = get(2) as LocalDateTime
+
+    open override var consumed: Boolean?
         set(value): Unit = set(3, value)
-        get(): LocalDateTime = get(3) as LocalDateTime
+        get(): Boolean? = get(3) as Boolean?
 
     // -------------------------------------------------------------------------
     // Primary key information
@@ -50,19 +50,19 @@ open class CallbackDataRecord private constructor() : UpdatableRecordImpl<Callba
     fun from(from: ICallbackData) {
         this.id = from.id
         this.`data` = from.`data`
-        this.type = from.type
         this.created = from.created
+        this.consumed = from.consumed
         resetChangedOnNotNull()
     }
 
     /**
      * Create a detached, initialised CallbackDataRecord
      */
-    constructor(id: UUID? = null, `data`: JSONB, type: String, created: LocalDateTime): this() {
+    constructor(id: UUID? = null, `data`: JSONB, created: LocalDateTime, consumed: Boolean? = null): this() {
         this.id = id
         this.`data` = `data`
-        this.type = type
         this.created = created
+        this.consumed = consumed
         resetChangedOnNotNull()
     }
 
@@ -73,8 +73,8 @@ open class CallbackDataRecord private constructor() : UpdatableRecordImpl<Callba
         if (value != null) {
             this.id = value.id
             this.`data` = value.`data`
-            this.type = value.type
             this.created = value.created
+            this.consumed = value.consumed
             resetChangedOnNotNull()
         }
     }

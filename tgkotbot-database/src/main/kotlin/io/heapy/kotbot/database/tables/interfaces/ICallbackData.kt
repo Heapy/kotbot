@@ -18,6 +18,6 @@ import org.jooq.JSONB
 interface ICallbackData : Serializable {
     val id: UUID?
     val `data`: JSONB
-    val type: String
     val created: LocalDateTime
+    val consumed: Boolean?
 }

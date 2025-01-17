@@ -58,17 +58,6 @@ open class CallbackDataDao(configuration: Configuration?) : DAOImpl<CallbackData
     fun fetchByData(vararg values: JSONB): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetch(CallbackData.CALLBACK_DATA.DATA, *values)
 
     /**
-     * Fetch records that have <code>type BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    fun fetchRangeOfType(lowerInclusive: String, upperInclusive: String): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetchRange(CallbackData.CALLBACK_DATA.TYPE, lowerInclusive, upperInclusive)
-
-    /**
-     * Fetch records that have <code>type IN (values)</code>
-     */
-    fun fetchByType(vararg values: String): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetch(CallbackData.CALLBACK_DATA.TYPE, *values)
-
-    /**
      * Fetch records that have <code>created BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
@@ -78,4 +67,15 @@ open class CallbackDataDao(configuration: Configuration?) : DAOImpl<CallbackData
      * Fetch records that have <code>created IN (values)</code>
      */
     fun fetchByCreated(vararg values: LocalDateTime): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetch(CallbackData.CALLBACK_DATA.CREATED, *values)
+
+    /**
+     * Fetch records that have <code>consumed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfConsumed(lowerInclusive: Boolean?, upperInclusive: Boolean?): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetchRange(CallbackData.CALLBACK_DATA.CONSUMED, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>consumed IN (values)</code>
+     */
+    fun fetchByConsumed(vararg values: Boolean): List<io.heapy.kotbot.database.tables.pojos.CallbackData> = fetch(CallbackData.CALLBACK_DATA.CONSUMED, *values.toTypedArray())
 }
