@@ -102,11 +102,22 @@ These commands work for everybody.
 
 ### BotFather configuration:
 
-Commands:
+User Commands:
+```
+spam – report spam, reply to a spam message with /spam
+```
+
+Moderator Commands:
 
 ```
-post - Create new post in @kotlin_forum
-spam - Mark message as spam
+spam - delete spam message and ban
+```
+
+Admin Commands:
+
+```
+spam - delete spam message and ban
+chat_info - Get chat info
 kotlin_meta - Send message to Kotlin Meta
 kotlin_lang - Send message to Kotlin Lang
 kotlin_jvm - Send message to Kotlin JVM
