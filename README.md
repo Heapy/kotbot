@@ -5,7 +5,7 @@
 * [Tgkotbot](https://github.com/Heapy/kotbot/tree/main/tgkotbot#readme) – Bot implementation for needs
   of [Kotlin Community](https://t.me/kotlin_lang) in the telegram
 
-## Bot API 8.1
+## Bot API 8.2
 
 ### Install library
 
