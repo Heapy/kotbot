@@ -1,7 +1,6 @@
 package io.heapy.kotbot.bot.commands
 
-import io.heapy.kotbot.bot.commands.Command.Access.ADMIN
-import io.heapy.kotbot.bot.commands.Command.Access.USER
+import io.heapy.kotbot.bot.commands.Command.Access.*
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -12,8 +11,13 @@ class CommandAccessTests {
     fun `test allowed`() {
         assertAll(
             { assertFalse(ADMIN.isAllowed(USER)) },
+            { assertFalse(ADMIN.isAllowed(MODERATOR)) },
             { assertTrue(ADMIN.isAllowed(ADMIN)) },
+            { assertFalse(MODERATOR.isAllowed(USER)) },
+            { assertTrue(MODERATOR.isAllowed(ADMIN)) },
+            { assertTrue(MODERATOR.isAllowed(MODERATOR)) },
             { assertTrue(USER.isAllowed(ADMIN)) },
+            { assertTrue(USER.isAllowed(MODERATOR)) },
             { assertTrue(USER.isAllowed(USER)) },
         )
     }

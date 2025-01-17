@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.ktor.server.content.negation)
 
     testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.coroutines.test)
 }

@@ -54,7 +54,7 @@ class DeleteGarbageRule(
         }
     }
 
-    internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
-
     private companion object : Logger()
 }
+
+internal fun wordRegex(word: String) = Regex("(?i)\\b$word\\b")
