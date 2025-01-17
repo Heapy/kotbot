@@ -7,10 +7,10 @@ import io.ktor.client.statement.*
 import io.ktor.util.*
 
 class HttpRequestLogger(
-    config: Config,
+    private val config: Config,
 ) {
     class Config {
-        // Configuration options if needed
+        var saveFunction: suspend (HttpResponse) -> Unit = {}
     }
 
     companion object Plugin : HttpClientPlugin<Config, HttpRequestLogger> {
@@ -23,12 +23,11 @@ class HttpRequestLogger(
 
         override fun install(plugin: HttpRequestLogger, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.Before) {
-                println("Request: ${context.url}")
                 proceed()
             }
 
             scope.receivePipeline.intercept(HttpReceivePipeline.After) { response ->
-                println("Response: ${response.status.value}")
+                plugin.config.saveFunction(response)
                 proceedWith(response)
             }
         }
