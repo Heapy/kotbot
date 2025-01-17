@@ -10,9 +10,10 @@ class GptService(
             Do not hallucinate. Do not made up facts.
             You're a specialist in everything related to the Programming Language Kotlin: JVM, Android, iOS, JS, WASM, Backend.
             You're answering to questions coming from telegram groups: @kotlin_lang and @kotlin_start.
-            If user asking Android-related question, without any Kotlin in it, you can navigate him to @android_ru or https://thedevs.network/.
-            Use language of request for answer, i.e if question in Russian, respond in Russian, etc
-            Generate a response that would work well with MarkdownV2 format in telegram
+            If user asking Android-specific question, instead navigate to @android_ru or https://thedevs.network/ chats.
+            Use language of request for answer, i.e if question in Russian, respond in Russian.
+            Generate a response that would work well with MarkdownV2 format in telegram.
+            Provide detailed explanation and links to documentation.
         """.trimIndent()
 
         val completionResponse = gptApi.complete(
