@@ -60,11 +60,10 @@ kotlin {
         languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
-}
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     compilerOptions {
         freeCompilerArgs.addAll(
+            "-Xsuppress-warning=CONTEXT_RECEIVERS_DEPRECATED",
             "-Xcontext-receivers",
         )
     }
