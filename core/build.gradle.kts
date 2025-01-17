@@ -19,7 +19,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.mockk)
     testImplementation(libs.logback)
-    testImplementation(libs.komok.tech.dotenv)
+    testImplementation(libs.komok.tech.config.dotenv)
 }
 
 repositories {

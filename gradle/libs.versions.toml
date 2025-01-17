@@ -6,7 +6,7 @@ hikari = "6.2.1"
 jooq = "3.19.17"
 jsoup = "1.18.3"
 junit = "5.11.4"
-komok = "1.0.7"
+komok = "1.0.11"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 ktor = "3.0.3"
@@ -40,7 +40,7 @@ kotlin-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 komok-tech-di = { module = "io.heapy.komok:komok-tech-di", version.ref = "komok" }
 komok-tech-di-lib = { module = "io.heapy.komok:komok-tech-di-lib", version.ref = "komok" }
-komok-tech-dotenv = { module = "io.heapy.komok:komok-tech-dotenv", version.ref = "komok" }
+komok-tech-config-dotenv = { module = "io.heapy.komok:komok-tech-config-dotenv", version.ref = "komok" }
 komok-tech-config = { module = "io.heapy.komok:komok-tech-config", version.ref = "komok" }
 komok-tech-logging = { module = "io.heapy.komok:komok-tech-logging", version.ref = "komok" }
 

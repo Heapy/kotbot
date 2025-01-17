@@ -38,7 +38,7 @@ dependencies {
     implementation(libs.komok.tech.di.lib)
     implementation(libs.komok.tech.config)
     implementation(libs.komok.tech.logging)
-    implementation(libs.komok.tech.dotenv)
+    implementation(libs.komok.tech.config.dotenv)
 
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client)
