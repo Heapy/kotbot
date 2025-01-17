@@ -6,7 +6,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * The background is a PNG or TGV (gzipped subset of SVG with MIME type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user.
+ * The background is a .PNG or .TGV (gzipped subset of SVG with MIME type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user.
  */
 @Serializable
 public data class BackgroundTypePattern(

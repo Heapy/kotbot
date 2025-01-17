@@ -20,7 +20,7 @@ public data class InlineQueryResultMpeg4Gif(
      */
     public val id: String,
     /**
-     * A valid URL for the MPEG4 file. File size must not exceed 1MB
+     * A valid URL for the MPEG4 file
      */
     public val mpeg4_url: String,
     /**

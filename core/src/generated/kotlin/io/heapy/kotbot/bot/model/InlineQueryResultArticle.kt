@@ -1,6 +1,5 @@
 package io.heapy.kotbot.bot.model
 
-import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
@@ -34,10 +33,6 @@ public data class InlineQueryResultArticle(
      * *Optional*. URL of the result
      */
     public val url: String? = null,
-    /**
-     * *Optional*. Pass *True* if you don't want the URL to be shown in the message
-     */
-    public val hide_url: Boolean? = null,
     /**
      * *Optional*. Short description of the result
      */

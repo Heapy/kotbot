@@ -25,6 +25,10 @@ public data class SendGift(
      */
     public val gift_id: String,
     /**
+     * Pass *True* to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver
+     */
+    public val pay_for_upgrade: Boolean? = null,
+    /**
      * Text that will be shown along with the gift; 0-255 characters
      */
     public val text: String? = null,

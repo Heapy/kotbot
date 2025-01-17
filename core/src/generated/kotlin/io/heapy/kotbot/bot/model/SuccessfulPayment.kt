@@ -7,7 +7,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * This object contains basic information about a successful payment.
+ * This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
  */
 @Serializable
 public data class SuccessfulPayment(

@@ -20,7 +20,7 @@ public data class InlineQueryResultGif(
      */
     public val id: String,
     /**
-     * A valid URL for the GIF file. File size must not exceed 1MB
+     * A valid URL for the GIF file
      */
     public val gif_url: String,
     /**

@@ -14,7 +14,7 @@ public data class InputSticker(
      */
     public val sticker: Sticker,
     /**
-     * Format of the added sticker, must be one of "static" for a **.WEBP** or **.PNG** image, "animated" for a **.TGS** animation, "video" for a **WEBM** video
+     * Format of the added sticker, must be one of "static" for a **.WEBP** or **.PNG** image, "animated" for a **.TGS** animation, "video" for a **.WEBM** video
      */
     public val format: String,
     /**

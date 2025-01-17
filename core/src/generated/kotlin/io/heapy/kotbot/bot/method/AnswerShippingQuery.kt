@@ -28,7 +28,7 @@ public data class AnswerShippingQuery(
      */
     public val shipping_options: List<ShippingOption>? = null,
     /**
-     * Required if *ok* is *False*. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
+     * Required if *ok* is *False*. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable"). Telegram will display this message to the user.
      */
     public val error_message: String? = null,
 ) : Method<AnswerShippingQuery, Boolean> by Companion {
