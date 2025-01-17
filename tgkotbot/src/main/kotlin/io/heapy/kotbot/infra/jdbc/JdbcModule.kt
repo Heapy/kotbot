@@ -37,6 +37,7 @@ open class JdbcModule(
 
     open val hikariConfig by lazy {
         HikariConfig().apply {
+            poolName = "kotbot-hikari-pool"
             dataSourceClassName = PGSimpleDataSource::class.qualifiedName
             username = configuration.user
             password = configuration.password
