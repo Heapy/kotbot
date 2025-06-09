@@ -1,11 +1,11 @@
 [versions]
 commonmark = "0.24.0"
 coroutines = "1.10.2"
-flyway = "11.8.2"
+flyway = "11.9.1"
 hikari = "6.3.0"
 jooq = "3.20.4"
 jsoup = "1.20.1"
-junit = "5.13.0"
+junit = "5.13.1"
 komok = "1.0.12"
 kotlin = "2.1.21"
 ksp = "2.1.21-2.0.1"
