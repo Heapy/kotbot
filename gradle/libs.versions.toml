@@ -1,8 +1,8 @@
 [versions]
 commonmark = "0.25.1"
 coroutines = "1.10.2"
-flyway = "11.10.5"
-hikari = "7.0.0"
+flyway = "11.11.0"
+hikari = "7.0.1"
 jooq = "3.20.5"
 jsoup = "1.21.1"
 junit = "5.13.4"
