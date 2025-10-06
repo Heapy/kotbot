@@ -35,7 +35,7 @@ jobs:
       with:
         java-version: "21"
         distribution: "liberica"
-    - uses: gradle/actions/setup-gradle@v4
+    - uses: gradle/actions/setup-gradle@v5
     - run: ./gradlew build -x test -x distTar
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
