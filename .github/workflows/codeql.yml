@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v5
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
     - uses: actions/setup-java@v5
@@ -38,6 +38,6 @@ jobs:
     - uses: gradle/actions/setup-gradle@v5
     - run: ./gradlew build -x test -x distTar
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"
