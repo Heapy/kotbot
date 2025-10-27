@@ -16,7 +16,7 @@ jobs:
           distribution: "liberica"
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew distTar
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: "Kotlin Application"
           path: "tgkotbot/build/distributions/kotbot.tar"
@@ -28,7 +28,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: "Kotlin Application"
           path: "tgkotbot/build/distributions/"
