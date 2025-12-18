@@ -33,7 +33,7 @@ jobs:
         languages: ${{ matrix.language }}
     - uses: actions/setup-java@v5
       with:
-        java-version: "21"
+        java-version: "25"
         distribution: "liberica"
     - uses: gradle/actions/setup-gradle@v5
     - run: ./gradlew build -x test -x distTar

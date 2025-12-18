@@ -28,7 +28,7 @@ repositories {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
 }
@@ -37,4 +37,4 @@ tasks.test {
     useJUnitPlatform()
 }
 
-sourceSets.main.get().java.srcDir("src/generated/kotlin")
+kotlin.sourceSets.getByName("main").generatedKotlin.srcDir("src/generated/kotlin")
