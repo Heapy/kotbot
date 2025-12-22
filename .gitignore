@@ -16,3 +16,6 @@ build
 
 # Publish
 publish.sh
+
+# macOS
+.DS_Store
