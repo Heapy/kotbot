@@ -9,13 +9,13 @@ junit = "6.0.2"
 komok = "1.0.13"
 kotlin = "2.3.0"
 ksp = "2.3.4"
-ktor = "3.3.3"
-logback = "1.5.25"
+ktor = "3.4.0"
+logback = "1.5.26"
 micrometer = "1.16.2"
 mockk = "1.14.7"
 poet = "2.2.0"
 postgresql = "42.7.9"
-serialization = "1.9.0"
+serialization = "1.10.0"
 
 [libraries]
 commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark" }
