@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.method
 
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
+import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.MessageEntity
 import kotlin.Boolean
 import kotlin.Long
@@ -12,14 +13,18 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 
 /**
- * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns *True* on success.
+ * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns *True* on success.
  */
 @Serializable
 public data class SendGift(
     /**
-     * Unique identifier of the target user that will receive the gift
+     * Required if *chat_id* is not specified. Unique identifier of the target user who will receive the gift.
      */
-    public val user_id: Long,
+    public val user_id: Long? = null,
+    /**
+     * Required if *user_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@channelusername`) that will receive the gift.
+     */
+    public val chat_id: ChatId? = null,
     /**
      * Identifier of the gift
      */
@@ -29,7 +34,7 @@ public data class SendGift(
      */
     public val pay_for_upgrade: Boolean? = null,
     /**
-     * Text that will be shown along with the gift; 0-255 characters
+     * Text that will be shown along with the gift; 0-128 characters
      */
     public val text: String? = null,
     /**

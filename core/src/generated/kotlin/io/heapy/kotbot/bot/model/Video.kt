@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.model
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
+import kotlin.collections.List
 import kotlinx.serialization.Serializable
 
 /**
@@ -34,6 +35,14 @@ public data class Video(
      * *Optional*. Video thumbnail
      */
     public val thumbnail: PhotoSize? = null,
+    /**
+     * *Optional*. Available sizes of the cover of the video in the message
+     */
+    public val cover: List<PhotoSize>? = null,
+    /**
+     * *Optional*. Timestamp in seconds from which the video will play in the message
+     */
+    public val start_timestamp: Int? = null,
     /**
      * *Optional*. Original filename as defined by the sender
      */

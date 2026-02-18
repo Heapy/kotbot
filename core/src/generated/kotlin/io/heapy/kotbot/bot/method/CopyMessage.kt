@@ -36,6 +36,10 @@ public data class CopyMessage(
      */
     public val message_id: Int,
     /**
+     * New start timestamp for the copied video in the message
+     */
+    public val video_start_timestamp: Int? = null,
+    /**
      * New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept
      */
     public val caption: String? = null,

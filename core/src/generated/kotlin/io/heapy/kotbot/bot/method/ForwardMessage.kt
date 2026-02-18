@@ -28,6 +28,10 @@ public data class ForwardMessage(
      */
     public val from_chat_id: ChatId,
     /**
+     * New start timestamp for the forwarded video in the message
+     */
+    public val video_start_timestamp: Int? = null,
+    /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
     public val disable_notification: Boolean? = null,

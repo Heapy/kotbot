@@ -7,10 +7,11 @@ import io.heapy.kotbot.bot.method.GetMe
 import io.heapy.kotbot.bot.model.LongChatId
 
 suspend fun main() {
-    val dotenv = dotenv().properties
+    val dotenv = dotenv()
+    val env = dotenv.properties
 
     val kotbot = Kotbot(
-        token = dotenv.getValue("KOTBOT_TOKEN"),
+        token = env.getValue("KOTBOT_TOKEN"),
     )
 
     val me = kotbot.execute(GetMe())

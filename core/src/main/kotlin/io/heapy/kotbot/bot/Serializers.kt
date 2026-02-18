@@ -198,6 +198,7 @@ public class TransactionPartnerSerializer : JsonContentPolymorphicSerializer<Tra
             "fragment" -> TransactionPartnerFragment.serializer()
             "telegram_ads" -> TransactionPartnerTelegramAds.serializer()
             "telegram_api" -> TransactionPartnerTelegramApi.serializer()
+            "chat" -> TransactionPartnerChat.serializer()
             "other" -> TransactionPartnerOther.serializer()
             else -> error("Unknown argument type: $type")
         }

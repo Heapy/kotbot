@@ -5,12 +5,12 @@
 * [Tgkotbot](https://github.com/Heapy/kotbot/tree/main/tgkotbot#readme) – Bot implementation for needs
   of [Kotlin Community](https://t.me/kotlin_lang) in the telegram
 
-## Bot API 8.2
+## Bot API 8.3
 
 ### Install library
 
 ```kotlin
-implementation("io.heapy.kotbot:core:1.3.0")
+implementation("io.heapy.kotbot:core:1.4.0")
 ```
 
 ### Example
@@ -38,6 +38,6 @@ suspend fun main() {
 
     // Flow, which emits updates
     kotbot.receiveUpdates()
-        .onEach(::println)
+        .collect(::println)
 }
 ```
