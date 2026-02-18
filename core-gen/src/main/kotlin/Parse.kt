@@ -28,6 +28,9 @@ fun main() {
         "api810",
         "api820",
         "api830",
+        "api900",
+        "api920",
+        "api940",
     ).forEach { v ->
         val input = rootPath.resolve(v).readText()
         val output = processVersion(input)
