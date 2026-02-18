@@ -18,9 +18,7 @@ data class UserContext(
     val version: Int,
 )
 
-class UserContextDao(
-    private val jooqDao: JooqDao,
-) : JooqDao by jooqDao {
+class UserContextDao {
     context(_: TransactionContext)
     suspend fun get(
         telegramId: Long,
@@ -46,7 +44,6 @@ class UserContextDao(
     suspend fun update(
         userContext: UserContext,
     ) = useTx {
-        // update with optimistic lock
         update(TELEGRAM_USER)
             .set(TELEGRAM_USER.LAST_MESSAGE, userContext.lastMessage)
             .set(TELEGRAM_USER.MESSAGE_COUNT, userContext.messageCount)

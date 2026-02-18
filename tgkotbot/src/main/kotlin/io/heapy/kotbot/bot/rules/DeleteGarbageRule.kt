@@ -6,16 +6,18 @@ import io.heapy.kotbot.bot.dao.GarbageMessageDao
 import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.database.enums.ActionType
 import io.heapy.kotbot.database.enums.MatchType
+import io.heapy.kotbot.infra.jdbc.TransactionProvider
 
 class DeleteGarbageRule(
     private val userContextService: UserContextService,
     private val garbageMessageDao: GarbageMessageDao,
+    private val transactionProvider: TransactionProvider,
 ) : Rule {
     override suspend fun validate(
         kotbot: Kotbot,
         update: Update,
         actions: Actions,
-    ) = garbageMessageDao.transaction {
+    ) = transactionProvider.transaction {
         update.anyText { messageText, message ->
             val possibleActions = garbageMessageDao
                 .getGarbageMessages()

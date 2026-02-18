@@ -6,9 +6,7 @@ import io.heapy.kotbot.infra.jdbc.TransactionContext
 import io.heapy.kotbot.infra.jdbc.dslContext
 import io.heapy.kotbot.infra.jdbc.useTx
 
-class GarbageMessageDao(
-    private val jooqDao: JooqDao,
-) : JooqDao by jooqDao {
+class GarbageMessageDao {
     context(_: TransactionContext)
     suspend fun getGarbageMessages(): List<GarbageMessages> = useTx {
         dslContext

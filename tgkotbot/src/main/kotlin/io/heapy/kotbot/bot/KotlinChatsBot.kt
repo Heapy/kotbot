@@ -3,16 +3,19 @@ package io.heapy.kotbot.bot
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.komok.tech.logging.logger
 import io.heapy.kotbot.bot.commands.CommandResolver
-import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.dao.UpdateDao
 import io.heapy.kotbot.bot.filters.Filter
+import io.heapy.kotbot.bot.model.Update
 import io.heapy.kotbot.bot.rules.RuleExecutor
+import io.heapy.kotbot.infra.jdbc.TransactionProvider
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class KotlinChatsBot(
     private val kotbot: Kotbot,
@@ -22,6 +25,7 @@ class KotlinChatsBot(
     private val updateDao: UpdateDao,
     private val commandResolver: CommandResolver,
     private val ruleExecutor: RuleExecutor,
+    private val transactionProvider: TransactionProvider,
 ) {
     suspend fun start() {
         val updateReceived = meterRegistry.counter("update.received")
@@ -63,7 +67,7 @@ class KotlinChatsBot(
         }
     }
 
-    private suspend fun saveUpdate(update: Update) = updateDao.transaction {
+    private suspend fun saveUpdate(update: Update) = transactionProvider.transaction {
         updateDao.saveRawUpdate(
             kotbot.json.encodeToString(Update.serializer(), update),
         )

@@ -6,6 +6,7 @@ import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.bot.filters.FiltersModule
 import io.heapy.kotbot.bot.rules.RulesModule
 import io.heapy.kotbot.infra.KotbotModule
+import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 import io.heapy.kotbot.infra.metrics.MetricsModule
 
@@ -18,6 +19,7 @@ open class KotlinChatBotModule(
     private val metricsModule: MetricsModule,
     private val applicationScopeModule: ApplicationScopeModule,
     private val kotbotModule: KotbotModule,
+    private val jdbcModule: JdbcModule,
 ) {
     open val kotlinChatsBot: KotlinChatsBot by lazy {
         KotlinChatsBot(
@@ -28,6 +30,7 @@ open class KotlinChatBotModule(
             applicationScope = applicationScopeModule.applicationScope,
             commandResolver = commandsModule.commandResolver,
             ruleExecutor = rulesModule.ruleExecutor,
+            transactionProvider = jdbcModule.transactionProvider,
         )
     }
 }

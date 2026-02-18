@@ -6,9 +6,7 @@ import io.heapy.kotbot.infra.jdbc.useTx
 import org.jooq.JSONB
 import java.time.LocalDateTime.now
 
-class UpdateDao(
-    private val jooqDao: JooqDao,
-) : JooqDao by jooqDao {
+class UpdateDao {
     context(_: TransactionContext)
     suspend fun saveRawUpdate(update: String) = useTx {
         insertInto(UPDATE_RAW)
