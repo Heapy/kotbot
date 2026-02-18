@@ -1,23 +1,29 @@
 package io.heapy.kotbot.bot.rules
 
 import io.heapy.komok.tech.logging.Logger
-import io.heapy.kotbot.bot.*
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.TypedUpdate
+import io.heapy.kotbot.bot.UserContextService
+import io.heapy.kotbot.bot.anyText
+import io.heapy.kotbot.bot.banFrom
 import io.heapy.kotbot.bot.dao.GarbageMessageDao
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.delete
+import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.refLog
 import io.heapy.kotbot.database.enums.ActionType
 import io.heapy.kotbot.database.enums.MatchType
-import io.heapy.kotbot.infra.jdbc.TransactionProvider
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 class DeleteGarbageRule(
     private val userContextService: UserContextService,
     private val garbageMessageDao: GarbageMessageDao,
-    private val transactionProvider: TransactionProvider,
 ) : Rule {
+    context(_: TransactionContext)
     override suspend fun validate(
         kotbot: Kotbot,
-        update: Update,
+        update: TypedUpdate,
         actions: Actions,
-    ) = transactionProvider.transaction {
+    ) {
         update.anyText { messageText, message ->
             val possibleActions = garbageMessageDao
                 .getGarbageMessages()
@@ -35,7 +41,7 @@ class DeleteGarbageRule(
 
             when {
                 ban != null -> {
-                    log.info("Delete message ${message.text}, reason ${ban.type}, from ${message.from?.info} (banned)")
+                    log.info("Delete message ${message.text}, reason ${ban.type}, from ${message.from?.refLog} (banned)")
                     userContextService.ban(message, ban.type)
                     actions.runIfNew("garbage_ban_rule", message.delete) {
                         kotbot.executeSafely(it)
@@ -46,7 +52,7 @@ class DeleteGarbageRule(
                 }
 
                 warn != null -> {
-                    log.info("Delete message ${message.text}, reason ${warn.type}, from ${message.from?.info}")
+                    log.info("Delete message ${message.text}, reason ${warn.type}, from ${message.from?.refLog}")
                     actions.runIfNew("garbage_warn_rule", message.delete) {
                         kotbot.executeSafely(it)
                         userContextService.addStrike(message, warn.type)

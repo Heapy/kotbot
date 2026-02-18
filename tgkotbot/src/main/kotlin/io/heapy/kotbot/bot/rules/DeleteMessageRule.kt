@@ -1,8 +1,13 @@
 package io.heapy.kotbot.bot.rules
 
 import io.heapy.komok.tech.logging.Logger
-import io.heapy.kotbot.bot.*
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.TypedUpdate
+import io.heapy.kotbot.bot.anyMessage
+import io.heapy.kotbot.bot.delete
+import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.refLog
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 /**
  * In @kotlin_lang following Send Media permissions disabled:
@@ -17,9 +22,10 @@ import io.heapy.kotbot.bot.model.Update
  * So a few rules above should never be triggered.
  */
 class DeleteMessageRule : Rule {
+    context(_: TransactionContext)
     override suspend fun validate(
         kotbot: Kotbot,
-        update: Update,
+        update: TypedUpdate,
         actions: Actions,
     ) {
         update.anyMessage?.let { message ->
@@ -40,21 +46,21 @@ class DeleteMessageRule : Rule {
 
                 message.video_note != null -> {
                     actions.runIfNew("video_note_rule", message.delete) {
-                        log.info("Delete video note message from ${message.from?.info}.")
+                        log.info("Delete video note message from ${message.from?.refLog}.")
                         kotbot.executeSafely(it)
                     }
                 }
 
                 message.voice != null -> {
                     actions.runIfNew("voice_rule", message.delete) {
-                        log.info("Delete voice message from ${message.from?.info}.")
+                        log.info("Delete voice message from ${message.from?.refLog}.")
                         kotbot.executeSafely(it)
                     }
                 }
 
                 message.sticker != null -> {
                     actions.runIfNew("sticker_rule", message.delete) {
-                        log.info("Delete sticker-message from ${message.from?.info}.")
+                        log.info("Delete sticker-message from ${message.from?.refLog}.")
                         kotbot.executeSafely(it)
                     }
                 }

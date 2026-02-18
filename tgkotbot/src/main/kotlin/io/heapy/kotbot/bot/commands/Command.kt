@@ -1,24 +1,23 @@
 package io.heapy.kotbot.bot.commands
 
-import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 interface Command {
     val name: String
-    val context: List<Context>
-    val access: Access
-    val deleteCommandMessage: Boolean
+    val requiredContext: List<Context>
+    val requiredAccess: Access
 
-    suspend fun execute(
-        kotbot: Kotbot,
-        update: Update,
-        message: Message,
+    context(
+        _: TransactionContext,
+        cex: CommandExecutionContext,
     )
+    suspend fun execute()
 
     val Message.textWithoutCommand: String?
         get() = text
             ?.substringAfter(name)
+            ?.trim()
             ?.takeIf(String::isNotBlank)
 
     enum class Context {

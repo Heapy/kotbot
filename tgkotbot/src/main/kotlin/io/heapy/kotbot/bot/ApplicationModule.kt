@@ -22,12 +22,15 @@ open class ApplicationModule(
     private val uptimeModule: UptimeModule,
     private val kotlinChatBotModule: KotlinChatBotModule,
     private val applicationScopeModule: ApplicationScopeModule,
+    private val updateProcessorsModule: UpdateProcessorsModule,
 ) {
     open suspend fun start() {
-        metricsReportersModule.metricsRegister
+        metricsReportersModule
+            .metricsRegister
             .addMetricsToRegistry(
                 metricsModule.meterRegistry
             )
+
         runMigrations(jdbcModule.hikariDataSource)
 
         Runtime.getRuntime().addShutdownHook(thread(
@@ -36,10 +39,10 @@ open class ApplicationModule(
         ) {
             log.info("Shutdown hook called.")
             autoClosableModule.close()
-            applicationScopeModule.applicationJob.cancel()
         })
 
         serverModule.server.start()
+        updateProcessorsModule.updateProcessor.start()
         kotlinChatBotModule.kotlinChatsBot.start()
 
         log.info("Application started in ${uptimeModule.uptimeService.uptime}ms.")

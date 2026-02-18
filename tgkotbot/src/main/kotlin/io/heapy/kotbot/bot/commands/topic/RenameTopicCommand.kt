@@ -4,57 +4,58 @@ import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.NotificationService
 import io.heapy.kotbot.bot.commands.Command
+import io.heapy.kotbot.bot.commands.CommandExecutionContext
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.EditForumTopic
 import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.refLog
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 class RenameTopicCommand(
+    private val kotbot: Kotbot,
     private val notificationService: NotificationService,
 ) : Command {
     override val name = "/rename"
-    override val context = listOf(Command.Context.GROUP_CHAT)
-    override val access = Command.Access.MODERATOR
-    override val deleteCommandMessage = true
+    override val requiredContext = listOf(Command.Context.GROUP_CHAT)
+    override val requiredAccess = Command.Access.MODERATOR
 
-    override suspend fun execute(
-        kotbot: Kotbot,
-        update: Update,
-        message: Message,
-    ) {
-        if (message.chat.is_forum != true) {
-            log.info("Chat is not a forum")
-            return
-        }
+    context(
+        _: TransactionContext,
+        cex: CommandExecutionContext,
+    )
+    override suspend fun execute() {
+        val message = cex.message
+        if (message.is_topic_message == true) {
+            val threadId = message.message_thread_id
 
-        notificationService
-            .notifyAdmins(
-                """
-                    Topic renamed in chat ${message.chat.title} by ${message.from?.username}
-                    https://t.me/${message.chat.id}/${message.message_thread_id}
-                    New name: ${message.textWithoutCommand}
-                """.trimIndent()
-            )
+            if (threadId != null) {
+                val newName = message.textWithoutCommand
+                    ?: run {
+                        log.info("No new name to rename")
+                        return
+                    }
 
-        val newName = message.textWithoutCommand
-            ?: run {
-                log.info("No new name to rename")
-                return
-            }
+                notificationService
+                    .notifyAdmins(
+                        """
+                        Topic renamed in chat ${message.chat.title} by ${message.from?.refLog}
+                        https://t.me/${message.chat.username}/${message.message_thread_id}
+                        New name: $newName
+                        """.trimIndent()
+                    )
 
-        val threadId = message.message_thread_id
-
-        if (threadId != null) {
-            kotbot.executeSafely(
-                EditForumTopic(
-                    chat_id = LongChatId(message.chat.id),
-                    message_thread_id = threadId,
-                    name = newName,
+                kotbot.executeSafely(
+                    EditForumTopic(
+                        chat_id = LongChatId(message.chat.id),
+                        message_thread_id = threadId,
+                        name = newName,
+                    )
                 )
-            )
+            } else {
+                log.warn("No thread id to rename")
+            }
         } else {
-            log.info("No thread id to rename")
+            log.warn("Not a topic message")
         }
     }
 

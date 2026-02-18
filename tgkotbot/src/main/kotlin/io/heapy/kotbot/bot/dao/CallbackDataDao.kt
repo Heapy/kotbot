@@ -3,7 +3,6 @@ package io.heapy.kotbot.bot.dao
 import io.heapy.kotbot.database.tables.CallbackData.Companion.CALLBACK_DATA
 import io.heapy.kotbot.database.tables.pojos.CallbackData
 import io.heapy.kotbot.infra.jdbc.TransactionContext
-import io.heapy.kotbot.infra.jdbc.dslContext
 import io.heapy.kotbot.infra.jdbc.useTx
 import org.jooq.JSONB
 import java.time.LocalDateTime

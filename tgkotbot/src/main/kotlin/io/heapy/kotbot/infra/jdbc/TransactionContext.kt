@@ -10,15 +10,20 @@ internal data class JooqTransactionContext(
 
 data object MockTransactionContext : TransactionContext
 
-context(transactionContext: TransactionContext)
+interface DSLContextHolder {
+    val dslContext: DSLContext
+}
+
+private data class DefaultDSLContextHolder(
+    override val dslContext: DSLContext,
+) : DSLContextHolder
+
+context(tx: TransactionContext)
 suspend fun <T> useTx(
-    block: suspend DSLContext.() -> T,
+    block: suspend DSLContextHolder.() -> T,
 ): T {
-    return when (transactionContext) {
-        is JooqTransactionContext -> block(transactionContext.dslContext)
+    return when (tx) {
+        is JooqTransactionContext -> block(DefaultDSLContextHolder(tx.dslContext))
         MockTransactionContext -> error("useTx shouldn't be called with mock transaction")
     }
 }
-
-inline val DSLContext.dslContext: DSLContext
-    get() = this

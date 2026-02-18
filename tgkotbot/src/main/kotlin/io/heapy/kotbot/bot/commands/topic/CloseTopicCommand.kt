@@ -4,44 +4,50 @@ import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.NotificationService
 import io.heapy.kotbot.bot.commands.Command
+import io.heapy.kotbot.bot.commands.CommandExecutionContext
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.CloseForumTopic
 import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.refLog
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 class CloseTopicCommand(
+    private val kotbot: Kotbot,
     private val notificationService: NotificationService,
 ) : Command {
     override val name = "/close"
-    override val context = listOf(Command.Context.GROUP_CHAT)
-    override val access = Command.Access.MODERATOR
-    override val deleteCommandMessage = true
+    override val requiredContext = listOf(Command.Context.GROUP_CHAT)
+    override val requiredAccess = Command.Access.MODERATOR
 
-    override suspend fun execute(
-        kotbot: Kotbot,
-        update: Update,
-        message: Message,
-    ) {
-        val threadId = message.message_thread_id
+    context(
+        _: TransactionContext,
+        cex: CommandExecutionContext,
+    )
+    override suspend fun execute() {
+        val message = cex.message
+        if (message.is_topic_message == true) {
+            val threadId = message.message_thread_id
 
-        notificationService
-            .notifyAdmins(
-                """
-                    Topic closed in chat ${message.chat.title} by ${message.from?.username}
-                    https://t.me/${message.chat.id}/${message.message_thread_id}
-                """.trimIndent()
-            )
+            if (threadId != null) {
+                notificationService
+                    .notifyAdmins(
+                        """
+                        Topic closed in chat ${message.chat.title} by ${message.from?.refLog}
+                        https://t.me/${message.chat.username}/${message.message_thread_id}
+                        """.trimIndent()
+                    )
 
-        if (threadId != null) {
-            kotbot.executeSafely(
-                CloseForumTopic(
-                    chat_id = LongChatId(message.chat.id),
-                    message_thread_id = threadId,
+                kotbot.executeSafely(
+                    CloseForumTopic(
+                        chat_id = LongChatId(message.chat.id),
+                        message_thread_id = threadId,
+                    )
                 )
-            )
+            } else {
+                log.warn("No thread id to close")
+            }
         } else {
-            log.info("No thread id to close")
+            log.warn("Not a topic message")
         }
     }
 

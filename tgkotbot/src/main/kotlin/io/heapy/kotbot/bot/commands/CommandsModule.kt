@@ -2,12 +2,16 @@ package io.heapy.kotbot.bot.commands
 
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.KotlinChatBotConfigurationModule
+import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.bot.NotificationServiceModule
+import io.heapy.kotbot.bot.UserContextServiceModule
 import io.heapy.kotbot.bot.commands.info.ChatInfoCommand
 import io.heapy.kotbot.bot.commands.topic.CloseTopicCommand
 import io.heapy.kotbot.bot.commands.topic.RenameTopicCommand
 import io.heapy.kotbot.bot.commands.topic.ReopenTopicCommand
+import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
+import io.heapy.kotbot.infra.debug.PrettyPrintModule
 import io.heapy.kotbot.infra.openai.GptApiModule
 
 @Module
@@ -15,13 +19,17 @@ open class CommandsModule(
     private val kotbotModule: KotbotModule,
     private val kotlinChatBotConfigurationModule: KotlinChatBotConfigurationModule,
     private val gptApiModule: GptApiModule,
+    private val callbackDataServiceModule: CallbackDataServiceModule,
     private val notificationServiceModule: NotificationServiceModule,
+    private val userContextServiceModule: UserContextServiceModule,
+    private val prettyPrintModule: PrettyPrintModule,
+    private val markdownModule: MarkdownModule,
 ) {
     open val commandResolver: CommandResolver by lazy {
         CommandResolver(
             commands = commands,
             commandExecutor = commandExecutor,
-            admins = kotlinChatBotConfigurationModule.groupsConfiguration.admins.flatMap { it.value },
+            userContextService = userContextServiceModule.userContextService,
         )
     }
 
@@ -45,41 +53,69 @@ open class CommandsModule(
 
     open val gptCommand: Command by lazy {
         GptCommand(
+            kotbot = kotbotModule.kotbot,
             gptService = gptApiModule.gptService,
+            markdown = markdownModule.markdown,
+            callbackDataService = callbackDataServiceModule.callbackDataService,
         )
     }
 
-    open val chatInfoCommand: Command by lazy(::ChatInfoCommand)
+    open val chatInfoCommand: Command by lazy {
+        ChatInfoCommand(
+            prettyPrint = prettyPrintModule.prettyPrint,
+            kotbot = kotbotModule.kotbot,
+            markdown = markdownModule.markdown,
+        )
+    }
 
-    open val spamCommand: Command by lazy(::SpamCommand)
+    open val spamCommand: Command by lazy {
+        SpamCommand(
+            kotbot = kotbotModule.kotbot,
+            notificationChannelId = kotlinChatBotConfigurationModule.groupsConfiguration.notificationChannel,
+            callbackDataService = callbackDataServiceModule.callbackDataService,
+            markdown = markdownModule.markdown,
+        )
+    }
 
     open val closeTopicCommand: Command by lazy {
         CloseTopicCommand(
+            kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
     open val renameTopicCommand: Command by lazy {
         RenameTopicCommand(
+            kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
     open val reopenTopicCommand: Command by lazy {
         ReopenTopicCommand(
+            kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
-    open val startCommand: Command by lazy(::StartCommand)
+    open val startCommand: Command by lazy {
+        StartCommand(
+            kotbot = kotbotModule.kotbot,
+        )
+    }
 
     open val sendMessageToGroupCommands by lazy {
-        kotlinChatBotConfigurationModule.groupsConfiguration.allowedGroups.map { (name, id) ->
-            SendMessageFromBotCommand(
-                admin = kotlinChatBotConfigurationModule.groupsConfiguration.notificationChannel,
-                name = "/$name",
-                id = id,
-            )
-        }
+        kotlinChatBotConfigurationModule
+            .groupsConfiguration
+            .allowedGroups
+            .map { (name, id) ->
+                SendMessageFromBotCommand(
+                    kotbot = kotbotModule.kotbot,
+                    notificationService = notificationServiceModule.notificationService,
+                    name = "/$name",
+                    id = id,
+                    markdown = markdownModule.markdown,
+                )
+            }
     }
 }

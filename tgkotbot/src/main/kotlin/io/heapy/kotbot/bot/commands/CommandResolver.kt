@@ -1,20 +1,24 @@
 package io.heapy.kotbot.bot.commands
 
 import io.heapy.komok.tech.logging.Logger
-import io.heapy.kotbot.bot.commands.Command.Access.ADMIN
+import io.heapy.kotbot.bot.UserContextService
 import io.heapy.kotbot.bot.commands.Command.Access.USER
 import io.heapy.kotbot.bot.commands.Command.Context.GROUP_CHAT
 import io.heapy.kotbot.bot.commands.Command.Context.USER_CHAT
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.model.Message
+import io.heapy.kotbot.infra.jdbc.TransactionContext
 import kotlinx.coroutines.coroutineScope
 
 class CommandResolver(
     private val commands: List<Command>,
     private val commandExecutor: CommandExecutor,
-    private val admins: List<Long>,
+    private val userContextService: UserContextService,
 ) {
-    suspend fun findAndExecuteCommand(update: Update): Boolean = coroutineScope {
-        val commandExecutionContext = update.toCommandExecutionContext()
+    context(_: TransactionContext)
+    suspend fun findAndExecuteCommand(
+        message: Message,
+    ): Boolean = coroutineScope {
+        val commandExecutionContext = message.toCommandExecutionContext()
 
         if (commandExecutionContext != null) {
             try {
@@ -23,7 +27,7 @@ class CommandResolver(
                         commandExecutionContext = commandExecutionContext,
                     )
             } catch (e: Exception) {
-                log.error("Exception in command. Update: {}", update, e)
+                log.error("Exception in command. Message: {}", message, e)
             }
 
             true
@@ -32,38 +36,50 @@ class CommandResolver(
         }
     }
 
-    internal fun Update.toCommandExecutionContext(): CommandExecutionContext? {
-        val update = this
-        return update.message?.let { message ->
-            val command = commands.find { command ->
-                command.name == update.name
-                        && update.context in command.context
-                        && command.access.isAllowed(update.access)
-            }
+    context(_: TransactionContext)
+    internal suspend fun Message.toCommandExecutionContext(
+    ): CommandExecutionContext? {
+        val message = this
+        val context = message.getContext()
+        val access = message.getAccess()
 
-            command?.let {
-                CommandExecutionContext(
-                    command = command,
-                    message = message,
-                    update = update,
-                )
-            }
+        val command = commands.find { command ->
+            command.name == message.getName()
+                    && context in command.requiredContext
+                    && command.requiredAccess.isAllowed(access)
+        }
+
+        return command?.let {
+            CommandExecutionContext(
+                command = command,
+                message = message,
+                currentContext = context,
+                currentAccess = access,
+            )
         }
     }
 
-    private val Update.context: Command.Context
-        get() = when (message?.chat?.type) {
+    private fun Message.getContext(): Command.Context =
+        when (chat.type) {
             "private" -> USER_CHAT
             else -> GROUP_CHAT
         }
 
-    private val Update.access: Command.Access
-        get() = message?.from?.id?.let { id ->
-            if (admins.contains(id)) ADMIN else USER
-        } ?: USER
+    context(_: TransactionContext)
+    private suspend fun Message.getAccess(): Command.Access {
+        return from
+            ?.id
+            ?.let { id ->
+                userContextService
+                    .userAccess(
+                        id = id,
+                    )
+            }
+            ?: USER
+    }
 
-    private val Update.name: String?
-        get() = message?.text?.split(' ')?.getOrNull(0)
+    private fun Message.getName(): String? =
+        text?.substringBefore(' ')
 
     private companion object : Logger()
 }

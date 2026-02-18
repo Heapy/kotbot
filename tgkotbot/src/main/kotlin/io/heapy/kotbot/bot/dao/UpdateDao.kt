@@ -9,7 +9,8 @@ import java.time.LocalDateTime.now
 class UpdateDao {
     context(_: TransactionContext)
     suspend fun saveRawUpdate(update: String) = useTx {
-        insertInto(UPDATE_RAW)
+        dslContext
+            .insertInto(UPDATE_RAW)
             .set(UPDATE_RAW.CREATED, now())
             .set(UPDATE_RAW.UPDATE, JSONB.valueOf(update))
             .execute()

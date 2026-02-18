@@ -1,49 +1,47 @@
 package io.heapy.kotbot.bot.commands
 
 import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.bot.escapeMarkdownV2
+import io.heapy.kotbot.bot.NotificationService
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.bot.model.Message
-import io.heapy.kotbot.bot.model.Update
+import io.heapy.kotbot.bot.model.ParseMode
+import io.heapy.kotbot.bot.refLog
+import io.heapy.kotbot.infra.jdbc.TransactionContext
+import io.heapy.kotbot.infra.markdown.Markdown
 
 class SendMessageFromBotCommand(
-    private val admin: Long,
+    private val kotbot: Kotbot,
+    private val notificationService: NotificationService,
+    private val id: Long,
+    private val markdown: Markdown,
     override val name: String,
-    val id: Long,
 ) : Command {
-    override val context = listOf(Command.Context.USER_CHAT)
-    override val access = Command.Access.ADMIN
-    override val deleteCommandMessage = false
+    override val requiredContext = listOf(Command.Context.USER_CHAT)
+    override val requiredAccess = Command.Access.ADMIN
 
-    override suspend fun execute(
-        kotbot: Kotbot,
-        update: Update,
-        message: Message,
-    ) {
+    context(
+        _: TransactionContext,
+        cex: CommandExecutionContext,
+    )
+    override suspend fun execute() {
+        val message = cex.message
         message.textWithoutCommand?.let { text ->
-            val escaped = escapeMarkdownV2(text)
+            val escaped = markdown.escape(text)
             kotbot.executeSafely(
                 SendMessage(
                     chat_id = LongChatId(id),
-                    parse_mode = "MarkdownV2",
+                    parse_mode = ParseMode.MarkdownV2.name,
                     text = escaped,
                 )
             )
-            val notificationMessage = escapeMarkdownV2(
-                """
-                ${message.from?.username} sent following message to chat $name:
-                $text
-                """.trimIndent()
-            )
-            kotbot.executeSafely(
-                SendMessage(
-                    chat_id = LongChatId(admin),
-                    parse_mode = "MarkdownV2",
-                    text = notificationMessage,
+            notificationService
+                .notifyAdmins(
+                    message = """
+                    ${message.from?.refLog} sent following message to chat $name:
+                    $text
+                    """.trimIndent()
                 )
-            )
         }
     }
 }

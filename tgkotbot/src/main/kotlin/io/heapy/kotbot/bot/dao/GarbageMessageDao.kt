@@ -3,7 +3,6 @@ package io.heapy.kotbot.bot.dao
 import io.heapy.kotbot.database.tables.pojos.GarbageMessages
 import io.heapy.kotbot.database.tables.references.GARBAGE_MESSAGES
 import io.heapy.kotbot.infra.jdbc.TransactionContext
-import io.heapy.kotbot.infra.jdbc.dslContext
 import io.heapy.kotbot.infra.jdbc.useTx
 
 class GarbageMessageDao {

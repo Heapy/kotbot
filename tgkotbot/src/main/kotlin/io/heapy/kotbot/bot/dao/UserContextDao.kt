@@ -23,7 +23,8 @@ class UserContextDao {
     suspend fun get(
         telegramId: Long,
     ): UserContext? = useTx {
-        selectFrom(TELEGRAM_USER)
+        dslContext
+            .selectFrom(TELEGRAM_USER)
             .where(TELEGRAM_USER.TELEGRAM_ID.eq(telegramId))
             .fetchOne()
             ?.let {
@@ -44,9 +45,26 @@ class UserContextDao {
     suspend fun update(
         userContext: UserContext,
     ) = useTx {
-        update(TELEGRAM_USER)
+        dslContext
+            .update(TELEGRAM_USER)
             .set(TELEGRAM_USER.LAST_MESSAGE, userContext.lastMessage)
             .set(TELEGRAM_USER.MESSAGE_COUNT, userContext.messageCount)
+            .set(TELEGRAM_USER.VERSION, userContext.version + 1)
+            .where(
+                TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),
+                TELEGRAM_USER.VERSION.eq(userContext.version),
+            )
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun updateStatus(
+        userContext: UserContext,
+        status: TelegramUserStatus,
+    ) = useTx {
+        dslContext
+            .update(TELEGRAM_USER)
+            .set(TELEGRAM_USER.STATUS, status)
             .set(TELEGRAM_USER.VERSION, userContext.version + 1)
             .where(
                 TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),

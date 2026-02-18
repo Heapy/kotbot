@@ -7,7 +7,6 @@ import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.infra.HttpClientModule
 import io.heapy.kotbot.infra.KotbotModule
 import io.heapy.kotbot.infra.configuration.CasConfiguration
-import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.metrics.MetricsModule
 
 @Module
@@ -18,7 +17,6 @@ open class RulesModule(
     private val metricsModule: MetricsModule,
     private val daoModule: DaoModule,
     private val userContextServiceModule: UserContextServiceModule,
-    private val jdbcModule: JdbcModule,
 ) {
     open val ruleExecutor: RuleExecutor by lazy {
         RuleExecutor(
@@ -43,7 +41,6 @@ open class RulesModule(
         DeleteGarbageRule(
             garbageMessageDao = daoModule.garbageMessageDao,
             userContextService = userContextServiceModule.userContextService,
-            transactionProvider = jdbcModule.transactionProvider,
         )
     }
 

@@ -16,5 +16,4 @@ data class CasConfiguration(
 data class KnownChatsConfiguration(
     val notificationChannel: Long,
     val allowedGroups: Map<String, Long>,
-    val admins: Map<String, List<Long>>,
 )
