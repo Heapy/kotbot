@@ -1,17 +1,18 @@
 # docker compose -f docker-compose.dev.yml up -d
+name: "kotbot"
+
 services:
-  kotbot_database:
-    image: postgres:16.4
-    container_name: kotbot_database
-    restart: always
-    mem_limit: 128m
-    memswap_limit: 0m
+  database:
+    image: "postgres:18.1"
+    restart: "always"
+    mem_limit: "128m"
+    memswap_limit: "0m"
     environment:
       POSTGRES_PASSWORD: "kotbot"
       POSTGRES_USER: "kotbot"
       POSTGRES_DB: "kotbot"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "pgdata:/var/lib/postgresql/data"
     ports:
       - "127.0.0.1:9577:5432"
 volumes:
