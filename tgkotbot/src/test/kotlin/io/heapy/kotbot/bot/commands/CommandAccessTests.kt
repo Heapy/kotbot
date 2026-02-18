@@ -1,6 +1,8 @@
 package io.heapy.kotbot.bot.commands
 
-import io.heapy.kotbot.bot.commands.Command.Access.*
+import io.heapy.kotbot.bot.commands.Command.Access.ADMIN
+import io.heapy.kotbot.bot.commands.Command.Access.MODERATOR
+import io.heapy.kotbot.bot.commands.Command.Access.USER
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

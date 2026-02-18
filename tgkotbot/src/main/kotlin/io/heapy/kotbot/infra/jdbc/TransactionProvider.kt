@@ -1,7 +1,9 @@
 package io.heapy.kotbot.infra.jdbc
 
 import io.heapy.kotbot.infra.Loom
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 
 class TransactionProvider(

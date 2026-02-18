@@ -1,6 +1,8 @@
 package io.heapy.kotbot.infra.health_check
 
-import io.heapy.kotbot.infra.health_check.HealthCheck.*
+import io.heapy.kotbot.infra.health_check.HealthCheck.HealthResponse
+import io.heapy.kotbot.infra.health_check.HealthCheck.Nok
+import io.heapy.kotbot.infra.health_check.HealthCheck.Ok
 
 class CombinedHealthCheck(
     private val healthChecks: List<HealthCheck>,

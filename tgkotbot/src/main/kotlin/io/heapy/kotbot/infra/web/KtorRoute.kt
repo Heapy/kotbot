@@ -1,6 +1,6 @@
 package io.heapy.kotbot.infra.web
 
-import io.ktor.server.routing.*
+import io.ktor.server.routing.Routing
 
 interface KtorRoute {
     fun Routing.install()

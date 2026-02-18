@@ -3,7 +3,6 @@ package io.heapy.kotbot.infra.metrics
 import io.heapy.kotbot.infra.web.KtorRoute
 import io.ktor.http.ContentType
 import io.ktor.http.HeaderValueParam
-import io.ktor.server.application.call
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get

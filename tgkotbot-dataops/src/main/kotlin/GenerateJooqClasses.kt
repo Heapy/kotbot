@@ -2,10 +2,14 @@
 
 import org.flywaydb.core.Flyway
 import org.jooq.codegen.GenerationTool
-import org.jooq.meta.jaxb.*
+import org.jooq.meta.jaxb.Configuration
+import org.jooq.meta.jaxb.Database
+import org.jooq.meta.jaxb.Generate
+import org.jooq.meta.jaxb.Generator
+import org.jooq.meta.jaxb.Jdbc
 import org.jooq.meta.jaxb.Target
 import org.postgresql.ds.PGSimpleDataSource
-import java.util.*
+import java.util.Locale
 
 fun main() {
     drop()

@@ -1,10 +1,14 @@
 package io.heapy.kotbot.infra.metrics
 
 import io.heapy.komok.tech.di.lib.Module
-import io.heapy.kotbot.infra.lifecycle.AutoClosableModule
 import io.heapy.kotbot.infra.jdbc.JdbcModule
+import io.heapy.kotbot.infra.lifecycle.AutoClosableModule
 import io.micrometer.core.instrument.binder.db.PostgreSQLDatabaseMetrics
-import io.micrometer.core.instrument.binder.jvm.*
+import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmHeapPressureMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmInfoMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.logging.LogbackMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics

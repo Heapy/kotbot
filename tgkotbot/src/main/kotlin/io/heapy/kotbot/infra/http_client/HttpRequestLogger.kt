@@ -1,10 +1,11 @@
 package io.heapy.kotbot.infra.http_client
 
-import io.ktor.client.*
-import io.ktor.client.plugins.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.util.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpClientPlugin
+import io.ktor.client.request.HttpRequestPipeline
+import io.ktor.client.statement.HttpReceivePipeline
+import io.ktor.client.statement.HttpResponse
+import io.ktor.util.AttributeKey
 
 class HttpRequestLogger(
     private val config: Config,
