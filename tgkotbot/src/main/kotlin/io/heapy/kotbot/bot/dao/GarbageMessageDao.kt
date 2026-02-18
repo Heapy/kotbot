@@ -9,7 +9,7 @@ import io.heapy.kotbot.infra.jdbc.useTx
 class GarbageMessageDao(
     private val jooqDao: JooqDao,
 ) : JooqDao by jooqDao {
-    context(TransactionContext)
+    context(_: TransactionContext)
     suspend fun getGarbageMessages(): List<GarbageMessages> = useTx {
         dslContext
             .select(

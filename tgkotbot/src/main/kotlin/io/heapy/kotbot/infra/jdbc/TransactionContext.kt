@@ -10,11 +10,12 @@ internal data class JooqTransactionContext(
 
 data object MockTransactionContext : TransactionContext
 
-suspend fun <T> TransactionContext.useTx(
+context(transactionContext: TransactionContext)
+suspend fun <T> useTx(
     block: suspend DSLContext.() -> T,
 ): T {
-    return when (val context = this) {
-        is JooqTransactionContext -> block(context.dslContext)
+    return when (transactionContext) {
+        is JooqTransactionContext -> block(transactionContext.dslContext)
         MockTransactionContext -> error("useTx shouldn't be called with mock transaction")
     }
 }

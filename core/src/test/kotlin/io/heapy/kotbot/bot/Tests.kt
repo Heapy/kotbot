@@ -1,12 +1,13 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.komok.tech.dotenv.dotenv
+import io.heapy.komok.tech.config.dotenv.dotenv
 import io.heapy.kotbot.bot.method.*
 import io.heapy.kotbot.bot.model.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 
 val verificationInlineKeyboard = InlineKeyboardMarkup(
     inline_keyboard = listOf(
@@ -369,7 +370,7 @@ class KotbotTest {
         private var offset: Int? = null
         private val log = logger<KotbotTest>()
 
-        private val env = dotenv()
+        private val env = dotenv().properties
 
         private val kotbot = Kotbot(
             token = env.getValue("KOTBOT_TOKEN")
@@ -457,10 +458,10 @@ class KotbotTest {
                     when {
                         callbackMessage is InaccessibleMessage
                                 && callbackMessage.message_id == message.message_id
-                                && it.callback_query?.from?.id == qaUserId -> true
+                                && it.callback_query.from.id == qaUserId -> true
                         callbackMessage is Message
                                 && callbackMessage.message_id == message.message_id
-                                && it.callback_query?.from?.id == qaUserId -> true
+                                && it.callback_query.from.id == qaUserId -> true
                         else -> false
                     }
                 }
@@ -472,7 +473,7 @@ class KotbotTest {
                             )
                         )
                     )
-                    assertEquals("PASS", update.callback_query?.data)
+                    assertEquals("PASS", update.callback_query.data)
 
                     return
                 }

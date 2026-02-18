@@ -9,7 +9,7 @@ class Actions(
 ) {
     private val actions = mutableSetOf<Method<*, *>>()
 
-    context(Rule)
+    context(_: Rule)
     suspend fun <Request : Method<Request, Result>, Result> runIfNew(
         name: String,
         action: Request,

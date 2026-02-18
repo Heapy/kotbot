@@ -9,7 +9,7 @@ import java.time.LocalDateTime.now
 class UpdateDao(
     private val jooqDao: JooqDao,
 ) : JooqDao by jooqDao {
-    context(TransactionContext)
+    context(_: TransactionContext)
     suspend fun saveRawUpdate(update: String) = useTx {
         insertInto(UPDATE_RAW)
             .set(UPDATE_RAW.CREATED, now())

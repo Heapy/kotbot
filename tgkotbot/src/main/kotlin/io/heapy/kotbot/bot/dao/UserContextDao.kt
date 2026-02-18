@@ -21,7 +21,7 @@ data class UserContext(
 class UserContextDao(
     private val jooqDao: JooqDao,
 ) : JooqDao by jooqDao {
-    context(TransactionContext)
+    context(_: TransactionContext)
     suspend fun get(
         telegramId: Long,
     ): UserContext? = useTx {
@@ -42,7 +42,7 @@ class UserContextDao(
             }
     }
 
-    context(TransactionContext)
+    context(_: TransactionContext)
     suspend fun update(
         userContext: UserContext,
     ) = useTx {
