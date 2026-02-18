@@ -1,0 +1,8 @@
+CREATE TABLE ALLOWED_USER (
+    id           BIGSERIAL PRIMARY KEY,
+    telegram_id  BIGINT NOT NULL UNIQUE,
+    username     VARCHAR(255),
+    display_name VARCHAR(255),
+    is_active    BOOLEAN NOT NULL DEFAULT TRUE,
+    created      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

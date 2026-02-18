@@ -15,5 +15,21 @@ services:
       - "pgdata:/var/lib/postgresql"
     ports:
       - "127.0.0.1:9577:5432"
+
+  tgpt-database:
+    image: "postgres:18.1"
+    restart: "always"
+    mem_limit: "128m"
+    memswap_limit: "0m"
+    environment:
+      POSTGRES_PASSWORD: "tgpt"
+      POSTGRES_USER: "tgpt"
+      POSTGRES_DB: "tgpt"
+    volumes:
+      - "tgpt-pgdata:/var/lib/postgresql"
+    ports:
+      - "127.0.0.1:9578:5432"
+
 volumes:
   pgdata:
+  tgpt-pgdata:

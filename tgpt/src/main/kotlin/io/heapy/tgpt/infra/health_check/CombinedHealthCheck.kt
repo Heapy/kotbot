@@ -1,0 +1,28 @@
+package io.heapy.tgpt.infra.health_check
+
+import io.heapy.tgpt.infra.health_check.HealthCheck.HealthResponse
+import io.heapy.tgpt.infra.health_check.HealthCheck.Nok
+import io.heapy.tgpt.infra.health_check.HealthCheck.Ok
+
+class CombinedHealthCheck(
+    private val healthChecks: List<HealthCheck>,
+) : HealthCheck {
+    override fun doCheck(): HealthResponse {
+        val responses = healthChecks.map {
+            try {
+                it.doCheck()
+            } catch (e: Exception) {
+                Nok(message = "Health check failed: ${e.message}")
+            }
+        }
+        return if (responses.all { it is Ok }) {
+            Ok()
+        } else {
+            Nok(
+                message = responses
+                    .filterIsInstance<Nok>()
+                    .joinToString(separator = "\n") { it.message }
+            )
+        }
+    }
+}

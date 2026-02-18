@@ -8,4 +8,7 @@ include(
     "tgkotbot",
     "tgkotbot-dataops",
     "tgkotbot-database",
+    "tgpt",
+    "tgpt-dataops",
+    "tgpt-database",
 )

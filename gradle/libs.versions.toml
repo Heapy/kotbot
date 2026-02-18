@@ -13,6 +13,7 @@ ktor = "3.4.0"
 logback = "1.5.31"
 micrometer = "1.16.3"
 mockk = "1.14.9"
+openai = "4.21.0"
 poet = "2.2.0"
 postgresql = "42.7.10"
 serialization = "1.10.0"
@@ -61,6 +62,8 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 micrometer-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+openai-java = { module = "com.openai:openai-java", version.ref = "openai" }
 
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 
