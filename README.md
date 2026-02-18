@@ -7,7 +7,7 @@
 
 ## Bot API 8.3
 
-### Install library
+### Install the library
 
 ```kotlin
 implementation("io.heapy.kotbot:core:1.4.0")

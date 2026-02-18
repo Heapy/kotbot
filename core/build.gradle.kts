@@ -1,5 +1,6 @@
 plugins {
     `kotbot-publish-conventions`
+    `java-test-fixtures`
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -20,6 +21,13 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.logback)
     testImplementation(libs.komok.tech.config.dotenv)
+
+    testFixturesImplementation(libs.junit)
+    testFixturesImplementation(libs.komok.tech.config.dotenv)
+    testFixturesImplementation(libs.logback)
+    testFixturesImplementation(libs.kotlin.coroutines)
+    testFixturesImplementation(libs.ktor.client)
+    testFixturesImplementation(libs.kotlin.serialization.json)
 }
 
 repositories {
