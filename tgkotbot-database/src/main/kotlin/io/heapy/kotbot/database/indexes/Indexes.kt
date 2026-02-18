@@ -6,6 +6,7 @@ package io.heapy.kotbot.database.indexes
 
 
 import io.heapy.kotbot.database.tables.GptSession
+import io.heapy.kotbot.database.tables.JobExecution
 import io.heapy.kotbot.database.tables.TelegramUser
 
 import org.jooq.Index
@@ -19,4 +20,5 @@ import org.jooq.impl.Internal
 // -------------------------------------------------------------------------
 
 val GPT_SESSION_PREVIEW_UINDEX: Index = Internal.createIndex(DSL.name("gpt_session_preview_uindex"), GptSession.GPT_SESSION, arrayOf(GptSession.GPT_SESSION.PREVIEW_CHAT_ID, GptSession.GPT_SESSION.PREVIEW_MESSAGE_ID), true)
+val JOB_EXECUTION_NAME_IDX: Index = Internal.createIndex(DSL.name("job_execution_name_idx"), JobExecution.JOB_EXECUTION, arrayOf(JobExecution.JOB_EXECUTION.JOB_NAME, JobExecution.JOB_EXECUTION.STARTED), false)
 val TELEGRAM_USER_TELEGRAM_ID_UINDEX: Index = Internal.createIndex(DSL.name("telegram_user_telegram_id_uindex"), TelegramUser.TELEGRAM_USER, arrayOf(TelegramUser.TELEGRAM_USER.TELEGRAM_ID), true)

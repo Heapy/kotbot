@@ -1,17 +1,20 @@
 package io.heapy.kotbot.bot.admin
 
 import io.heapy.komok.tech.logging.Logger
+import io.heapy.kotbot.bot.dao.JobExecutionDao
 import io.heapy.kotbot.bot.dao.UpdateDao
 import io.heapy.kotbot.bot.dao.UserContextDao
 import io.heapy.kotbot.infra.jdbc.TransactionProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import kotlin.time.Duration.Companion.hours
 
 class StatsBackfillJob(
     private val userContextDao: UserContextDao,
     private val updateDao: UpdateDao,
+    private val jobExecutionDao: JobExecutionDao,
     private val transactionProvider: TransactionProvider,
     private val applicationScope: CoroutineScope,
 ) {
@@ -19,13 +22,35 @@ class StatsBackfillJob(
         applicationScope.launch {
             while (true) {
                 try {
-                    log.info("Starting stats backfill job")
-                    backfill()
-                    log.info("Stats backfill job completed")
+                    val lastExecution = transactionProvider.transaction {
+                        jobExecutionDao.getLastExecution(JOB_NAME)
+                    }
+
+                    if (lastExecution != null && lastExecution.isAfter(LocalDateTime.now().minusHours(24))) {
+                        log.info("Stats backfill job already ran at {}, skipping", lastExecution)
+                    } else {
+                        val executionId = transactionProvider.transaction {
+                            jobExecutionDao.startExecution(JOB_NAME)
+                        }
+
+                        try {
+                            log.info("Starting stats backfill job")
+                            backfill()
+                            transactionProvider.transaction {
+                                jobExecutionDao.completeExecution(executionId)
+                            }
+                            log.info("Stats backfill job completed")
+                        } catch (e: Exception) {
+                            transactionProvider.transaction {
+                                jobExecutionDao.failExecution(executionId)
+                            }
+                            throw e
+                        }
+                    }
                 } catch (e: Exception) {
                     log.error("Stats backfill job failed", e)
                 }
-                delay(24.hours)
+                delay(1.hours)
             }
         }
     }
@@ -62,5 +87,7 @@ class StatsBackfillJob(
         }
     }
 
-    private companion object : Logger()
+    private companion object : Logger() {
+        private const val JOB_NAME = "stats_backfill"
+    }
 }

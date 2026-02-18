@@ -23,4 +23,8 @@ open class DaoModule {
     open val gptSessionDao by lazy {
         GptSessionDao()
     }
+
+    open val jobExecutionDao by lazy {
+        JobExecutionDao()
+    }
 }

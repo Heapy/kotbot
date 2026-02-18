@@ -9,6 +9,7 @@ import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
+import io.heapy.kotbot.database.tables.JobExecution
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
@@ -33,6 +34,11 @@ val GPT_SESSION: GptSession = GptSession.GPT_SESSION
  * The table <code>public.gpt_session_message</code>.
  */
 val GPT_SESSION_MESSAGE: GptSessionMessage = GptSessionMessage.GPT_SESSION_MESSAGE
+
+/**
+ * The table <code>public.job_execution</code>.
+ */
+val JOB_EXECUTION: JobExecution = JobExecution.JOB_EXECUTION
 
 /**
  * The table <code>public.telegram_user</code>.

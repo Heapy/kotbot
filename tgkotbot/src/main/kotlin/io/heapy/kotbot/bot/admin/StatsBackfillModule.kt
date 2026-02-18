@@ -15,6 +15,7 @@ open class StatsBackfillModule(
         StatsBackfillJob(
             userContextDao = daoModule.userContextDao,
             updateDao = daoModule.updateDao,
+            jobExecutionDao = daoModule.jobExecutionDao,
             transactionProvider = jdbcModule.transactionProvider,
             applicationScope = applicationScopeModule.applicationScope,
         )

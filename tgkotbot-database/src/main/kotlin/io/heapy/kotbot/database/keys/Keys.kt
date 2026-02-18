@@ -9,12 +9,14 @@ import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
+import io.heapy.kotbot.database.tables.JobExecution
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 import io.heapy.kotbot.database.tables.records.CallbackDataRecord
 import io.heapy.kotbot.database.tables.records.GarbageMessagesRecord
 import io.heapy.kotbot.database.tables.records.GptSessionMessageRecord
 import io.heapy.kotbot.database.tables.records.GptSessionRecord
+import io.heapy.kotbot.database.tables.records.JobExecutionRecord
 import io.heapy.kotbot.database.tables.records.TelegramUserRecord
 import io.heapy.kotbot.database.tables.records.UpdateRawRecord
 
@@ -34,6 +36,7 @@ val CALLBACK_DATA_PKEY: UniqueKey<CallbackDataRecord> = Internal.createUniqueKey
 val GARBAGE_MESSAGES_PKEY: UniqueKey<GarbageMessagesRecord> = Internal.createUniqueKey(GarbageMessages.GARBAGE_MESSAGES, DSL.name("garbage_messages_pkey"), arrayOf(GarbageMessages.GARBAGE_MESSAGES.ID), true)
 val GPT_SESSION_PKEY: UniqueKey<GptSessionRecord> = Internal.createUniqueKey(GptSession.GPT_SESSION, DSL.name("gpt_session_pkey"), arrayOf(GptSession.GPT_SESSION.ID), true)
 val GPT_SESSION_MESSAGE_PKEY: UniqueKey<GptSessionMessageRecord> = Internal.createUniqueKey(GptSessionMessage.GPT_SESSION_MESSAGE, DSL.name("gpt_session_message_pkey"), arrayOf(GptSessionMessage.GPT_SESSION_MESSAGE.ID), true)
+val JOB_EXECUTION_PKEY: UniqueKey<JobExecutionRecord> = Internal.createUniqueKey(JobExecution.JOB_EXECUTION, DSL.name("job_execution_pkey"), arrayOf(JobExecution.JOB_EXECUTION.ID), true)
 val TELEGRAM_USER_PK: UniqueKey<TelegramUserRecord> = Internal.createUniqueKey(TelegramUser.TELEGRAM_USER, DSL.name("telegram_user_pk"), arrayOf(TelegramUser.TELEGRAM_USER.INTERNAL_ID), true)
 val UPDATE_RAW_PK: UniqueKey<UpdateRawRecord> = Internal.createUniqueKey(UpdateRaw.UPDATE_RAW, DSL.name("update_raw_pk"), arrayOf(UpdateRaw.UPDATE_RAW.ID), true)
 
