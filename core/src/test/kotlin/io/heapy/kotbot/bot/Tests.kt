@@ -370,7 +370,8 @@ class KotbotTest {
         private var offset: Int? = null
         private val log = logger<KotbotTest>()
 
-        private val env = dotenv().properties
+        private val dotenv = dotenv()
+        private val env = dotenv.properties
 
         private val kotbot = Kotbot(
             token = env.getValue("KOTBOT_TOKEN")

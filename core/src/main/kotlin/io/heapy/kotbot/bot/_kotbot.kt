@@ -15,15 +15,13 @@ import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-/**
- * Workaround until [multi-receivers](https://youtrack.jetbrains.com/issue/KT-10468) will be implemented in Kotlin.
- */
-public data class Kotbot(
+public class Kotbot(
     public val token: String,
     public val baseUrl: String = "https://api.telegram.org/bot",
     public val httpClient: HttpClient = HttpClient(CIO) {
@@ -100,15 +98,18 @@ public interface Method<Request, Result> {
 public data class Response<Result>(
     public val ok: Boolean,
     public val result: Result? = null,
-    public val error_code: Int? = null,
+    @SerialName("error_code")
+    public val errorCode: Int? = null,
     public val description: String? = null,
     public val parameters: ResponseParameters? = null,
 )
 
 @Serializable
 public data class ResponseParameters(
-    public val migrate_to_chat_id: Long? = null,
-    public val retry_after: Int? = null,
+    @SerialName("migrate_to_chat_id")
+    public val migrateToChatId: Long? = null,
+    @SerialName("retry_after")
+    public val retryAfter: Int? = null,
 )
 
 public fun <T> Response<T>.unwrap(): T {
@@ -117,10 +118,10 @@ public fun <T> Response<T>.unwrap(): T {
     } else {
         throw TelegramApiError(
             message = "Telegram API error",
-            errorCode = error_code,
+            errorCode = errorCode,
             description = description,
-            migrateToChatId = parameters?.migrate_to_chat_id,
-            retryAfter = parameters?.retry_after,
+            migrateToChatId = parameters?.migrateToChatId,
+            retryAfter = parameters?.retryAfter,
         )
     }
 }
