@@ -121,6 +121,11 @@ open class TelegramUser(
      */
     val VERSION: TableField<TelegramUserRecord, Int?> = createField(DSL.name("version"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "")
 
+    /**
+     * The column <code>public.telegram_user.display_name</code>.
+     */
+    val DISPLAY_NAME: TableField<TelegramUserRecord, String?> = createField(DSL.name("display_name"), SQLDataType.VARCHAR(255), this, "")
+
     private constructor(alias: Name, aliased: Table<TelegramUserRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<TelegramUserRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
     private constructor(alias: Name, aliased: Table<TelegramUserRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)

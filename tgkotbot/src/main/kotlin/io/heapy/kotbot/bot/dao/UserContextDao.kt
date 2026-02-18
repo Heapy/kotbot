@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.dao
 
 import io.heapy.kotbot.database.enums.TelegramUserRole
 import io.heapy.kotbot.database.enums.TelegramUserStatus
+import io.heapy.kotbot.database.tables.records.TelegramUserRecord
 import io.heapy.kotbot.database.tables.references.TELEGRAM_USER
 import io.heapy.kotbot.infra.jdbc.TransactionContext
 import io.heapy.kotbot.infra.jdbc.useTx
@@ -16,6 +17,19 @@ data class UserContext(
     val lastMessage: LocalDateTime,
     val messageCount: Int,
     val version: Int,
+    val displayName: String? = null,
+)
+
+private fun TelegramUserRecord.toUserContext(): UserContext = UserContext(
+    internalId = internalId ?: error("internalId is null"),
+    telegramId = telegramId,
+    created = created ?: error("created is null"),
+    role = role ?: error("role is null"),
+    status = status ?: error("status is null"),
+    lastMessage = lastMessage ?: error("lastMessage is null"),
+    messageCount = messageCount ?: error("messageCount is null"),
+    version = version ?: error("version is null"),
+    displayName = displayName,
 )
 
 class UserContextDao {
@@ -27,18 +41,7 @@ class UserContextDao {
             .selectFrom(TELEGRAM_USER)
             .where(TELEGRAM_USER.TELEGRAM_ID.eq(telegramId))
             .fetchOne()
-            ?.let {
-                UserContext(
-                    internalId = it.internalId ?: error("internalId is null"),
-                    telegramId = it.telegramId,
-                    created = it.created ?: error("created is null"),
-                    role = it.role ?: error("role is null"),
-                    status = it.status ?: error("status is null"),
-                    lastMessage = it.lastMessage ?: error("lastMessage is null"),
-                    messageCount = it.messageCount ?: error("messageCount is null"),
-                    version = it.version ?: error("version is null"),
-                )
-            }
+            ?.toUserContext()
     }
 
     context(_: TransactionContext)
@@ -70,6 +73,84 @@ class UserContextDao {
                 TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),
                 TELEGRAM_USER.VERSION.eq(userContext.version),
             )
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun insertIfNotExists(
+        telegramId: Long,
+        displayName: String?,
+    ) = useTx {
+        dslContext
+            .insertInto(TELEGRAM_USER)
+            .set(TELEGRAM_USER.TELEGRAM_ID, telegramId)
+            .set(TELEGRAM_USER.DISPLAY_NAME, displayName)
+            .onConflict(TELEGRAM_USER.TELEGRAM_ID)
+            .doUpdate()
+            .set(TELEGRAM_USER.DISPLAY_NAME, displayName)
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun listAll(
+        limit: Int,
+        offset: Int,
+    ): List<UserContext> = useTx {
+        dslContext
+            .selectFrom(TELEGRAM_USER)
+            .orderBy(TELEGRAM_USER.INTERNAL_ID)
+            .limit(limit)
+            .offset(offset)
+            .fetch()
+            .map { it.toUserContext() }
+    }
+
+    context(_: TransactionContext)
+    suspend fun countAll(): Int = useTx {
+        dslContext
+            .selectCount()
+            .from(TELEGRAM_USER)
+            .fetchOne(0, Int::class.java) ?: 0
+    }
+
+    context(_: TransactionContext)
+    suspend fun updateRole(
+        userContext: UserContext,
+        role: TelegramUserRole,
+    ) = useTx {
+        dslContext
+            .update(TELEGRAM_USER)
+            .set(TELEGRAM_USER.ROLE, role)
+            .set(TELEGRAM_USER.VERSION, userContext.version + 1)
+            .where(
+                TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),
+                TELEGRAM_USER.VERSION.eq(userContext.version),
+            )
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun getByInternalId(
+        internalId: Long,
+    ): UserContext? = useTx {
+        dslContext
+            .selectFrom(TELEGRAM_USER)
+            .where(TELEGRAM_USER.INTERNAL_ID.eq(internalId))
+            .fetchOne()
+            ?.toUserContext()
+    }
+
+    context(_: TransactionContext)
+    suspend fun backfillStats(
+        internalId: Long,
+        created: LocalDateTime,
+        messageCount: Int,
+    ) = useTx {
+        dslContext
+            .update(TELEGRAM_USER)
+            .set(TELEGRAM_USER.CREATED, created)
+            .set(TELEGRAM_USER.MESSAGE_COUNT, messageCount)
+            .where(TELEGRAM_USER.INTERNAL_ID.eq(internalId))
             .execute()
     }
 }

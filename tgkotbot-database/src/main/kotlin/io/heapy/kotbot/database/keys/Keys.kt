@@ -7,16 +7,22 @@ package io.heapy.kotbot.database.keys
 
 import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
+import io.heapy.kotbot.database.tables.GptSession
+import io.heapy.kotbot.database.tables.GptSessionMessage
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 import io.heapy.kotbot.database.tables.records.CallbackDataRecord
 import io.heapy.kotbot.database.tables.records.GarbageMessagesRecord
+import io.heapy.kotbot.database.tables.records.GptSessionMessageRecord
+import io.heapy.kotbot.database.tables.records.GptSessionRecord
 import io.heapy.kotbot.database.tables.records.TelegramUserRecord
 import io.heapy.kotbot.database.tables.records.UpdateRawRecord
 
+import org.jooq.ForeignKey
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
+import org.jooq.impl.QOM.ForeignKeyRule
 
 
 
@@ -26,5 +32,13 @@ import org.jooq.impl.Internal
 
 val CALLBACK_DATA_PKEY: UniqueKey<CallbackDataRecord> = Internal.createUniqueKey(CallbackData.CALLBACK_DATA, DSL.name("callback_data_pkey"), arrayOf(CallbackData.CALLBACK_DATA.ID), true)
 val GARBAGE_MESSAGES_PKEY: UniqueKey<GarbageMessagesRecord> = Internal.createUniqueKey(GarbageMessages.GARBAGE_MESSAGES, DSL.name("garbage_messages_pkey"), arrayOf(GarbageMessages.GARBAGE_MESSAGES.ID), true)
+val GPT_SESSION_PKEY: UniqueKey<GptSessionRecord> = Internal.createUniqueKey(GptSession.GPT_SESSION, DSL.name("gpt_session_pkey"), arrayOf(GptSession.GPT_SESSION.ID), true)
+val GPT_SESSION_MESSAGE_PKEY: UniqueKey<GptSessionMessageRecord> = Internal.createUniqueKey(GptSessionMessage.GPT_SESSION_MESSAGE, DSL.name("gpt_session_message_pkey"), arrayOf(GptSessionMessage.GPT_SESSION_MESSAGE.ID), true)
 val TELEGRAM_USER_PK: UniqueKey<TelegramUserRecord> = Internal.createUniqueKey(TelegramUser.TELEGRAM_USER, DSL.name("telegram_user_pk"), arrayOf(TelegramUser.TELEGRAM_USER.INTERNAL_ID), true)
 val UPDATE_RAW_PK: UniqueKey<UpdateRawRecord> = Internal.createUniqueKey(UpdateRaw.UPDATE_RAW, DSL.name("update_raw_pk"), arrayOf(UpdateRaw.UPDATE_RAW.ID), true)
+
+// -------------------------------------------------------------------------
+// FOREIGN KEY definitions
+// -------------------------------------------------------------------------
+
+val GPT_SESSION_MESSAGE__GPT_SESSION_MESSAGE_SESSION_ID_FKEY: ForeignKey<GptSessionMessageRecord, GptSessionRecord> = Internal.createForeignKey(GptSessionMessage.GPT_SESSION_MESSAGE, DSL.name("gpt_session_message_session_id_fkey"), arrayOf(GptSessionMessage.GPT_SESSION_MESSAGE.SESSION_ID), io.heapy.kotbot.database.keys.GPT_SESSION_PKEY, arrayOf(GptSession.GPT_SESSION.ID), true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION)

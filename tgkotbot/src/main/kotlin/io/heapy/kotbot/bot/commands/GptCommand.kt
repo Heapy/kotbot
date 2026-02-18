@@ -5,12 +5,12 @@ import io.heapy.kotbot.bot.DismissGptCallbackData
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.SendGptMessageCallbackData
 import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.dao.GptSessionDao
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InlineKeyboardButton
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ParseMode
 import io.heapy.kotbot.bot.model.ReplyParameters
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataService
@@ -23,6 +23,7 @@ class GptCommand(
     private val gptService: GptService,
     private val markdown: Markdown,
     private val callbackDataService: CallbackDataService,
+    private val gptSessionDao: GptSessionDao,
 ) : Command {
     override val name: String = "/gpt"
     override val requiredContext = listOf(
@@ -65,7 +66,10 @@ class GptCommand(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
                 text = markdown.escape("Processing your request, please wait..."),
-                reply_parameters = ReplyParameters(message_id = message.message_id),
+                reply_parameters = ReplyParameters(
+                    message_id = message.message_id,
+                    allow_sending_without_reply = true,
+                ),
                 parse_mode = ParseMode.MarkdownV2.name,
                 message_thread_id = threadId,
             )
@@ -76,14 +80,32 @@ class GptCommand(
             return
         }
 
+        // Create session in DB
+        val sessionId = gptSessionDao.createSession(
+            userId = message.from!!.id,
+            groupChatId = message.chat.id,
+            waitMessageId = waitMessage.message_id,
+        )
+
+        if (sessionId == null) {
+            log.error("Failed to create GPT session")
+            return
+        }
+
+        // Store user prompt
+        gptSessionDao.addMessage(sessionId, "user", prompt)
+
         val response = gptService.complete(userPrompt = prompt)
         val escaped = markdown.escape(response)
 
         log.info("GPT response: {}", response)
         log.info("Escaped response: {}", escaped)
 
+        // Store assistant response
+        gptSessionDao.addMessage(sessionId, "assistant", response)
+
         // Send preview to user's private chat with Send/Dismiss buttons
-        kotbot.executeSafely(
+        val previewMessage = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(message.from!!.id),
                 text = escaped,
@@ -92,9 +114,19 @@ class GptCommand(
                     groupChatId = message.chat.id,
                     waitMessageId = waitMessage.message_id,
                     responseText = escaped,
+                    sessionId = sessionId,
                 ),
             )
         )
+
+        // Store preview message reference
+        if (previewMessage != null) {
+            gptSessionDao.setPreviewMessage(
+                sessionId = sessionId,
+                previewChatId = previewMessage.chat.id,
+                previewMessageId = previewMessage.message_id,
+            )
+        }
     }
 
     context(
@@ -113,81 +145,25 @@ class GptCommand(
                 return
             }
 
-        // Check if this is a reply to a GPT preview (refinement flow)
-        val groupContext = extractGroupContext(message)
-
-        if (groupContext != null) {
-            // Show processing state by editing the preview message
-            kotbot.executeSafely(
-                EditMessageText(
-                    chat_id = LongChatId(message.chat.id),
-                    message_id = message.reply_to_message!!.message_id,
-                    text = markdown.escape("Processing your refinement, please wait..."),
-                    parse_mode = ParseMode.MarkdownV2.name,
-                )
+        // Direct GPT response in private chat
+        val sentMessage = kotbot.executeSafely(
+            SendMessage(
+                chat_id = LongChatId(message.from!!.id),
+                text = markdown.escape("Processing your request, please wait..."),
+                parse_mode = ParseMode.MarkdownV2.name,
             )
+        )
 
-            val response = gptService.complete(userPrompt = prompt)
-            val escaped = markdown.escape(response)
+        val response = gptService.complete(userPrompt = prompt)
+        val escaped = markdown.escape(response)
 
-            log.info("GPT refinement response: {}", response)
-
-            // Edit the preview message with new response and buttons
-            kotbot.executeSafely(
-                EditMessageText(
-                    chat_id = LongChatId(message.chat.id),
-                    message_id = message.reply_to_message!!.message_id,
-                    text = escaped,
-                    parse_mode = ParseMode.MarkdownV2.name,
-                    reply_markup = buildGptReplyMarkup(
-                        groupChatId = groupContext.groupChatId,
-                        waitMessageId = groupContext.waitMessageId,
-                        responseText = escaped,
-                    ),
-                )
+        kotbot.executeSafely(
+            EditMessageText(
+                chat_id = LongChatId(message.from!!.id),
+                message_id = sentMessage?.message_id,
+                text = escaped,
+                parse_mode = ParseMode.MarkdownV2.name,
             )
-        } else {
-            // Direct GPT response (no group context)
-            val sentMessage = kotbot.executeSafely(
-                SendMessage(
-                    chat_id = LongChatId(message.from!!.id),
-                    text = markdown.escape("Processing your request, please wait..."),
-                    parse_mode = ParseMode.MarkdownV2.name,
-                )
-            )
-
-            val response = gptService.complete(userPrompt = prompt)
-            val escaped = markdown.escape(response)
-
-            kotbot.executeSafely(
-                EditMessageText(
-                    chat_id = LongChatId(message.from!!.id),
-                    message_id = sentMessage?.message_id,
-                    text = escaped,
-                    parse_mode = ParseMode.MarkdownV2.name,
-                )
-            )
-        }
-    }
-
-    /**
-     * Extract group context from the reply_to_message's inline keyboard buttons.
-     * Consumes the old Send callback data since it will be replaced with new buttons.
-     */
-    context(_: TransactionContext)
-    private suspend fun extractGroupContext(message: Message): GroupContext? {
-        val replyMarkup = message.reply_to_message?.reply_markup ?: return null
-        val sendButton = replyMarkup.inline_keyboard
-            .flatten()
-            .find { it.text == "Send" }
-        val callbackDataId = sendButton?.callback_data ?: return null
-
-        val callbackData = callbackDataService.getById(callbackDataId)
-            as? SendGptMessageCallbackData ?: return null
-
-        return GroupContext(
-            groupChatId = callbackData.groupChatId,
-            waitMessageId = callbackData.waitMessageId,
         )
     }
 
@@ -196,12 +172,14 @@ class GptCommand(
         groupChatId: Long,
         waitMessageId: Int,
         responseText: String,
+        sessionId: Long,
     ): InlineKeyboardMarkup {
         val sendCallbackData = callbackDataService.insert(
             SendGptMessageCallbackData(
                 groupChatId = groupChatId,
                 waitMessageId = waitMessageId,
                 responseText = responseText,
+                sessionId = sessionId,
             )
         ) ?: error("Failed to create send callback data")
 
@@ -209,6 +187,7 @@ class GptCommand(
             DismissGptCallbackData(
                 groupChatId = groupChatId,
                 waitMessageId = waitMessageId,
+                sessionId = sessionId,
             )
         ) ?: error("Failed to create dismiss callback data")
 
@@ -227,11 +206,6 @@ class GptCommand(
             )
         )
     }
-
-    private data class GroupContext(
-        val groupChatId: Long,
-        val waitMessageId: Int,
-    )
 
     private companion object : Logger()
 }

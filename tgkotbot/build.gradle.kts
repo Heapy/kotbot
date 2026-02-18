@@ -45,6 +45,10 @@ dependencies {
     implementation(libs.ktor.client.content.negation)
     implementation(libs.ktor.server)
     implementation(libs.ktor.server.content.negation)
+    implementation(libs.ktor.server.html.builder)
+    implementation(libs.ktor.htmx)
+    implementation(libs.ktor.htmx.html)
+    implementation(libs.ktor.server.htmx)
 
     testImplementation(testFixtures(projects.core))
     testImplementation(libs.junit)

@@ -6,6 +6,8 @@ package io.heapy.kotbot.database
 
 import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.GarbageMessages
+import io.heapy.kotbot.database.tables.GptSession
+import io.heapy.kotbot.database.tables.GptSessionMessage
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
 
@@ -41,6 +43,16 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     val GARBAGE_MESSAGES: GarbageMessages get() = GarbageMessages.GARBAGE_MESSAGES
 
     /**
+     * The table <code>public.gpt_session</code>.
+     */
+    val GPT_SESSION: GptSession get() = GptSession.GPT_SESSION
+
+    /**
+     * The table <code>public.gpt_session_message</code>.
+     */
+    val GPT_SESSION_MESSAGE: GptSessionMessage get() = GptSessionMessage.GPT_SESSION_MESSAGE
+
+    /**
      * The table <code>public.telegram_user</code>.
      */
     val TELEGRAM_USER: TelegramUser get() = TelegramUser.TELEGRAM_USER
@@ -55,6 +67,8 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     override fun getTables(): List<Table<*>> = listOf(
         CallbackData.CALLBACK_DATA,
         GarbageMessages.GARBAGE_MESSAGES,
+        GptSession.GPT_SESSION,
+        GptSessionMessage.GPT_SESSION_MESSAGE,
         TelegramUser.TELEGRAM_USER,
         UpdateRaw.UPDATE_RAW
     )

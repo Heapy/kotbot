@@ -19,4 +19,8 @@ open class DaoModule {
     open val callbackDataDao by lazy {
         CallbackDataDao()
     }
+
+    open val gptSessionDao by lazy {
+        GptSessionDao()
+    }
 }

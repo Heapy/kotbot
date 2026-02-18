@@ -24,12 +24,14 @@ data class SendGptMessageCallbackData(
     val groupChatId: Long,
     val waitMessageId: Int,
     val responseText: String,
+    val sessionId: Long,
 ) : KotbotCallBackData
 
 @Serializable
 data class DismissGptCallbackData(
     val groupChatId: Long,
     val waitMessageId: Int,
+    val sessionId: Long,
 ) : KotbotCallBackData
 
 @Serializable

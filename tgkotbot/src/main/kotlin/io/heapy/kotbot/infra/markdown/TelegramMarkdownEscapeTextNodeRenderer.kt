@@ -2,6 +2,7 @@ package io.heapy.kotbot.infra.markdown
 
 import org.commonmark.node.BulletList
 import org.commonmark.node.Emphasis
+import org.commonmark.node.Heading
 import org.commonmark.node.ListItem
 import org.commonmark.node.Node
 import org.commonmark.node.OrderedList
@@ -20,6 +21,7 @@ class TelegramMarkdownEscapeTextNodeRenderer(
             ListItem::class.java,
             Emphasis::class.java,
             StrongEmphasis::class.java,
+            Heading::class.java,
             Spoiler::class.java,
         )
     }
@@ -66,6 +68,14 @@ class TelegramMarkdownEscapeTextNodeRenderer(
         visitChildren(orderedList)
         listHolder = listHolder?.parent
         writer.popTight()
+        writer.block()
+    }
+
+    override fun visit(heading: Heading) {
+        val writer = rendererContext.writer
+        writer.raw("*")
+        visitChildren(heading)
+        writer.raw("*")
         writer.block()
     }
 

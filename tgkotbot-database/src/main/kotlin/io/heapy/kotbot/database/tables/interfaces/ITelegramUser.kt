@@ -25,4 +25,5 @@ interface ITelegramUser : Serializable {
     val role: TelegramUserRole?
     val badge: String?
     val version: Int?
+    val displayName: String?
 }

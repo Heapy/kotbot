@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot.commands
 
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.KotlinChatBotConfigurationModule
+import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.bot.NotificationServiceModule
 import io.heapy.kotbot.bot.UserContextServiceModule
@@ -24,6 +25,7 @@ open class CommandsModule(
     private val userContextServiceModule: UserContextServiceModule,
     private val prettyPrintModule: PrettyPrintModule,
     private val markdownModule: MarkdownModule,
+    private val daoModule: DaoModule,
 ) {
     open val commandResolver: CommandResolver by lazy {
         CommandResolver(
@@ -57,6 +59,7 @@ open class CommandsModule(
             gptService = gptApiModule.gptService,
             markdown = markdownModule.markdown,
             callbackDataService = callbackDataServiceModule.callbackDataService,
+            gptSessionDao = daoModule.gptSessionDao,
         )
     }
 

@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot
 
+import io.heapy.kotbot.bot.dao.GptSessionDao
 import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.model.CallbackQuery
@@ -13,6 +14,7 @@ import io.heapy.kotbot.infra.jdbc.TransactionContext
 class CallbackQueryProcessor(
     private val callbackDataService: CallbackDataService,
     private val kotbot: Kotbot,
+    private val gptSessionDao: GptSessionDao,
     private val userContextService: UserContextService,
 ) {
     context(_: TransactionContext)
@@ -151,6 +153,9 @@ class CallbackQueryProcessor(
                             )
                         )
 
+                        // Mark session as sent
+                        gptSessionDao.updateStatus(callBackData.sessionId, "SENT")
+
                         // Update the private chat message to indicate it was sent
                         kotbot.executeSafely(
                             EditMessageText(
@@ -179,6 +184,9 @@ class CallbackQueryProcessor(
                                 message_id = callBackData.waitMessageId,
                             )
                         )
+
+                        // Mark session as dismissed
+                        gptSessionDao.updateStatus(callBackData.sessionId, "DISMISSED")
 
                         // Update the private chat message to indicate it was dismissed
                         kotbot.executeSafely(

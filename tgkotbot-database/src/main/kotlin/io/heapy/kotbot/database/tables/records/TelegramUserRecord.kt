@@ -57,6 +57,10 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         set(value): Unit = set(8, value)
         get(): Int? = get(8) as Int?
 
+    open override var displayName: String?
+        set(value): Unit = set(9, value)
+        get(): String? = get(9) as String?
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -77,13 +81,14 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         this.role = from.role
         this.badge = from.badge
         this.version = from.version
+        this.displayName = from.displayName
         resetTouchedOnNotNull()
     }
 
     /**
      * Create a detached, initialised TelegramUserRecord
      */
-    constructor(internalId: Long? = null, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null): this() {
+    constructor(internalId: Long? = null, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null, displayName: String? = null): this() {
         this.internalId = internalId
         this.telegramId = telegramId
         this.created = created
@@ -93,6 +98,7 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         this.role = role
         this.badge = badge
         this.version = version
+        this.displayName = displayName
         resetTouchedOnNotNull()
     }
 
@@ -110,6 +116,7 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
             this.role = value.role
             this.badge = value.badge
             this.version = value.version
+            this.displayName = value.displayName
             resetTouchedOnNotNull()
         }
     }
