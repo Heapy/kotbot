@@ -12,6 +12,7 @@ build
 
 # Configuration
 /tgkotbot/src/main/resources/application.conf
+/tgpt/src/main/resources/application.conf
 .env
 
 # Publish
