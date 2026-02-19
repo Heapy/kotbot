@@ -1,4 +1,4 @@
-@file:JvmName("Application")
+@file:JvmName("Tgpt")
 
 package io.heapy.tgpt
 

@@ -7,7 +7,7 @@ plugins {
 
 application {
     applicationName = "tgpt"
-    mainClass.set("io.heapy.tgpt.Application")
+    mainClass.set("io.heapy.tgpt.Tgpt")
 }
 
 tasks.distTar {
