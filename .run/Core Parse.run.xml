@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Parse" type="JetRunConfigurationType" nameIsGenerated="true">
+  <configuration default="false" name="Core Parse" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="Parse" />
     <module name="kotbot.core-gen.main" />
     <shortenClasspath name="NONE" />

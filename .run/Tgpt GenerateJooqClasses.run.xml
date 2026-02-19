@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tgpt GenerateJooqClasses" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="GenerateJooqClasses" />
+    <module name="kotbot.tgpt-dataops.main" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

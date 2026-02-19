@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tgpt" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="io.heapy.tgpt.Tgpt" />
+    <module name="kotbot.tgpt.main" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

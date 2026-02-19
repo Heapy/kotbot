@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GenerateJooqClasses" type="JetRunConfigurationType" nameIsGenerated="true">
+  <configuration default="false" name="Kotbot GenerateJooqClasses" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="GenerateJooqClasses" />
     <module name="kotbot.tgkotbot-dataops.main" />
     <shortenClasspath name="NONE" />

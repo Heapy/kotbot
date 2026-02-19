@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Generate" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="Generate" />
-    <module name="kotbot.core-gen.main" />
+  <configuration default="false" name="Kotbot" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="io.heapy.kotbot.Kotbot" />
+    <module name="kotbot.tgkotbot.main" />
     <shortenClasspath name="NONE" />
     <method v="2">
       <option name="Make" enabled="true" />
