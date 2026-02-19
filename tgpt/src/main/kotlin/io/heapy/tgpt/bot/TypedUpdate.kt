@@ -24,10 +24,14 @@ data class TypedEditedMessage(
 fun Update.toTypedUpdate(): TypedUpdate? {
     val message = message
     val edited_message = edited_message
+    val businessMessage = business_message
+    val editedBusinessMessage = edited_business_message
 
     return when {
         message != null -> TypedMessage(update_id, message)
         edited_message != null -> TypedEditedMessage(update_id, edited_message)
+        businessMessage != null -> TypedMessage(update_id, businessMessage)
+        editedBusinessMessage != null -> TypedEditedMessage(update_id, editedBusinessMessage)
         else -> null
     }
 }

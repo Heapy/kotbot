@@ -4,6 +4,7 @@ import io.heapy.komok.tech.di.lib.Module
 import io.heapy.tgpt.bot.dao.DaoModule
 import io.heapy.tgpt.infra.jdbc.JdbcModule
 import io.heapy.tgpt.infra.lifecycle.ApplicationScopeModule
+import io.heapy.tgpt.infra.markdown.MarkdownModule
 import io.heapy.tgpt.openai.OpenAiModule
 import io.heapy.tgpt.openai.TelegramFileServiceModule
 
@@ -15,6 +16,7 @@ open class UpdateProcessorsModule(
     private val kotbotModule: KotbotModule,
     private val openAiModule: OpenAiModule,
     private val telegramFileServiceModule: TelegramFileServiceModule,
+    private val markdownModule: MarkdownModule,
 ) {
     open val tgptUpdateProcessor: TgptUpdateProcessor by lazy {
         TgptUpdateProcessor(
@@ -26,6 +28,7 @@ open class UpdateProcessorsModule(
             threadMessageDao = daoModule.threadMessageDao,
             apiCallDao = daoModule.apiCallDao,
             transactionProvider = jdbcModule.transactionProvider,
+            markdown = markdownModule.markdown,
         )
     }
 
