@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.model
 
+import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
@@ -21,4 +22,8 @@ public data class ForumTopicCreated(
      * *Optional*. Unique identifier of the custom emoji shown as the topic icon
      */
     public val icon_custom_emoji_id: String? = null,
+    /**
+     * *Optional*. *True*, if the name of the topic wasn't specified explicitly by its creator and likely needs to be changed by the bot
+     */
+    public val is_name_implicit: Boolean? = null,
 )

@@ -71,6 +71,10 @@ public data class ExternalReplyInfo(
      */
     public val has_media_spoiler: Boolean? = null,
     /**
+     * *Optional*. Message is a checklist
+     */
+    public val checklist: Checklist? = null,
+    /**
      * *Optional*. Message is a shared contact, information about the contact
      */
     public val contact: Contact? = null,

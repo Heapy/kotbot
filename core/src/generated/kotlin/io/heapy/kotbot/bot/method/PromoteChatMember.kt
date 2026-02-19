@@ -28,7 +28,7 @@ public data class PromoteChatMember(
      */
     public val is_anonymous: Boolean? = null,
     /**
-     * Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+     * Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
      */
     public val can_manage_chat: Boolean? = null,
     /**
@@ -40,7 +40,7 @@ public data class PromoteChatMember(
      */
     public val can_manage_video_chats: Boolean? = null,
     /**
-     * Pass *True* if the administrator can restrict, ban or unban chat members, or access supergroup statistics
+     * Pass *True* if the administrator can restrict, ban or unban chat members, or access supergroup statistics. For backward compatibility, defaults to *True* for promotions of channel administrators
      */
     public val can_restrict_members: Boolean? = null,
     /**
@@ -68,7 +68,7 @@ public data class PromoteChatMember(
      */
     public val can_delete_stories: Boolean? = null,
     /**
-     * Pass *True* if the administrator can post messages in the channel, or access channel statistics; for channels only
+     * Pass *True* if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
      */
     public val can_post_messages: Boolean? = null,
     /**
@@ -83,6 +83,10 @@ public data class PromoteChatMember(
      * Pass *True* if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
      */
     public val can_manage_topics: Boolean? = null,
+    /**
+     * Pass *True* if the administrator can manage direct messages within the channel and decline suggested posts; for channels only
+     */
+    public val can_manage_direct_messages: Boolean? = null,
 ) : Method<PromoteChatMember, Boolean> by Companion {
     public companion object : Method<PromoteChatMember, Boolean> {
         override val _deserializer: KSerializer<Response<Boolean>> =

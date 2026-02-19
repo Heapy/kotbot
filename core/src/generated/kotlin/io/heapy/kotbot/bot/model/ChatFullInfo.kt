@@ -41,6 +41,10 @@ public data class ChatFullInfo(
      */
     public val is_forum: Boolean? = null,
     /**
+     * *Optional*. *True*, if the chat is the direct messages chat of a channel
+     */
+    public val is_direct_messages: Boolean? = null,
+    /**
      * Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See [accent colors](https://core.telegram.org/bots/api/#accent-colors) for more details.
      */
     public val accent_color_id: Int,
@@ -76,6 +80,10 @@ public data class ChatFullInfo(
      * *Optional*. For private chats, the personal channel of the user
      */
     public val personal_chat: Chat? = null,
+    /**
+     * *Optional*. Information about the corresponding channel chat; for direct messages chats only
+     */
+    public val parent_chat: Chat? = null,
     /**
      * *Optional*. List of available reactions allowed in the chat. If omitted, then all [emoji reactions](https://core.telegram.org/bots/api/#reactiontypeemoji) are allowed.
      */
@@ -137,9 +145,9 @@ public data class ChatFullInfo(
      */
     public val permissions: ChatPermissions? = null,
     /**
-     * *Optional*. *True*, if gifts can be sent to the chat
+     * Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
      */
-    public val can_send_gift: Boolean? = null,
+    public val accepted_gift_types: AcceptedGiftTypes,
     /**
      * *Optional*. *True*, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
      */
@@ -192,4 +200,20 @@ public data class ChatFullInfo(
      * *Optional*. For supergroups, the location to which the supergroup is connected
      */
     public val location: ChatLocation? = null,
+    /**
+     * *Optional*. For private chats, the rating of the user if any
+     */
+    public val rating: UserRating? = null,
+    /**
+     * *Optional*. For private chats, the first audio added to the profile of the user
+     */
+    public val first_profile_audio: Audio? = null,
+    /**
+     * *Optional*. The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews
+     */
+    public val unique_gift_colors: UniqueGiftColors? = null,
+    /**
+     * *Optional*. The number of Telegram Stars a general user have to pay to send a message to the chat
+     */
+    public val paid_message_star_count: Int? = null,
 )

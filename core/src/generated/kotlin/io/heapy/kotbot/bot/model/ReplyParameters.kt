@@ -16,7 +16,7 @@ public data class ReplyParameters(
      */
     public val message_id: Int,
     /**
-     * *Optional*. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format `@channelusername`). Not supported for messages sent on behalf of a business account.
+     * *Optional*. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format `@channelusername`). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.
      */
     public val chat_id: ChatId? = null,
     /**
@@ -39,4 +39,8 @@ public data class ReplyParameters(
      * *Optional*. Position of the quote in the original message in UTF-16 code units
      */
     public val quote_position: Int? = null,
+    /**
+     * *Optional*. Identifier of the specific checklist task to be replied to
+     */
+    public val checklist_task_id: Int? = null,
 )

@@ -38,4 +38,8 @@ public data class Chat(
      * *Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
      */
     public val is_forum: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the chat is the direct messages chat of a channel
+     */
+    public val is_direct_messages: Boolean? = null,
 )

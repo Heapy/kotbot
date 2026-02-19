@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 
 /**
- * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Messages](https://core.telegram.org/bots/api/#message) that were sent is returned.
+ * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Message](https://core.telegram.org/bots/api/#message) objects that were sent is returned.
  */
 @Serializable
 public data class SendMediaGroup(
@@ -28,9 +28,13 @@ public data class SendMediaGroup(
      */
     public val chat_id: ChatId,
     /**
-     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
      */
     public val message_thread_id: Int? = null,
+    /**
+     * Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
+     */
+    public val direct_messages_topic_id: Int? = null,
     /**
      * A JSON-serialized array describing messages to be sent, must include 2-10 items
      */

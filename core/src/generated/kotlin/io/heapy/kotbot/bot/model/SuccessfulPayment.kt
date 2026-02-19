@@ -28,11 +28,11 @@ public data class SuccessfulPayment(
      */
     public val subscription_expiration_date: Long? = null,
     /**
-     * *Optional*. True, if the payment is a recurring payment for a subscription
+     * *Optional*. *True*, if the payment is a recurring payment for a subscription
      */
     public val is_recurring: Boolean? = null,
     /**
-     * *Optional*. True, if the payment is the first payment for a subscription
+     * *Optional*. *True*, if the payment is the first payment for a subscription
      */
     public val is_first_recurring: Boolean? = null,
     /**

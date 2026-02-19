@@ -26,7 +26,7 @@ public data class SendGift(
      */
     public val chat_id: ChatId? = null,
     /**
-     * Identifier of the gift
+     * Identifier of the gift; limited gifts can't be sent to channel chats
      */
     public val gift_id: String,
     /**

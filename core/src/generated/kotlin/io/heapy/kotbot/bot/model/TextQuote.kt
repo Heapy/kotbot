@@ -24,7 +24,7 @@ public data class TextQuote(
      */
     public val position: Int,
     /**
-     * *Optional*. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
+     * *Optional*. *True*, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
      */
     public val is_manual: Boolean? = null,
 )

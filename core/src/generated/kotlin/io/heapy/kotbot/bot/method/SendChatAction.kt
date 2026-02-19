@@ -24,11 +24,11 @@ public data class SendChatAction(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`). Channel chats and channel direct messages chats aren't supported.
      */
     public val chat_id: ChatId,
     /**
-     * Unique identifier for the target message thread; for supergroups only
+     * Unique identifier for the target message thread or topic of a forum; for supergroups and private chats of bots with forum topic mode enabled only
      */
     public val message_thread_id: Int? = null,
     /**

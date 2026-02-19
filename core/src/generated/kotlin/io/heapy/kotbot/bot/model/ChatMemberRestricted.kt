@@ -51,7 +51,7 @@ public data class ChatMemberRestricted(
      */
     public val can_send_voice_notes: Boolean,
     /**
-     * *True*, if the user is allowed to send polls
+     * *True*, if the user is allowed to send polls and checklists
      */
     public val can_send_polls: Boolean,
     /**

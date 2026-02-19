@@ -37,7 +37,7 @@ public data class ChatPermissions(
      */
     public val can_send_voice_notes: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to send polls
+     * *Optional*. *True*, if the user is allowed to send polls and checklists
      */
     public val can_send_polls: Boolean? = null,
     /**

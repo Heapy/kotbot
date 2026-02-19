@@ -5,20 +5,28 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, *String* can be used instead of this object to specify the button text.
+ * This object represents one button of the reply keyboard. At most one of the fields other than *text*, *icon_custom_emoji_id*, and *style* must be used to specify the type of the button. For simple text buttons, *String* can be used instead of this object to specify the button text.
  */
 @Serializable
 public data class KeyboardButton(
     /**
-     * Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
+     * Text of the button. If none of the fields other than *text*, *icon_custom_emoji_id*, and *style* are used, it will be sent as a message when the button is pressed
      */
     public val text: String,
     /**
-     * *Optional.* If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a "users_shared" service message. Available in private chats only.
+     * *Optional*. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on [Fragment](https://fragment.com) or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription.
+     */
+    public val icon_custom_emoji_id: String? = null,
+    /**
+     * *Optional*. Style of the button. Must be one of "danger" (red), "success" (green) or "primary" (blue). If omitted, then an app-specific style is used.
+     */
+    public val style: String? = null,
+    /**
+     * *Optional*. If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a "users_shared" service message. Available in private chats only.
      */
     public val request_users: KeyboardButtonRequestUsers? = null,
     /**
-     * *Optional.* If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a "chat_shared" service message. Available in private chats only.
+     * *Optional*. If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a "chat_shared" service message. Available in private chats only.
      */
     public val request_chat: KeyboardButtonRequestChat? = null,
     /**

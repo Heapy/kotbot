@@ -42,6 +42,12 @@ import io.heapy.kotbot.bot.model.InputMessageContent
 import io.heapy.kotbot.bot.model.InputPaidMedia
 import io.heapy.kotbot.bot.model.InputPaidMediaPhoto
 import io.heapy.kotbot.bot.model.InputPaidMediaVideo
+import io.heapy.kotbot.bot.model.InputProfilePhoto
+import io.heapy.kotbot.bot.model.InputProfilePhotoAnimated
+import io.heapy.kotbot.bot.model.InputProfilePhotoStatic
+import io.heapy.kotbot.bot.model.InputStoryContent
+import io.heapy.kotbot.bot.model.InputStoryContentPhoto
+import io.heapy.kotbot.bot.model.InputStoryContentVideo
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.MaybeInaccessibleMessage
 import io.heapy.kotbot.bot.model.MenuButton
@@ -53,6 +59,9 @@ import io.heapy.kotbot.bot.model.MessageOriginChat
 import io.heapy.kotbot.bot.model.MessageOriginHiddenUser
 import io.heapy.kotbot.bot.model.MessageOriginUser
 import io.heapy.kotbot.bot.model.MessageValue
+import io.heapy.kotbot.bot.model.OwnedGift
+import io.heapy.kotbot.bot.model.OwnedGiftRegular
+import io.heapy.kotbot.bot.model.OwnedGiftUnique
 import io.heapy.kotbot.bot.model.PaidMedia
 import io.heapy.kotbot.bot.model.PaidMediaPhoto
 import io.heapy.kotbot.bot.model.PaidMediaPreview
@@ -66,6 +75,12 @@ import io.heapy.kotbot.bot.model.RevenueWithdrawalState
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStateFailed
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStatePending
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStateSucceeded
+import io.heapy.kotbot.bot.model.StoryAreaType
+import io.heapy.kotbot.bot.model.StoryAreaTypeLink
+import io.heapy.kotbot.bot.model.StoryAreaTypeLocation
+import io.heapy.kotbot.bot.model.StoryAreaTypeSuggestedReaction
+import io.heapy.kotbot.bot.model.StoryAreaTypeUniqueGift
+import io.heapy.kotbot.bot.model.StoryAreaTypeWeather
 import io.heapy.kotbot.bot.model.StringChatId
 import io.heapy.kotbot.bot.model.Thumbnail
 import io.heapy.kotbot.bot.model.TransactionPartner
@@ -279,6 +294,47 @@ public class TransactionPartnerSerializer : JsonContentPolymorphicSerializer<Tra
             "telegram_api" -> TransactionPartnerTelegramApi.serializer()
             "chat" -> TransactionPartnerChat.serializer()
             "other" -> TransactionPartnerOther.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class StoryAreaTypeSerializer : JsonContentPolymorphicSerializer<StoryAreaType>(StoryAreaType::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out StoryAreaType> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "location" -> StoryAreaTypeLocation.serializer()
+            "suggested_reaction" -> StoryAreaTypeSuggestedReaction.serializer()
+            "link" -> StoryAreaTypeLink.serializer()
+            "weather" -> StoryAreaTypeWeather.serializer()
+            "unique_gift" -> StoryAreaTypeUniqueGift.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class InputStoryContentSerializer :
+    JsonContentPolymorphicSerializer<InputStoryContent>(InputStoryContent::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out InputStoryContent> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "photo" -> InputStoryContentPhoto.serializer()
+            "video" -> InputStoryContentVideo.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class InputProfilePhotoSerializer :
+    JsonContentPolymorphicSerializer<InputProfilePhoto>(InputProfilePhoto::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out InputProfilePhoto> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "static" -> InputProfilePhotoStatic.serializer()
+            "animated" -> InputProfilePhotoAnimated.serializer()
+            else -> error("Unknown argument type: $type")
+        }
+}
+
+public class OwnedGiftSerializer : JsonContentPolymorphicSerializer<OwnedGift>(OwnedGift::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out OwnedGift> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "regular" -> OwnedGiftRegular.serializer()
+            "unique" -> OwnedGiftUnique.serializer()
             else -> error("Unknown argument type: $type")
         }
 }

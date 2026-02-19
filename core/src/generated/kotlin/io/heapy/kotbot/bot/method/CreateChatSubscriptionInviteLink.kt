@@ -27,7 +27,7 @@ public data class CreateChatSubscriptionInviteLink(
      */
     public val subscription_period: Int,
     /**
-     * The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+     * The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000
      */
     public val subscription_price: Int,
 ) : Method<CreateChatSubscriptionInviteLink, ChatInviteLink> by Companion {

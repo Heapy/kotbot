@@ -3,6 +3,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "kotbot"
 
 include(
+    "api-parser",
     "core",
     "core-gen",
     "tgkotbot",

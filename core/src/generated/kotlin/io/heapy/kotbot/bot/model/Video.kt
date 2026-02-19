@@ -44,6 +44,10 @@ public data class Video(
      */
     public val start_timestamp: Int? = null,
     /**
+     * *Optional*. List of available qualities of the video
+     */
+    public val qualities: List<VideoQuality>? = null,
+    /**
      * *Optional*. Original filename as defined by the sender
      */
     public val file_name: String? = null,

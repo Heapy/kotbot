@@ -5,7 +5,7 @@ import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
- * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
+ * This object represents one button of an inline keyboard. Exactly one of the fields other than *text*, *icon_custom_emoji_id*, and *style* must be used to specify the type of the button.
  */
 @Serializable
 public data class InlineKeyboardButton(
@@ -13,6 +13,14 @@ public data class InlineKeyboardButton(
      * Label text on the button
      */
     public val text: String,
+    /**
+     * *Optional*. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on [Fragment](https://fragment.com) or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription.
+     */
+    public val icon_custom_emoji_id: String? = null,
+    /**
+     * *Optional*. Style of the button. Must be one of "danger" (red), "success" (green) or "primary" (blue). If omitted, then an app-specific style is used.
+     */
+    public val style: String? = null,
     /**
      * *Optional*. HTTP or tg:// URL to be opened when the button is pressed. Links `tg://user?id=<user_id>` can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
      */
@@ -30,17 +38,17 @@ public data class InlineKeyboardButton(
      */
     public val login_url: LoginUrl? = null,
     /**
-     * *Optional*. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
+     * *Optional*. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
      */
     public val switch_inline_query: String? = null,
     /**
      * *Optional*. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.  
      *
-     * This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
+     * This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
      */
     public val switch_inline_query_current_chat: String? = null,
     /**
-     * *Optional*. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
+     * *Optional*. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
      */
     public val switch_inline_query_chosen_chat: SwitchInlineQueryChosenChat? = null,
     /**

@@ -26,11 +26,11 @@ public data class SendPoll(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). Polls can't be sent to channel direct messages chats.
      */
     public val chat_id: ChatId,
     /**
-     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
      */
     public val message_thread_id: Int? = null,
     /**
@@ -46,7 +46,7 @@ public data class SendPoll(
      */
     public val question_entities: List<MessageEntity>? = null,
     /**
-     * A JSON-serialized list of 2-10 answer options
+     * A JSON-serialized list of 2-12 answer options
      */
     public val options: List<InputPollOption>,
     /**

@@ -27,7 +27,7 @@ public data class ChatBoostSourceGiveaway(
      */
     public val prize_star_count: Int? = null,
     /**
-     * *Optional*. True, if the giveaway was completed, but there was no user to win the prize
+     * *Optional*. *True*, if the giveaway was completed, but there was no user to win the prize
      */
     public val is_unclaimed: Boolean? = null,
 ) : ChatBoostSource

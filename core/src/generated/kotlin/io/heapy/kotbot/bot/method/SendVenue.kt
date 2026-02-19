@@ -6,6 +6,7 @@ import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyMarkup
 import io.heapy.kotbot.bot.model.ReplyParameters
+import io.heapy.kotbot.bot.model.SuggestedPostParameters
 import kotlin.Boolean
 import kotlin.Double
 import kotlin.Int
@@ -27,9 +28,13 @@ public data class SendVenue(
      */
     public val chat_id: ChatId,
     /**
-     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
      */
     public val message_thread_id: Int? = null,
+    /**
+     * Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+     */
+    public val direct_messages_topic_id: Int? = null,
     /**
      * Latitude of the venue
      */
@@ -78,6 +83,10 @@ public data class SendVenue(
      * Unique identifier of the message effect to be added to the message; for private chats only
      */
     public val message_effect_id: String? = null,
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    public val suggested_post_parameters: SuggestedPostParameters? = null,
     /**
      * Description of the message to reply to
      */

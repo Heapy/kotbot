@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.apiParser)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlinpoet)

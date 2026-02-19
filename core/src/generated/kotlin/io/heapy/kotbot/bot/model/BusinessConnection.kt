@@ -27,11 +27,11 @@ public data class BusinessConnection(
      */
     public val date: Long,
     /**
-     * True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
+     * *Optional*. Rights of the business bot
      */
-    public val can_reply: Boolean,
+    public val rights: BusinessBotRights? = null,
     /**
-     * True, if the connection is active
+     * *True*, if the connection is active
      */
     public val is_enabled: Boolean,
 )

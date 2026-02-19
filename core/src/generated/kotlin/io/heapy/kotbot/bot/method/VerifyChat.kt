@@ -15,7 +15,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class VerifyChat(
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). Channel direct messages chats can't be verified.
      */
     public val chat_id: ChatId,
     /**

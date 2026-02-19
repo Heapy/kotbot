@@ -62,4 +62,12 @@ public data class User(
      * *Optional*. *True*, if the bot has a main Web App. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val has_main_web_app: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the bot has forum topic mode enabled in private chats. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val has_topics_enabled: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the bot allows users to create and delete topics in private chats. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val allows_users_to_create_topics: Boolean? = null,
 )

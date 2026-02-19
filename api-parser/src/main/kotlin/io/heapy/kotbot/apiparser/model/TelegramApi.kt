@@ -1,3 +1,5 @@
+package io.heapy.kotbot.apiparser.model
+
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement

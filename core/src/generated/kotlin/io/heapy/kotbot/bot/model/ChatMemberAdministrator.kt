@@ -26,7 +26,7 @@ public data class ChatMemberAdministrator(
      */
     public val is_anonymous: Boolean,
     /**
-     * *True*, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+     * *True*, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
      */
     public val can_manage_chat: Boolean,
     /**
@@ -66,7 +66,7 @@ public data class ChatMemberAdministrator(
      */
     public val can_delete_stories: Boolean,
     /**
-     * *Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; for channels only
+     * *Optional*. *True*, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
      */
     public val can_post_messages: Boolean? = null,
     /**
@@ -81,6 +81,10 @@ public data class ChatMemberAdministrator(
      * *Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
      */
     public val can_manage_topics: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+     */
+    public val can_manage_direct_messages: Boolean? = null,
     /**
      * *Optional*. Custom title for this user
      */

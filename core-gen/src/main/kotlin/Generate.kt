@@ -12,18 +12,39 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
+import io.heapy.kotbot.apiparser.HtmlApiParser
+import io.heapy.kotbot.apiparser.model.AnyOfApiType
+import io.heapy.kotbot.apiparser.model.AnyOfArgument
+import io.heapy.kotbot.apiparser.model.AnyOfObject
+import io.heapy.kotbot.apiparser.model.ApiType
+import io.heapy.kotbot.apiparser.model.Argument
+import io.heapy.kotbot.apiparser.model.ArrayApiType
+import io.heapy.kotbot.apiparser.model.ArrayArgument
+import io.heapy.kotbot.apiparser.model.BooleanApiType
+import io.heapy.kotbot.apiparser.model.BooleanArgument
+import io.heapy.kotbot.apiparser.model.EmptyObject
+import io.heapy.kotbot.apiparser.model.FloatArgument
+import io.heapy.kotbot.apiparser.model.IntApiType
+import io.heapy.kotbot.apiparser.model.IntArgument
+import io.heapy.kotbot.apiparser.model.Method
+import io.heapy.kotbot.apiparser.model.Object
+import io.heapy.kotbot.apiparser.model.PropertiesObject
+import io.heapy.kotbot.apiparser.model.ReferenceApiType
+import io.heapy.kotbot.apiparser.model.ReferenceArgument
+import io.heapy.kotbot.apiparser.model.StringApiType
+import io.heapy.kotbot.apiparser.model.StringArgument
+import io.heapy.kotbot.apiparser.model.TelegramApi
+import io.heapy.kotbot.apiparser.model.nullable
 import kotlin.io.path.Path
-import kotlinx.serialization.json.Json
 
 fun main() {
-    // https://ark0f.github.io/tg-bot-api/custom.json
-    val apiJson = {}::class.java
-        .getResource("api830.json")
+    val apiResource = "api940"
+    val apiHtml = {}::class.java
+        .getResource(apiResource)
         ?.readText()
-        ?: error("custom.json not found")
+        ?: error("Resource not found: $apiResource")
 
-    Json.decodeFromString(TelegramApi.serializer(), apiJson)
-        .generate()
+    HtmlApiParser.parse(apiHtml).generate()
 }
 
 fun TelegramApi.generate() {
@@ -547,14 +568,14 @@ private fun Method.toFileSpec(): FileSpec =
                     return_type.generic(),
                 ), delegate = CodeBlock.of("Companion"))
                 .apply {
-                    arguments?.let {
+                    arguments?.let { args ->
                         addModifiers(KModifier.DATA)
                             .primaryConstructor(
                                 FunSpec.constructorBuilder()
-                                    .addParameters(arguments.map(Argument::asParameterSpec))
+                                    .addParameters(args.map(Argument::asParameterSpec))
                                     .build()
                             )
-                            .addProperties(arguments.map(Argument::asPropertySpec))
+                            .addProperties(args.map(Argument::asPropertySpec))
                     }
                 }
                 .addKdoc(CodeBlock.of(description.asKdoc()))

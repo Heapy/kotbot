@@ -14,19 +14,19 @@ public data class SwitchInlineQueryChosenChat(
      */
     public val query: String? = null,
     /**
-     * *Optional*. True, if private chats with users can be chosen
+     * *Optional*. *True*, if private chats with users can be chosen
      */
     public val allow_user_chats: Boolean? = null,
     /**
-     * *Optional*. True, if private chats with bots can be chosen
+     * *Optional*. *True*, if private chats with bots can be chosen
      */
     public val allow_bot_chats: Boolean? = null,
     /**
-     * *Optional*. True, if group and supergroup chats can be chosen
+     * *Optional*. *True*, if group and supergroup chats can be chosen
      */
     public val allow_group_chats: Boolean? = null,
     /**
-     * *Optional*. True, if channel chats can be chosen
+     * *Optional*. *True*, if channel chats can be chosen
      */
     public val allow_channel_chats: Boolean? = null,
 )

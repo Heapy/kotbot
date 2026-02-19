@@ -22,11 +22,11 @@ public data class SendGame(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat
+     * Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats.
      */
     public val chat_id: Long,
     /**
-     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
      */
     public val message_thread_id: Int? = null,
     /**

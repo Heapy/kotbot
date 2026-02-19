@@ -13,7 +13,7 @@ public data class BotCommandScopeChatAdministrators(
      */
     public val type: String,
     /**
-     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`). Channel direct messages chats and channel chats aren't supported.
      */
     public val chat_id: ChatId,
 ) : BotCommandScope
