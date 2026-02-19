@@ -20,6 +20,7 @@ tasks.distZip {
 
 dependencies {
     implementation(projects.core)
+    implementation(projects.coreMd)
     implementation(projects.tgptDatabase)
     implementation(projects.tgptDataops)
 
@@ -33,7 +34,6 @@ dependencies {
     implementation(libs.micrometer.prometheus)
 
     implementation(libs.openai.java)
-    implementation(libs.commonmark)
 
     ksp(libs.komok.tech.di)
     implementation(libs.komok.tech.di.lib)

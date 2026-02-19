@@ -4,7 +4,7 @@ import org.commonmark.renderer.NodeRenderer
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory
 
-class TelegramMarkdownEscapeTextVisitorFactory : MarkdownNodeRendererFactory {
+internal class TelegramMarkdownEscapeTextVisitorFactory : MarkdownNodeRendererFactory {
     override fun create(context: MarkdownNodeRendererContext): NodeRenderer {
         return TelegramMarkdownEscapeTextNodeRenderer(context)
     }

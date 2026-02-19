@@ -5,7 +5,7 @@ import org.commonmark.node.SourceSpans
 import org.commonmark.parser.delimiter.DelimiterProcessor
 import org.commonmark.parser.delimiter.DelimiterRun
 
-class SpoilerDelimiterProcessor : DelimiterProcessor {
+internal class SpoilerDelimiterProcessor : DelimiterProcessor {
     override fun getOpeningCharacter(): Char = '|'
 
     override fun getClosingCharacter(): Char = '|'

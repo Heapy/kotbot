@@ -10,7 +10,7 @@ import org.commonmark.node.StrongEmphasis
 import org.commonmark.renderer.markdown.CoreMarkdownNodeRenderer
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext
 
-class TelegramMarkdownEscapeTextNodeRenderer(
+internal class TelegramMarkdownEscapeTextNodeRenderer(
     private val rendererContext: MarkdownNodeRendererContext,
 ) : CoreMarkdownNodeRenderer(rendererContext) {
 
@@ -138,7 +138,7 @@ class TelegramMarkdownEscapeTextNodeRenderer(
         }
     }
 
-    companion object {
+    internal companion object {
         val specialCharacters = "`*[]()_~>#+-=|{}.!".toCharArray()
     }
 }

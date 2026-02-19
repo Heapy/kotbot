@@ -1,10 +1,10 @@
 package io.heapy.tgpt.bot
 
 import io.heapy.komok.tech.di.lib.Module
+import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.tgpt.bot.dao.DaoModule
 import io.heapy.tgpt.infra.jdbc.JdbcModule
 import io.heapy.tgpt.infra.lifecycle.ApplicationScopeModule
-import io.heapy.tgpt.infra.markdown.MarkdownModule
 import io.heapy.tgpt.openai.OpenAiModule
 import io.heapy.tgpt.openai.TelegramFileServiceModule
 

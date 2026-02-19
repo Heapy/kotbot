@@ -1,4 +1,4 @@
-package io.heapy.tgpt.infra.markdown
+package io.heapy.kotbot.infra.markdown
 
 import org.commonmark.internal.renderer.NodeRendererMap
 import org.commonmark.node.Node
@@ -6,9 +6,9 @@ import org.commonmark.renderer.Renderer
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory
 import org.commonmark.renderer.markdown.MarkdownWriter
-import java.util.Collections
+import java.util.*
 
-class TelegramMarkdownRenderer(
+internal class TelegramMarkdownRenderer(
     private val nodeRendererFactories: List<MarkdownNodeRendererFactory>,
 ) : Renderer {
     override fun render(node: Node, output: Appendable) {

@@ -1,4 +1,4 @@
-package io.heapy.tgpt.infra.markdown
+package io.heapy.kotbot.infra.markdown
 
 import io.heapy.komok.tech.di.lib.Module
 import org.commonmark.parser.Parser
@@ -9,18 +9,18 @@ import org.commonmark.renderer.markdown.MarkdownNodeRendererContext
 import org.commonmark.renderer.markdown.MarkdownNodeRendererFactory
 
 @Module
-open class MarkdownModule {
-    open val parser: Parser by lazy {
+public open class MarkdownModule {
+    public open val parser: Parser by lazy {
         Parser.builder()
             .customDelimiterProcessor(SpoilerDelimiterProcessor())
             .build()
     }
 
-    open val telegramMarkdownEscapeTextVisitorFactory by lazy {
+    public open val telegramMarkdownEscapeTextVisitorFactory: MarkdownNodeRendererFactory by lazy {
         TelegramMarkdownEscapeTextVisitorFactory()
     }
 
-    open val renderer: Renderer by lazy {
+    public open val renderer: Renderer by lazy {
         TelegramMarkdownRenderer(
             nodeRendererFactories = listOf(
                 telegramMarkdownEscapeTextVisitorFactory,
@@ -37,7 +37,7 @@ open class MarkdownModule {
         )
     }
 
-    open val markdown by lazy {
+    public open val markdown: Markdown by lazy {
         Markdown(
             parser = parser,
             renderer = renderer,

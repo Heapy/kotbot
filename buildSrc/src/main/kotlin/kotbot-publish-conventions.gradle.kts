@@ -16,6 +16,10 @@ val modules: Map<String, Map<String, String>> = mapOf(
         "publishName" to "Telegram chat bot framework",
         "publishDescription" to "Unopinionated and flexible library for building Telegram chat bots",
     ),
+    "core-md" to mapOf(
+        "publishName" to "Telegram chat bot framework markdown support",
+        "publishDescription" to "Markdown support for Telegram chat bot framework",
+    )
 )
 
 fun Project.getPublishName(): String = modules.getValue(name).getValue("publishName")

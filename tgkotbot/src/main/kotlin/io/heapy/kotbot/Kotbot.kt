@@ -1,4 +1,4 @@
-@file:JvmName("Application")
+@file:JvmName("Kotbot")
 
 package io.heapy.kotbot
 

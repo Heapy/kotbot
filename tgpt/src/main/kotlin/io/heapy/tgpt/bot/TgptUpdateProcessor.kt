@@ -12,6 +12,7 @@ import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.TelegramApiError
 import io.heapy.kotbot.bot.execute
+import io.heapy.kotbot.infra.markdown.Markdown
 import io.heapy.kotbot.bot.method.SendChecklist
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InputChecklist
@@ -29,7 +30,6 @@ import io.heapy.tgpt.database.enums.MessageRole
 import io.heapy.tgpt.database.tables.pojos.ThreadMessage
 import io.heapy.tgpt.infra.jdbc.TransactionContext
 import io.heapy.tgpt.infra.jdbc.TransactionProvider
-import io.heapy.tgpt.infra.markdown.Markdown
 import io.heapy.tgpt.openai.CostCalculator
 import io.heapy.tgpt.openai.OpenAiService
 import io.heapy.tgpt.openai.TelegramFileService

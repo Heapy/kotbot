@@ -5,6 +5,7 @@ rootProject.name = "kotbot"
 include(
     "api-parser",
     "core",
+    "core-md",
     "core-gen",
     "tgkotbot",
     "tgkotbot-dataops",

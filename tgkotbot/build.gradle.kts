@@ -7,7 +7,7 @@ plugins {
 
 application {
     applicationName = "kotbot"
-    mainClass.set("io.heapy.kotbot.Application")
+    mainClass.set("io.heapy.kotbot.Kotbot")
 }
 
 tasks.distTar {
@@ -20,6 +20,7 @@ tasks.distZip {
 
 dependencies {
     implementation(projects.core)
+    implementation(projects.coreMd)
     implementation(projects.tgkotbotDatabase)
     implementation(projects.tgkotbotDataops)
 
@@ -31,8 +32,6 @@ dependencies {
     implementation(libs.logback)
 
     implementation(libs.micrometer.prometheus)
-
-    implementation(libs.commonmark)
 
     ksp(libs.komok.tech.di)
     implementation(libs.komok.tech.di.lib)
