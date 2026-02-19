@@ -1,18 +1,17 @@
 package io.heapy.tgpt.bot
 
 import com.openai.models.ChatModel
+import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
 import com.openai.models.chat.completions.ChatCompletionContentPart
 import com.openai.models.chat.completions.ChatCompletionContentPartImage
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 import com.openai.models.chat.completions.ChatCompletionMessageParam
 import com.openai.models.chat.completions.ChatCompletionSystemMessageParam
 import com.openai.models.chat.completions.ChatCompletionUserMessageParam
-import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.TelegramApiError
 import io.heapy.kotbot.bot.execute
-import io.heapy.kotbot.infra.markdown.Markdown
 import io.heapy.kotbot.bot.method.SendChecklist
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InputChecklist
@@ -21,6 +20,7 @@ import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ParseMode
 import io.heapy.kotbot.bot.model.ReplyParameters
 import io.heapy.kotbot.bot.model.chatId
+import io.heapy.kotbot.infra.markdown.Markdown
 import io.heapy.tgpt.bot.dao.AllowedUserDao
 import io.heapy.tgpt.bot.dao.ApiCallDao
 import io.heapy.tgpt.bot.dao.ThreadDao
@@ -33,7 +33,7 @@ import io.heapy.tgpt.infra.jdbc.TransactionProvider
 import io.heapy.tgpt.openai.CostCalculator
 import io.heapy.tgpt.openai.OpenAiService
 import io.heapy.tgpt.openai.TelegramFileService
-import java.util.Base64
+import java.util.*
 
 class TgptUpdateProcessor(
     private val kotbot: Kotbot,
@@ -57,6 +57,10 @@ class TgptUpdateProcessor(
         val from = message.from ?: return
         val chatId = message.chat.id
         val userId = from.id
+
+        if (processPublicCommand(message)) {
+            return
+        }
 
         // Check if user is allowed
         val isAllowed = transactionProvider.transaction {
@@ -214,7 +218,7 @@ class TgptUpdateProcessor(
         val argument: String?,
     )
 
-    private suspend fun processCommand(message: Message): Boolean {
+    private suspend fun processPublicCommand(message: Message): Boolean {
         val text = message.text ?: return false
         val command = parseCommand(text) ?: return false
 
@@ -227,6 +231,15 @@ class TgptUpdateProcessor(
                 true
             }
 
+            else -> false
+        }
+    }
+
+    private suspend fun processCommand(message: Message): Boolean {
+        val text = message.text ?: return false
+        val command = parseCommand(text) ?: return false
+
+        return when (command.name) {
             "checklist" -> {
                 processChecklistCommand(
                     message = message,
@@ -305,6 +318,8 @@ class TgptUpdateProcessor(
                                     text = task,
                                 )
                             },
+                            others_can_add_tasks = true,
+                            others_can_mark_tasks_as_done = true,
                         ),
                         reply_parameters = ReplyParameters(
                             message_id = message.message_id,
@@ -477,7 +492,7 @@ class TgptUpdateProcessor(
     private suspend fun extractContent(message: Message): ExtractedContent? {
         // Photo
         val photos = message.photo
-        if (photos != null && photos.isNotEmpty()) {
+        if (!photos.isNullOrEmpty()) {
             val largest = photos.maxBy { it.file_size ?: 0 }
             return ExtractedContent(
                 content = largest.file_id,
