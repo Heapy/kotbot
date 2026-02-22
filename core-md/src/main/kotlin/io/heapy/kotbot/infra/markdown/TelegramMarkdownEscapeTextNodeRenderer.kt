@@ -3,6 +3,8 @@ package io.heapy.kotbot.infra.markdown
 import org.commonmark.node.BulletList
 import org.commonmark.node.Emphasis
 import org.commonmark.node.Heading
+import org.commonmark.node.HtmlBlock
+import org.commonmark.node.HtmlInline
 import org.commonmark.node.ListItem
 import org.commonmark.node.Node
 import org.commonmark.node.OrderedList
@@ -22,6 +24,8 @@ internal class TelegramMarkdownEscapeTextNodeRenderer(
             Emphasis::class.java,
             StrongEmphasis::class.java,
             Heading::class.java,
+            HtmlInline::class.java,
+            HtmlBlock::class.java,
             Spoiler::class.java,
         )
     }
@@ -93,6 +97,16 @@ internal class TelegramMarkdownEscapeTextNodeRenderer(
         writer.raw("*")
     }
 
+    override fun visit(htmlInline: HtmlInline) {
+        rendererContext.writer.raw(escapePlainTextForMarkdownV2(htmlInline.literal ?: ""))
+    }
+
+    override fun visit(htmlBlock: HtmlBlock) {
+        val writer = rendererContext.writer
+        writer.raw(escapePlainTextForMarkdownV2(htmlBlock.literal ?: ""))
+        writer.block()
+    }
+
     override fun visit(listItem: ListItem) {
         val writer = rendererContext.writer
         val markerIndent = listItem.markerIndent ?: 0
@@ -139,6 +153,6 @@ internal class TelegramMarkdownEscapeTextNodeRenderer(
     }
 
     internal companion object {
-        val specialCharacters = "`*[]()_~>#+-=|{}.!".toCharArray()
+        val specialCharacters = "`*[]()_~>#+-=|{}.!".toSet()
     }
 }

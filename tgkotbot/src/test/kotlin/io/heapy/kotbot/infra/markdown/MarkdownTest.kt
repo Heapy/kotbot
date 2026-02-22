@@ -160,4 +160,23 @@ class MarkdownTest {
             )
             .verify()
     }
+
+    @Test
+    fun KotbotVerifier.`escape html`(): Unit = runBlocking {
+        val module = createMarkdownModule {}
+
+        val message = """
+            <svg stroke-width="2"></svg>
+        """.trimIndent()
+
+        val rendered = module.markdown.escape(message)
+
+        kotbot.execute(
+            SendMessage(
+                chat_id = qaUserId.chatId,
+                text = rendered,
+                parse_mode = ParseMode.MarkdownV2.name,
+            )
+        )
+    }
 }
