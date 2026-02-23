@@ -22,7 +22,7 @@ class TelegramFileService(
             val filePath = fileResponse.file_path
                 ?: error("File path is null for file_id=$fileId")
             val url = "https://api.telegram.org/file/bot$botToken/$filePath"
-            log.info("Downloading file from Telegram: $filePath")
+            log.info("Downloading file from Telegram: file_id=$fileId, url=$url")
             httpClient.get(url).readRawBytes()
         }
     }
