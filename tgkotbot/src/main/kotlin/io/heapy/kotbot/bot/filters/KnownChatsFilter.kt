@@ -10,14 +10,13 @@ import io.heapy.kotbot.bot.TypedUpdate
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.LeaveChat
 import io.heapy.kotbot.bot.model.LongChatId
-import io.heapy.kotbot.infra.configuration.KnownChatsConfiguration
 import io.heapy.kotbot.infra.debug.PrettyPrint
 
 class KnownChatsFilter(
-    private val config: KnownChatsConfiguration,
     private val notificationService: NotificationService,
     private val prettyPrint: PrettyPrint,
     private val kotbot: Kotbot,
+    private val wellKnownChats: Set<Long>,
 ) : Filter {
     override suspend fun predicate(
         update: TypedUpdate,
@@ -67,7 +66,7 @@ class KnownChatsFilter(
             is TypedChannelPost -> update.value.chat
             else -> return true
         }
-        val isWellKnown = config.allowedGroups.values.contains(chat.id)
+        val isWellKnown = chat.id in wellKnownChats
 
         return when (chat.type) {
             "supergroup",

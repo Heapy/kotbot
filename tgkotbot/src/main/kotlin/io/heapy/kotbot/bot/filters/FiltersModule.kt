@@ -16,7 +16,7 @@ open class FiltersModule(
     open val groupInFamilyFilter: Filter by lazy {
         KnownChatsFilter(
             kotbot = kotbotModule.kotbot,
-            config = kotlinChatBotConfigurationModule.groupsConfiguration,
+            wellKnownChats = kotlinChatBotConfigurationModule.wellKnownChats,
             notificationService = notificationServiceModule.notificationService,
             prettyPrint = prettyPrintModule.prettyPrint,
         )

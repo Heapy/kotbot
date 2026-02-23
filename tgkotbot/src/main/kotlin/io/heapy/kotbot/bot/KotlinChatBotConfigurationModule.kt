@@ -16,4 +16,8 @@ open class KotlinChatBotConfigurationModule(
                 path = "groups",
             )
     }
+
+    open val wellKnownChats by lazy {
+        groupsConfiguration.allowedGroups.values.toSet() + groupsConfiguration.notificationChannel
+    }
 }
