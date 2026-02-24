@@ -9,6 +9,7 @@ import org.commonmark.node.ListItem
 import org.commonmark.node.Node
 import org.commonmark.node.OrderedList
 import org.commonmark.node.StrongEmphasis
+import org.commonmark.node.ThematicBreak
 import org.commonmark.renderer.markdown.CoreMarkdownNodeRenderer
 import org.commonmark.renderer.markdown.MarkdownNodeRendererContext
 
@@ -26,6 +27,7 @@ internal class TelegramMarkdownEscapeTextNodeRenderer(
             Heading::class.java,
             HtmlInline::class.java,
             HtmlBlock::class.java,
+            ThematicBreak::class.java,
             Spoiler::class.java,
         )
     }
@@ -104,6 +106,12 @@ internal class TelegramMarkdownEscapeTextNodeRenderer(
     override fun visit(htmlBlock: HtmlBlock) {
         val writer = rendererContext.writer
         writer.raw(escapePlainTextForMarkdownV2(htmlBlock.literal ?: ""))
+        writer.block()
+    }
+
+    override fun visit(thematicBreak: ThematicBreak) {
+        val writer = rendererContext.writer
+        writer.raw(escapePlainTextForMarkdownV2("---"))
         writer.block()
     }
 
