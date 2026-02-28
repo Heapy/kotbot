@@ -419,37 +419,62 @@ class TgptUpdateProcessor(
     ): Message {
         val escapedText = markdown.escape(text)
         return try {
-            kotbot.execute(
-                SendMessage(
-                    chat_id = message.chat.id.chatId,
-                    text = escapedText,
-                    parse_mode = ParseMode.MarkdownV2.name,
-                    reply_parameters = ReplyParameters(
-                        message_id = message.message_id,
-                    ),
-                )
-            )
+            sendMarkdownReply(message, escapedText)
         } catch (error: TelegramApiError) {
-            val description = error.message.orEmpty()
-            if (!description.contains("can't parse entities", ignoreCase = true)) {
+            if (isParseEntitiesError(error)) {
+                log.error(
+                    """
+                    |
+                    |MarkdownV2 rendering failed, falling back to plain text
+                    |--- Start of Original message ---
+                    |{}
+                    |--- End of Original message ---
+                    |
+                    |""".trimMargin(),
+                    text,
+                    error,
+                )
+                sendPlainTextReply(message, text)
+            } else {
                 throw error
             }
-            log.warn(
-                "MarkdownV2 rendering failed, sending plain text fallback. Original preview='{}', escaped preview='{}'",
-                text.take(LOG_PREVIEW_LENGTH),
-                escapedText.take(LOG_PREVIEW_LENGTH),
-                error,
-            )
-            kotbot.execute(
-                SendMessage(
-                    chat_id = message.chat.id.chatId,
-                    text = text,
-                    reply_parameters = ReplyParameters(
-                        message_id = message.message_id,
-                    ),
-                )
-            )
         }
+    }
+
+    private suspend fun sendMarkdownReply(
+        message: Message,
+        text: String,
+    ): Message {
+        return kotbot.execute(
+            SendMessage(
+                chat_id = message.chat.id.chatId,
+                text = text,
+                parse_mode = ParseMode.MarkdownV2.name,
+                reply_parameters = ReplyParameters(
+                    message_id = message.message_id,
+                ),
+            ),
+        )
+    }
+
+    private suspend fun sendPlainTextReply(
+        message: Message,
+        text: String,
+    ): Message {
+        return kotbot.execute(
+            SendMessage(
+                chat_id = message.chat.id.chatId,
+                text = text,
+                reply_parameters = ReplyParameters(
+                    message_id = message.message_id,
+                ),
+            ),
+        )
+    }
+
+    private fun isParseEntitiesError(error: TelegramApiError): Boolean {
+        val description = error.description?.takeIf { it.isNotBlank() } ?: error.message.orEmpty()
+        return description.contains("can't parse entities", ignoreCase = true)
     }
 
     private fun ensureTelegramMarkdownPrompt(prompt: String): String {
@@ -609,7 +634,6 @@ class TgptUpdateProcessor(
             "Interactive Telegram checklist requires a connected Telegram Business account. Sending text checklist."
         private const val TELEGRAM_MARKDOWN_SYSTEM_PROMPT =
             "Generate a response that would work well with MarkdownV2 format in Telegram."
-        private const val LOG_PREVIEW_LENGTH = 500
         private val CHECKLIST_SYSTEM_PROMPT = """
             You convert user text into a Telegram checklist.
             Output rules:
