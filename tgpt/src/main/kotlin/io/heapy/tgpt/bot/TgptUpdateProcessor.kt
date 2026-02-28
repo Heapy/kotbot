@@ -82,7 +82,11 @@ class TgptUpdateProcessor(
         val replyToMessageId = message.reply_to_message?.message_id
 
         val (threadId, isNewThread) = transactionProvider.transaction {
-            resolveThread(chatId, userId, replyToMessageId)
+            resolveThread(
+                chatId = chatId,
+                userId = userId,
+                replyToMessageId = replyToMessageId,
+            )
         }
 
         // Add system prompt for new threads
@@ -275,14 +279,14 @@ class TgptUpdateProcessor(
                     ChatCompletionMessageParam.ofSystem(
                         ChatCompletionSystemMessageParam.builder()
                             .content(CHECKLIST_SYSTEM_PROMPT)
-                            .build()
+                            .build(),
                     ),
                     ChatCompletionMessageParam.ofUser(
                         ChatCompletionUserMessageParam.builder()
                             .content(sourceText)
-                            .build()
+                            .build(),
                     ),
-                )
+                ),
             )
             .maxCompletionTokens(openAiService.maxTokens().toLong())
             .build()
@@ -324,7 +328,7 @@ class TgptUpdateProcessor(
                         reply_parameters = ReplyParameters(
                             message_id = message.message_id,
                         ),
-                    )
+                    ),
                 )
                 return
             } catch (error: Exception) {
@@ -461,7 +465,7 @@ class TgptUpdateProcessor(
         val markdownPrompt = ChatCompletionMessageParam.ofSystem(
             ChatCompletionSystemMessageParam.builder()
                 .content(TELEGRAM_MARKDOWN_SYSTEM_PROMPT)
-                .build()
+                .build(),
         )
         return listOf(markdownPrompt) + messages
     }
@@ -551,7 +555,7 @@ class TgptUpdateProcessor(
                 MessageRole.system -> ChatCompletionMessageParam.ofSystem(
                     ChatCompletionSystemMessageParam.builder()
                         .content(msg.content)
-                        .build()
+                        .build(),
                 )
 
                 MessageRole.user -> when (msg.contentType) {
@@ -582,26 +586,26 @@ class TgptUpdateProcessor(
                     ContentType.transcription -> ChatCompletionMessageParam.ofUser(
                         ChatCompletionUserMessageParam.builder()
                             .content("[Voice message]: ${msg.content}")
-                            .build()
+                            .build(),
                     )
 
                     ContentType.text -> ChatCompletionMessageParam.ofUser(
                         ChatCompletionUserMessageParam.builder()
                             .content(msg.content)
-                            .build()
+                            .build(),
                     )
 
                     null -> ChatCompletionMessageParam.ofUser(
                         ChatCompletionUserMessageParam.builder()
                             .content(msg.content)
-                            .build()
+                            .build(),
                     )
                 }
 
                 MessageRole.assistant -> ChatCompletionMessageParam.ofAssistant(
                     ChatCompletionAssistantMessageParam.builder()
                         .content(msg.content)
-                        .build()
+                        .build(),
                 )
             }
         }
