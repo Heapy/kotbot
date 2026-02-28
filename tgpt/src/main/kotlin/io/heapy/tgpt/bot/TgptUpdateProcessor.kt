@@ -473,21 +473,10 @@ class TgptUpdateProcessor(
     private fun parseChecklistTasks(text: String): List<String> {
         return text
             .lineSequence()
-            .map { it.trim() }
-            .mapNotNull { rawLine ->
-                if (rawLine.isBlank()) {
-                    return@mapNotNull null
-                }
-
-                val unprefixed = rawLine
-                    .replace(CHECKLIST_MARK_PREFIX_REGEX, "")
-                    .replace(BULLET_PREFIX_REGEX, "")
-                    .trim()
-                if (unprefixed.isBlank()) {
-                    return@mapNotNull null
-                }
-
-                unprefixed.take(CHECKLIST_TASK_MAX_LENGTH)
+            .map(String::trim)
+            .filter(String::isNotBlank)
+            .map { rawLine ->
+                rawLine.take(CHECKLIST_TASK_MAX_LENGTH)
             }
             .take(CHECKLIST_MAX_TASKS)
             .toList()
@@ -613,8 +602,6 @@ class TgptUpdateProcessor(
 
     private companion object : Logger() {
         private val COMMAND_SEPARATOR_CHARS = charArrayOf(' ', '\n', '\t', '\r')
-        private val CHECKLIST_MARK_PREFIX_REGEX = Regex("""^[-*]?\s*\[(?:\s|x|X)\]\s*""")
-        private val BULLET_PREFIX_REGEX = Regex("""^[-*]\s*""")
         private const val CHECKLIST_MAX_TASKS = 30
         private const val CHECKLIST_TASK_MAX_LENGTH = 100
         private const val CHECKLIST_DEFAULT_TITLE = "Checklist"
@@ -627,7 +614,7 @@ class TgptUpdateProcessor(
             You convert user text into a Telegram checklist.
             Output rules:
             - Return plain text only.
-            - Every line must be one checklist item and start with "- [ ] ".
+            - Every line must be one checklist item without any prefix, like "- ", "*", "- [ ]".
             - Keep items concise and actionable.
             - Preserve the intent and order of the input.
             - Do not include any intro, explanation, or extra formatting.
