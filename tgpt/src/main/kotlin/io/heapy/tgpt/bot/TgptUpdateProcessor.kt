@@ -79,7 +79,14 @@ class TgptUpdateProcessor(
         }
 
         // Extract content
-        val extracted = extractContent(message) ?: return
+        val extracted = extractContent(message)
+        if (extracted == null) {
+            replyToMessage(
+                message = message,
+                text = "Sorry, this message type is not supported. I can process text, photos, voice messages, and video notes.",
+            )
+            return
+        }
 
         // Determine thread: new, continue, or fork
         val replyToMessageId = message.reply_to_message?.message_id
