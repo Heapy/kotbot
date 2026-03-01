@@ -87,6 +87,10 @@ public data class PromoteChatMember(
      * Pass *True* if the administrator can manage direct messages within the channel and decline suggested posts; for channels only
      */
     public val can_manage_direct_messages: Boolean? = null,
+    /**
+     * Pass *True* if the administrator can edit the tags of regular members; for groups and supergroups only
+     */
+    public val can_manage_tags: Boolean? = null,
 ) : Method<PromoteChatMember, Boolean> by Companion {
     public companion object : Method<PromoteChatMember, Boolean> {
         override val _deserializer: KSerializer<Response<Boolean>> =

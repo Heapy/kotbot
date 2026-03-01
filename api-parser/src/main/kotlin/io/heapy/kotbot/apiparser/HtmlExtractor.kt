@@ -45,8 +45,6 @@ data class RawField(
 )
 
 object HtmlExtractor {
-    private val RELEVANT_TAGS = setOf("h3", "h4", "p", "table", "ul")
-
     fun extract(html: String): ExtractedApi {
         val doc = Jsoup.parse(html)
         val content = doc.select("#dev_page_content").first()
@@ -118,7 +116,7 @@ object HtmlExtractor {
                     i++
                 }
                 is State.GetDescription -> {
-                    val s = state as State.GetDescription
+                    val s = state
                     if (tag == "p" || tag == "ul") {
                         s.description.add(elem)
                         i++
@@ -136,7 +134,7 @@ object HtmlExtractor {
                         } else {
                             // For objects with a UL as last description + elements UL
                             if (hasNextUl && !isMethod) {
-                                s.description.add(nextElem!!)
+                                s.description.add(nextElem)
                             }
 
                             when {
@@ -176,7 +174,7 @@ object HtmlExtractor {
                     }
                 }
                 is State.GetObjectFields -> {
-                    val s = state as State.GetObjectFields
+                    val s = state
                     if (tag == "table") {
                         val fields = extractFields(elem)
                         objects.add(RawObject(
@@ -190,7 +188,7 @@ object HtmlExtractor {
                     i++
                 }
                 is State.GetMethodFields -> {
-                    val s = state as State.GetMethodFields
+                    val s = state
                     if (tag == "table") {
                         val args = extractArguments(elem)
                         methods.add(RawMethod(
@@ -204,7 +202,7 @@ object HtmlExtractor {
                     i++
                 }
                 is State.GetObjectElements -> {
-                    val s = state as State.GetObjectElements
+                    val s = state
                     if (tag == "ul") {
                         val elems = elem.select("li").map { it.plainText() }
                         objects.add(RawObject(

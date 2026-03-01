@@ -15,6 +15,10 @@ public data class ChatMemberRestricted(
      */
     public val status: String,
     /**
+     * *Optional*. Tag of the member
+     */
+    public val tag: String? = null,
+    /**
      * Information about the user
      */
     public val user: User,
@@ -62,6 +66,10 @@ public data class ChatMemberRestricted(
      * *True*, if the user is allowed to add web page previews to their messages
      */
     public val can_add_web_page_previews: Boolean,
+    /**
+     * *True*, if the user is allowed to edit their own tag
+     */
+    public val can_edit_tag: Boolean,
     /**
      * *True*, if the user is allowed to change the chat title, photo and other settings
      */

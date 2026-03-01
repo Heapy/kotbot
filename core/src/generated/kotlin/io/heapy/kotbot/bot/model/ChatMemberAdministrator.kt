@@ -86,6 +86,10 @@ public data class ChatMemberAdministrator(
      */
     public val can_manage_direct_messages: Boolean? = null,
     /**
+     * *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can_pin_messages.
+     */
+    public val can_manage_tags: Boolean? = null,
+    /**
      * *Optional*. Custom title for this user
      */
     public val custom_title: String? = null,

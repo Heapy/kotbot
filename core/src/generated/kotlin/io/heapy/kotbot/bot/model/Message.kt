@@ -41,6 +41,10 @@ public data class Message(
      */
     public val sender_business_bot: User? = null,
     /**
+     * *Optional*. Tag or custom title of the sender of the message; for supergroups only
+     */
+    public val sender_tag: String? = null,
+    /**
      * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
      */
     public val date: Long,
@@ -105,7 +109,7 @@ public data class Message(
      */
     public val is_paid_post: Boolean? = null,
     /**
-     * *Optional*. The unique identifier of a media message group this message belongs to
+     * *Optional*. The unique identifier inside this chat of a media message group this message belongs to
      */
     public val media_group_id: String? = null,
     /**

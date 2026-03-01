@@ -49,6 +49,10 @@ public data class ChatPermissions(
      */
     public val can_add_web_page_previews: Boolean? = null,
     /**
+     * *Optional*. *True*, if the user is allowed to edit their own tag
+     */
+    public val can_edit_tag: Boolean? = null,
+    /**
      * *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
      */
     public val can_change_info: Boolean? = null,

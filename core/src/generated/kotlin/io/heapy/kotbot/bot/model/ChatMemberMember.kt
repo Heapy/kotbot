@@ -14,6 +14,10 @@ public data class ChatMemberMember(
      */
     public val status: String,
     /**
+     * *Optional*. Tag of the member
+     */
+    public val tag: String? = null,
+    /**
      * Information about the user
      */
     public val user: User,

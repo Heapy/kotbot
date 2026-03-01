@@ -2,7 +2,6 @@
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -31,6 +30,7 @@ fun main() {
         "api900",
         "api920",
         "api940",
+        "api950",
     ).forEach { v ->
         val input = rootPath.resolve(v).readText()
         val output = processVersion(input)
@@ -93,51 +93,6 @@ fun processVersion(input: String): String {
                 }
             }
             appendLine()
-        }
-    }
-}
-
-fun buildGraph(children: Elements) {
-    val root = Element("h0")
-    val tree = mutableMapOf<Element, MutableList<Element>>(root to mutableListOf())
-    val stack = ArrayDeque(listOf(root))
-
-    children.forEach { el ->
-        when (el.tagName()) {
-            "h1", "h2", "h3", "h4", "h5", "h6" -> {
-                stack.lastOrNull()?.let { last ->
-                    when {
-                        last.level == el.level -> {
-                            stack.removeLast()
-                            stack.add(el)
-                            tree[el] = mutableListOf()
-                        }
-
-                        last.level < el.level -> {
-                            stack.add(el)
-                            tree[el] = mutableListOf()
-                        }
-
-                        last.level > el.level -> {
-                            stack.removeLast()
-                            stack.removeLast()
-                            stack.add(el)
-                            tree[el] = mutableListOf()
-                        }
-
-                        else -> error("Unhandled case")
-                    }
-                } ?: run {
-                    tree[el] = mutableListOf()
-                    stack.add(el)
-                }
-            }
-
-            "p", "ul", "table", "hr", "pre", "ol", "blockquote" -> {
-                tree[stack.last()]!!.add(el)
-            }
-
-            else -> println("Unknown tag: ${el.tagName()}")
         }
     }
 }
