@@ -88,6 +88,14 @@ class TgptUpdateProcessor(
             return
         }
 
+        // Send transcription text back to the user
+        if (extracted.contentType == ContentType.transcription) {
+            replyToMessage(
+                message = message,
+                text = extracted.content,
+            )
+        }
+
         // Determine thread: new, continue, or fork
         val replyToMessageId = message.reply_to_message?.message_id
 
