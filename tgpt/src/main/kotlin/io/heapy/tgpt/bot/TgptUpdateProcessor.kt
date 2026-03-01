@@ -4,6 +4,7 @@ import com.openai.models.ChatModel
 import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
 import com.openai.models.chat.completions.ChatCompletionContentPart
 import com.openai.models.chat.completions.ChatCompletionContentPartImage
+import com.openai.models.chat.completions.ChatCompletionContentPartText
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 import com.openai.models.chat.completions.ChatCompletionMessageParam
 import com.openai.models.chat.completions.ChatCompletionSystemMessageParam
@@ -33,7 +34,9 @@ import io.heapy.tgpt.infra.jdbc.TransactionProvider
 import io.heapy.tgpt.openai.CostCalculator
 import io.heapy.tgpt.openai.OpenAiService
 import io.heapy.tgpt.openai.TelegramFileService
-import java.util.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlin.io.encoding.Base64
 
 class TgptUpdateProcessor(
     private val kotbot: Kotbot,
@@ -96,7 +99,7 @@ class TgptUpdateProcessor(
                     threadId = threadId,
                     role = MessageRole.system,
                     contentType = ContentType.text,
-                    content = ensureTelegramMarkdownPrompt(openAiService.systemPrompt),
+                    content = openAiService.systemPrompt,
                 )
             }
         }
@@ -215,6 +218,12 @@ class TgptUpdateProcessor(
     private data class ExtractedContent(
         val content: String,
         val contentType: ContentType,
+    )
+
+    @Serializable
+    private data class ImageContentPayload(
+        val fileIds: List<String>,
+        val caption: String? = null,
     )
 
     private data class ParsedCommand(
@@ -477,13 +486,6 @@ class TgptUpdateProcessor(
         return description.contains("can't parse entities", ignoreCase = true)
     }
 
-    private fun ensureTelegramMarkdownPrompt(prompt: String): String {
-        if (prompt.contains("MarkdownV2", ignoreCase = true)) {
-            return prompt
-        }
-        return "$prompt\n\n$TELEGRAM_MARKDOWN_SYSTEM_PROMPT"
-    }
-
     private fun prependTelegramMarkdownPrompt(
         messages: List<ChatCompletionMessageParam>,
     ): List<ChatCompletionMessageParam> {
@@ -508,12 +510,15 @@ class TgptUpdateProcessor(
     }
 
     private suspend fun extractContent(message: Message): ExtractedContent? {
-        // Photo
+        // Photo – keep only the highest-resolution variant
         val photos = message.photo
         if (!photos.isNullOrEmpty()) {
-            val largest = photos.maxBy { it.file_size ?: 0 }
+            val largestPhoto = photos.maxBy { it.width * it.height }
             return ExtractedContent(
-                content = largest.file_id,
+                content = serializeImageContentPayload(
+                    fileIds = listOf(largestPhoto.file_id),
+                    caption = message.caption,
+                ),
                 contentType = ContentType.image_url,
             )
         }
@@ -574,26 +579,51 @@ class TgptUpdateProcessor(
 
                 MessageRole.user -> when (msg.contentType) {
                     ContentType.image_url -> {
-                        val imageBytes = telegramFileService.downloadFile(msg.content)
-                        val base64 = Base64.getEncoder().encodeToString(imageBytes)
-                        val imageUrl = "data:image/jpeg;base64,$base64"
+                        val payload = deserializeImageContentPayload(msg.content)
+                        val parts = mutableListOf<ChatCompletionContentPart>()
+
+                        payload.caption
+                            ?.takeIf { it.isNotBlank() }
+                            ?.let {
+                                parts += ChatCompletionContentPart.ofText(
+                                    ChatCompletionContentPartText.builder()
+                                        .text(it)
+                                        .build(),
+                                )
+                            }
+
+                        payload.fileIds.forEach { fileId ->
+                            val imageBytes = telegramFileService.downloadFile(fileId)
+                            val base64 = Base64.encode(imageBytes)
+                            val imageUrl = "data:image/jpeg;base64,$base64"
+
+                            parts += ChatCompletionContentPart.ofImageUrl(
+                                ChatCompletionContentPartImage.builder()
+                                    .imageUrl(
+                                        ChatCompletionContentPartImage.ImageUrl.builder()
+                                            .url(imageUrl)
+                                            .build(),
+                                    )
+                                    .build(),
+                            )
+                        }
+
+                        val safeParts = if (parts.isEmpty()) {
+                            listOf(
+                                ChatCompletionContentPart.ofText(
+                                    ChatCompletionContentPartText.builder()
+                                        .text("[Image message]")
+                                        .build(),
+                                ),
+                            )
+                        } else {
+                            parts
+                        }
 
                         ChatCompletionMessageParam.ofUser(
                             ChatCompletionUserMessageParam.builder()
-                                .contentOfArrayOfContentParts(
-                                    listOf(
-                                        ChatCompletionContentPart.ofImageUrl(
-                                            ChatCompletionContentPartImage.builder()
-                                                .imageUrl(
-                                                    ChatCompletionContentPartImage.ImageUrl.builder()
-                                                        .url(imageUrl)
-                                                        .build()
-                                                )
-                                                .build()
-                                        ),
-                                    )
-                                )
-                                .build()
+                                .contentOfArrayOfContentParts(safeParts)
+                                .build(),
                         )
                     }
 
@@ -625,15 +655,56 @@ class TgptUpdateProcessor(
         }
     }
 
+    private fun serializeImageContentPayload(
+        fileIds: List<String>,
+        caption: String?,
+    ): String {
+        val normalized = fileIds
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+        val payload = ImageContentPayload(
+            fileIds = normalized,
+            caption = caption?.takeIf { it.isNotBlank() },
+        )
+        return json.encodeToString(payload)
+    }
+
+    private fun deserializeImageContentPayload(content: String): ImageContentPayload {
+        val payload = runCatching {
+            json.decodeFromString<ImageContentPayload>(content)
+        }.getOrNull()
+
+        if (payload == null) {
+            return ImageContentPayload(
+                fileIds = listOf(content),
+                caption = null,
+            )
+        }
+
+        val normalized = payload.fileIds
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+
+        return payload.copy(fileIds = normalized)
+    }
+
     private companion object : Logger() {
+        private val json = Json {
+            ignoreUnknownKeys = true
+        }
         private val COMMAND_SEPARATOR_CHARS = charArrayOf(' ', '\n', '\t', '\r')
         private const val CHECKLIST_MAX_TASKS = 30
         private const val CHECKLIST_TASK_MAX_LENGTH = 100
         private const val CHECKLIST_DEFAULT_TITLE = "Checklist"
         private const val CHECKLIST_TEXT_FALLBACK_NOTE =
             "Interactive Telegram checklist requires a connected Telegram Business account. Sending text checklist."
-        private const val TELEGRAM_MARKDOWN_SYSTEM_PROMPT =
-            "Generate a response that would work well with MarkdownV2 format in Telegram."
+        private val TELEGRAM_MARKDOWN_SYSTEM_PROMPT = """
+            Generate a response that would work well with MarkdownV2 format in Telegram.
+            Keep responses short and concise.
+            Default to Russian, if language not specified.
+        """.trimIndent()
         private val CHECKLIST_SYSTEM_PROMPT = """
             You convert user text into a Telegram checklist.
             Output rules:
