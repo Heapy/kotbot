@@ -610,8 +610,9 @@ class TgptUpdateProcessor(
 
                         payload.fileIds.forEach { fileId ->
                             val imageBytes = telegramFileService.downloadFile(fileId)
+                            val mimeType = detectImageMimeType(imageBytes)
                             val base64 = Base64.encode(imageBytes)
-                            val imageUrl = "data:image/jpeg;base64,$base64"
+                            val imageUrl = "data:$mimeType;base64,$base64"
 
                             parts += ChatCompletionContentPart.ofImageUrl(
                                 ChatCompletionContentPartImage.builder()
@@ -704,6 +705,16 @@ class TgptUpdateProcessor(
             .distinct()
 
         return payload.copy(fileIds = normalized)
+    }
+
+    private fun detectImageMimeType(bytes: ByteArray): String {
+        return when {
+            bytes.size >= 3 && bytes[0] == 0xFF.toByte() && bytes[1] == 0xD8.toByte() && bytes[2] == 0xFF.toByte() -> "image/jpeg"
+            bytes.size >= 8 && bytes[0] == 0x89.toByte() && bytes[1] == 0x50.toByte() && bytes[2] == 0x4E.toByte() && bytes[3] == 0x47.toByte() -> "image/png"
+            bytes.size >= 4 && bytes[0] == 0x47.toByte() && bytes[1] == 0x49.toByte() && bytes[2] == 0x46.toByte() && bytes[3] == 0x38.toByte() -> "image/gif"
+            bytes.size >= 4 && bytes[0] == 0x52.toByte() && bytes[1] == 0x49.toByte() && bytes[2] == 0x46.toByte() && bytes[3] == 0x46.toByte() -> "image/webp"
+            else -> "image/jpeg"
+        }
     }
 
     private companion object : Logger() {
