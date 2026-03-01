@@ -80,7 +80,16 @@ class TgptUpdateProcessor(
         }
 
         // Extract content
-        val extracted = extractContent(message)
+        val extracted = try {
+            extractContent(message)
+        } catch (e: Exception) {
+            log.error("Failed to extract content", e)
+            replyToMessage(
+                message = message,
+                text = "Something went wrong. Please try again.",
+            )
+            return
+        }
         if (extracted == null) {
             replyToMessage(
                 message = message,
@@ -327,7 +336,16 @@ class TgptUpdateProcessor(
             .maxCompletionTokens(openAiService.maxTokens().toLong())
             .build()
 
-        val completion = openAiService.chatCompletion(params)
+        val completion = try {
+            openAiService.chatCompletion(params)
+        } catch (e: Exception) {
+            log.error("OpenAI API call failed for /checklist", e)
+            replyToMessage(
+                message = message,
+                text = "Something went wrong. Please try again.",
+            )
+            return
+        }
         val checklistText = completion.choices().firstOrNull()
             ?.message()?.content()?.orElse(null)
             ?.trim()
