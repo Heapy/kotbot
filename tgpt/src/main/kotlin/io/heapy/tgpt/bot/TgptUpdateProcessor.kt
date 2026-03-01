@@ -131,7 +131,16 @@ class TgptUpdateProcessor(
             .maxCompletionTokens(openAiService.maxTokens().toLong())
             .build()
 
-        val completion = openAiService.chatCompletion(params)
+        val completion = try {
+            openAiService.chatCompletion(params)
+        } catch (e: Exception) {
+            log.error("OpenAI API call failed", e)
+            replyToMessage(
+                message = message,
+                text = "Something went wrong. Please try again.",
+            )
+            return
+        }
 
         val responseText = completion.choices().firstOrNull()
             ?.message()?.content()?.orElse(null)
