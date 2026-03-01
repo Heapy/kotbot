@@ -13,6 +13,7 @@ import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.TelegramApiError
 import io.heapy.kotbot.bot.execute
+import io.heapy.kotbot.bot.method.SendChatAction
 import io.heapy.kotbot.bot.method.SendChecklist
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InputChecklist
@@ -130,6 +131,8 @@ class TgptUpdateProcessor(
                 telegramUserId = userId,
             )
         }
+
+        sendTypingAction(chatId)
 
         // Build OpenAI messages and call API
         val threadMessages = transactionProvider.transaction {
@@ -505,6 +508,19 @@ class TgptUpdateProcessor(
         )
     }
 
+    private suspend fun sendTypingAction(chatId: Long) {
+        try {
+            kotbot.execute(
+                SendChatAction(
+                    chat_id = chatId.chatId,
+                    action = "typing",
+                ),
+            )
+        } catch (e: Exception) {
+            log.debug("Failed to send typing action", e)
+        }
+    }
+
     private fun isParseEntitiesError(error: TelegramApiError): Boolean {
         val description = error.description?.takeIf { it.isNotBlank() } ?: error.message.orEmpty()
         return description.contains("can't parse entities", ignoreCase = true)
@@ -550,6 +566,7 @@ class TgptUpdateProcessor(
         // Voice
         val voice = message.voice
         if (voice != null) {
+            sendTypingAction(message.chat.id)
             val audioBytes = telegramFileService.downloadFile(voice.file_id)
             val transcription = openAiService.transcribe(audioBytes)
             return ExtractedContent(
@@ -561,6 +578,7 @@ class TgptUpdateProcessor(
         // Video note
         val videoNote = message.video_note
         if (videoNote != null) {
+            sendTypingAction(message.chat.id)
             val audioBytes = telegramFileService.downloadFile(videoNote.file_id)
             val transcription = openAiService.transcribe(audioBytes)
             return ExtractedContent(
