@@ -18,7 +18,8 @@ import org.jooq.Schema
 enum class ContentType(@get:JvmName("literal") public val literal: String) : EnumType {
     text("text"),
     image_url("image_url"),
-    transcription("transcription");
+    transcription("transcription"),
+    file("file");
     override fun getCatalog(): Catalog? = schema.catalog
     override fun getSchema(): Schema = Public.PUBLIC
     override fun getName(): String = "content_type"

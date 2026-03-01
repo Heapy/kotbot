@@ -93,7 +93,7 @@ class TgptUpdateProcessor(
         if (extracted == null) {
             replyToMessage(
                 message = message,
-                text = "Sorry, this message type is not supported. I can process text, photos, voice messages, and video notes.",
+                text = "Sorry, this message type is not supported. I can process text, photos, documents, voice messages, and video notes.",
             )
             return
         }
@@ -259,6 +259,14 @@ class TgptUpdateProcessor(
     @Serializable
     private data class ImageContentPayload(
         val fileIds: List<String>,
+        val caption: String? = null,
+    )
+
+    @Serializable
+    private data class FileContentPayload(
+        val fileId: String,
+        val mimeType: String,
+        val fileName: String? = null,
         val caption: String? = null,
     )
 
@@ -605,6 +613,20 @@ class TgptUpdateProcessor(
             )
         }
 
+        // Document (PDF, etc.)
+        val document = message.document
+        if (document != null) {
+            return ExtractedContent(
+                content = serializeFileContentPayload(
+                    fileId = document.file_id,
+                    mimeType = document.mime_type ?: "application/octet-stream",
+                    fileName = document.file_name,
+                    caption = message.caption,
+                ),
+                contentType = ContentType.file,
+            )
+        }
+
         // Text
         val text = message.text
         if (text != null) {
@@ -688,6 +710,41 @@ class TgptUpdateProcessor(
                         )
                     }
 
+                    ContentType.file -> {
+                        val payload = deserializeFileContentPayload(msg.content)
+                        val parts = mutableListOf<ChatCompletionContentPart>()
+
+                        payload.caption
+                            ?.takeIf { it.isNotBlank() }
+                            ?.let {
+                                parts += ChatCompletionContentPart.ofText(
+                                    ChatCompletionContentPartText.builder()
+                                        .text(it)
+                                        .build(),
+                                )
+                            }
+
+                        val fileBytes = telegramFileService.downloadFile(payload.fileId)
+                        val base64 = Base64.encode(fileBytes)
+
+                        parts += ChatCompletionContentPart.ofFile(
+                            ChatCompletionContentPart.File.builder()
+                                .file(
+                                    ChatCompletionContentPart.File.FileObject.builder()
+                                        .fileData("data:${payload.mimeType};base64,$base64")
+                                        .filename(payload.fileName ?: defaultFilenameForMimeType(payload.mimeType))
+                                        .build(),
+                                )
+                                .build(),
+                        )
+
+                        ChatCompletionMessageParam.ofUser(
+                            ChatCompletionUserMessageParam.builder()
+                                .contentOfArrayOfContentParts(parts)
+                                .build(),
+                        )
+                    }
+
                     ContentType.transcription -> ChatCompletionMessageParam.ofUser(
                         ChatCompletionUserMessageParam.builder()
                             .content("[Voice message]: ${msg.content}")
@@ -729,6 +786,35 @@ class TgptUpdateProcessor(
             caption = caption?.takeIf { it.isNotBlank() },
         )
         return json.encodeToString(payload)
+    }
+
+    private fun serializeFileContentPayload(
+        fileId: String,
+        mimeType: String,
+        fileName: String?,
+        caption: String?,
+    ): String {
+        val payload = FileContentPayload(
+            fileId = fileId.trim(),
+            mimeType = mimeType,
+            fileName = fileName?.takeIf { it.isNotBlank() },
+            caption = caption?.takeIf { it.isNotBlank() },
+        )
+        return json.encodeToString(payload)
+    }
+
+    private fun deserializeFileContentPayload(content: String): FileContentPayload {
+        return json.decodeFromString<FileContentPayload>(content)
+    }
+
+    private fun defaultFilenameForMimeType(mimeType: String): String {
+        return when (mimeType.trim().lowercase()) {
+            "application/pdf" -> "file.pdf"
+            "text/plain" -> "file.txt"
+            "text/csv" -> "file.csv"
+            "application/json" -> "file.json"
+            else -> "file.bin"
+        }
     }
 
     private fun deserializeImageContentPayload(content: String): ImageContentPayload {
