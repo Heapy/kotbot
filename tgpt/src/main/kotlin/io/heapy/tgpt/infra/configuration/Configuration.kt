@@ -14,4 +14,5 @@ data class OpenAiConfiguration(
     val whisperModel: String = "whisper-1",
     val systemPrompt: String = "You are a helpful assistant.",
     val maxTokens: Int = 4096,
+    val webSearchEnabled: Boolean = true,
 )

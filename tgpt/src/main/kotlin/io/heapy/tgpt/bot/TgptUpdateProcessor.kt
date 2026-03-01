@@ -1,14 +1,15 @@
 package io.heapy.tgpt.bot
 
 import com.openai.models.ChatModel
-import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam
-import com.openai.models.chat.completions.ChatCompletionContentPart
-import com.openai.models.chat.completions.ChatCompletionContentPartImage
-import com.openai.models.chat.completions.ChatCompletionContentPartText
-import com.openai.models.chat.completions.ChatCompletionCreateParams
-import com.openai.models.chat.completions.ChatCompletionMessageParam
-import com.openai.models.chat.completions.ChatCompletionSystemMessageParam
-import com.openai.models.chat.completions.ChatCompletionUserMessageParam
+import com.openai.models.responses.EasyInputMessage
+import com.openai.models.responses.Response
+import com.openai.models.responses.ResponseCreateParams
+import com.openai.models.responses.ResponseInputContent
+import com.openai.models.responses.ResponseInputFile
+import com.openai.models.responses.ResponseInputImage
+import com.openai.models.responses.ResponseInputItem
+import com.openai.models.responses.ResponseInputText
+import com.openai.models.responses.WebSearchTool
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.TelegramApiError
@@ -148,18 +149,28 @@ class TgptUpdateProcessor(
             threadMessageDao.getThreadMessages(threadId)
         }
 
-        val openAiMessages = prependTelegramMarkdownPrompt(
-            buildOpenAiMessages(threadMessages),
-        )
+        val inputItems = buildResponseInput(threadMessages)
+        val instructions = TELEGRAM_MARKDOWN_SYSTEM_PROMPT + "\n\n" + openAiService.systemPrompt
 
-        val params = ChatCompletionCreateParams.builder()
+        val paramsBuilder = ResponseCreateParams.builder()
             .model(ChatModel.of(openAiService.model()))
-            .messages(openAiMessages)
-            .maxCompletionTokens(openAiService.maxTokens().toLong())
-            .build()
+            .inputOfResponse(inputItems)
+            .instructions(instructions)
+            .maxOutputTokens(openAiService.maxTokens().toLong())
 
-        val completion = try {
-            openAiService.chatCompletion(params)
+        if (openAiService.webSearchEnabled) {
+            paramsBuilder.addTool(
+                WebSearchTool.builder()
+                    .type(WebSearchTool.Type.WEB_SEARCH)
+                    .searchContextSize(WebSearchTool.SearchContextSize.MEDIUM)
+                    .build()
+            )
+        }
+
+        val params = paramsBuilder.build()
+
+        val response = try {
+            openAiService.createResponse(params)
         } catch (e: Exception) {
             log.error("OpenAI API call failed", e)
             replyToMessage(
@@ -169,8 +180,7 @@ class TgptUpdateProcessor(
             return
         }
 
-        val responseText = completion.choices().firstOrNull()
-            ?.message()?.content()?.orElse(null)
+        val responseText = extractOutputText(response)
             ?: "No response from the model."
 
         // Send reply to Telegram
@@ -191,24 +201,24 @@ class TgptUpdateProcessor(
         }
 
         // Record API call with cost
-        val usage = completion.usage()
+        val usage = response.usage()
         if (usage.isPresent) {
             val usageVal = usage.get()
-            val promptTokens = usageVal.promptTokens().toInt()
-            val completionTokens = usageVal.completionTokens().toInt()
+            val inputTokens = usageVal.inputTokens().toInt()
+            val outputTokens = usageVal.outputTokens().toInt()
             val totalTokens = usageVal.totalTokens().toInt()
             val cost = CostCalculator.estimateCost(
                 model = openAiService.model(),
-                promptTokens = promptTokens,
-                completionTokens = completionTokens,
+                inputTokens = inputTokens,
+                outputTokens = outputTokens,
             )
             transactionProvider.transaction {
                 apiCallDao.recordApiCall(
                     threadId = threadId,
                     telegramUserId = userId,
                     model = openAiService.model(),
-                    promptTokens = promptTokens,
-                    completionTokens = completionTokens,
+                    promptTokens = inputTokens,
+                    completionTokens = outputTokens,
                     totalTokens = totalTokens,
                     estimatedCostUsd = cost,
                 )
@@ -325,27 +335,15 @@ class TgptUpdateProcessor(
             return
         }
 
-        val params = ChatCompletionCreateParams.builder()
+        val params = ResponseCreateParams.builder()
             .model(ChatModel.of(openAiService.model()))
-            .messages(
-                listOf(
-                    ChatCompletionMessageParam.ofSystem(
-                        ChatCompletionSystemMessageParam.builder()
-                            .content(CHECKLIST_SYSTEM_PROMPT)
-                            .build(),
-                    ),
-                    ChatCompletionMessageParam.ofUser(
-                        ChatCompletionUserMessageParam.builder()
-                            .content(sourceText)
-                            .build(),
-                    ),
-                ),
-            )
-            .maxCompletionTokens(openAiService.maxTokens().toLong())
+            .instructions(CHECKLIST_SYSTEM_PROMPT)
+            .input(sourceText)
+            .maxOutputTokens(openAiService.maxTokens().toLong())
             .build()
 
-        val completion = try {
-            openAiService.chatCompletion(params)
+        val response = try {
+            openAiService.createResponse(params)
         } catch (e: Exception) {
             log.error("OpenAI API call failed for /checklist", e)
             replyToMessage(
@@ -354,8 +352,7 @@ class TgptUpdateProcessor(
             )
             return
         }
-        val checklistText = completion.choices().firstOrNull()
-            ?.message()?.content()?.orElse(null)
+        val checklistText = extractOutputText(response)
             ?.trim()
             ?.takeIf { it.isNotBlank() }
             ?: "Could not generate checklist."
@@ -552,17 +549,6 @@ class TgptUpdateProcessor(
         return description.contains("can't parse entities", ignoreCase = true)
     }
 
-    private fun prependTelegramMarkdownPrompt(
-        messages: List<ChatCompletionMessageParam>,
-    ): List<ChatCompletionMessageParam> {
-        val markdownPrompt = ChatCompletionMessageParam.ofSystem(
-            ChatCompletionSystemMessageParam.builder()
-                .content(TELEGRAM_MARKDOWN_SYSTEM_PROMPT)
-                .build(),
-        )
-        return listOf(markdownPrompt) + messages
-    }
-
     private fun parseChecklistTasks(text: String): List<String> {
         return text
             .lineSequence()
@@ -648,129 +634,135 @@ class TgptUpdateProcessor(
         return null
     }
 
-    private suspend fun buildOpenAiMessages(
+    private fun extractOutputText(response: Response): String? {
+        return response.output()
+            .filter { it.isMessage() }
+            .flatMap { it.asMessage().content() }
+            .filter { it.isOutputText() }
+            .joinToString("") { it.asOutputText().text() }
+            .ifBlank { null }
+    }
+
+    private suspend fun buildResponseInput(
         threadMessages: List<ThreadMessage>,
-    ): List<ChatCompletionMessageParam> {
-        return threadMessages.map { msg ->
-            when (msg.role) {
-                MessageRole.system -> ChatCompletionMessageParam.ofSystem(
-                    ChatCompletionSystemMessageParam.builder()
-                        .content(msg.content)
-                        .build(),
-                )
+    ): List<ResponseInputItem> {
+        return threadMessages
+            .filter { it.role != MessageRole.system }
+            .map { msg ->
+                when (msg.role) {
+                    MessageRole.system -> error("system messages should be filtered out")
 
-                MessageRole.user -> when (msg.contentType) {
-                    ContentType.image_url -> {
-                        val payload = deserializeImageContentPayload(msg.content)
-                        val parts = mutableListOf<ChatCompletionContentPart>()
+                    MessageRole.user -> when (msg.contentType) {
+                        ContentType.image_url -> {
+                            val payload = deserializeImageContentPayload(msg.content)
+                            val contentParts = mutableListOf<ResponseInputContent>()
 
-                        payload.caption
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let {
-                                parts += ChatCompletionContentPart.ofText(
-                                    ChatCompletionContentPartText.builder()
-                                        .text(it)
+                            payload.caption
+                                ?.takeIf { it.isNotBlank() }
+                                ?.let {
+                                    contentParts += ResponseInputContent.ofInputText(
+                                        ResponseInputText.builder()
+                                            .text(it)
+                                            .build(),
+                                    )
+                                }
+
+                            payload.fileIds.forEach { fileId ->
+                                val imageBytes = telegramFileService.downloadFile(fileId)
+                                val mimeType = detectImageMimeType(imageBytes)
+                                val base64 = Base64.encode(imageBytes)
+                                val imageUrl = "data:$mimeType;base64,$base64"
+
+                                contentParts += ResponseInputContent.ofInputImage(
+                                    ResponseInputImage.builder()
+                                        .imageUrl(imageUrl)
+                                        .detail(ResponseInputImage.Detail.AUTO)
                                         .build(),
                                 )
                             }
 
-                        payload.fileIds.forEach { fileId ->
-                            val imageBytes = telegramFileService.downloadFile(fileId)
-                            val mimeType = detectImageMimeType(imageBytes)
-                            val base64 = Base64.encode(imageBytes)
-                            val imageUrl = "data:$mimeType;base64,$base64"
-
-                            parts += ChatCompletionContentPart.ofImageUrl(
-                                ChatCompletionContentPartImage.builder()
-                                    .imageUrl(
-                                        ChatCompletionContentPartImage.ImageUrl.builder()
-                                            .url(imageUrl)
+                            val safeParts = if (contentParts.isEmpty()) {
+                                listOf(
+                                    ResponseInputContent.ofInputText(
+                                        ResponseInputText.builder()
+                                            .text("[Image message]")
                                             .build(),
-                                    )
+                                    ),
+                                )
+                            } else {
+                                contentParts
+                            }
+
+                            ResponseInputItem.ofEasyInputMessage(
+                                EasyInputMessage.builder()
+                                    .role(EasyInputMessage.Role.USER)
+                                    .contentOfResponseInputMessageContentList(safeParts)
                                     .build(),
                             )
                         }
 
-                        val safeParts = if (parts.isEmpty()) {
-                            listOf(
-                                ChatCompletionContentPart.ofText(
-                                    ChatCompletionContentPartText.builder()
-                                        .text("[Image message]")
-                                        .build(),
-                                ),
+                        ContentType.file -> {
+                            val payload = deserializeFileContentPayload(msg.content)
+                            val contentParts = mutableListOf<ResponseInputContent>()
+
+                            payload.caption
+                                ?.takeIf { it.isNotBlank() }
+                                ?.let {
+                                    contentParts += ResponseInputContent.ofInputText(
+                                        ResponseInputText.builder()
+                                            .text(it)
+                                            .build(),
+                                    )
+                                }
+
+                            val fileBytes = telegramFileService.downloadFile(payload.fileId)
+                            val base64 = Base64.encode(fileBytes)
+
+                            contentParts += ResponseInputContent.ofInputFile(
+                                ResponseInputFile.builder()
+                                    .fileData("data:${payload.mimeType};base64,$base64")
+                                    .filename(payload.fileName ?: defaultFilenameForMimeType(payload.mimeType))
+                                    .build(),
                             )
-                        } else {
-                            parts
+
+                            ResponseInputItem.ofEasyInputMessage(
+                                EasyInputMessage.builder()
+                                    .role(EasyInputMessage.Role.USER)
+                                    .contentOfResponseInputMessageContentList(contentParts)
+                                    .build(),
+                            )
                         }
 
-                        ChatCompletionMessageParam.ofUser(
-                            ChatCompletionUserMessageParam.builder()
-                                .contentOfArrayOfContentParts(safeParts)
+                        ContentType.transcription -> ResponseInputItem.ofEasyInputMessage(
+                            EasyInputMessage.builder()
+                                .role(EasyInputMessage.Role.USER)
+                                .content("[Voice message]: ${msg.content}")
+                                .build(),
+                        )
+
+                        ContentType.text -> ResponseInputItem.ofEasyInputMessage(
+                            EasyInputMessage.builder()
+                                .role(EasyInputMessage.Role.USER)
+                                .content(msg.content)
+                                .build(),
+                        )
+
+                        null -> ResponseInputItem.ofEasyInputMessage(
+                            EasyInputMessage.builder()
+                                .role(EasyInputMessage.Role.USER)
+                                .content(msg.content)
                                 .build(),
                         )
                     }
 
-                    ContentType.file -> {
-                        val payload = deserializeFileContentPayload(msg.content)
-                        val parts = mutableListOf<ChatCompletionContentPart>()
-
-                        payload.caption
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let {
-                                parts += ChatCompletionContentPart.ofText(
-                                    ChatCompletionContentPartText.builder()
-                                        .text(it)
-                                        .build(),
-                                )
-                            }
-
-                        val fileBytes = telegramFileService.downloadFile(payload.fileId)
-                        val base64 = Base64.encode(fileBytes)
-
-                        parts += ChatCompletionContentPart.ofFile(
-                            ChatCompletionContentPart.File.builder()
-                                .file(
-                                    ChatCompletionContentPart.File.FileObject.builder()
-                                        .fileData("data:${payload.mimeType};base64,$base64")
-                                        .filename(payload.fileName ?: defaultFilenameForMimeType(payload.mimeType))
-                                        .build(),
-                                )
-                                .build(),
-                        )
-
-                        ChatCompletionMessageParam.ofUser(
-                            ChatCompletionUserMessageParam.builder()
-                                .contentOfArrayOfContentParts(parts)
-                                .build(),
-                        )
-                    }
-
-                    ContentType.transcription -> ChatCompletionMessageParam.ofUser(
-                        ChatCompletionUserMessageParam.builder()
-                            .content("[Voice message]: ${msg.content}")
-                            .build(),
-                    )
-
-                    ContentType.text -> ChatCompletionMessageParam.ofUser(
-                        ChatCompletionUserMessageParam.builder()
-                            .content(msg.content)
-                            .build(),
-                    )
-
-                    null -> ChatCompletionMessageParam.ofUser(
-                        ChatCompletionUserMessageParam.builder()
+                    MessageRole.assistant -> ResponseInputItem.ofEasyInputMessage(
+                        EasyInputMessage.builder()
+                            .role(EasyInputMessage.Role.ASSISTANT)
                             .content(msg.content)
                             .build(),
                     )
                 }
-
-                MessageRole.assistant -> ChatCompletionMessageParam.ofAssistant(
-                    ChatCompletionAssistantMessageParam.builder()
-                        .content(msg.content)
-                        .build(),
-                )
             }
-        }
     }
 
     private fun serializeImageContentPayload(

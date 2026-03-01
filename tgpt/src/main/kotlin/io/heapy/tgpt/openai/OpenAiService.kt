@@ -3,8 +3,8 @@ package io.heapy.tgpt.openai
 import com.openai.client.OpenAIClient
 import com.openai.core.MultipartField
 import com.openai.models.audio.transcriptions.TranscriptionCreateParams
-import com.openai.models.chat.completions.ChatCompletion
-import com.openai.models.chat.completions.ChatCompletionCreateParams
+import com.openai.models.responses.Response
+import com.openai.models.responses.ResponseCreateParams
 import java.io.InputStream
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.tgpt.infra.Loom
@@ -17,13 +17,14 @@ class OpenAiService(
     private val configuration: OpenAiConfiguration,
 ) {
     val systemPrompt: String get() = configuration.systemPrompt
+    val webSearchEnabled: Boolean get() = configuration.webSearchEnabled
 
-    suspend fun chatCompletion(
-        params: ChatCompletionCreateParams,
-    ): ChatCompletion {
+    suspend fun createResponse(
+        params: ResponseCreateParams,
+    ): Response {
         return withContext(Dispatchers.Loom) {
-            log.info("Calling chat completion with model ${configuration.model}")
-            client.chat().completions().create(params)
+            log.info("Calling responses API with model ${configuration.model}")
+            client.responses().create(params)
         }
     }
 

@@ -15,12 +15,12 @@ object CostCalculator {
 
     fun estimateCost(
         model: String,
-        promptTokens: Int,
-        completionTokens: Int,
+        inputTokens: Int,
+        outputTokens: Int,
     ): BigDecimal {
         val (inputPrice, outputPrice) = MODEL_PRICING[model] ?: DEFAULT_PRICING
-        val inputCost = inputPrice.multiply(BigDecimal(promptTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
-        val outputCost = outputPrice.multiply(BigDecimal(completionTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
+        val inputCost = inputPrice.multiply(BigDecimal(inputTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
+        val outputCost = outputPrice.multiply(BigDecimal(outputTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
         return inputCost.add(outputCost)
     }
 }
