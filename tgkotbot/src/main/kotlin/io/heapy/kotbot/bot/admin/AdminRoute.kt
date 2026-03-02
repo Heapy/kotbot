@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.admin
 import io.heapy.kotbot.bot.dao.UserContext
 import io.heapy.kotbot.bot.dao.UserContextDao
 import io.heapy.kotbot.database.enums.TelegramUserRole
+import io.heapy.kotbot.database.enums.TelegramUserStatus
 import io.heapy.kotbot.infra.jdbc.TransactionProvider
 import io.heapy.kotbot.infra.web.KtorRoute
 import io.ktor.http.ContentType
@@ -163,6 +164,43 @@ class AdminRoute(
             }
             call.respondText(html, ContentType.Text.Html)
         }
+
+        post("/admin/users/{id}/status") {
+            val id = call.pathParameters["id"]?.toLongOrNull()
+            if (id == null) {
+                call.respondText("Invalid user ID", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val formParameters = call.receiveParameters()
+            val newStatus = formParameters["status"]?.let { statusName ->
+                TelegramUserStatus.entries.find { it.literal == statusName }
+            }
+            if (newStatus == null) {
+                call.respondText("Invalid status", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val user = transactionProvider.transaction {
+                val userContext = userContextDao.getByInternalId(id)
+                if (userContext != null) {
+                    userContextDao.updateStatus(userContext, newStatus)
+                    userContextDao.getByInternalId(id)
+                } else {
+                    null
+                }
+            }
+
+            if (user == null) {
+                call.respondText("User not found", status = HttpStatusCode.NotFound)
+                return@post
+            }
+
+            val html = createHTML(prettyPrint = false).tr {
+                userRowContent(user)
+            }
+            call.respondText(html, ContentType.Text.Html)
+        }
     }
 }
 
@@ -195,7 +233,24 @@ private fun TR.userRowContent(user: UserContext) {
             }
         }
     }
-    td { +user.status.literal }
+    td {
+        form {
+            attributes["hx-post"] = "/admin/users/${user.internalId}/status"
+            attributes["hx-target"] = "#user-row-${user.internalId}"
+            attributes["hx-swap"] = "outerHTML"
+            select {
+                name = "status"
+                attributes["onchange"] = "this.form.requestSubmit()"
+                for (s in TelegramUserStatus.entries) {
+                    option {
+                        value = s.literal
+                        selected = s == user.status
+                        +s.literal
+                    }
+                }
+            }
+        }
+    }
     td { +"${user.messageCount}" }
     td { +"${user.created}" }
     td { +"${user.lastMessage}" }
