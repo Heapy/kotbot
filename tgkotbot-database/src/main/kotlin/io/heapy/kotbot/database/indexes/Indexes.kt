@@ -5,9 +5,12 @@
 package io.heapy.kotbot.database.indexes
 
 
+import io.heapy.kotbot.database.tables.ChallengeAttempt
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.JobExecution
+import io.heapy.kotbot.database.tables.JoinSession
 import io.heapy.kotbot.database.tables.TelegramUser
+import io.heapy.kotbot.database.tables.VerifiedUser
 
 import org.jooq.Index
 import org.jooq.impl.DSL
@@ -19,6 +22,11 @@ import org.jooq.impl.Internal
 // INDEX definitions
 // -------------------------------------------------------------------------
 
+val CHALLENGE_ATTEMPT_SESSION_IDX: Index = Internal.createIndex(DSL.name("challenge_attempt_session_idx"), ChallengeAttempt.CHALLENGE_ATTEMPT, arrayOf(ChallengeAttempt.CHALLENGE_ATTEMPT.SESSION_ID), false)
+val CHALLENGE_ATTEMPT_TELEGRAM_IDX: Index = Internal.createIndex(DSL.name("challenge_attempt_telegram_idx"), ChallengeAttempt.CHALLENGE_ATTEMPT, arrayOf(ChallengeAttempt.CHALLENGE_ATTEMPT.TELEGRAM_ID), false)
 val GPT_SESSION_PREVIEW_UINDEX: Index = Internal.createIndex(DSL.name("gpt_session_preview_uindex"), GptSession.GPT_SESSION, arrayOf(GptSession.GPT_SESSION.PREVIEW_CHAT_ID, GptSession.GPT_SESSION.PREVIEW_MESSAGE_ID), true)
 val JOB_EXECUTION_NAME_IDX: Index = Internal.createIndex(DSL.name("job_execution_name_idx"), JobExecution.JOB_EXECUTION, arrayOf(JobExecution.JOB_EXECUTION.JOB_NAME, JobExecution.JOB_EXECUTION.STARTED), false)
+val JOIN_SESSION_ACTIVE_IDX: Index = Internal.createIndex(DSL.name("join_session_active_idx"), JoinSession.JOIN_SESSION, arrayOf(JoinSession.JOIN_SESSION.STATUS, JoinSession.JOIN_SESSION.EXPIRES_AT), false)
+val JOIN_SESSION_ACTIVE_USER_CHAT_UINDEX: Index = Internal.createIndex(DSL.name("join_session_active_user_chat_uindex"), JoinSession.JOIN_SESSION, arrayOf(JoinSession.JOIN_SESSION.TELEGRAM_ID, JoinSession.JOIN_SESSION.CHAT_ID), true)
 val TELEGRAM_USER_TELEGRAM_ID_UINDEX: Index = Internal.createIndex(DSL.name("telegram_user_telegram_id_uindex"), TelegramUser.TELEGRAM_USER, arrayOf(TelegramUser.TELEGRAM_USER.TELEGRAM_ID), true)
+val VERIFIED_USER_TELEGRAM_ID_UINDEX: Index = Internal.createIndex(DSL.name("verified_user_telegram_id_uindex"), VerifiedUser.VERIFIED_USER, arrayOf(VerifiedUser.VERIFIED_USER.TELEGRAM_ID), true)

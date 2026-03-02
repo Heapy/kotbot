@@ -5,12 +5,15 @@ package io.heapy.kotbot.database
 
 
 import io.heapy.kotbot.database.tables.CallbackData
+import io.heapy.kotbot.database.tables.ChallengeAttempt
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
 import io.heapy.kotbot.database.tables.JobExecution
+import io.heapy.kotbot.database.tables.JoinSession
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
+import io.heapy.kotbot.database.tables.VerifiedUser
 
 import kotlin.collections.List
 
@@ -39,6 +42,11 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     val CALLBACK_DATA: CallbackData get() = CallbackData.CALLBACK_DATA
 
     /**
+     * The table <code>public.challenge_attempt</code>.
+     */
+    val CHALLENGE_ATTEMPT: ChallengeAttempt get() = ChallengeAttempt.CHALLENGE_ATTEMPT
+
+    /**
      * The table <code>public.garbage_messages</code>.
      */
     val GARBAGE_MESSAGES: GarbageMessages get() = GarbageMessages.GARBAGE_MESSAGES
@@ -59,6 +67,11 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     val JOB_EXECUTION: JobExecution get() = JobExecution.JOB_EXECUTION
 
     /**
+     * The table <code>public.join_session</code>.
+     */
+    val JOIN_SESSION: JoinSession get() = JoinSession.JOIN_SESSION
+
+    /**
      * The table <code>public.telegram_user</code>.
      */
     val TELEGRAM_USER: TelegramUser get() = TelegramUser.TELEGRAM_USER
@@ -68,15 +81,23 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
      */
     val UPDATE_RAW: UpdateRaw get() = UpdateRaw.UPDATE_RAW
 
+    /**
+     * The table <code>public.verified_user</code>.
+     */
+    val VERIFIED_USER: VerifiedUser get() = VerifiedUser.VERIFIED_USER
+
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
         CallbackData.CALLBACK_DATA,
+        ChallengeAttempt.CHALLENGE_ATTEMPT,
         GarbageMessages.GARBAGE_MESSAGES,
         GptSession.GPT_SESSION,
         GptSessionMessage.GPT_SESSION_MESSAGE,
         JobExecution.JOB_EXECUTION,
+        JoinSession.JOIN_SESSION,
         TelegramUser.TELEGRAM_USER,
-        UpdateRaw.UPDATE_RAW
+        UpdateRaw.UPDATE_RAW,
+        VerifiedUser.VERIFIED_USER
     )
 }

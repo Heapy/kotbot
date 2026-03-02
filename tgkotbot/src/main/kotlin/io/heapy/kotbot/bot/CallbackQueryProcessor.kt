@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.dao.GptSessionDao
+import io.heapy.kotbot.bot.join.JoinChallengeProcessor
 import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.model.CallbackQuery
@@ -16,20 +17,20 @@ class CallbackQueryProcessor(
     private val kotbot: Kotbot,
     private val gptSessionDao: GptSessionDao,
     private val userContextService: UserContextService,
+    private val joinChallengeProcessor: JoinChallengeProcessor,
 ) {
     context(_: TransactionContext)
     suspend fun processCallbackQuery(
         callbackQuery: CallbackQuery,
     ) {
-        val callbackData = callbackQuery.data
-        callbackData?.let {
-            val backData = callbackDataService.getById(callbackData)
-            backData?.let {
-                processCallbackData(
-                    callbackQuery = callbackQuery,
-                    callBackData = backData,
-                )
-            }
+        val callbackData = callbackQuery.data ?: return
+
+        val backData = callbackDataService.getById(callbackData)
+        backData?.let {
+            processCallbackData(
+                callbackQuery = callbackQuery,
+                callBackData = backData,
+            )
         }
     }
 
@@ -171,6 +172,14 @@ class CallbackQueryProcessor(
                         )
                     }
                 }
+            }
+
+            is JoinChallengeAnswerCallbackData -> {
+                joinChallengeProcessor.handleChallengeAnswer(
+                    callbackQuery = callbackQuery,
+                    challengeId = java.util.UUID.fromString(callBackData.challengeId),
+                    selectedIndex = callBackData.selectedIndex,
+                )
             }
 
             is DismissGptCallbackData -> {

@@ -5,6 +5,7 @@ import io.heapy.kotbot.bot.commands.CommandsModule
 import io.heapy.kotbot.bot.commands.GptReplyHandler
 import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.bot.filters.FiltersModule
+import io.heapy.kotbot.bot.join.JoinChallengeModule
 import io.heapy.kotbot.bot.rules.RulesModule
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
@@ -28,6 +29,7 @@ open class UpdateProcessorsModule(
     private val gptApiModule: GptApiModule,
     private val markdownModule: MarkdownModule,
     private val callbackDataServiceModule: CallbackDataServiceModule,
+    private val joinChallengeModule: JoinChallengeModule,
 ) {
     open val updateProcessor: UpdateProcessor by lazy {
         ParallelUpdateProcessor(
@@ -54,6 +56,7 @@ open class UpdateProcessorsModule(
             gptReplyHandler = gptReplyHandler,
             ruleExecutor = rulesModule.ruleExecutor,
             callbackQueryProcessor = callbackQueryProcessorModule.callbackQueryProcessor,
+            joinChallengeProcessor = joinChallengeModule.joinChallengeProcessor,
             transactionProvider = jdbcModule.transactionProvider,
             userContextDao = daoModule.userContextDao,
         )

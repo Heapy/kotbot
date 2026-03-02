@@ -2,6 +2,7 @@ package io.heapy.kotbot.bot
 
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.dao.DaoModule
+import io.heapy.kotbot.bot.join.JoinChallengeModule
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
 
@@ -11,6 +12,7 @@ open class CallbackQueryProcessorModule(
     private val kotbotModule: KotbotModule,
     private val userContextServiceModule: UserContextServiceModule,
     private val daoModule: DaoModule,
+    private val joinChallengeModule: JoinChallengeModule,
 ) {
     open val callbackQueryProcessor by lazy {
         CallbackQueryProcessor(
@@ -18,6 +20,7 @@ open class CallbackQueryProcessorModule(
             kotbot = kotbotModule.kotbot,
             userContextService = userContextServiceModule.userContextService,
             gptSessionDao = daoModule.gptSessionDao,
+            joinChallengeProcessor = joinChallengeModule.joinChallengeProcessor,
         )
     }
 }

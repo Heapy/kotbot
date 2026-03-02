@@ -44,3 +44,9 @@ data class DeleteMessageInReplyCallbackData(
 data class DismissCallbackData(
     val message: Message,
 ) : KotbotCallBackData
+
+@Serializable
+data class JoinChallengeAnswerCallbackData(
+    val challengeId: String,
+    val selectedIndex: Int,
+) : KotbotCallBackData

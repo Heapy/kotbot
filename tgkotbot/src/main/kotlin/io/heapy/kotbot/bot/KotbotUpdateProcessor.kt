@@ -5,6 +5,7 @@ import io.heapy.kotbot.bot.commands.CommandResolver
 import io.heapy.kotbot.bot.commands.GptReplyHandler
 import io.heapy.kotbot.bot.dao.UserContextDao
 import io.heapy.kotbot.bot.filters.Filter
+import io.heapy.kotbot.bot.join.JoinChallengeProcessor
 import io.heapy.kotbot.bot.model.User
 import io.heapy.kotbot.bot.rules.RuleExecutor
 import io.heapy.kotbot.infra.jdbc.TransactionProvider
@@ -17,6 +18,7 @@ class KotbotUpdateProcessor(
     private val gptReplyHandler: GptReplyHandler,
     private val ruleExecutor: RuleExecutor,
     private val callbackQueryProcessor: CallbackQueryProcessor,
+    private val joinChallengeProcessor: JoinChallengeProcessor,
     private val transactionProvider: TransactionProvider,
     private val userContextDao: UserContextDao,
 ) : TypedUpdateProcessor {
@@ -60,6 +62,10 @@ class KotbotUpdateProcessor(
                     update.value.let { callbackQuery ->
                         callbackQueryProcessor.processCallbackQuery(callbackQuery)
                     }
+                }
+
+                is TypedChatJoinRequest -> {
+                    joinChallengeProcessor.handleJoinRequest(update.value)
                 }
 
                 else -> log.info("Update type not handled: {}", update::class.simpleName)

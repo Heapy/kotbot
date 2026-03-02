@@ -6,12 +6,15 @@ package io.heapy.kotbot.database.tables.references
 
 
 import io.heapy.kotbot.database.tables.CallbackData
+import io.heapy.kotbot.database.tables.ChallengeAttempt
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
 import io.heapy.kotbot.database.tables.JobExecution
+import io.heapy.kotbot.database.tables.JoinSession
 import io.heapy.kotbot.database.tables.TelegramUser
 import io.heapy.kotbot.database.tables.UpdateRaw
+import io.heapy.kotbot.database.tables.VerifiedUser
 
 
 
@@ -19,6 +22,11 @@ import io.heapy.kotbot.database.tables.UpdateRaw
  * The table <code>public.callback_data</code>.
  */
 val CALLBACK_DATA: CallbackData = CallbackData.CALLBACK_DATA
+
+/**
+ * The table <code>public.challenge_attempt</code>.
+ */
+val CHALLENGE_ATTEMPT: ChallengeAttempt = ChallengeAttempt.CHALLENGE_ATTEMPT
 
 /**
  * The table <code>public.garbage_messages</code>.
@@ -41,6 +49,11 @@ val GPT_SESSION_MESSAGE: GptSessionMessage = GptSessionMessage.GPT_SESSION_MESSA
 val JOB_EXECUTION: JobExecution = JobExecution.JOB_EXECUTION
 
 /**
+ * The table <code>public.join_session</code>.
+ */
+val JOIN_SESSION: JoinSession = JoinSession.JOIN_SESSION
+
+/**
  * The table <code>public.telegram_user</code>.
  */
 val TELEGRAM_USER: TelegramUser = TelegramUser.TELEGRAM_USER
@@ -49,3 +62,8 @@ val TELEGRAM_USER: TelegramUser = TelegramUser.TELEGRAM_USER
  * The table <code>public.update_raw</code>.
  */
 val UPDATE_RAW: UpdateRaw = UpdateRaw.UPDATE_RAW
+
+/**
+ * The table <code>public.verified_user</code>.
+ */
+val VERIFIED_USER: VerifiedUser = VerifiedUser.VERIFIED_USER

@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.admin.StatsBackfillModule
+import io.heapy.kotbot.bot.join.JoinChallengeModule
 import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 import io.heapy.kotbot.infra.lifecycle.AutoClosableModule
@@ -25,6 +26,7 @@ open class ApplicationModule(
     private val applicationScopeModule: ApplicationScopeModule,
     private val updateProcessorsModule: UpdateProcessorsModule,
     private val statsBackfillModule: StatsBackfillModule,
+    private val joinChallengeModule: JoinChallengeModule,
 ) {
     open suspend fun start() {
         metricsReportersModule
@@ -47,6 +49,8 @@ open class ApplicationModule(
         updateProcessorsModule.updateProcessor.start()
         kotlinChatBotModule.kotlinChatsBot.start()
         statsBackfillModule.statsBackfillJob.start()
+        joinChallengeModule.existingMemberBootstrapJob.start()
+        joinChallengeModule.joinChallengeExpiryJob.start()
 
         log.info("Application started in ${uptimeModule.uptimeService.uptime}ms.")
 
