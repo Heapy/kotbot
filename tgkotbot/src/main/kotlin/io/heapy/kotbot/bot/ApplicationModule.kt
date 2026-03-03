@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.admin.StatsBackfillModule
+import io.heapy.kotbot.bot.admin.UserAutoTagModule
 import io.heapy.kotbot.bot.join.JoinChallengeModule
 import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
@@ -26,6 +27,7 @@ open class ApplicationModule(
     private val applicationScopeModule: ApplicationScopeModule,
     private val updateProcessorsModule: UpdateProcessorsModule,
     private val statsBackfillModule: StatsBackfillModule,
+    private val userAutoTagModule: UserAutoTagModule,
     private val joinChallengeModule: JoinChallengeModule,
 ) {
     open suspend fun start() {
@@ -49,6 +51,7 @@ open class ApplicationModule(
         updateProcessorsModule.updateProcessor.start()
         kotlinChatBotModule.kotlinChatsBot.start()
         statsBackfillModule.statsBackfillJob.start()
+        userAutoTagModule.userAutoTagJob.start()
         joinChallengeModule.existingMemberBootstrapJob.start()
         joinChallengeModule.joinChallengeExpiryJob.start()
 

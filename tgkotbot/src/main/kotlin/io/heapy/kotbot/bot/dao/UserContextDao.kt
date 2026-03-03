@@ -171,4 +171,18 @@ class UserContextDao {
             .where(TELEGRAM_USER.INTERNAL_ID.eq(internalId))
             .execute()
     }
+
+    context(_: TransactionContext)
+    suspend fun listEligibleForAutoTag(
+        minMessageCount: Int,
+        milestoneTags: List<String>,
+    ): List<UserContext> = useTx {
+        dslContext
+            .selectFrom(TELEGRAM_USER)
+            .where(TELEGRAM_USER.MESSAGE_COUNT.greaterOrEqual(minMessageCount))
+            .and(TELEGRAM_USER.BADGE.isNull.or(TELEGRAM_USER.BADGE.`in`(milestoneTags)))
+            .orderBy(TELEGRAM_USER.INTERNAL_ID)
+            .fetch()
+            .map { it.toUserContext() }
+    }
 }
