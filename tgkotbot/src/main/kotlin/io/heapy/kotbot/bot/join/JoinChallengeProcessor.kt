@@ -16,7 +16,9 @@ import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.ParseMode
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataService
+import io.heapy.kotbot.bot.dao.UserContextDao
 import io.heapy.kotbot.database.enums.JoinSessionStatus
+import io.heapy.kotbot.database.enums.TelegramUserStatus
 import io.heapy.kotbot.database.enums.VerificationSource
 import io.heapy.kotbot.infra.jdbc.TransactionContext
 import io.heapy.kotbot.infra.markdown.Markdown
@@ -36,12 +38,26 @@ class JoinChallengeProcessor(
     private val resolvedConfig: ResolvedJoinChallengeConfig,
     private val callbackDataService: CallbackDataService,
     private val markdown: Markdown,
+    private val userContextDao: UserContextDao,
 ) {
     context(_: TransactionContext)
     suspend fun handleJoinRequest(joinRequest: ChatJoinRequest) {
         val telegramId = joinRequest.from.id
         val chatId = joinRequest.chat.id
         val userChatId = joinRequest.user_chat_id
+
+        // Reject banned users immediately
+        val userContext = userContextDao.get(telegramId)
+        if (userContext?.status == TelegramUserStatus.BANNED) {
+            log.info("Banned user {} attempted to join chat {}, declining", telegramId, chatId)
+            kotbot.executeSafely(
+                DeclineChatJoinRequest(
+                    chat_id = LongChatId(chatId),
+                    user_id = telegramId,
+                )
+            )
+            return
+        }
 
         // Auto-approve if already verified
         val verified = verifiedUserDao.findByTelegramId(telegramId)

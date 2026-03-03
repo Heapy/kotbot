@@ -28,10 +28,17 @@ open class RulesModule(
 
     open val rules by lazy {
         listOf(
+            bannedUserRule,
             deleteMessageRule,
             deleteGarbageRule,
             combotCasRule,
             deletePropagandaRule,
+        )
+    }
+
+    open val bannedUserRule: Rule by lazy {
+        BannedUserRule(
+            userContextDao = daoModule.userContextDao,
         )
     }
 

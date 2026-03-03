@@ -90,6 +90,7 @@ open class JoinChallengeModule(
             resolvedConfig = resolvedJoinChallengeConfig,
             callbackDataService = callbackDataServiceModule.callbackDataService,
             markdown = markdownModule.markdown,
+            userContextDao = daoModule.userContextDao,
         )
     }
 
