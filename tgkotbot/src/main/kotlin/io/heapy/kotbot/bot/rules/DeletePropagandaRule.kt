@@ -10,7 +10,7 @@ import io.heapy.kotbot.bot.refLog
 import io.heapy.kotbot.infra.jdbc.TransactionContext
 
 class DeletePropagandaRule : Rule {
-    context(_: TransactionContext)
+    context(_: TransactionContext, _: RuleContext)
     override suspend fun validate(
         kotbot: Kotbot,
         update: TypedUpdate,

@@ -18,7 +18,7 @@ class DeleteGarbageRule(
     private val userContextService: UserContextService,
     private val garbageMessageDao: GarbageMessageDao,
 ) : Rule {
-    context(_: TransactionContext)
+    context(_: TransactionContext, _: RuleContext)
     override suspend fun validate(
         kotbot: Kotbot,
         update: TypedUpdate,

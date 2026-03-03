@@ -18,6 +18,7 @@ data class UserContext(
     val messageCount: Int,
     val version: Int,
     val displayName: String? = null,
+    val badge: String? = null,
 )
 
 private fun TelegramUserRecord.toUserContext(): UserContext = UserContext(
@@ -30,6 +31,7 @@ private fun TelegramUserRecord.toUserContext(): UserContext = UserContext(
     messageCount = messageCount ?: error("messageCount is null"),
     version = version ?: error("version is null"),
     displayName = displayName,
+    badge = badge,
 )
 
 class UserContextDao {
@@ -121,6 +123,22 @@ class UserContextDao {
         dslContext
             .update(TELEGRAM_USER)
             .set(TELEGRAM_USER.ROLE, role)
+            .set(TELEGRAM_USER.VERSION, userContext.version + 1)
+            .where(
+                TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),
+                TELEGRAM_USER.VERSION.eq(userContext.version),
+            )
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun updateBadge(
+        userContext: UserContext,
+        badge: String?,
+    ) = useTx {
+        dslContext
+            .update(TELEGRAM_USER)
+            .set(TELEGRAM_USER.BADGE, badge)
             .set(TELEGRAM_USER.VERSION, userContext.version + 1)
             .where(
                 TELEGRAM_USER.INTERNAL_ID.eq(userContext.internalId),

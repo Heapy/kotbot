@@ -24,6 +24,8 @@ import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.head
 import kotlinx.html.id
+import kotlinx.html.input
+import kotlinx.html.InputType
 import kotlinx.html.meta
 import kotlinx.html.option
 import kotlinx.html.script
@@ -93,6 +95,7 @@ class AdminRoute(
                             th { +"Display Name" }
                             th { +"Role" }
                             th { +"Status" }
+                            th { +"Tag" }
                             th { +"Messages" }
                             th { +"Created" }
                             th { +"Last Message" }
@@ -201,6 +204,37 @@ class AdminRoute(
             }
             call.respondText(html, ContentType.Text.Html)
         }
+
+        post("/admin/users/{id}/tag") {
+            val id = call.pathParameters["id"]?.toLongOrNull()
+            if (id == null) {
+                call.respondText("Invalid user ID", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val formParameters = call.receiveParameters()
+            val tag = formParameters["tag"]?.takeIf { it.isNotBlank() }
+
+            val user = transactionProvider.transaction {
+                val userContext = userContextDao.getByInternalId(id)
+                if (userContext != null) {
+                    userContextDao.updateBadge(userContext, tag)
+                    userContextDao.getByInternalId(id)
+                } else {
+                    null
+                }
+            }
+
+            if (user == null) {
+                call.respondText("User not found", status = HttpStatusCode.NotFound)
+                return@post
+            }
+
+            val html = createHTML(prettyPrint = false).tr {
+                userRowContent(user)
+            }
+            call.respondText(html, ContentType.Text.Html)
+        }
     }
 }
 
@@ -251,6 +285,20 @@ private fun TR.userRowContent(user: UserContext) {
             }
         }
     }
+    td {
+        form {
+            attributes["hx-post"] = "/admin/users/${user.internalId}/tag"
+            attributes["hx-target"] = "#user-row-${user.internalId}"
+            attributes["hx-swap"] = "outerHTML"
+            attributes["hx-trigger"] = "change"
+            input(type = InputType.text) {
+                name = "tag"
+                value = user.badge ?: ""
+                maxLength = "16"
+                attributes["style"] = "width: 120px"
+            }
+        }
+    }
     td { +"${user.messageCount}" }
     td { +"${user.created}" }
     td { +"${user.lastMessage}" }
@@ -265,6 +313,7 @@ private const val CSS = """
     th { background: #f8f9fa; font-weight: 600; color: #555; }
     tr:hover { background: #f8f9fa; }
     select { padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; background: white; cursor: pointer; }
+    input[type="text"] { padding: 0.25rem 0.5rem; border: 1px solid #ddd; border-radius: 4px; background: white; }
     .pagination { margin-top: 1rem; display: flex; align-items: center; gap: 1rem; justify-content: center; }
     .pagination button { padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; background: white; cursor: pointer; }
     .pagination button:hover { background: #e9ecef; }

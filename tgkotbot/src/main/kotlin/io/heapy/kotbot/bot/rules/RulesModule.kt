@@ -23,6 +23,7 @@ open class RulesModule(
             rules = rules,
             kotbot = kotbotModule.kotbot,
             meterRegistry = metricsModule.meterRegistry,
+            userContextDao = daoModule.userContextDao,
         )
     }
 
@@ -33,14 +34,13 @@ open class RulesModule(
             deleteGarbageRule,
             combotCasRule,
             deletePropagandaRule,
+            tagEnforcementRule,
         )
     }
 
-    open val bannedUserRule: Rule by lazy {
-        BannedUserRule(
-            userContextDao = daoModule.userContextDao,
-        )
-    }
+    open val bannedUserRule: Rule by lazy(::BannedUserRule)
+
+    open val tagEnforcementRule: Rule by lazy(::TagEnforcementRule)
 
     open val deleteMessageRule: Rule by lazy(::DeleteMessageRule)
 

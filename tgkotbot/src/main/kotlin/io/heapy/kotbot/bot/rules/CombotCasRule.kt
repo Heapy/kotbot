@@ -19,7 +19,7 @@ class CombotCasRule(
     private val client: HttpClient,
     private val casConfiguration: CasConfiguration,
 ) : Rule {
-    context(_: TransactionContext)
+    context(_: TransactionContext, _: RuleContext)
     override suspend fun validate(
         kotbot: Kotbot,
         update: TypedUpdate,

@@ -22,7 +22,7 @@ import io.heapy.kotbot.infra.jdbc.TransactionContext
  * So a few rules above should never be triggered.
  */
 class DeleteMessageRule : Rule {
-    context(_: TransactionContext)
+    context(_: TransactionContext, _: RuleContext)
     override suspend fun validate(
         kotbot: Kotbot,
         update: TypedUpdate,
