@@ -58,4 +58,30 @@ class UpdateDao {
             messageCount = result?.get("msg_count", Int::class.java) ?: 0,
         )
     }
+
+    /**
+     * Fetches up to [limit] message texts for the given user from UPDATE_RAW JSONB.
+     * Messages are ordered by the row creation timestamp.
+     */
+    context(_: TransactionContext)
+    suspend fun getUserMessageTexts(telegramId: Long): List<String> = useTx {
+        dslContext
+            .fetch(
+                """
+                SELECT elem -> 'message' ->> 'text' AS text
+                FROM (
+                    SELECT ur.created, ur.update -> 'result' AS result_arr
+                    FROM update_raw ur
+                    WHERE jsonb_typeof(ur.update -> 'result') = 'array'
+                ) sub,
+                jsonb_array_elements(sub.result_arr) AS elem
+                WHERE elem -> 'message' -> 'from' ->> 'id' = {0}
+                  AND elem -> 'message' ->> 'text' IS NOT NULL
+                  AND trim(elem -> 'message' ->> 'text') <> ''
+                ORDER BY sub.created
+                """.trimIndent(),
+                DSL.`val`(telegramId.toString()),
+            )
+            .mapNotNull { it.get("text", String::class.java) }
+    }
 }

@@ -15,6 +15,8 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import kotlinx.html.FlowContent
+import kotlinx.html.InputType
 import kotlinx.html.TBODY
 import kotlinx.html.TR
 import kotlinx.html.body
@@ -22,10 +24,10 @@ import kotlinx.html.button
 import kotlinx.html.div
 import kotlinx.html.form
 import kotlinx.html.h1
+import kotlinx.html.h2
 import kotlinx.html.head
 import kotlinx.html.id
 import kotlinx.html.input
-import kotlinx.html.InputType
 import kotlinx.html.meta
 import kotlinx.html.option
 import kotlinx.html.script
@@ -36,6 +38,7 @@ import kotlinx.html.style
 import kotlinx.html.table
 import kotlinx.html.tbody
 import kotlinx.html.td
+import kotlinx.html.textArea
 import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.title
@@ -45,6 +48,7 @@ import kotlinx.html.unsafe
 class AdminRoute(
     private val userContextDao: UserContextDao,
     private val transactionProvider: TransactionProvider,
+    private val userNoteService: UserNoteService,
 ) : KtorRoute {
     override fun Routing.install() {
         get("/admin") {
@@ -69,6 +73,7 @@ class AdminRoute(
                         attributes["hx-swap"] = "innerHTML"
                         +"Loading users..."
                     }
+                    div { id = "modal-container" }
                 }
             }
         }
@@ -96,6 +101,7 @@ class AdminRoute(
                             th { +"Role" }
                             th { +"Status" }
                             th { +"Tag" }
+                            th { +"Note" }
                             th { +"Messages" }
                             th { +"Created" }
                             th { +"Last Message" }
@@ -235,6 +241,81 @@ class AdminRoute(
             }
             call.respondText(html, ContentType.Text.Html)
         }
+
+        get("/admin/users/{id}/note") {
+            val id = call.pathParameters["id"]?.toLongOrNull()
+            if (id == null) {
+                call.respondText("Invalid user ID", status = HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            val user = transactionProvider.transaction { userContextDao.getByInternalId(id) }
+            if (user == null) {
+                call.respondText("User not found", status = HttpStatusCode.NotFound)
+                return@get
+            }
+
+            val html = createHTML(prettyPrint = false).div {
+                noteModal(user)
+            }
+            call.respondText(html, ContentType.Text.Html)
+        }
+
+        post("/admin/users/{id}/note") {
+            val id = call.pathParameters["id"]?.toLongOrNull()
+            if (id == null) {
+                call.respondText("Invalid user ID", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val formParameters = call.receiveParameters()
+            val note = formParameters["note"]?.takeIf { it.isNotBlank() }
+
+            val user = transactionProvider.transaction {
+                val userContext = userContextDao.getByInternalId(id)
+                if (userContext != null) {
+                    userContextDao.updateNote(userContext, note)
+                    userContextDao.getByInternalId(id)
+                } else {
+                    null
+                }
+            }
+
+            if (user == null) {
+                call.respondText("User not found", status = HttpStatusCode.NotFound)
+                return@post
+            }
+
+            val html = createHTML(prettyPrint = false).tr {
+                userRowContent(user)
+            }
+            call.respondText(html, ContentType.Text.Html)
+        }
+
+        post("/admin/users/{id}/note/generate") {
+            val userId = call.pathParameters["id"]?.toLongOrNull()
+            if (userId == null) {
+                call.respondText("Invalid user ID", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val user = transactionProvider.transaction { userContextDao.getByInternalId(userId) }
+            if (user == null) {
+                call.respondText("User not found", status = HttpStatusCode.NotFound)
+                return@post
+            }
+
+            with(user) { userNoteService.startGeneration() }
+
+            val html = createHTML(prettyPrint = false).textArea {
+                id = "note-textarea-$userId"
+                name = "note"
+                attributes["style"] = TEXTAREA_STYLE
+                attributes["readonly"] = ""
+                +"Generating in background… close and reopen this dialog when done."
+            }
+            call.respondText(html, ContentType.Text.Html)
+        }
     }
 }
 
@@ -299,10 +380,64 @@ private fun TR.userRowContent(user: UserContext) {
             }
         }
     }
+    td {
+        button(classes = "note-btn") {
+            attributes["hx-get"] = "/admin/users/${user.internalId}/note"
+            attributes["hx-target"] = "#modal-container"
+            attributes["hx-swap"] = "innerHTML"
+            if (user.note != null) +"Edit note" else +"Add note"
+        }
+    }
     td { +"${user.messageCount}" }
     td { +"${user.created}" }
     td { +"${user.lastMessage}" }
 }
+
+private fun FlowContent.noteModal(user: UserContext) {
+    div {
+        id = "note-modal-overlay"
+        attributes["style"] = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center"
+        attributes["onclick"] = "if(event.target===this)document.getElementById('modal-container').innerHTML=''"
+        div {
+            attributes["style"] = "background:white;padding:2rem;border-radius:8px;width:640px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.3)"
+            attributes["onclick"] = "event.stopPropagation()"
+            h2 {
+                attributes["style"] = "margin-bottom:1rem;color:#333"
+                +"Note: ${user.displayName ?: "User #${user.internalId}"}"
+            }
+            textArea {
+                id = "note-textarea-${user.internalId}"
+                name = "note"
+                attributes["style"] = TEXTAREA_STYLE
+                +(user.note ?: "")
+            }
+            div {
+                attributes["style"] = "margin-top:1rem;display:flex;gap:0.5rem;justify-content:flex-end"
+                button(classes = "modal-btn") {
+                    attributes["hx-post"] = "/admin/users/${user.internalId}/note/generate"
+                    attributes["hx-target"] = "#note-textarea-${user.internalId}"
+                    attributes["hx-swap"] = "outerHTML"
+                    attributes["hx-disabled-elt"] = "this"
+                    +"Auto-generate"
+                }
+                button(classes = "modal-btn modal-btn-primary") {
+                    attributes["hx-post"] = "/admin/users/${user.internalId}/note"
+                    attributes["hx-include"] = "#note-textarea-${user.internalId}"
+                    attributes["hx-target"] = "#user-row-${user.internalId}"
+                    attributes["hx-swap"] = "outerHTML"
+                    attributes["hx-on::after-request"] = "document.getElementById('modal-container').innerHTML=''"
+                    +"Save"
+                }
+                button(classes = "modal-btn") {
+                    attributes["onclick"] = "document.getElementById('modal-container').innerHTML=''"
+                    +"Cancel"
+                }
+            }
+        }
+    }
+}
+
+private const val TEXTAREA_STYLE = "width:100%;height:200px;padding:0.5rem;border:1px solid #ddd;border-radius:4px;font-family:inherit;font-size:0.9rem;resize:vertical;display:block"
 
 private const val CSS = """
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -318,4 +453,11 @@ private const val CSS = """
     .pagination button { padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; background: white; cursor: pointer; }
     .pagination button:hover { background: #e9ecef; }
     .pagination span { color: #666; }
+    .note-btn { padding: 0.25rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; background: white; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+    .note-btn:hover { background: #e9ecef; }
+    .modal-btn { padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 4px; background: white; cursor: pointer; font-size: 0.9rem; }
+    .modal-btn:hover { background: #e9ecef; }
+    .modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .modal-btn-primary { background: #0d6efd; color: white; border-color: #0d6efd; }
+    .modal-btn-primary:hover { background: #0b5ed7; }
 """

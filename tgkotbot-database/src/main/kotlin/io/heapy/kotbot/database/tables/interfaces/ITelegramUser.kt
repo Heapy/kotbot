@@ -26,4 +26,5 @@ interface ITelegramUser : Serializable {
     val badge: String?
     val version: Int?
     val displayName: String?
+    val note: String?
 }

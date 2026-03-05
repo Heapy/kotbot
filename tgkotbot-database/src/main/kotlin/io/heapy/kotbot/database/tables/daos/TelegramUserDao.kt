@@ -144,4 +144,15 @@ open class TelegramUserDao(configuration: Configuration?) : DAOImpl<TelegramUser
      * Fetch records that have <code>display_name IN (values)</code>
      */
     fun fetchByDisplayName(vararg values: String): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetch(TelegramUser.TELEGRAM_USER.DISPLAY_NAME, *values)
+
+    /**
+     * Fetch records that have <code>note BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfNote(lowerInclusive: String?, upperInclusive: String?): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetchRange(TelegramUser.TELEGRAM_USER.NOTE, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>note IN (values)</code>
+     */
+    fun fetchByNote(vararg values: String): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetch(TelegramUser.TELEGRAM_USER.NOTE, *values)
 }

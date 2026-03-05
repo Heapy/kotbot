@@ -61,6 +61,10 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         set(value): Unit = set(9, value)
         get(): String? = get(9) as String?
 
+    open override var note: String?
+        set(value): Unit = set(10, value)
+        get(): String? = get(10) as String?
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -82,13 +86,14 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         this.badge = from.badge
         this.version = from.version
         this.displayName = from.displayName
+        this.note = from.note
         resetTouchedOnNotNull()
     }
 
     /**
      * Create a detached, initialised TelegramUserRecord
      */
-    constructor(internalId: Long? = null, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null, displayName: String? = null): this() {
+    constructor(internalId: Long? = null, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null, displayName: String? = null, note: String? = null): this() {
         this.internalId = internalId
         this.telegramId = telegramId
         this.created = created
@@ -99,6 +104,7 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
         this.badge = badge
         this.version = version
         this.displayName = displayName
+        this.note = note
         resetTouchedOnNotNull()
     }
 
@@ -117,6 +123,7 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
             this.badge = value.badge
             this.version = value.version
             this.displayName = value.displayName
+            this.note = value.note
             resetTouchedOnNotNull()
         }
     }

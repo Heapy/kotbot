@@ -25,7 +25,8 @@ data class TelegramUser(
     override val role: TelegramUserRole? = null,
     override val badge: String? = null,
     override val version: Int? = null,
-    override val displayName: String? = null
+    override val displayName: String? = null,
+    override val note: String? = null
 ): ITelegramUser {
 
     override fun equals(other: Any?): Boolean {
@@ -92,6 +93,12 @@ data class TelegramUser(
         }
         else if (this.displayName != o.displayName)
             return false
+        if (this.note == null) {
+            if (o.note != null)
+                return false
+        }
+        else if (this.note != o.note)
+            return false
         return true
     }
 
@@ -108,6 +115,7 @@ data class TelegramUser(
         result = prime * result + (if (this.badge == null) 0 else this.badge.hashCode())
         result = prime * result + (if (this.version == null) 0 else this.version.hashCode())
         result = prime * result + (if (this.displayName == null) 0 else this.displayName.hashCode())
+        result = prime * result + (if (this.note == null) 0 else this.note.hashCode())
         return result
     }
 
@@ -124,6 +132,7 @@ data class TelegramUser(
         sb.append(", ").append(badge)
         sb.append(", ").append(version)
         sb.append(", ").append(displayName)
+        sb.append(", ").append(note)
 
         sb.append(")")
         return sb.toString()
