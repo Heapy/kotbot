@@ -19,7 +19,7 @@ public data class InputChecklist(
      */
     public val parse_mode: String? = null,
     /**
-     * *Optional*. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, and *custom_emoji* entities are allowed.
+     * *Optional*. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, *custom_emoji*, and *date_time* entities are allowed.
      */
     public val title_entities: List<MessageEntity>? = null,
     /**

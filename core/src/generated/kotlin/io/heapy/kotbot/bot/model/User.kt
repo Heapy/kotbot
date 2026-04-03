@@ -70,4 +70,8 @@ public data class User(
      * *Optional*. *True*, if the bot allows users to create and delete topics in private chats. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val allows_users_to_create_topics: Boolean? = null,
+    /**
+     * *Optional*. *True*, if other bots can be created to be controlled by the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val can_manage_bots: Boolean? = null,
 )

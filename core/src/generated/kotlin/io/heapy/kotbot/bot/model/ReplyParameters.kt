@@ -24,7 +24,7 @@ public data class ReplyParameters(
      */
     public val allow_sending_without_reply: Boolean? = null,
     /**
-     * *Optional*. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, and *custom_emoji* entities. The message will fail to send if the quote isn't found in the original message.
+     * *Optional*. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, *custom_emoji*, and *date_time* entities. The message will fail to send if the quote isn't found in the original message.
      */
     public val quote: String? = null,
     /**
@@ -43,4 +43,8 @@ public data class ReplyParameters(
      * *Optional*. Identifier of the specific checklist task to be replied to
      */
     public val checklist_task_id: Int? = null,
+    /**
+     * *Optional*. Persistent identifier of the specific poll option to be replied to
+     */
+    public val poll_option_id: String? = null,
 )

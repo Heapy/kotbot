@@ -89,6 +89,10 @@ public data class Message(
      */
     public val reply_to_checklist_task_id: Int? = null,
     /**
+     * *Optional*. Persistent identifier of the specific poll option that is being replied to
+     */
+    public val reply_to_poll_option_id: String? = null,
+    /**
      * *Optional*. Bot through which the message was sent
      */
     public val via_bot: User? = null,
@@ -389,9 +393,21 @@ public data class Message(
      */
     public val giveaway_completed: GiveawayCompleted? = null,
     /**
+     * *Optional*. Service message: user created a bot that will be managed by the current bot
+     */
+    public val managed_bot_created: ManagedBotCreated? = null,
+    /**
      * *Optional*. Service message: the price for paid messages has changed in the chat
      */
     public val paid_message_price_changed: PaidMessagePriceChanged? = null,
+    /**
+     * *Optional*. Service message: answer option was added to a poll
+     */
+    public val poll_option_added: PollOptionAdded? = null,
+    /**
+     * *Optional*. Service message: answer option was deleted from a poll
+     */
+    public val poll_option_deleted: PollOptionDeleted? = null,
     /**
      * *Optional*. Service message: a suggested post was approved
      */

@@ -26,4 +26,8 @@ public data class PollAnswer(
      * 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
      */
     public val option_ids: List<Int>,
+    /**
+     * Persistent identifiers of the chosen answer options. May be empty if the vote was retracted.
+     */
+    public val option_persistent_ids: List<String>,
 )

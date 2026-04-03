@@ -49,9 +49,13 @@ public data class Poll(
      */
     public val allows_multiple_answers: Boolean,
     /**
-     * *Optional*. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
+     * *True*, if the poll allows to change the chosen answer options
      */
-    public val correct_option_id: Int? = null,
+    public val allows_revoting: Boolean,
+    /**
+     * *Optional*. Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
+     */
+    public val correct_option_ids: List<Int>? = null,
     /**
      * *Optional*. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
      */
@@ -68,4 +72,12 @@ public data class Poll(
      * *Optional*. Point in time (Unix timestamp) when the poll will be automatically closed
      */
     public val close_date: Long? = null,
+    /**
+     * *Optional*. Description of the poll; for polls inside the [Message](https://core.telegram.org/bots/api/#message) object only
+     */
+    public val description: String? = null,
+    /**
+     * *Optional*. Special entities like usernames, URLs, bot commands, etc. that appear in the description
+     */
+    public val description_entities: List<MessageEntity>? = null,
 )

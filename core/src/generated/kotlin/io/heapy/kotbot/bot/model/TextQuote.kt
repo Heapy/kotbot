@@ -16,7 +16,7 @@ public data class TextQuote(
      */
     public val text: String,
     /**
-     * *Optional*. Special entities that appear in the quote. Currently, only *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, and *custom_emoji* entities are kept in quotes.
+     * *Optional*. Special entities that appear in the quote. Currently, only *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, *custom_emoji*, and *date_time* entities are kept in quotes.
      */
     public val entities: List<MessageEntity>? = null,
     /**

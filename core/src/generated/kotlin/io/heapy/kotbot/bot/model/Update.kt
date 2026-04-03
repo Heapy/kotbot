@@ -105,4 +105,8 @@ public data class Update(
      * *Optional*. A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
      */
     public val removed_chat_boost: ChatBoostRemoved? = null,
+    /**
+     * *Optional*. A new bot was created to be managed by the bot or token of a bot was changed
+     */
+    public val managed_bot: ManagedBotUpdated? = null,
 )
