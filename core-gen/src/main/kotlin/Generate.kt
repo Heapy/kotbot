@@ -48,25 +48,23 @@ fun main() {
 }
 
 fun TelegramApi.generate() {
-    val objectSupertypeMapping = objects
+    val objectSupertypeMappings = objects
         .filterIsInstance<AnyOfObject>()
         .flatMap { anyOf ->
             anyOf.any_of.map { (it as ReferenceApiType).reference to anyOf.name }
         }
-        .toMap()
 
-    val methodSupertypeMapping = methods.flatMap { it.arguments ?: emptyList() }
+    val methodSupertypeMappings = methods.flatMap { it.arguments ?: emptyList() }
         .filterIsInstance<AnyOfArgument>()
         .flatMap { anyOf ->
             anyOf.any_of
                 .filterIsInstance<ReferenceApiType>()
                 .map { it.reference to anyOf.name.snakeToTitle() }
         }
-        .toMap()
 
     val methodFiles = methods.map { it.toFileSpec() }
 
-    val objectsFiles = objects.map { it.toFileSpec(objectSupertypeMapping + methodSupertypeMapping) }
+    val objectsFiles = objects.map { it.toFileSpec((objectSupertypeMappings + methodSupertypeMappings).toSupertypeMapping()) }
 
     val anyOfArgumentsFiles = objects.filterIsInstance<PropertiesObject>()
         .flatMap(PropertiesObject::toAnyOfArguments)
@@ -111,6 +109,10 @@ private val knownApiTypes = mapOf(
         )
     ) to ClassName(modelPackageName, "MessageOrTrue"),
 )
+
+private fun List<Pair<String, String>>.toSupertypeMapping(): Map<String, List<String>> =
+    groupBy({ it.first }, { it.second })
+        .mapValues { (_, supertypes) -> supertypes.distinct() }
 
 private fun PropertiesObject.toAnyOfArguments() =
     properties.filterIsInstance<AnyOfArgument>()
@@ -261,7 +263,7 @@ private fun AnyOfApiType.toFileSpec() =
     } ?: error("Unknown type $this")
 
 private fun Object.toFileSpec(
-    supertypes: Map<String, String>,
+    supertypes: Map<String, List<String>>,
 ): FileSpec {
     return FileSpec.builder(modelPackageName, name)
         .kotbotIndent()
@@ -304,7 +306,7 @@ private fun Object.toFileSpec(
                 .addAnnotation(serializableAnnotation)
                 .addModifiers(KModifier.DATA)
                 .apply {
-                    supertypes[obj.name]?.let { supertype ->
+                    supertypes[obj.name].orEmpty().forEach { supertype ->
                         addSuperinterface(ClassName(modelPackageName, supertype))
                     }
                 }

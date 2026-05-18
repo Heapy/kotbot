@@ -9,6 +9,9 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlinpoet)
     implementation(libs.jsoup)
+
+    testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.platform)
 }
 
 repositories {
@@ -20,4 +23,8 @@ kotlin {
         languageVersion.set(JavaLanguageVersion.of(25))
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

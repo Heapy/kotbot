@@ -2,11 +2,20 @@
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.jsoup.nodes.TextNode
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 val Element.level get() = tagName().substring(1).toInt()
+
+private fun Element.textWithImageAlt(): String {
+    val copy = clone()
+    copy.select("img").forEach { img ->
+        img.replaceWith(TextNode(img.attr("alt")))
+    }
+    return copy.text()
+}
 
 fun main() {
     val rootPath = Path("core-gen", "src", "main", "resources")
@@ -50,39 +59,39 @@ fun processVersion(input: String): String {
         children.forEach { el ->
             appendLine()
             when (el.tagName()) {
-                "h1" -> appendLine("# ${el.text()}")
-                "h2" -> appendLine("## ${el.text()}")
-                "h3" -> appendLine("### ${el.text()}")
-                "h4" -> appendLine("#### ${el.text()}")
-                "h5" -> appendLine("##### ${el.text()}")
-                "h6" -> appendLine("###### ${el.text()}")
-                "p" -> appendLine(el.text())
+                "h1" -> appendLine("# ${el.textWithImageAlt()}")
+                "h2" -> appendLine("## ${el.textWithImageAlt()}")
+                "h3" -> appendLine("### ${el.textWithImageAlt()}")
+                "h4" -> appendLine("#### ${el.textWithImageAlt()}")
+                "h5" -> appendLine("##### ${el.textWithImageAlt()}")
+                "h6" -> appendLine("###### ${el.textWithImageAlt()}")
+                "p" -> appendLine(el.textWithImageAlt())
                 "ul" -> {
                     el.children().forEach { li ->
-                        appendLine("* ${li.text()}")
+                        appendLine("* ${li.textWithImageAlt()}")
                     }
                 }
 
                 "ol" -> {
                     el.children().forEach { li ->
-                        appendLine("1. ${li.text()}")
+                        appendLine("1. ${li.textWithImageAlt()}")
                     }
                 }
 
                 "pre" -> {
-                    appendLine(el.text())
+                    appendLine(el.textWithImageAlt())
                 }
 
                 "table" -> {
-                    appendLine("| ${el.select("th").joinToString(" | ") { it.text() }} |")
+                    appendLine("| ${el.select("th").joinToString(" | ") { it.textWithImageAlt() }} |")
                     appendLine("| ${el.select("th").joinToString(" | ") { "---" }} |")
                     el.select("tr").forEach { tr ->
-                        appendLine("| ${tr.select("td").joinToString(" | ") { it.text() }} |")
+                        appendLine("| ${tr.select("td").joinToString(" | ") { it.textWithImageAlt() }} |")
                     }
                 }
 
                 "blockquote" -> {
-                    appendLine("> ${el.text()}")
+                    appendLine("> ${el.textWithImageAlt()}")
                 }
 
                 "hr" -> {
