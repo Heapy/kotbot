@@ -5,12 +5,12 @@
 * [Tgkotbot](https://github.com/Heapy/kotbot/tree/main/tgkotbot#readme) – Bot implementation for needs
   of [Kotlin Community](https://t.me/kotlin_lang) in the telegram
 
-## Bot API 9.6
+## Bot API 10.0
 
 ### Install the library
 
 ```kotlin
-implementation("io.heapy.kotbot:core:1.7.0")
+implementation("io.heapy.kotbot:core:1.8.0")
 ```
 
 ### Example
