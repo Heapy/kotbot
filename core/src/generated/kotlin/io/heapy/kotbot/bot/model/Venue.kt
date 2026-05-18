@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Venue(
     /**
-     * Venue location. Can't be a live location
+     * Venue location. Can't be a live location.
      */
     public val location: Location,
     /**

@@ -39,6 +39,10 @@ public data class ExternalReplyInfo(
      */
     public val document: Document? = null,
     /**
+     * *Optional*. Message is a live photo, information about the live photo
+     */
+    public val live_photo: LivePhoto? = null,
+    /**
      * *Optional*. Message contains paid media; information about the paid media
      */
     public val paid_media: PaidMediaInfo? = null,

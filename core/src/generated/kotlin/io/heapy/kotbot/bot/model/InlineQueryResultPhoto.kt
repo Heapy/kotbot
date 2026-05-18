@@ -20,7 +20,7 @@ public data class InlineQueryResultPhoto(
      */
     public val id: String,
     /**
-     * A valid URL of the photo. Photo must be in **JPEG** format. Photo size must not exceed 5MB
+     * A valid URL of the photo. Photo must be in **JPEG** format. Photo size must not exceed 5MB.
      */
     public val photo_url: String,
     /**

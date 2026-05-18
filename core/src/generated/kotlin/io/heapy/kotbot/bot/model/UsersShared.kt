@@ -14,7 +14,7 @@ public data class UsersShared(
      */
     public val request_id: Int,
     /**
-     * Information about users shared with the bot.
+     * Information about users shared with the bot
      */
     public val users: List<SharedUser>,
 )

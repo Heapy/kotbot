@@ -19,7 +19,7 @@ public data class UniqueGift(
      */
     public val base_name: String,
     /**
-     * Unique name of the gift. This name can be used in `https://t.me/nft/...` links and story areas
+     * Unique name of the gift. This name can be used in `https://t.me/nft/...` links and story areas.
      */
     public val name: String,
     /**

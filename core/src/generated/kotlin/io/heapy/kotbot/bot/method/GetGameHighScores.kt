@@ -23,15 +23,15 @@ public data class GetGameHighScores(
      */
     public val user_id: Long,
     /**
-     * Required if *inline_message_id* is not specified. Unique identifier for the target chat
+     * Required if *inline_message_id* is not specified. Unique identifier for the target chat.
      */
     public val chat_id: Long? = null,
     /**
-     * Required if *inline_message_id* is not specified. Identifier of the sent message
+     * Required if *inline_message_id* is not specified. Identifier of the sent message.
      */
     public val message_id: Int? = null,
     /**
-     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
+     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message.
      */
     public val inline_message_id: String? = null,
 ) : Method<GetGameHighScores, List<GameHighScore>> by Companion {

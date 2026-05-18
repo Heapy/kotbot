@@ -48,7 +48,7 @@ public data class GiftInfo(
      */
     public val is_private: Boolean? = null,
     /**
-     * *Optional*. Unique number reserved for this gift when upgraded. See the *number* field in [UniqueGift](https://core.telegram.org/bots/api/#uniquegift)
+     * *Optional*. Unique number reserved for this gift when upgraded. See the *number* field in [UniqueGift](https://core.telegram.org/bots/api/#uniquegift).
      */
     public val unique_gift_number: Int? = null,
 )

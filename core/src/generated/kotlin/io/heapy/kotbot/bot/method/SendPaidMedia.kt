@@ -26,7 +26,7 @@ public data class SendPaidMedia(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`. If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
      */
     public val chat_id: ChatId,
     /**
@@ -74,7 +74,7 @@ public data class SendPaidMedia(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**
@@ -86,7 +86,7 @@ public data class SendPaidMedia(
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendPaidMedia, Message> by Companion {

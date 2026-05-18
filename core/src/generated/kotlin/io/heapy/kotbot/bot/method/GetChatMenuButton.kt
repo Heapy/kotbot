@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class GetChatMenuButton(
     /**
-     * Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
+     * Unique identifier for the target private chat. If not specified, the bot's default menu button will be returned.
      */
     public val chat_id: Long? = null,
 ) : Method<GetChatMenuButton, MenuButton> by Companion {

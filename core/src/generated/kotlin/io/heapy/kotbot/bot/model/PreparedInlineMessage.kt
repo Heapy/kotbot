@@ -14,7 +14,7 @@ public data class PreparedInlineMessage(
      */
     public val id: String,
     /**
-     * Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
+     * Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used.
      */
     public val expiration_date: Long,
 )

@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 
 /**
- * Use this method to stream a partial message to a user while the message is being generated. Returns *True* on success.
+ * Use this method to stream a partial message to a user while the message is being generated. Note that the streamed draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you **must** call [sendMessage](https://core.telegram.org/bots/api/#sendmessage) with the complete message to persist it in the user's chat. Returns *True* on success.
  */
 @Serializable
 public data class SendMessageDraft(
@@ -26,13 +26,13 @@ public data class SendMessageDraft(
      */
     public val message_thread_id: Int? = null,
     /**
-     * Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated
+     * Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated.
      */
     public val draft_id: Int,
     /**
-     * Text of the message to be sent, 1-4096 characters after entities parsing
+     * Text of the message to be sent, 0-4096 characters after entities parsing. Pass an empty text to show a "Thinking…" placeholder.
      */
-    public val text: String,
+    public val text: String? = null,
     /**
      * Mode for parsing entities in the message text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
      */

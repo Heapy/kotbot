@@ -55,7 +55,7 @@ public data class GetBusinessAccountGifts(
      */
     public val offset: String? = null,
     /**
-     * The maximum number of gifts to be returned; 1-100. Defaults to 100
+     * The maximum number of gifts to be returned; 1-100. Defaults to 100.
      */
     public val limit: Int? = null,
 ) : Method<GetBusinessAccountGifts, OwnedGifts> by Companion {

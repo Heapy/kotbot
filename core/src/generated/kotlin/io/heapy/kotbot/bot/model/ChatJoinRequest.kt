@@ -26,7 +26,7 @@ public data class ChatJoinRequest(
      */
     public val date: Long,
     /**
-     * *Optional*. Bio of the user.
+     * *Optional*. Bio of the user
      */
     public val bio: String? = null,
     /**

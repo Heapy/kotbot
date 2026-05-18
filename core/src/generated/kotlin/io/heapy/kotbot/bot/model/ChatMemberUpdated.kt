@@ -30,7 +30,7 @@ public data class ChatMemberUpdated(
      */
     public val new_chat_member: ChatMember,
     /**
-     * *Optional*. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+     * *Optional*. Chat invite link, which was used by the user to join the chat; for joining by invite link events only
      */
     public val invite_link: ChatInviteLink? = null,
     /**

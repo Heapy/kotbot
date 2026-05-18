@@ -13,7 +13,7 @@ public data class BotCommand(
      */
     public val command: String,
     /**
-     * Description of the command; 1-256 characters.
+     * Description of the command; 1-256 characters
      */
     public val description: String,
 )

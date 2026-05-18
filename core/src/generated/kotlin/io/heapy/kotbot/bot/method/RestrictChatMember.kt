@@ -17,7 +17,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class RestrictChatMember(
     /**
-     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -33,7 +33,7 @@ public data class RestrictChatMember(
      */
     public val use_independent_chat_permissions: Boolean? = null,
     /**
-     * Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+     * Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever.
      */
     public val until_date: Long? = null,
 ) : Method<RestrictChatMember, Boolean> by Companion {

@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 
 /**
- * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Message](https://core.telegram.org/bots/api/#message) objects that were sent is returned.
+ * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Message](https://core.telegram.org/bots/api/#message) objects that were sent is returned.
  */
 @Serializable
 public data class SendMediaGroup(
@@ -24,7 +24,7 @@ public data class SendMediaGroup(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -48,7 +48,7 @@ public data class SendMediaGroup(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**

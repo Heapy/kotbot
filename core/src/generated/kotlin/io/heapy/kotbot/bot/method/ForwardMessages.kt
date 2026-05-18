@@ -18,7 +18,7 @@ import kotlinx.serialization.builtins.ListSerializer
 @Serializable
 public data class ForwardMessages(
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -30,7 +30,7 @@ public data class ForwardMessages(
      */
     public val direct_messages_topic_id: Int? = null,
     /**
-     * Unique identifier for the chat where the original messages were sent (or channel username in the format `@channelusername`)
+     * Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup or channel in the format `@username`)
      */
     public val from_chat_id: ChatId,
     /**

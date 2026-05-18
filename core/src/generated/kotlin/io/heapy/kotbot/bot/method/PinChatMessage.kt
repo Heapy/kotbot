@@ -20,7 +20,7 @@ public data class PinChatMessage(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**

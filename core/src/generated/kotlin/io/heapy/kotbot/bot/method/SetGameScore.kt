@@ -24,7 +24,7 @@ public data class SetGameScore(
      */
     public val score: Int,
     /**
-     * Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
+     * Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters.
      */
     public val force: Boolean? = null,
     /**
@@ -32,15 +32,15 @@ public data class SetGameScore(
      */
     public val disable_edit_message: Boolean? = null,
     /**
-     * Required if *inline_message_id* is not specified. Unique identifier for the target chat
+     * Required if *inline_message_id* is not specified. Unique identifier for the target chat.
      */
     public val chat_id: Long? = null,
     /**
-     * Required if *inline_message_id* is not specified. Identifier of the sent message
+     * Required if *inline_message_id* is not specified. Identifier of the sent message.
      */
     public val message_id: Int? = null,
     /**
-     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
+     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message.
      */
     public val inline_message_id: String? = null,
 ) : Method<SetGameScore, MessageOrTrue> by Companion {

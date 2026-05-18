@@ -24,6 +24,10 @@ public data class PollOption(
      */
     public val text_entities: List<MessageEntity>? = null,
     /**
+     * *Optional*. Media added to the poll option
+     */
+    public val media: PollMedia? = null,
+    /**
      * Number of users who voted for this option; may be 0 if unknown
      */
     public val voter_count: Int,

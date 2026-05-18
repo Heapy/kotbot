@@ -16,7 +16,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class EditForumTopic(
     /**
-     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -24,11 +24,11 @@ public data class EditForumTopic(
      */
     public val message_thread_id: Int,
     /**
-     * New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
+     * New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept.
      */
     public val name: String? = null,
     /**
-     * New unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+     * New unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept.
      */
     public val icon_custom_emoji_id: String? = null,
 ) : Method<EditForumTopic, Boolean> by Companion {

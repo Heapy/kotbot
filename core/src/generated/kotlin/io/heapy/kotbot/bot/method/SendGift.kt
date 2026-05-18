@@ -22,7 +22,7 @@ public data class SendGift(
      */
     public val user_id: Long? = null,
     /**
-     * Required if *user_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@channelusername`) that will receive the gift.
+     * Required if *user_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@username`) that will receive the gift.
      */
     public val chat_id: ChatId? = null,
     /**

@@ -51,11 +51,15 @@ public data class User(
      */
     public val can_read_all_group_messages: Boolean? = null,
     /**
+     * *Optional*. *True*, if the bot supports guest queries from chats it is not a member of. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     */
+    public val supports_guest_queries: Boolean? = null,
+    /**
      * *Optional*. *True*, if the bot supports inline queries. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val supports_inline_queries: Boolean? = null,
     /**
-     * *Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+     * *Optional*. *True*, if the bot can be connected to a user account to manage it. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
      */
     public val can_connect_to_business: Boolean? = null,
     /**

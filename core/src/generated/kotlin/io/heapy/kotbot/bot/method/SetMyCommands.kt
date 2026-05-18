@@ -25,7 +25,7 @@ public data class SetMyCommands(
      */
     public val scope: BotCommandScope? = null,
     /**
-     * A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+     * A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands.
      */
     public val language_code: String? = null,
 ) : Method<SetMyCommands, Boolean> by Companion {

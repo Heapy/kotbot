@@ -213,7 +213,7 @@ public data class ChatFullInfo(
      */
     public val unique_gift_colors: UniqueGiftColors? = null,
     /**
-     * *Optional*. The number of Telegram Stars a general user have to pay to send a message to the chat
+     * *Optional*. The number of Telegram Stars a general user has to pay to send a message to the chat
      */
     public val paid_message_star_count: Int? = null,
 )

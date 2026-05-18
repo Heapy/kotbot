@@ -46,4 +46,4 @@ public data class InputMediaAudio(
      * *Optional*. Title of the audio
      */
     public val title: String? = null,
-) : InputMedia
+) : InputMedia, InputPollMedia

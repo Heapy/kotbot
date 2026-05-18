@@ -44,7 +44,7 @@ public data class OwnedGiftUnique(
      */
     public val transfer_star_count: Int? = null,
     /**
-     * *Optional*. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+     * *Optional*. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now.
      */
     public val next_transfer_date: Long? = null,
 ) : OwnedGift

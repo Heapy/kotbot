@@ -14,7 +14,7 @@ public data class SuggestedPostPaid(
      */
     public val suggested_post_message: Message? = null,
     /**
-     * Currency in which the payment was made. Currently, one of "XTR" for Telegram Stars or "TON" for toncoins
+     * Currency in which the payment was made. Currently, one of "XTR" for Telegram Stars or "TON" for toncoins.
      */
     public val currency: String,
     /**

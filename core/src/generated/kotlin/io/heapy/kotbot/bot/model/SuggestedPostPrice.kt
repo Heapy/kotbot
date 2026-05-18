@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SuggestedPostPrice(
     /**
-     * Currency in which the post will be paid. Currently, must be one of "XTR" for Telegram Stars or "TON" for toncoins
+     * Currency in which the post will be paid. Currently, must be one of "XTR" for Telegram Stars or "TON" for toncoins.
      */
     public val currency: String,
     /**

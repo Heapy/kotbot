@@ -25,7 +25,7 @@ public data class SendVideoNote(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -37,7 +37,7 @@ public data class SendVideoNote(
      */
     public val direct_messages_topic_id: Int? = null,
     /**
-     * Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files). Sending video notes by a URL is currently unsupported
+     * Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. [More information on Sending Files &raquo;](https://core.telegram.org/bots/api/#sending-files). Sending video notes by a URL is currently unsupported.
      */
     public val video_note: VideoNote,
     /**
@@ -61,7 +61,7 @@ public data class SendVideoNote(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**
@@ -77,7 +77,7 @@ public data class SendVideoNote(
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendVideoNote, Message> by Companion {

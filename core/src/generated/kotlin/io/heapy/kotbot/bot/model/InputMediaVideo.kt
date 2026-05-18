@@ -67,4 +67,4 @@ public data class InputMediaVideo(
      * *Optional*. Pass *True* if the video needs to be covered with a spoiler animation
      */
     public val has_spoiler: Boolean? = null,
-) : InputMedia
+) : InputMedia, InputPollMedia, InputPollOptionMedia

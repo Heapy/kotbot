@@ -15,7 +15,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class HideGeneralForumTopic(
     /**
-     * Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
      */
     public val chat_id: ChatId,
 ) : Method<HideGeneralForumTopic, Boolean> by Companion {

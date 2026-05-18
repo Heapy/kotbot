@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class SendInvoice(
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -65,7 +65,7 @@ public data class SendInvoice(
      */
     public val suggested_tip_amounts: List<Int>? = null,
     /**
-     * Unique deep-linking parameter. If left empty, **forwarded copies** of the sent message will have a *Pay* button, allowing multiple users to pay directly from the forwarded message, using the same invoice. If non-empty, forwarded copies of the sent message will have a *URL* button with a deep link to the bot (instead of a *Pay* button), with the value used as the start parameter
+     * Unique deep-linking parameter. If left empty, **forwarded copies** of the sent message will have a *Pay* button, allowing multiple users to pay directly from the forwarded message, using the same invoice. If non-empty, forwarded copies of the sent message will have a *URL* button with a deep link to the bot (instead of a *Pay* button), with the value used as the start parameter.
      */
     public val start_parameter: String? = null,
     /**
@@ -125,7 +125,7 @@ public data class SendInvoice(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**

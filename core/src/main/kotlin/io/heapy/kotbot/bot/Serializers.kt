@@ -36,12 +36,19 @@ import io.heapy.kotbot.bot.model.InputMedia
 import io.heapy.kotbot.bot.model.InputMediaAnimation
 import io.heapy.kotbot.bot.model.InputMediaAudio
 import io.heapy.kotbot.bot.model.InputMediaDocument
+import io.heapy.kotbot.bot.model.InputMediaLivePhoto
+import io.heapy.kotbot.bot.model.InputMediaLocation
 import io.heapy.kotbot.bot.model.InputMediaPhoto
+import io.heapy.kotbot.bot.model.InputMediaSticker
+import io.heapy.kotbot.bot.model.InputMediaVenue
 import io.heapy.kotbot.bot.model.InputMediaVideo
 import io.heapy.kotbot.bot.model.InputMessageContent
 import io.heapy.kotbot.bot.model.InputPaidMedia
+import io.heapy.kotbot.bot.model.InputPaidMediaLivePhoto
 import io.heapy.kotbot.bot.model.InputPaidMediaPhoto
 import io.heapy.kotbot.bot.model.InputPaidMediaVideo
+import io.heapy.kotbot.bot.model.InputPollMedia
+import io.heapy.kotbot.bot.model.InputPollOptionMedia
 import io.heapy.kotbot.bot.model.InputProfilePhoto
 import io.heapy.kotbot.bot.model.InputProfilePhotoAnimated
 import io.heapy.kotbot.bot.model.InputProfilePhotoStatic
@@ -63,6 +70,7 @@ import io.heapy.kotbot.bot.model.OwnedGift
 import io.heapy.kotbot.bot.model.OwnedGiftRegular
 import io.heapy.kotbot.bot.model.OwnedGiftUnique
 import io.heapy.kotbot.bot.model.PaidMedia
+import io.heapy.kotbot.bot.model.PaidMediaLivePhoto
 import io.heapy.kotbot.bot.model.PaidMediaPhoto
 import io.heapy.kotbot.bot.model.PaidMediaPreview
 import io.heapy.kotbot.bot.model.PaidMediaVideo
@@ -131,9 +139,40 @@ public object InputMediaSerializer : JsonContentPolymorphicSerializer<InputMedia
             "animation" -> InputMediaAnimation.serializer()
             "document" -> InputMediaDocument.serializer()
             "audio" -> InputMediaAudio.serializer()
+            "live_photo" -> InputMediaLivePhoto.serializer()
             "photo" -> InputMediaPhoto.serializer()
             "video" -> InputMediaVideo.serializer()
             else -> error("Unknown InputMedia type: $type")
+        }
+}
+
+public object InputPollMediaSerializer : JsonContentPolymorphicSerializer<InputPollMedia>(InputPollMedia::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out InputPollMedia> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "animation" -> InputMediaAnimation.serializer()
+            "audio" -> InputMediaAudio.serializer()
+            "document" -> InputMediaDocument.serializer()
+            "live_photo" -> InputMediaLivePhoto.serializer()
+            "location" -> InputMediaLocation.serializer()
+            "photo" -> InputMediaPhoto.serializer()
+            "venue" -> InputMediaVenue.serializer()
+            "video" -> InputMediaVideo.serializer()
+            else -> error("Unknown InputPollMedia type: $type")
+        }
+}
+
+public object InputPollOptionMediaSerializer :
+    JsonContentPolymorphicSerializer<InputPollOptionMedia>(InputPollOptionMedia::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out InputPollOptionMedia> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "animation" -> InputMediaAnimation.serializer()
+            "live_photo" -> InputMediaLivePhoto.serializer()
+            "location" -> InputMediaLocation.serializer()
+            "photo" -> InputMediaPhoto.serializer()
+            "sticker" -> InputMediaSticker.serializer()
+            "venue" -> InputMediaVenue.serializer()
+            "video" -> InputMediaVideo.serializer()
+            else -> error("Unknown InputPollOptionMedia type: $type")
         }
 }
 
@@ -258,6 +297,7 @@ public class BackgroundTypeSerializer : JsonContentPolymorphicSerializer<Backgro
 public class InputPaidMediaSerializer : JsonContentPolymorphicSerializer<InputPaidMedia>(InputPaidMedia::class) {
     override fun selectDeserializer(element: JsonElement): KSerializer<out InputPaidMedia> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "live_photo" -> InputPaidMediaLivePhoto.serializer()
             "photo" -> InputPaidMediaPhoto.serializer()
             "video" -> InputPaidMediaVideo.serializer()
             else -> error("Unknown argument type: $type")
@@ -268,6 +308,7 @@ public class PaidMediaSerializer : JsonContentPolymorphicSerializer<PaidMedia>(P
     override fun selectDeserializer(element: JsonElement): KSerializer<out PaidMedia> =
         when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
             "preview" -> PaidMediaPreview.serializer()
+            "live_photo" -> PaidMediaLivePhoto.serializer()
             "photo" -> PaidMediaPhoto.serializer()
             "video" -> PaidMediaVideo.serializer()
             else -> error("Unknown argument type: $type")

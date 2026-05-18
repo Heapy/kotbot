@@ -20,7 +20,7 @@ public data class DeleteBusinessMessages(
      */
     public val business_connection_id: String,
     /**
-     * A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
+     * A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted.
      */
     public val message_ids: List<Int>,
 ) : Method<DeleteBusinessMessages, Boolean> by Companion {

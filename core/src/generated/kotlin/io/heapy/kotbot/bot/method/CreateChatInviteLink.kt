@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class CreateChatInviteLink(
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -33,7 +33,7 @@ public data class CreateChatInviteLink(
      */
     public val member_limit: Int? = null,
     /**
-     * *True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member_limit* can't be specified
+     * *True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member_limit* can't be specified.
      */
     public val creates_join_request: Boolean? = null,
 ) : Method<CreateChatInviteLink, ChatInviteLink> by Companion {

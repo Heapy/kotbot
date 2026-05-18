@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Message(
     /**
-     * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
+     * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
      */
     public val message_id: Int,
     /**
@@ -25,7 +25,7 @@ public data class Message(
      */
     public val direct_messages_topic: DirectMessagesTopic? = null,
     /**
-     * *Optional*. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
+     * *Optional*. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats.
      */
     public val from: User? = null,
     /**
@@ -48,6 +48,10 @@ public data class Message(
      * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
      */
     public val date: Long,
+    /**
+     * *Optional*. The unique identifier for the guest query. Use this identifier with the method [answerGuestQuery](https://core.telegram.org/bots/api/#answerguestquery) to send a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with other existing bot chats sharing the same identifier.
+     */
+    public val guest_query_id: String? = null,
     /**
      * *Optional*. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
      */
@@ -97,6 +101,14 @@ public data class Message(
      */
     public val via_bot: User? = null,
     /**
+     * *Optional*. For a message sent by a guest bot, this is the user whose original message triggered the bot's response
+     */
+    public val guest_bot_caller_user: User? = null,
+    /**
+     * *Optional*. For a message sent by a guest bot, this is the chat whose original message triggered the bot's response
+     */
+    public val guest_bot_caller_chat: Chat? = null,
+    /**
      * *Optional*. Date the message was last edited in Unix time
      */
     public val edit_date: Long? = null,
@@ -145,7 +157,7 @@ public data class Message(
      */
     public val effect_id: String? = null,
     /**
-     * *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
+     * *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set.
      */
     public val animation: Animation? = null,
     /**
@@ -156,6 +168,10 @@ public data class Message(
      * *Optional*. Message is a general file, information about the file
      */
     public val document: Document? = null,
+    /**
+     * *Optional*. Message is a live photo, information about the live photo. For backward compatibility, when this field is set, the *photo* field will also be set.
+     */
+    public val live_photo: LivePhoto? = null,
     /**
      * *Optional*. Message contains paid media; information about the paid media
      */
@@ -221,7 +237,7 @@ public data class Message(
      */
     public val poll: Poll? = null,
     /**
-     * *Optional*. Message is a venue, information about the venue. For backward compatibility, when this field is set, the *location* field will also be set
+     * *Optional*. Message is a venue, information about the venue. For backward compatibility, when this field is set, the *location* field will also be set.
      */
     public val venue: Venue? = null,
     /**

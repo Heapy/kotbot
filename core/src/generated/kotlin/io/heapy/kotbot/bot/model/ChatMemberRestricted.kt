@@ -67,6 +67,10 @@ public data class ChatMemberRestricted(
      */
     public val can_add_web_page_previews: Boolean,
     /**
+     * *True*, if the user is allowed to react to messages
+     */
+    public val can_react_to_messages: Boolean,
+    /**
      * *True*, if the user is allowed to edit their own tag
      */
     public val can_edit_tag: Boolean,
@@ -87,7 +91,7 @@ public data class ChatMemberRestricted(
      */
     public val can_manage_topics: Boolean,
     /**
-     * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
+     * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.
      */
     public val until_date: Long,
 ) : ChatMember

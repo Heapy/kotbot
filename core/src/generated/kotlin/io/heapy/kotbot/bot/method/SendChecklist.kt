@@ -2,12 +2,12 @@ package io.heapy.kotbot.bot.method
 
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
+import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.InputChecklist
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyParameters
 import kotlin.Boolean
-import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -22,9 +22,9 @@ public data class SendChecklist(
      */
     public val business_connection_id: String,
     /**
-     * Unique identifier for the target chat
+     * Unique identifier for the target chat or username of the target bot in the format `@username`
      */
-    public val chat_id: Long,
+    public val chat_id: ChatId,
     /**
      * A JSON-serialized object for the checklist to send
      */

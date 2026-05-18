@@ -49,11 +49,15 @@ public data class ChatPermissions(
      */
     public val can_add_web_page_previews: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to edit their own tag
+     * *Optional*. *True*, if the user is allowed to react to messages. If omitted, defaults to the value of *can_send_messages*.
+     */
+    public val can_react_to_messages: Boolean? = null,
+    /**
+     * *Optional*. *True*, if the user is allowed to edit their own tag. If omitted, defaults to the value of *can_pin_messages*.
      */
     public val can_edit_tag: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+     * *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups.
      */
     public val can_change_info: Boolean? = null,
     /**
@@ -61,11 +65,11 @@ public data class ChatPermissions(
      */
     public val can_invite_users: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to pin messages. Ignored in public supergroups
+     * *Optional*. *True*, if the user is allowed to pin messages. Ignored in public supergroups.
      */
     public val can_pin_messages: Boolean? = null,
     /**
-     * *Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages
+     * *Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages.
      */
     public val can_manage_topics: Boolean? = null,
 )

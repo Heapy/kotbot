@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.method
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
+import io.heapy.kotbot.bot.model.InputPollMedia
 import io.heapy.kotbot.bot.model.InputPollOption
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.MessageEntity
@@ -26,7 +27,7 @@ public data class SendPoll(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). Polls can't be sent to channel direct messages chats.
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`. Polls can't be sent to channel direct messages chats.
      */
     public val chat_id: ChatId,
     /**
@@ -38,15 +39,15 @@ public data class SendPoll(
      */
     public val question: String,
     /**
-     * Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
+     * Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed.
      */
     public val question_parse_mode: String? = null,
     /**
-     * A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question_parse_mode*
+     * A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question_parse_mode*.
      */
     public val question_entities: List<MessageEntity>? = null,
     /**
-     * A JSON-serialized list of 2-12 answer options
+     * A JSON-serialized list of 1-12 answer options
      */
     public val options: List<InputPollOption>,
     /**
@@ -78,6 +79,14 @@ public data class SendPoll(
      */
     public val hide_results_until_closes: Boolean? = null,
     /**
+     * Pass *True*, if voting is limited to users who have been members of the chat where the poll is being sent for more than 24 hours; for channel chats only
+     */
+    public val members_only: Boolean? = null,
+    /**
+     * A JSON-serialized list of 0-12 two-letter [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes indicating the countries from which users can vote in the poll; for channel chats only. Use "FT" as a country code to allow users with anonymous numbers to vote. If omitted or empty, then users from any country can participate in the poll.
+     */
+    public val country_codes: List<String>? = null,
+    /**
      * A JSON-serialized list of monotonically increasing 0-based identifiers of the correct answer options, required for polls in quiz mode
      */
     public val correct_option_ids: List<Int>? = null,
@@ -90,9 +99,13 @@ public data class SendPoll(
      */
     public val explanation_parse_mode: String? = null,
     /**
-     * A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation_parse_mode*
+     * A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation_parse_mode*.
      */
     public val explanation_entities: List<MessageEntity>? = null,
+    /**
+     * Media added to the quiz explanation
+     */
+    public val explanation_media: InputPollMedia? = null,
     /**
      * Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with *close_date*.
      */
@@ -118,6 +131,10 @@ public data class SendPoll(
      */
     public val description_entities: List<MessageEntity>? = null,
     /**
+     * Media added to the poll description
+     */
+    public val media: InputPollMedia? = null,
+    /**
      * Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
      */
     public val disable_notification: Boolean? = null,
@@ -126,7 +143,7 @@ public data class SendPoll(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**
@@ -138,7 +155,7 @@ public data class SendPoll(
      */
     public val reply_parameters: ReplyParameters? = null,
     /**
-     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
+     * Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user.
      */
     public val reply_markup: ReplyMarkup? = null,
 ) : Method<SendPoll, Message> by Companion {

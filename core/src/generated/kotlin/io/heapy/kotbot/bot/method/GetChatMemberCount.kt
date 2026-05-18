@@ -15,7 +15,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class GetChatMemberCount(
     /**
-     * Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target supergroup or channel in the format `@username`
      */
     public val chat_id: ChatId,
 ) : Method<GetChatMemberCount, Int> by Companion {

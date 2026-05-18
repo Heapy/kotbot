@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class KeyboardButtonRequestChat(
     /**
-     * Signed 32-bit identifier of the request, which will be received back in the [ChatShared](https://core.telegram.org/bots/api/#chatshared) object. Must be unique within the message
+     * Signed 32-bit identifier of the request, which will be received back in the [ChatShared](https://core.telegram.org/bots/api/#chatshared) object. Must be unique within the message.
      */
     public val request_id: Int,
     /**
-     * Pass *True* to request a channel chat, pass *False* to request a group or a supergroup chat.
+     * Pass *True* to request a channel chat, pass *False* to request a group or a supergroup chat
      */
     public val chat_is_channel: Boolean,
     /**

@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class KeyboardButtonRequestManagedBot(
     /**
-     * Signed 32-bit identifier of the request. Must be unique within the message
+     * Signed 32-bit identifier of the request. Must be unique within the message.
      */
     public val request_id: Int,
     /**

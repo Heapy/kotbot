@@ -3,7 +3,7 @@ package io.heapy.kotbot.bot.model
 import kotlinx.serialization.Serializable
 
 /**
- * This object contains information about the creation or token update of a bot that is managed by the current bot.
+ * This object contains information about the creation, token update, or owner update of a bot that is managed by the current bot.
  */
 @Serializable
 public data class ManagedBotUpdated(

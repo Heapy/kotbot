@@ -27,7 +27,7 @@ public data class BackgroundTypePattern(
      */
     public val intensity: Int,
     /**
-     * *Optional*. *True*, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
+     * *Optional*. *True*, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only.
      */
     public val is_inverted: Boolean? = null,
     /**

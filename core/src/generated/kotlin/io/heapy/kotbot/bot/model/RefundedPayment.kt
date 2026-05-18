@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class RefundedPayment(
     /**
-     * Three-letter ISO 4217 [currency](https://core.telegram.org/bots/payments#supported-currencies) code, or "XTR" for payments in [Telegram Stars](https://t.me/BotNews/90). Currently, always "XTR"
+     * Three-letter ISO 4217 [currency](https://core.telegram.org/bots/payments#supported-currencies) code, or "XTR" for payments in [Telegram Stars](https://t.me/BotNews/90). Currently, always "XTR".
      */
     public val currency: String,
     /**

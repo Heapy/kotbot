@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.  
- * At most **one** of the optional parameters can be present in any given update.
+ * At most **one** of the optional fields can be present in any given update.
  */
 @Serializable
 public data class Update(
@@ -46,6 +46,10 @@ public data class Update(
      */
     public val deleted_business_messages: BusinessMessagesDeleted? = null,
     /**
+     * *Optional*. New guest message. The bot can use the field *Message.guest_query_id* and the method [answerGuestQuery](https://core.telegram.org/bots/api/#answerguestquery) to send a message in response.
+     */
+    public val guest_message: Message? = null,
+    /**
      * *Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed_updates* to receive these updates. The update isn't received for reactions set by bots.
      */
     public val message_reaction: MessageReactionUpdated? = null,
@@ -66,11 +70,11 @@ public data class Update(
      */
     public val callback_query: CallbackQuery? = null,
     /**
-     * *Optional*. New incoming shipping query. Only for invoices with flexible price
+     * *Optional*. New incoming shipping query. Only for invoices with flexible price.
      */
     public val shipping_query: ShippingQuery? = null,
     /**
-     * *Optional*. New incoming pre-checkout query. Contains full information about checkout
+     * *Optional*. New incoming pre-checkout query. Contains full information about checkout.
      */
     public val pre_checkout_query: PreCheckoutQuery? = null,
     /**
@@ -78,7 +82,7 @@ public data class Update(
      */
     public val purchased_paid_media: PaidMediaPurchased? = null,
     /**
-     * *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
+     * *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot.
      */
     public val poll: Poll? = null,
     /**
@@ -106,7 +110,7 @@ public data class Update(
      */
     public val removed_chat_boost: ChatBoostRemoved? = null,
     /**
-     * *Optional*. A new bot was created to be managed by the bot or token of a bot was changed
+     * *Optional*. A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
      */
     public val managed_bot: ManagedBotUpdated? = null,
 )

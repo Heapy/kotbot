@@ -38,4 +38,4 @@ public data class InputMediaPhoto(
      * *Optional*. Pass *True* if the photo needs to be covered with a spoiler animation
      */
     public val has_spoiler: Boolean? = null,
-) : InputMedia
+) : InputMedia, InputPollMedia, InputPollOptionMedia

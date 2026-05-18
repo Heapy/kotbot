@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class KeyboardButtonRequestUsers(
     /**
-     * Signed 32-bit identifier of the request that will be received back in the [UsersShared](https://core.telegram.org/bots/api/#usersshared) object. Must be unique within the message
+     * Signed 32-bit identifier of the request that will be received back in the [UsersShared](https://core.telegram.org/bots/api/#usersshared) object. Must be unique within the message.
      */
     public val request_id: Int,
     /**

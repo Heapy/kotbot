@@ -13,7 +13,7 @@ public data class DirectMessagesTopic(
      */
     public val topic_id: Long,
     /**
-     * *Optional*. Information about the user that created the topic. Currently, it is always present
+     * *Optional*. Information about the user that created the topic. Currently, it is always present.
      */
     public val user: User? = null,
 )

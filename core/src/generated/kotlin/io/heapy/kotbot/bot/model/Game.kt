@@ -18,7 +18,7 @@ public data class Game(
      */
     public val description: String,
     /**
-     * Photo that will be displayed in the game message in chats.
+     * Photo that will be displayed in the game message in chats
      */
     public val photo: List<PhotoSize>,
     /**
@@ -30,7 +30,7 @@ public data class Game(
      */
     public val text_entities: List<MessageEntity>? = null,
     /**
-     * *Optional*. Animation that will be displayed in the game message in chats. Upload via [BotFather](https://t.me/botfather)
+     * *Optional*. Animation that will be displayed in the game message in chats. Upload via [BotFather](https://t.me/botfather).
      */
     public val animation: Animation? = null,
 )

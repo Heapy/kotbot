@@ -38,4 +38,4 @@ public data class InputMediaDocument(
      * *Optional*. Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always *True*, if the document is sent as part of an album.
      */
     public val disable_content_type_detection: Boolean? = null,
-) : InputMedia
+) : InputMedia, InputPollMedia

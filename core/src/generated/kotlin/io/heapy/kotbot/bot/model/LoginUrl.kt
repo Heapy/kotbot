@@ -20,7 +20,7 @@ public data class LoginUrl(
      */
     public val url: String,
     /**
-     * *Optional*. New text of the button in forwarded messages.
+     * *Optional*. New text of the button in forwarded messages
      */
     public val forward_text: String? = null,
     /**
@@ -28,7 +28,7 @@ public data class LoginUrl(
      */
     public val bot_username: String? = null,
     /**
-     * *Optional*. Pass *True* to request the permission for your bot to send messages to the user.
+     * *Optional*. Pass *True* to request the permission for your bot to send messages to the user
      */
     public val request_write_access: Boolean? = null,
 )

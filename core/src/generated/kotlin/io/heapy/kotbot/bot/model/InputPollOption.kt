@@ -14,11 +14,15 @@ public data class InputPollOption(
      */
     public val text: String,
     /**
-     * *Optional*. Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
+     * *Optional*. Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed.
      */
     public val text_parse_mode: String? = null,
     /**
-     * *Optional*. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of *text_parse_mode*
+     * *Optional*. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of *text_parse_mode*.
      */
     public val text_entities: List<MessageEntity>? = null,
+    /**
+     * *Optional*. Media added to the poll option
+     */
+    public val media: InputPollOptionMedia? = null,
 )

@@ -38,7 +38,7 @@ import io.heapy.kotbot.apiparser.model.nullable
 import kotlin.io.path.Path
 
 fun main() {
-    val apiResource = "api960"
+    val apiResource = "api1000"
     val apiHtml = {}::class.java
         .getResource(apiResource)
         ?.readText()

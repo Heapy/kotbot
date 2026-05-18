@@ -20,11 +20,11 @@ public data class ChatShared(
      */
     public val chat_id: Long,
     /**
-     * *Optional*. Title of the chat, if the title was requested by the bot.
+     * *Optional*. Title of the chat, if the title was requested by the bot
      */
     public val title: String? = null,
     /**
-     * *Optional*. Username of the chat, if the username was requested by the bot and available.
+     * *Optional*. Username of the chat, if the username was requested by the bot and available
      */
     public val username: String? = null,
     /**

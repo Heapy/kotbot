@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class GetUserChatBoosts(
     /**
-     * Unique identifier for the chat or username of the channel (in the format `@channelusername`)
+     * Unique identifier for the chat or username of the channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**

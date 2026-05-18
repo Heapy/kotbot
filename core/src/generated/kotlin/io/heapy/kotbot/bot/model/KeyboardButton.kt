@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class KeyboardButton(
     /**
-     * Text of the button. If none of the fields other than *text*, *icon_custom_emoji_id*, and *style* are used, it will be sent as a message when the button is pressed
+     * Text of the button. If none of the fields other than *text*, *icon_custom_emoji_id*, and *style* are used, it will be sent as a message when the button is pressed.
      */
     public val text: String,
     /**

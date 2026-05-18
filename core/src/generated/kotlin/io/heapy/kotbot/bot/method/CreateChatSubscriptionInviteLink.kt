@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class CreateChatSubscriptionInviteLink(
     /**
-     * Unique identifier for the target channel chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target channel chat or username of the target channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**

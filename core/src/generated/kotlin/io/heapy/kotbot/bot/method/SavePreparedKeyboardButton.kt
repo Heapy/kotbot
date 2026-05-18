@@ -19,7 +19,7 @@ public data class SavePreparedKeyboardButton(
      */
     public val user_id: Long,
     /**
-     * A JSON-serialized object describing the button to be saved. The button must be of the type *request_users*, *request_chat*, or *request_managed_bot*
+     * A JSON-serialized object describing the button to be saved. The button must be of the type *request_users*, *request_chat*, or *request_managed_bot*.
      */
     public val button: KeyboardButton,
 ) : Method<SavePreparedKeyboardButton, PreparedKeyboardButton> by Companion {

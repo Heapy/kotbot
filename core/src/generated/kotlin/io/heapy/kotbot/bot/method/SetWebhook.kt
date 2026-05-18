@@ -19,7 +19,7 @@ import kotlinx.serialization.builtins.serializer
 @Serializable
 public data class SetWebhook(
     /**
-     * HTTPS URL to send updates to. Use an empty string to remove webhook integration
+     * HTTPS URL to send updates to. Use an empty string to remove webhook integration.
      */
     public val url: String,
     /**

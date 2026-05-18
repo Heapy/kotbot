@@ -2,12 +2,12 @@ package io.heapy.kotbot.bot.method
 
 import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
+import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ReplyParameters
 import kotlin.Boolean
 import kotlin.Int
-import kotlin.Long
 import kotlin.String
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -22,9 +22,9 @@ public data class SendGame(
      */
     public val business_connection_id: String? = null,
     /**
-     * Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats.
+     * Unique identifier for the target chat or username of the target bot in the format `@username`. Games can't be sent to channel direct messages chats and channel chats.
      */
-    public val chat_id: Long,
+    public val chat_id: ChatId,
     /**
      * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
      */
@@ -42,7 +42,7 @@ public data class SendGame(
      */
     public val protect_content: Boolean? = null,
     /**
-     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     * Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance.
      */
     public val allow_paid_broadcast: Boolean? = null,
     /**

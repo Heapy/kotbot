@@ -21,7 +21,7 @@ public data class AnswerCallbackQuery(
      */
     public val callback_query_id: String,
     /**
-     * Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+     * Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters.
      */
     public val text: String? = null,
     /**

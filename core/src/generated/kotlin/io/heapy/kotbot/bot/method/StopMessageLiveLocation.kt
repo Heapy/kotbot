@@ -20,19 +20,19 @@ public data class StopMessageLiveLocation(
      */
     public val business_connection_id: String? = null,
     /**
-     * Required if *inline_message_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Required if *inline_message_id* is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`.
      */
     public val chat_id: ChatId? = null,
     /**
-     * Required if *inline_message_id* is not specified. Identifier of the message with live location to stop
+     * Required if *inline_message_id* is not specified. Identifier of the message with live location to stop.
      */
     public val message_id: Int? = null,
     /**
-     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
+     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message.
      */
     public val inline_message_id: String? = null,
     /**
-     * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+     * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
      */
     public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<StopMessageLiveLocation, MessageOrTrue> by Companion {

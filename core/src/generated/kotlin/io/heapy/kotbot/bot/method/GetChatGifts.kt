@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class GetChatGifts(
     /**
-     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Unique identifier for the target chat or username of the target channel in the format `@username`
      */
     public val chat_id: ChatId,
     /**
@@ -56,7 +56,7 @@ public data class GetChatGifts(
      */
     public val offset: String? = null,
     /**
-     * The maximum number of gifts to be returned; 1-100. Defaults to 100
+     * The maximum number of gifts to be returned; 1-100. Defaults to 100.
      */
     public val limit: Int? = null,
 ) : Method<GetChatGifts, OwnedGifts> by Companion {

@@ -21,15 +21,15 @@ public data class EditMessageLiveLocation(
      */
     public val business_connection_id: String? = null,
     /**
-     * Required if *inline_message_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     * Required if *inline_message_id* is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`.
      */
     public val chat_id: ChatId? = null,
     /**
-     * Required if *inline_message_id* is not specified. Identifier of the message to edit
+     * Required if *inline_message_id* is not specified. Identifier of the message to edit.
      */
     public val message_id: Int? = null,
     /**
-     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message
+     * Required if *chat_id* and *message_id* are not specified. Identifier of the inline message.
      */
     public val inline_message_id: String? = null,
     /**
@@ -41,7 +41,7 @@ public data class EditMessageLiveLocation(
      */
     public val longitude: Double,
     /**
-     * New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current *live_period* by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then *live_period* remains unchanged
+     * New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current *live_period* by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then *live_period* remains unchanged.
      */
     public val live_period: Int? = null,
     /**
@@ -57,7 +57,7 @@ public data class EditMessageLiveLocation(
      */
     public val proximity_alert_radius: Int? = null,
     /**
-     * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+     * A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
      */
     public val reply_markup: InlineKeyboardMarkup? = null,
 ) : Method<EditMessageLiveLocation, MessageOrTrue> by Companion {
