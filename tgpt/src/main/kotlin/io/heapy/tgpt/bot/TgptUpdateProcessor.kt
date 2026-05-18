@@ -19,6 +19,7 @@ import io.heapy.kotbot.bot.method.SendChecklist
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InputChecklist
 import io.heapy.kotbot.bot.model.InputChecklistTask
+import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ParseMode
 import io.heapy.kotbot.bot.model.ReplyParameters
@@ -372,7 +373,7 @@ class TgptUpdateProcessor(
                 kotbot.execute(
                     SendChecklist(
                         business_connection_id = businessConnectionId,
-                        chat_id = message.chat.id,
+                        chat_id = LongChatId(message.chat.id),
                         checklist = InputChecklist(
                             title = CHECKLIST_DEFAULT_TITLE,
                             tasks = checklistTasks.mapIndexed { index, task ->
