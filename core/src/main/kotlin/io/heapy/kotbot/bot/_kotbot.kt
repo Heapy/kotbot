@@ -12,6 +12,8 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.KSerializer
@@ -20,6 +22,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 public class Kotbot(
     public val token: String,
@@ -42,26 +46,34 @@ public fun Kotbot.receiveUpdates(
     timeout: Int = 50,
     limit: Int = 100,
     allowedUpdates: List<String> = listOf(),
-): Flow<Update> {
+    retryDelay: Duration = 1.seconds,
+): Flow<List<Update>> {
     var offset: Int? = null
 
     return flow {
         while (true) {
             val currentOffset = offset?.let { it + 1 }
             log.info("Receiving updates with offset $currentOffset")
-            val updates = execute(GetUpdates(
-                offset = currentOffset,
-                limit = limit,
-                timeout = timeout,
-                allowed_updates = allowedUpdates,
-            ))
+            val updates = try {
+                execute(
+                    GetUpdates(
+                        offset = currentOffset,
+                        limit = limit,
+                        timeout = timeout,
+                        allowed_updates = allowedUpdates,
+                    ),
+                )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                log.error("getUpdates failed, retrying in {}", retryDelay, e)
+                delay(retryDelay)
+                continue
+            }
 
             offset = updates.maxByOrNull { it.update_id }?.update_id ?: offset
 
-            updates.forEach { update ->
-                log.debug("Received update: {}", update)
-                emit(update)
-            }
+            emit(updates)
         }
     }
 }

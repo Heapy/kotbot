@@ -15,8 +15,10 @@ class TgptBot(
 ) {
     fun start() {
         kotbot.receiveUpdates()
-            .onEach { update ->
-                updateProcessor.processUpdate(update)
+            .onEach { updates ->
+                updates.forEach { update ->
+                    updateProcessor.processUpdate(update)
+                }
             }
             .launchIn(applicationScope)
             .invokeOnCompletion { cause ->

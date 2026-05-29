@@ -19,15 +19,17 @@ suspend fun main() {
     println(me)
 
     kotbot.receiveUpdates()
-        .collect {
-            println("Update $it")
-            try {
-                kotbot.execute(DeleteMessage(
-                    chat_id = LongChatId(it.message?.chat?.id!!),
-                    message_id = it.message.message_id
-                ))
-            } catch (e: Exception) {
-                println(e.message)
+        .collect { updates ->
+            updates.forEach {
+                println("Update $it")
+                try {
+                    kotbot.execute(DeleteMessage(
+                        chat_id = LongChatId(it.message?.chat?.id!!),
+                        message_id = it.message.message_id
+                    ))
+                } catch (e: Exception) {
+                    println(e.message)
+                }
             }
         }
 }

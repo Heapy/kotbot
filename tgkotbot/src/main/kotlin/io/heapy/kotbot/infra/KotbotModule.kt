@@ -1,13 +1,14 @@
  package io.heapy.kotbot.infra
 
+import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.infra.configuration.BotConfiguration
-import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.kotbot.bot.use_case.history.LogUpdatesServiceModule
+import io.heapy.kotbot.infra.configuration.BotConfiguration
 import io.heapy.kotbot.infra.http_client.HttpRequestLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 
 @Module
 open class KotbotModule(
@@ -27,6 +28,9 @@ open class KotbotModule(
         HttpClient(CIO) {
             engine {
                 requestTimeout = 60_000
+            }
+            install(HttpTimeout) {
+                socketTimeoutMillis = 60_000
             }
             install(HttpRequestLogger) {
                 saveFunction = logUpdatesServiceModule

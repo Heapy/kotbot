@@ -21,6 +21,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.logback)
     testImplementation(libs.komok.tech.config.dotenv)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
 
     testFixturesImplementation(libs.junit)
     testFixturesImplementation(libs.komok.tech.config.dotenv)
