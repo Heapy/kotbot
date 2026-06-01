@@ -6,6 +6,7 @@ import io.heapy.kotbot.bot.Kotbot
 import io.heapy.tgpt.infra.configuration.BotConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 
 @Module
 open class KotbotModule(
@@ -22,8 +23,9 @@ open class KotbotModule(
 
     open val kotbotHttpClient by lazy {
         HttpClient(CIO) {
-            engine {
-                requestTimeout = 60_000
+            install(HttpTimeout) {
+                requestTimeoutMillis = 60_000
+                socketTimeoutMillis = 60_000
             }
         }
     }

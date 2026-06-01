@@ -26,10 +26,8 @@ open class KotbotModule(
 
     open val kotbotHttpClient by lazy {
         HttpClient(CIO) {
-            engine {
-                requestTimeout = 60_000
-            }
             install(HttpTimeout) {
+                requestTimeoutMillis = 60_000
                 socketTimeoutMillis = 60_000
             }
             install(HttpRequestLogger) {

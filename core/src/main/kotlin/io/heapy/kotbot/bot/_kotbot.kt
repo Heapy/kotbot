@@ -4,6 +4,7 @@ import io.heapy.kotbot.bot.method.GetUpdates
 import io.heapy.kotbot.bot.model.Update
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -29,8 +30,9 @@ public class Kotbot(
     public val token: String,
     public val baseUrl: String = "https://api.telegram.org/bot",
     public val httpClient: HttpClient = HttpClient(CIO) {
-        engine {
-            requestTimeout = 60_000
+        install(HttpTimeout) {
+            requestTimeoutMillis = 60_000
+            socketTimeoutMillis = 60_000
         }
     },
     public val json: Json = kotbotJson,
