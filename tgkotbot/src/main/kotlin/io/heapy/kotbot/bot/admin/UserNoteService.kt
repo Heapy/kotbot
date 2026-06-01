@@ -73,7 +73,7 @@ class UserNoteService(
         val messagesText = messages.joinToString("\n---\n")
         return gptApi.complete(
             GptApi.ChatCompletionRequest(
-                model = "gpt-4o-mini",
+                model = "gpt-5.4-mini",
                 messages = listOf(
                     GptApi.ChatCompletionRequest.Message(
                         role = "system",
@@ -113,7 +113,7 @@ class UserNoteService(
         val summariesText = summaries.joinToString("\n\n---\n\n")
         return gptApi.complete(
             GptApi.ChatCompletionRequest(
-                model = "gpt-4o-mini",
+                model = "gpt-5.4-mini",
                 messages = listOf(
                     GptApi.ChatCompletionRequest.Message(
                         role = "system",

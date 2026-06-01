@@ -18,7 +18,7 @@ class GptService(
 
         val completionResponse = gptApi.complete(
             GptApi.ChatCompletionRequest(
-                model = "gpt-4o-mini",
+                model = "gpt-5.4-mini",
                 messages = listOf(
                     GptApi.ChatCompletionRequest.Message(
                         role = "system",

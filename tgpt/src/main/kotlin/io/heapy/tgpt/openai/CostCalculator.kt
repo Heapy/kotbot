@@ -6,9 +6,7 @@ import java.math.RoundingMode
 object CostCalculator {
     // Approximate pricing per 1M tokens (input/output)
     private val MODEL_PRICING: Map<String, Pair<BigDecimal, BigDecimal>> = mapOf(
-        "gpt-4o" to (BigDecimal("2.50") to BigDecimal("10.00")),
-        "gpt-4o-mini" to (BigDecimal("0.15") to BigDecimal("0.60")),
-        "gpt-5.2" to (BigDecimal("2.50") to BigDecimal("10.00")),
+        "gpt-5.5" to (BigDecimal("5.00") to BigDecimal("30.00")),
     )
 
     private val DEFAULT_PRICING = BigDecimal("2.50") to BigDecimal("10.00")

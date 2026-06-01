@@ -10,7 +10,7 @@ data class BotConfiguration(
 @Serializable
 data class OpenAiConfiguration(
     val apiKey: String,
-    val model: String = "gpt-5.2",
+    val model: String = "gpt-5.5",
     val whisperModel: String = "whisper-1",
     val systemPrompt: String = "You are a helpful assistant.",
     val maxTokens: Int = 4096,
