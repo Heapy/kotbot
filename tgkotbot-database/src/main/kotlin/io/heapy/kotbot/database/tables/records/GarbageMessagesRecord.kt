@@ -19,9 +19,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class GarbageMessagesRecord private constructor() : UpdatableRecordImpl<GarbageMessagesRecord>(GarbageMessages.GARBAGE_MESSAGES), IGarbageMessages {
 
-    open override var id: Int?
+    open override var id: Int
         set(value): Unit = set(0, value)
-        get(): Int? = get(0) as Int?
+        get(): Int = get(0) as Int
 
     open override var text: String
         set(value): Unit = set(1, value)
@@ -61,7 +61,7 @@ open class GarbageMessagesRecord private constructor() : UpdatableRecordImpl<Gar
     /**
      * Create a detached, initialised GarbageMessagesRecord
      */
-    constructor(id: Int? = null, text: String, type: String, match: MatchType, action: ActionType): this() {
+    constructor(id: Int, text: String, type: String, match: MatchType, action: ActionType): this() {
         this.id = id
         this.text = text
         this.type = type

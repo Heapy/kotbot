@@ -20,9 +20,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class ChallengeAttemptRecord private constructor() : UpdatableRecordImpl<ChallengeAttemptRecord>(ChallengeAttempt.CHALLENGE_ATTEMPT), IChallengeAttempt {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var sessionId: Long
         set(value): Unit = set(1, value)
@@ -94,7 +94,7 @@ open class ChallengeAttemptRecord private constructor() : UpdatableRecordImpl<Ch
     /**
      * Create a detached, initialised ChallengeAttemptRecord
      */
-    constructor(id: Long? = null, sessionId: Long, telegramId: Long, challengeId: UUID, templateKey: String, selectedAnswer: String, correctAnswer: String, isCorrect: Boolean, challengeSentAt: LocalDateTime, answeredAt: LocalDateTime? = null, latencyMs: Long): this() {
+    constructor(id: Long, sessionId: Long, telegramId: Long, challengeId: UUID, templateKey: String, selectedAnswer: String, correctAnswer: String, isCorrect: Boolean, challengeSentAt: LocalDateTime, answeredAt: LocalDateTime? = null, latencyMs: Long): this() {
         this.id = id
         this.sessionId = sessionId
         this.telegramId = telegramId

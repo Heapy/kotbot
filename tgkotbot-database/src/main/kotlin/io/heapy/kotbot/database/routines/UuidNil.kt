@@ -25,7 +25,7 @@ open class UuidNil : AbstractRoutine<UUID>("uuid_nil", Public.PUBLIC, DSL.commen
         /**
          * The parameter <code>public.uuid_nil.RETURN_VALUE</code>.
          */
-        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false, false)
+        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false)
     }
 
     init {

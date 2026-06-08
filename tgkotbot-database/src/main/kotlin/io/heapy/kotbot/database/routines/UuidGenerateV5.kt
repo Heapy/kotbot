@@ -26,17 +26,17 @@ open class UuidGenerateV5 : AbstractRoutine<UUID>("uuid_generate_v5", Public.PUB
         /**
          * The parameter <code>public.uuid_generate_v5.RETURN_VALUE</code>.
          */
-        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false, false)
+        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false)
 
         /**
          * The parameter <code>public.uuid_generate_v5.namespace</code>.
          */
-        val NAMESPACE: Parameter<UUID?> = Internal.createParameter("namespace", SQLDataType.UUID, false, false)
+        val NAMESPACE: Parameter<UUID?> = Internal.createParameter("namespace", SQLDataType.UUID, false)
 
         /**
          * The parameter <code>public.uuid_generate_v5.name</code>.
          */
-        val NAME: Parameter<String?> = Internal.createParameter("name", SQLDataType.CLOB, false, false)
+        val NAME: Parameter<String?> = Internal.createParameter("name", SQLDataType.CLOB, false)
     }
 
     init {

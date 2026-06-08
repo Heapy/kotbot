@@ -19,7 +19,6 @@ import kotlin.collections.List
 import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
-import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.InverseForeignKey
 import org.jooq.Name
@@ -29,10 +28,10 @@ import org.jooq.QueryPart
 import org.jooq.Record
 import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.Select
 import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
+import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
@@ -81,7 +80,7 @@ open class GptSession(
     /**
      * The column <code>public.gpt_session.id</code>.
      */
-    val ID: TableField<GptSessionRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "")
+    val ID: TableField<GptSessionRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "")
 
     /**
      * The column <code>public.gpt_session.user_id</code>.
@@ -151,7 +150,6 @@ open class GptSession(
     }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(GPT_SESSION_PREVIEW_UINDEX)
-    override fun getIdentity(): Identity<GptSessionRecord, Long?> = super.getIdentity() as Identity<GptSessionRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<GptSessionRecord> = GPT_SESSION_PKEY
 
     private lateinit var _gptSessionMessage: GptSessionMessagePath
@@ -191,7 +189,7 @@ open class GptSession(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): GptSession = GptSession(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): GptSession = GptSession(qualifiedName, if (aliased()) this else null, Internal.condition(this, condition))
 
     /**
      * Create an inline derived table from this table
@@ -231,10 +229,10 @@ open class GptSession(
     /**
      * Create an inline derived table from this table
      */
-    override fun whereExists(select: Select<*>): GptSession = where(DSL.exists(select))
+    override fun whereExists(select: TableLike<*>): GptSession = where(DSL.exists(select))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun whereNotExists(select: Select<*>): GptSession = where(DSL.notExists(select))
+    override fun whereNotExists(select: TableLike<*>): GptSession = where(DSL.notExists(select))
 }

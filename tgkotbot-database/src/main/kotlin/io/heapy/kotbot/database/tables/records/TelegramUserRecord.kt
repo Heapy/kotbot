@@ -21,9 +21,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class TelegramUserRecord private constructor() : UpdatableRecordImpl<TelegramUserRecord>(TelegramUser.TELEGRAM_USER), ITelegramUser {
 
-    open override var internalId: Long?
+    open override var internalId: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var telegramId: Long
         set(value): Unit = set(1, value)
@@ -93,7 +93,7 @@ open class TelegramUserRecord private constructor() : UpdatableRecordImpl<Telegr
     /**
      * Create a detached, initialised TelegramUserRecord
      */
-    constructor(internalId: Long? = null, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null, displayName: String? = null, note: String? = null): this() {
+    constructor(internalId: Long, telegramId: Long, created: LocalDateTime? = null, lastMessage: LocalDateTime? = null, messageCount: Int? = null, status: TelegramUserStatus? = null, role: TelegramUserRole? = null, badge: String? = null, version: Int? = null, displayName: String? = null, note: String? = null): this() {
         this.internalId = internalId
         this.telegramId = telegramId
         this.created = created

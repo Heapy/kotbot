@@ -20,9 +20,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class UpdateRawRecord private constructor() : UpdatableRecordImpl<UpdateRawRecord>(UpdateRaw.UPDATE_RAW), IUpdateRaw {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var created: LocalDateTime
         set(value): Unit = set(1, value)
@@ -52,7 +52,7 @@ open class UpdateRawRecord private constructor() : UpdatableRecordImpl<UpdateRaw
     /**
      * Create a detached, initialised UpdateRawRecord
      */
-    constructor(id: Long? = null, created: LocalDateTime, update: JSONB): this() {
+    constructor(id: Long, created: LocalDateTime, update: JSONB): this() {
         this.id = id
         this.created = created
         this.update = update

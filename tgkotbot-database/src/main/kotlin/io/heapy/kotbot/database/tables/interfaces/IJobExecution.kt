@@ -15,7 +15,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 interface IJobExecution : Serializable {
-    val id: Long?
+    val id: Long
     val jobName: String
     val started: LocalDateTime?
     val finished: LocalDateTime?

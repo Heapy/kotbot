@@ -27,13 +27,13 @@ open class JobExecutionDao(configuration: Configuration?) : DAOImpl<JobExecution
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.JobExecution): Long? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.JobExecution): Long = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.JobExecution> = fetchRange(JobExecution.JOB_EXECUTION.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.JobExecution> = fetchRange(JobExecution.JOB_EXECUTION.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

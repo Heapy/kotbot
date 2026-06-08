@@ -15,7 +15,7 @@ import java.io.Serializable
  */
 @Suppress("warnings")
 interface IGarbageMessages : Serializable {
-    val id: Int?
+    val id: Int
     val text: String
     val type: String
     val match: MatchType

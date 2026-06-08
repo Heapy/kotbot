@@ -24,13 +24,14 @@ import org.jooq.QueryPart
 import org.jooq.Record
 import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.Select
 import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
+import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
+import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -134,7 +135,7 @@ open class CallbackData(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): CallbackData = CallbackData(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): CallbackData = CallbackData(qualifiedName, if (aliased()) this else null, Internal.condition(this, condition))
 
     /**
      * Create an inline derived table from this table
@@ -174,10 +175,10 @@ open class CallbackData(
     /**
      * Create an inline derived table from this table
      */
-    override fun whereExists(select: Select<*>): CallbackData = where(DSL.exists(select))
+    override fun whereExists(select: TableLike<*>): CallbackData = where(DSL.exists(select))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun whereNotExists(select: Select<*>): CallbackData = where(DSL.notExists(select))
+    override fun whereNotExists(select: TableLike<*>): CallbackData = where(DSL.notExists(select))
 }

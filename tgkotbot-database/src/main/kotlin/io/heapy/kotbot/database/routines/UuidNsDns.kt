@@ -25,7 +25,7 @@ open class UuidNsDns : AbstractRoutine<UUID>("uuid_ns_dns", Public.PUBLIC, DSL.c
         /**
          * The parameter <code>public.uuid_ns_dns.RETURN_VALUE</code>.
          */
-        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false, false)
+        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false)
     }
 
     init {

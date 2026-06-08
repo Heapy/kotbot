@@ -15,7 +15,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 data class VerifiedUser(
-    override val id: Long? = null,
+    override val id: Long,
     override val telegramId: Long,
     override val source: VerificationSource,
     override val verifiedAt: LocalDateTime? = null,
@@ -30,11 +30,7 @@ data class VerifiedUser(
         if (this::class != other::class)
             return false
         val o: VerifiedUser = other as VerifiedUser
-        if (this.id == null) {
-            if (o.id != null)
-                return false
-        }
-        else if (this.id != o.id)
+        if (this.id != o.id)
             return false
         if (this.telegramId != o.telegramId)
             return false
@@ -58,7 +54,7 @@ data class VerifiedUser(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
+        result = prime * result + this.id.hashCode()
         result = prime * result + this.telegramId.hashCode()
         result = prime * result + this.source.hashCode()
         result = prime * result + (if (this.verifiedAt == null) 0 else this.verifiedAt.hashCode())

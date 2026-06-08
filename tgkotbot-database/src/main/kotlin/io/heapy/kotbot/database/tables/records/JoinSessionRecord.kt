@@ -22,9 +22,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSessionRecord>(JoinSession.JOIN_SESSION), IJoinSession {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var telegramId: Long
         set(value): Unit = set(1, value)
@@ -129,7 +129,7 @@ open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSes
     /**
      * Create a detached, initialised JoinSessionRecord
      */
-    constructor(id: Long? = null, telegramId: Long, chatId: Long, userChatId: Long, status: JoinSessionStatus? = null, maxAttempts: Int, attemptsUsed: Int? = null, expiresAt: LocalDateTime, createdAt: LocalDateTime? = null, finishedAt: LocalDateTime? = null, challengeId: UUID? = null, templateKey: String? = null, seed: Long? = null, snippet: String? = null, correctAnswer: String? = null, options: JSONB? = null, challengeSentAt: LocalDateTime? = null, messageId: Int? = null): this() {
+    constructor(id: Long, telegramId: Long, chatId: Long, userChatId: Long, status: JoinSessionStatus? = null, maxAttempts: Int, attemptsUsed: Int? = null, expiresAt: LocalDateTime, createdAt: LocalDateTime? = null, finishedAt: LocalDateTime? = null, challengeId: UUID? = null, templateKey: String? = null, seed: Long? = null, snippet: String? = null, correctAnswer: String? = null, options: JSONB? = null, challengeSentAt: LocalDateTime? = null, messageId: Int? = null): this() {
         this.id = id
         this.telegramId = telegramId
         this.chatId = chatId

@@ -26,13 +26,13 @@ open class GptSessionDao(configuration: Configuration?) : DAOImpl<GptSessionReco
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.GptSession): Long? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.GptSession): Long = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.GptSession> = fetchRange(GptSession.GPT_SESSION.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.GptSession> = fetchRange(GptSession.GPT_SESSION.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

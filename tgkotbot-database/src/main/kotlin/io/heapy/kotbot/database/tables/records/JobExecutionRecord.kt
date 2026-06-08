@@ -20,9 +20,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class JobExecutionRecord private constructor() : UpdatableRecordImpl<JobExecutionRecord>(JobExecution.JOB_EXECUTION), IJobExecution {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var jobName: String
         set(value): Unit = set(1, value)
@@ -62,7 +62,7 @@ open class JobExecutionRecord private constructor() : UpdatableRecordImpl<JobExe
     /**
      * Create a detached, initialised JobExecutionRecord
      */
-    constructor(id: Long? = null, jobName: String, started: LocalDateTime? = null, finished: LocalDateTime? = null, status: JobExecutionStatus? = null): this() {
+    constructor(id: Long, jobName: String, started: LocalDateTime? = null, finished: LocalDateTime? = null, status: JobExecutionStatus? = null): this() {
         this.id = id
         this.jobName = jobName
         this.started = started

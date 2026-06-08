@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 interface ITelegramUser : Serializable {
-    val internalId: Long?
+    val internalId: Long
     val telegramId: Long
     val created: LocalDateTime?
     val lastMessage: LocalDateTime?

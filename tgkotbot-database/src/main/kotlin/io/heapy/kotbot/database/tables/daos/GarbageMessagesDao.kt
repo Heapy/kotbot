@@ -26,13 +26,13 @@ open class GarbageMessagesDao(configuration: Configuration?) : DAOImpl<GarbageMe
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.GarbageMessages): Int? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.GarbageMessages): Int = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Int?, upperInclusive: Int?): List<io.heapy.kotbot.database.tables.pojos.GarbageMessages> = fetchRange(GarbageMessages.GARBAGE_MESSAGES.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Int, upperInclusive: Int): List<io.heapy.kotbot.database.tables.pojos.GarbageMessages> = fetchRange(GarbageMessages.GARBAGE_MESSAGES.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

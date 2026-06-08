@@ -14,7 +14,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 data class GptSessionMessage(
-    override val id: Long? = null,
+    override val id: Long,
     override val sessionId: Long,
     override val role: String,
     override val content: String,
@@ -29,11 +29,7 @@ data class GptSessionMessage(
         if (this::class != other::class)
             return false
         val o: GptSessionMessage = other as GptSessionMessage
-        if (this.id == null) {
-            if (o.id != null)
-                return false
-        }
-        else if (this.id != o.id)
+        if (this.id != o.id)
             return false
         if (this.sessionId != o.sessionId)
             return false
@@ -53,7 +49,7 @@ data class GptSessionMessage(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
+        result = prime * result + this.id.hashCode()
         result = prime * result + this.sessionId.hashCode()
         result = prime * result + this.role.hashCode()
         result = prime * result + this.content.hashCode()

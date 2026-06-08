@@ -13,7 +13,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 interface IGptSession : Serializable {
-    val id: Long?
+    val id: Long
     val userId: Long
     val groupChatId: Long
     val waitMessageId: Int

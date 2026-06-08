@@ -27,13 +27,13 @@ open class ChallengeAttemptDao(configuration: Configuration?) : DAOImpl<Challeng
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.ChallengeAttempt): Long? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.ChallengeAttempt): Long = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.ChallengeAttempt> = fetchRange(ChallengeAttempt.CHALLENGE_ATTEMPT.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.ChallengeAttempt> = fetchRange(ChallengeAttempt.CHALLENGE_ATTEMPT.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

@@ -13,7 +13,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 interface IGptSessionMessage : Serializable {
-    val id: Long?
+    val id: Long
     val sessionId: Long
     val role: String
     val content: String

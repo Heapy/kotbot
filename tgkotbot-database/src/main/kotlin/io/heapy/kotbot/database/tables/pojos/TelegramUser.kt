@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 data class TelegramUser(
-    override val internalId: Long? = null,
+    override val internalId: Long,
     override val telegramId: Long,
     override val created: LocalDateTime? = null,
     override val lastMessage: LocalDateTime? = null,
@@ -37,11 +37,7 @@ data class TelegramUser(
         if (this::class != other::class)
             return false
         val o: TelegramUser = other as TelegramUser
-        if (this.internalId == null) {
-            if (o.internalId != null)
-                return false
-        }
-        else if (this.internalId != o.internalId)
+        if (this.internalId != o.internalId)
             return false
         if (this.telegramId != o.telegramId)
             return false
@@ -105,7 +101,7 @@ data class TelegramUser(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.internalId == null) 0 else this.internalId.hashCode())
+        result = prime * result + this.internalId.hashCode()
         result = prime * result + this.telegramId.hashCode()
         result = prime * result + (if (this.created == null) 0 else this.created.hashCode())
         result = prime * result + (if (this.lastMessage == null) 0 else this.lastMessage.hashCode())

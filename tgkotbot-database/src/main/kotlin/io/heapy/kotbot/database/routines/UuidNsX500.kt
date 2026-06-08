@@ -25,7 +25,7 @@ open class UuidNsX500 : AbstractRoutine<UUID>("uuid_ns_x500", Public.PUBLIC, DSL
         /**
          * The parameter <code>public.uuid_ns_x500.RETURN_VALUE</code>.
          */
-        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false, false)
+        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false)
     }
 
     init {

@@ -25,7 +25,7 @@ open class UuidGenerateV1 : AbstractRoutine<UUID>("uuid_generate_v1", Public.PUB
         /**
          * The parameter <code>public.uuid_generate_v1.RETURN_VALUE</code>.
          */
-        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false, false)
+        val RETURN_VALUE: Parameter<UUID?> = Internal.createParameter("RETURN_VALUE", SQLDataType.UUID, false)
     }
 
     init {

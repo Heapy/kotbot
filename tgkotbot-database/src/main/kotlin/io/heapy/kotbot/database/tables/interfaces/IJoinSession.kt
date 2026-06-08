@@ -18,7 +18,7 @@ import org.jooq.JSONB
  */
 @Suppress("warnings")
 interface IJoinSession : Serializable {
-    val id: Long?
+    val id: Long
     val telegramId: Long
     val chatId: Long
     val userChatId: Long

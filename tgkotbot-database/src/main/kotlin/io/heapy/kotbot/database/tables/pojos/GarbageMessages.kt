@@ -14,7 +14,7 @@ import io.heapy.kotbot.database.tables.interfaces.IGarbageMessages
  */
 @Suppress("warnings")
 data class GarbageMessages(
-    override val id: Int? = null,
+    override val id: Int,
     override val text: String,
     override val type: String,
     override val match: MatchType,
@@ -29,11 +29,7 @@ data class GarbageMessages(
         if (this::class != other::class)
             return false
         val o: GarbageMessages = other as GarbageMessages
-        if (this.id == null) {
-            if (o.id != null)
-                return false
-        }
-        else if (this.id != o.id)
+        if (this.id != o.id)
             return false
         if (this.text != o.text)
             return false
@@ -49,7 +45,7 @@ data class GarbageMessages(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
+        result = prime * result + this.id.hashCode()
         result = prime * result + this.text.hashCode()
         result = prime * result + this.type.hashCode()
         result = prime * result + this.match.hashCode()

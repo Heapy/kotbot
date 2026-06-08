@@ -15,7 +15,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 data class JobExecution(
-    override val id: Long? = null,
+    override val id: Long,
     override val jobName: String,
     override val started: LocalDateTime? = null,
     override val finished: LocalDateTime? = null,
@@ -30,11 +30,7 @@ data class JobExecution(
         if (this::class != other::class)
             return false
         val o: JobExecution = other as JobExecution
-        if (this.id == null) {
-            if (o.id != null)
-                return false
-        }
-        else if (this.id != o.id)
+        if (this.id != o.id)
             return false
         if (this.jobName != o.jobName)
             return false
@@ -62,7 +58,7 @@ data class JobExecution(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
+        result = prime * result + this.id.hashCode()
         result = prime * result + this.jobName.hashCode()
         result = prime * result + (if (this.started == null) 0 else this.started.hashCode())
         result = prime * result + (if (this.finished == null) 0 else this.finished.hashCode())

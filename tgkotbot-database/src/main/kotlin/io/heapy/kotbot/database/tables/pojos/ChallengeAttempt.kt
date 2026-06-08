@@ -15,7 +15,7 @@ import java.util.UUID
  */
 @Suppress("warnings")
 data class ChallengeAttempt(
-    override val id: Long? = null,
+    override val id: Long,
     override val sessionId: Long,
     override val telegramId: Long,
     override val challengeId: UUID,
@@ -36,11 +36,7 @@ data class ChallengeAttempt(
         if (this::class != other::class)
             return false
         val o: ChallengeAttempt = other as ChallengeAttempt
-        if (this.id == null) {
-            if (o.id != null)
-                return false
-        }
-        else if (this.id != o.id)
+        if (this.id != o.id)
             return false
         if (this.sessionId != o.sessionId)
             return false
@@ -72,7 +68,7 @@ data class ChallengeAttempt(
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
-        result = prime * result + (if (this.id == null) 0 else this.id.hashCode())
+        result = prime * result + this.id.hashCode()
         result = prime * result + this.sessionId.hashCode()
         result = prime * result + this.telegramId.hashCode()
         result = prime * result + this.challengeId.hashCode()

@@ -20,9 +20,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class VerifiedUserRecord private constructor() : UpdatableRecordImpl<VerifiedUserRecord>(VerifiedUser.VERIFIED_USER), IVerifiedUser {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var telegramId: Long
         set(value): Unit = set(1, value)
@@ -62,7 +62,7 @@ open class VerifiedUserRecord private constructor() : UpdatableRecordImpl<Verifi
     /**
      * Create a detached, initialised VerifiedUserRecord
      */
-    constructor(id: Long? = null, telegramId: Long, source: VerificationSource, verifiedAt: LocalDateTime? = null, sessionId: Long? = null): this() {
+    constructor(id: Long, telegramId: Long, source: VerificationSource, verifiedAt: LocalDateTime? = null, sessionId: Long? = null): this() {
         this.id = id
         this.telegramId = telegramId
         this.source = source

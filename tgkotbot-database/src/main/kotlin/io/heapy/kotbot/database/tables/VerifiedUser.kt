@@ -18,7 +18,6 @@ import kotlin.collections.List
 import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
-import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.InverseForeignKey
 import org.jooq.Name
@@ -27,13 +26,14 @@ import org.jooq.QueryPart
 import org.jooq.Record
 import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.Select
 import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
+import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
+import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -78,7 +78,7 @@ open class VerifiedUser(
     /**
      * The column <code>public.verified_user.id</code>.
      */
-    val ID: TableField<VerifiedUserRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "")
+    val ID: TableField<VerifiedUserRecord, Long?> = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "")
 
     /**
      * The column <code>public.verified_user.telegram_id</code>.
@@ -120,7 +120,6 @@ open class VerifiedUser(
     constructor(): this(DSL.name("verified_user"), null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(VERIFIED_USER_TELEGRAM_ID_UINDEX)
-    override fun getIdentity(): Identity<VerifiedUserRecord, Long?> = super.getIdentity() as Identity<VerifiedUserRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<VerifiedUserRecord> = VERIFIED_USER_PKEY
     override fun `as`(alias: String): VerifiedUser = VerifiedUser(DSL.name(alias), this)
     override fun `as`(alias: Name): VerifiedUser = VerifiedUser(alias, this)
@@ -144,7 +143,7 @@ open class VerifiedUser(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): VerifiedUser = VerifiedUser(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): VerifiedUser = VerifiedUser(qualifiedName, if (aliased()) this else null, Internal.condition(this, condition))
 
     /**
      * Create an inline derived table from this table
@@ -184,10 +183,10 @@ open class VerifiedUser(
     /**
      * Create an inline derived table from this table
      */
-    override fun whereExists(select: Select<*>): VerifiedUser = where(DSL.exists(select))
+    override fun whereExists(select: TableLike<*>): VerifiedUser = where(DSL.exists(select))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun whereNotExists(select: Select<*>): VerifiedUser = where(DSL.notExists(select))
+    override fun whereNotExists(select: TableLike<*>): VerifiedUser = where(DSL.notExists(select))
 }

@@ -28,13 +28,13 @@ open class TelegramUserDao(configuration: Configuration?) : DAOImpl<TelegramUser
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.TelegramUser): Long? = o.internalId
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.TelegramUser): Long = o.internalId
 
     /**
      * Fetch records that have <code>internal_id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfInternalId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetchRange(TelegramUser.TELEGRAM_USER.INTERNAL_ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfInternalId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetchRange(TelegramUser.TELEGRAM_USER.INTERNAL_ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>internal_id IN (values)</code>
@@ -56,6 +56,11 @@ open class TelegramUserDao(configuration: Configuration?) : DAOImpl<TelegramUser
      * Fetch records that have <code>telegram_id IN (values)</code>
      */
     fun fetchByTelegramId(vararg values: Long): List<io.heapy.kotbot.database.tables.pojos.TelegramUser> = fetch(TelegramUser.TELEGRAM_USER.TELEGRAM_ID, *values.toTypedArray())
+
+    /**
+     * Fetch a unique record that has <code>telegram_id = value</code>
+     */
+    fun fetchOneByTelegramId(value: Long): io.heapy.kotbot.database.tables.pojos.TelegramUser? = fetchOne(TelegramUser.TELEGRAM_USER.TELEGRAM_ID, value)
 
     /**
      * Fetch records that have <code>created BETWEEN lowerInclusive AND

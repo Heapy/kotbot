@@ -19,7 +19,6 @@ import kotlin.collections.List
 import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
-import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.InverseForeignKey
 import org.jooq.Name
@@ -28,13 +27,14 @@ import org.jooq.QueryPart
 import org.jooq.Record
 import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.Select
 import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
+import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
+import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -79,7 +79,7 @@ open class TelegramUser(
     /**
      * The column <code>public.telegram_user.internal_id</code>.
      */
-    val INTERNAL_ID: TableField<TelegramUserRecord, Long?> = createField(DSL.name("internal_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "")
+    val INTERNAL_ID: TableField<TelegramUserRecord, Long?> = createField(DSL.name("internal_id"), SQLDataType.BIGINT.nullable(false), this, "")
 
     /**
      * The column <code>public.telegram_user.telegram_id</code>.
@@ -151,7 +151,6 @@ open class TelegramUser(
     constructor(): this(DSL.name("telegram_user"), null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(TELEGRAM_USER_TELEGRAM_ID_UINDEX)
-    override fun getIdentity(): Identity<TelegramUserRecord, Long?> = super.getIdentity() as Identity<TelegramUserRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<TelegramUserRecord> = TELEGRAM_USER_PK
     override fun `as`(alias: String): TelegramUser = TelegramUser(DSL.name(alias), this)
     override fun `as`(alias: Name): TelegramUser = TelegramUser(alias, this)
@@ -175,7 +174,7 @@ open class TelegramUser(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): TelegramUser = TelegramUser(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): TelegramUser = TelegramUser(qualifiedName, if (aliased()) this else null, Internal.condition(this, condition))
 
     /**
      * Create an inline derived table from this table
@@ -215,10 +214,10 @@ open class TelegramUser(
     /**
      * Create an inline derived table from this table
      */
-    override fun whereExists(select: Select<*>): TelegramUser = where(DSL.exists(select))
+    override fun whereExists(select: TableLike<*>): TelegramUser = where(DSL.exists(select))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun whereNotExists(select: Select<*>): TelegramUser = where(DSL.notExists(select))
+    override fun whereNotExists(select: TableLike<*>): TelegramUser = where(DSL.notExists(select))
 }

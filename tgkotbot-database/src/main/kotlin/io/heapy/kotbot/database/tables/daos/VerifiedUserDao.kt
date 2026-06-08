@@ -27,13 +27,13 @@ open class VerifiedUserDao(configuration: Configuration?) : DAOImpl<VerifiedUser
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.VerifiedUser): Long? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.VerifiedUser): Long = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.VerifiedUser> = fetchRange(VerifiedUser.VERIFIED_USER.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.VerifiedUser> = fetchRange(VerifiedUser.VERIFIED_USER.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>
@@ -55,6 +55,11 @@ open class VerifiedUserDao(configuration: Configuration?) : DAOImpl<VerifiedUser
      * Fetch records that have <code>telegram_id IN (values)</code>
      */
     fun fetchByTelegramId(vararg values: Long): List<io.heapy.kotbot.database.tables.pojos.VerifiedUser> = fetch(VerifiedUser.VERIFIED_USER.TELEGRAM_ID, *values.toTypedArray())
+
+    /**
+     * Fetch a unique record that has <code>telegram_id = value</code>
+     */
+    fun fetchOneByTelegramId(value: Long): io.heapy.kotbot.database.tables.pojos.VerifiedUser? = fetchOne(VerifiedUser.VERIFIED_USER.TELEGRAM_ID, value)
 
     /**
      * Fetch records that have <code>source BETWEEN lowerInclusive AND

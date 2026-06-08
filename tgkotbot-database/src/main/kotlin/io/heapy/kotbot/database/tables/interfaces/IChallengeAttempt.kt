@@ -14,7 +14,7 @@ import java.util.UUID
  */
 @Suppress("warnings")
 interface IChallengeAttempt : Serializable {
-    val id: Long?
+    val id: Long
     val sessionId: Long
     val telegramId: Long
     val challengeId: UUID

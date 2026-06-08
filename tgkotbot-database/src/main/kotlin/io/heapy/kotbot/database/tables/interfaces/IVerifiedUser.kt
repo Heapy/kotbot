@@ -15,7 +15,7 @@ import java.time.LocalDateTime
  */
 @Suppress("warnings")
 interface IVerifiedUser : Serializable {
-    val id: Long?
+    val id: Long
     val telegramId: Long
     val source: VerificationSource
     val verifiedAt: LocalDateTime?

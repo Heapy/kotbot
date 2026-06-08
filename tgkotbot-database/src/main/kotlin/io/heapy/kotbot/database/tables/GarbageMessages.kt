@@ -15,7 +15,6 @@ import kotlin.collections.Collection
 import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
-import org.jooq.Identity
 import org.jooq.InverseForeignKey
 import org.jooq.Name
 import org.jooq.PlainSQL
@@ -23,13 +22,14 @@ import org.jooq.QueryPart
 import org.jooq.Record
 import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.Select
 import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
+import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
+import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -74,7 +74,7 @@ open class GarbageMessages(
     /**
      * The column <code>public.garbage_messages.id</code>.
      */
-    val ID: TableField<GarbageMessagesRecord, Int?> = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "")
+    val ID: TableField<GarbageMessagesRecord, Int?> = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false), this, "")
 
     /**
      * The column <code>public.garbage_messages.text</code>.
@@ -115,7 +115,6 @@ open class GarbageMessages(
      */
     constructor(): this(DSL.name("garbage_messages"), null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIdentity(): Identity<GarbageMessagesRecord, Int?> = super.getIdentity() as Identity<GarbageMessagesRecord, Int?>
     override fun getPrimaryKey(): UniqueKey<GarbageMessagesRecord> = GARBAGE_MESSAGES_PKEY
     override fun `as`(alias: String): GarbageMessages = GarbageMessages(DSL.name(alias), this)
     override fun `as`(alias: Name): GarbageMessages = GarbageMessages(alias, this)
@@ -139,7 +138,7 @@ open class GarbageMessages(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): GarbageMessages = GarbageMessages(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): GarbageMessages = GarbageMessages(qualifiedName, if (aliased()) this else null, Internal.condition(this, condition))
 
     /**
      * Create an inline derived table from this table
@@ -179,10 +178,10 @@ open class GarbageMessages(
     /**
      * Create an inline derived table from this table
      */
-    override fun whereExists(select: Select<*>): GarbageMessages = where(DSL.exists(select))
+    override fun whereExists(select: TableLike<*>): GarbageMessages = where(DSL.exists(select))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun whereNotExists(select: Select<*>): GarbageMessages = where(DSL.notExists(select))
+    override fun whereNotExists(select: TableLike<*>): GarbageMessages = where(DSL.notExists(select))
 }

@@ -29,13 +29,13 @@ open class JoinSessionDao(configuration: Configuration?) : DAOImpl<JoinSessionRe
      */
     constructor(): this(null)
 
-    override fun getId(o: io.heapy.kotbot.database.tables.pojos.JoinSession): Long? = o.id
+    override fun getId(o: io.heapy.kotbot.database.tables.pojos.JoinSession): Long = o.id
 
     /**
      * Fetch records that have <code>id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    fun fetchRangeOfId(lowerInclusive: Long?, upperInclusive: Long?): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.ID, lowerInclusive, upperInclusive)
+    fun fetchRangeOfId(lowerInclusive: Long, upperInclusive: Long): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.ID, lowerInclusive, upperInclusive)
 
     /**
      * Fetch records that have <code>id IN (values)</code>

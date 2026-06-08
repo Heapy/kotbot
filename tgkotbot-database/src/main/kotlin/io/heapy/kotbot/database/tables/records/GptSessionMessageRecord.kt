@@ -19,9 +19,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("warnings")
 open class GptSessionMessageRecord private constructor() : UpdatableRecordImpl<GptSessionMessageRecord>(GptSessionMessage.GPT_SESSION_MESSAGE), IGptSessionMessage {
 
-    open override var id: Long?
+    open override var id: Long
         set(value): Unit = set(0, value)
-        get(): Long? = get(0) as Long?
+        get(): Long = get(0) as Long
 
     open override var sessionId: Long
         set(value): Unit = set(1, value)
@@ -61,7 +61,7 @@ open class GptSessionMessageRecord private constructor() : UpdatableRecordImpl<G
     /**
      * Create a detached, initialised GptSessionMessageRecord
      */
-    constructor(id: Long? = null, sessionId: Long, role: String, content: String, created: LocalDateTime? = null): this() {
+    constructor(id: Long, sessionId: Long, role: String, content: String, created: LocalDateTime? = null): this() {
         this.id = id
         this.sessionId = sessionId
         this.role = role
