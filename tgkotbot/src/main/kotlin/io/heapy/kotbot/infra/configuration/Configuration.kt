@@ -10,7 +10,12 @@ data class BotConfiguration(
 
 @Serializable
 data class CasConfiguration(
-    val allowlist: Set<Long>,
+    /**
+     * Single user ID always treated as CAS-flagged — admitted read-only and forced into the appeal
+     * flow — without calling the CAS API. For testing the appeal flow; unset (null) in production.
+     * Set via the KOTBOT_CAS_FORCE_FLAGGED env.
+     */
+    val forceFlagged: Long? = null,
 )
 
 @Serializable

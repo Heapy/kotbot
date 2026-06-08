@@ -20,7 +20,8 @@ open class CallbackQueryProcessorModule(
             kotbot = kotbotModule.kotbot,
             userContextService = userContextServiceModule.userContextService,
             gptSessionDao = daoModule.gptSessionDao,
-            joinChallengeProcessor = joinChallengeModule.joinChallengeProcessor,
+            challengeAnswerHandler = joinChallengeModule.challengeAnswerHandler,
+            appealHandler = joinChallengeModule.appealHandler,
         )
     }
 }

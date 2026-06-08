@@ -1,19 +1,14 @@
 package io.heapy.kotbot.bot.rules
 
-import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.ChatAdministratorsCache
 import io.heapy.kotbot.bot.UserContextServiceModule
 import io.heapy.kotbot.bot.dao.DaoModule
-import io.heapy.kotbot.infra.HttpClientModule
 import io.heapy.kotbot.infra.KotbotModule
-import io.heapy.kotbot.infra.configuration.CasConfiguration
 import io.heapy.kotbot.infra.metrics.MetricsModule
 
 @Module
 open class RulesModule(
-    private val configurationModule: ConfigurationModule,
-    private val httpClientModule: HttpClientModule,
     private val kotbotModule: KotbotModule,
     private val metricsModule: MetricsModule,
     private val daoModule: DaoModule,
@@ -33,7 +28,6 @@ open class RulesModule(
             bannedUserRule,
             deleteMessageRule,
             deleteGarbageRule,
-            combotCasRule,
             deletePropagandaRule,
             tagEnforcementRule,
         )
@@ -63,20 +57,4 @@ open class RulesModule(
     }
 
     open val deletePropagandaRule: Rule by lazy(::DeletePropagandaRule)
-
-    open val combotCasRule: Rule by lazy {
-        CombotCasRule(
-            client = httpClientModule.httpClient,
-            casConfiguration = casConfiguration,
-        )
-    }
-
-    open val casConfiguration: CasConfiguration by lazy {
-        configurationModule
-            .config
-            .read(
-                deserializer = CasConfiguration.serializer(),
-                path = "cas",
-            )
-    }
 }

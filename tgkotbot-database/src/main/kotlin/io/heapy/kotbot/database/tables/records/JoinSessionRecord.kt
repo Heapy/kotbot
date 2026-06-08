@@ -94,6 +94,22 @@ open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSes
         set(value): Unit = set(17, value)
         get(): Int? = get(17) as Int?
 
+    open override var appealText: String?
+        set(value): Unit = set(18, value)
+        get(): String? = get(18) as String?
+
+    open override var casOffenses: Int?
+        set(value): Unit = set(19, value)
+        get(): Int? = get(19) as Int?
+
+    open override var casTimeAdded: String?
+        set(value): Unit = set(20, value)
+        get(): String? = get(20) as String?
+
+    open override var casMessages: JSONB?
+        set(value): Unit = set(21, value)
+        get(): JSONB? = get(21) as JSONB?
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -123,13 +139,17 @@ open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSes
         this.options = from.options
         this.challengeSentAt = from.challengeSentAt
         this.messageId = from.messageId
+        this.appealText = from.appealText
+        this.casOffenses = from.casOffenses
+        this.casTimeAdded = from.casTimeAdded
+        this.casMessages = from.casMessages
         resetTouchedOnNotNull()
     }
 
     /**
      * Create a detached, initialised JoinSessionRecord
      */
-    constructor(id: Long, telegramId: Long, chatId: Long, userChatId: Long, status: JoinSessionStatus? = null, maxAttempts: Int, attemptsUsed: Int? = null, expiresAt: LocalDateTime, createdAt: LocalDateTime? = null, finishedAt: LocalDateTime? = null, challengeId: UUID? = null, templateKey: String? = null, seed: Long? = null, snippet: String? = null, correctAnswer: String? = null, options: JSONB? = null, challengeSentAt: LocalDateTime? = null, messageId: Int? = null): this() {
+    constructor(id: Long, telegramId: Long, chatId: Long, userChatId: Long, status: JoinSessionStatus? = null, maxAttempts: Int, attemptsUsed: Int? = null, expiresAt: LocalDateTime, createdAt: LocalDateTime? = null, finishedAt: LocalDateTime? = null, challengeId: UUID? = null, templateKey: String? = null, seed: Long? = null, snippet: String? = null, correctAnswer: String? = null, options: JSONB? = null, challengeSentAt: LocalDateTime? = null, messageId: Int? = null, appealText: String? = null, casOffenses: Int? = null, casTimeAdded: String? = null, casMessages: JSONB? = null): this() {
         this.id = id
         this.telegramId = telegramId
         this.chatId = chatId
@@ -148,6 +168,10 @@ open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSes
         this.options = options
         this.challengeSentAt = challengeSentAt
         this.messageId = messageId
+        this.appealText = appealText
+        this.casOffenses = casOffenses
+        this.casTimeAdded = casTimeAdded
+        this.casMessages = casMessages
         resetTouchedOnNotNull()
     }
 
@@ -174,6 +198,10 @@ open class JoinSessionRecord private constructor() : UpdatableRecordImpl<JoinSes
             this.options = value.options
             this.challengeSentAt = value.challengeSentAt
             this.messageId = value.messageId
+            this.appealText = value.appealText
+            this.casOffenses = value.casOffenses
+            this.casTimeAdded = value.casTimeAdded
+            this.casMessages = value.casMessages
             resetTouchedOnNotNull()
         }
     }

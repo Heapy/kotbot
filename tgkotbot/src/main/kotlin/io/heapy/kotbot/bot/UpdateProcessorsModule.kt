@@ -48,15 +48,24 @@ open class UpdateProcessorsModule(
         )
     }
 
+    // Ordered message-handling chain: each handler may consume a non-command message, falling
+    // through to the next. Adding a new message feature is a one-line change here.
+    open val messageHandlers: List<MessageHandler> by lazy {
+        listOf(
+            commandsModule.commandResolver,
+            joinChallengeModule.appealHandler,
+            gptReplyHandler,
+        )
+    }
+
     open val kotbotUpdateProcessor: TypedUpdateProcessor by lazy {
         KotbotUpdateProcessor(
             filter = filtersModule.filter,
             meterRegistry = metricsModule.meterRegistry,
-            commandResolver = commandsModule.commandResolver,
-            gptReplyHandler = gptReplyHandler,
+            messageHandlers = messageHandlers,
             ruleExecutor = rulesModule.ruleExecutor,
             callbackQueryProcessor = callbackQueryProcessorModule.callbackQueryProcessor,
-            joinChallengeProcessor = joinChallengeModule.joinChallengeProcessor,
+            joinRequestHandler = joinChallengeModule.joinRequestHandler,
             transactionProvider = jdbcModule.transactionProvider,
             userContextDao = daoModule.userContextDao,
         )

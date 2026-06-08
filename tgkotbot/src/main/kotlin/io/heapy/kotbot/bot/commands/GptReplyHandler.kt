@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.commands
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.DismissGptCallbackData
 import io.heapy.kotbot.bot.Kotbot
+import io.heapy.kotbot.bot.MessageHandler
 import io.heapy.kotbot.bot.SendGptMessageCallbackData
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.dao.GptSessionDao
@@ -23,13 +24,13 @@ class GptReplyHandler(
     private val markdown: Markdown,
     private val callbackDataService: CallbackDataService,
     private val gptSessionDao: GptSessionDao,
-) {
+) : MessageHandler {
     /**
      * Handle a message in private chat that might be a reply to a GPT preview.
      * Returns true if the message was handled as a GPT refinement.
      */
     context(_: TransactionContext)
-    suspend fun handleIfGptReply(message: Message): Boolean {
+    override suspend fun handle(message: Message): Boolean {
         if (message.chat.type != "private") return false
 
         val replyToMessage = message.reply_to_message ?: return false

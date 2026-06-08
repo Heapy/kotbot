@@ -1,11 +1,9 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.komok.tech.logging.Logger
-import io.heapy.kotbot.bot.commands.CommandResolver
-import io.heapy.kotbot.bot.commands.GptReplyHandler
 import io.heapy.kotbot.bot.dao.UserContextDao
 import io.heapy.kotbot.bot.filters.Filter
-import io.heapy.kotbot.bot.join.JoinChallengeProcessor
+import io.heapy.kotbot.bot.join.JoinRequestHandler
 import io.heapy.kotbot.bot.model.User
 import io.heapy.kotbot.bot.rules.RuleExecutor
 import io.heapy.kotbot.infra.jdbc.TransactionProvider
@@ -14,11 +12,10 @@ import io.micrometer.core.instrument.MeterRegistry
 class KotbotUpdateProcessor(
     meterRegistry: MeterRegistry,
     private val filter: Filter,
-    private val commandResolver: CommandResolver,
-    private val gptReplyHandler: GptReplyHandler,
+    private val messageHandlers: List<MessageHandler>,
     private val ruleExecutor: RuleExecutor,
     private val callbackQueryProcessor: CallbackQueryProcessor,
-    private val joinChallengeProcessor: JoinChallengeProcessor,
+    private val joinRequestHandler: JoinRequestHandler,
     private val transactionProvider: TransactionProvider,
     private val userContextDao: UserContextDao,
 ) : TypedUpdateProcessor {
@@ -49,12 +46,9 @@ class KotbotUpdateProcessor(
         if (passed) {
             when (update) {
                 is TypedMessage -> {
-                    val result = commandResolver.findAndExecuteCommand(update.value)
-                    if (!result) {
-                        val gptHandled = gptReplyHandler.handleIfGptReply(update.value)
-                        if (!gptHandled) {
-                            ruleExecutor.executeRules(update)
-                        }
+                    val message = update.value
+                    if (messageHandlers.none { it.handle(message) }) {
+                        ruleExecutor.executeRules(update)
                     }
                 }
 
@@ -65,7 +59,7 @@ class KotbotUpdateProcessor(
                 }
 
                 is TypedChatJoinRequest -> {
-                    joinChallengeProcessor.handleJoinRequest(update.value)
+                    joinRequestHandler.handleJoinRequest(update.value)
                 }
 
                 else -> log.info("Update type not handled: {}", update::class.simpleName)

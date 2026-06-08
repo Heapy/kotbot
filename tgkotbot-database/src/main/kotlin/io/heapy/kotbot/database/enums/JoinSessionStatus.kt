@@ -19,7 +19,9 @@ enum class JoinSessionStatus(@get:JvmName("literal") public val literal: String)
     ACTIVE("ACTIVE"),
     PASSED("PASSED"),
     FAILED("FAILED"),
-    EXPIRED("EXPIRED");
+    EXPIRED("EXPIRED"),
+    AWAITING_APPEAL("AWAITING_APPEAL"),
+    APPEAL_PENDING("APPEAL_PENDING");
     override fun getCatalog(): Catalog? = schema.catalog
     override fun getSchema(): Schema = Public.PUBLIC
     override fun getName(): String = "join_session_status"

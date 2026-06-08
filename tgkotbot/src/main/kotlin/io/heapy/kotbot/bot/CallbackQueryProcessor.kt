@@ -1,7 +1,8 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.dao.GptSessionDao
-import io.heapy.kotbot.bot.join.JoinChallengeProcessor
+import io.heapy.kotbot.bot.join.AppealHandler
+import io.heapy.kotbot.bot.join.ChallengeAnswerHandler
 import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.model.CallbackQuery
@@ -17,7 +18,8 @@ class CallbackQueryProcessor(
     private val kotbot: Kotbot,
     private val gptSessionDao: GptSessionDao,
     private val userContextService: UserContextService,
-    private val joinChallengeProcessor: JoinChallengeProcessor,
+    private val challengeAnswerHandler: ChallengeAnswerHandler,
+    private val appealHandler: AppealHandler,
 ) {
     context(_: TransactionContext)
     suspend fun processCallbackQuery(
@@ -175,10 +177,26 @@ class CallbackQueryProcessor(
             }
 
             is JoinChallengeAnswerCallbackData -> {
-                joinChallengeProcessor.handleChallengeAnswer(
+                challengeAnswerHandler.handleChallengeAnswer(
                     callbackQuery = callbackQuery,
                     challengeId = java.util.UUID.fromString(callBackData.challengeId),
                     selectedIndex = callBackData.selectedIndex,
+                )
+            }
+
+            is ApproveAppealCallbackData -> {
+                appealHandler.handleAppealDecision(
+                    callbackQuery = callbackQuery,
+                    sessionId = callBackData.sessionId,
+                    approve = true,
+                )
+            }
+
+            is DeclineAppealCallbackData -> {
+                appealHandler.handleAppealDecision(
+                    callbackQuery = callbackQuery,
+                    sessionId = callBackData.sessionId,
+                    approve = false,
                 )
             }
 

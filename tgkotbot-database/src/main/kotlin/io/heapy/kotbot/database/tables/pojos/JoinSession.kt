@@ -35,7 +35,11 @@ data class JoinSession(
     override val correctAnswer: String? = null,
     override val options: JSONB? = null,
     override val challengeSentAt: LocalDateTime? = null,
-    override val messageId: Int? = null
+    override val messageId: Int? = null,
+    override val appealText: String? = null,
+    override val casOffenses: Int? = null,
+    override val casTimeAdded: String? = null,
+    override val casMessages: JSONB? = null
 ): IJoinSession {
 
     override fun equals(other: Any?): Boolean {
@@ -130,6 +134,30 @@ data class JoinSession(
         }
         else if (this.messageId != o.messageId)
             return false
+        if (this.appealText == null) {
+            if (o.appealText != null)
+                return false
+        }
+        else if (this.appealText != o.appealText)
+            return false
+        if (this.casOffenses == null) {
+            if (o.casOffenses != null)
+                return false
+        }
+        else if (this.casOffenses != o.casOffenses)
+            return false
+        if (this.casTimeAdded == null) {
+            if (o.casTimeAdded != null)
+                return false
+        }
+        else if (this.casTimeAdded != o.casTimeAdded)
+            return false
+        if (this.casMessages == null) {
+            if (o.casMessages != null)
+                return false
+        }
+        else if (this.casMessages != o.casMessages)
+            return false
         return true
     }
 
@@ -154,6 +182,10 @@ data class JoinSession(
         result = prime * result + (if (this.options == null) 0 else this.options.hashCode())
         result = prime * result + (if (this.challengeSentAt == null) 0 else this.challengeSentAt.hashCode())
         result = prime * result + (if (this.messageId == null) 0 else this.messageId.hashCode())
+        result = prime * result + (if (this.appealText == null) 0 else this.appealText.hashCode())
+        result = prime * result + (if (this.casOffenses == null) 0 else this.casOffenses.hashCode())
+        result = prime * result + (if (this.casTimeAdded == null) 0 else this.casTimeAdded.hashCode())
+        result = prime * result + (if (this.casMessages == null) 0 else this.casMessages.hashCode())
         return result
     }
 
@@ -178,6 +210,10 @@ data class JoinSession(
         sb.append(", ").append(options)
         sb.append(", ").append(challengeSentAt)
         sb.append(", ").append(messageId)
+        sb.append(", ").append(appealText)
+        sb.append(", ").append(casOffenses)
+        sb.append(", ").append(casTimeAdded)
+        sb.append(", ").append(casMessages)
 
         sb.append(")")
         return sb.toString()

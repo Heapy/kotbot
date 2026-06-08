@@ -233,4 +233,48 @@ open class JoinSessionDao(configuration: Configuration?) : DAOImpl<JoinSessionRe
      * Fetch records that have <code>message_id IN (values)</code>
      */
     fun fetchByMessageId(vararg values: Int): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetch(JoinSession.JOIN_SESSION.MESSAGE_ID, *values.toTypedArray())
+
+    /**
+     * Fetch records that have <code>appeal_text BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfAppealText(lowerInclusive: String?, upperInclusive: String?): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.APPEAL_TEXT, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>appeal_text IN (values)</code>
+     */
+    fun fetchByAppealText(vararg values: String): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetch(JoinSession.JOIN_SESSION.APPEAL_TEXT, *values)
+
+    /**
+     * Fetch records that have <code>cas_offenses BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfCasOffenses(lowerInclusive: Int?, upperInclusive: Int?): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.CAS_OFFENSES, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>cas_offenses IN (values)</code>
+     */
+    fun fetchByCasOffenses(vararg values: Int): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetch(JoinSession.JOIN_SESSION.CAS_OFFENSES, *values.toTypedArray())
+
+    /**
+     * Fetch records that have <code>cas_time_added BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfCasTimeAdded(lowerInclusive: String?, upperInclusive: String?): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.CAS_TIME_ADDED, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>cas_time_added IN (values)</code>
+     */
+    fun fetchByCasTimeAdded(vararg values: String): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetch(JoinSession.JOIN_SESSION.CAS_TIME_ADDED, *values)
+
+    /**
+     * Fetch records that have <code>cas_messages BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfCasMessages(lowerInclusive: JSONB?, upperInclusive: JSONB?): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetchRange(JoinSession.JOIN_SESSION.CAS_MESSAGES, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>cas_messages IN (values)</code>
+     */
+    fun fetchByCasMessages(vararg values: JSONB): List<io.heapy.kotbot.database.tables.pojos.JoinSession> = fetch(JoinSession.JOIN_SESSION.CAS_MESSAGES, *values)
 }

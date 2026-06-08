@@ -54,6 +54,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
 }
 
 repositories {

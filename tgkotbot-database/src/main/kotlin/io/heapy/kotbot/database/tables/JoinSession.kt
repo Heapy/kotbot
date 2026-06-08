@@ -171,6 +171,26 @@ open class JoinSession(
      */
     val MESSAGE_ID: TableField<JoinSessionRecord, Int?> = createField(DSL.name("message_id"), SQLDataType.INTEGER, this, "")
 
+    /**
+     * The column <code>public.join_session.appeal_text</code>.
+     */
+    val APPEAL_TEXT: TableField<JoinSessionRecord, String?> = createField(DSL.name("appeal_text"), SQLDataType.CLOB, this, "")
+
+    /**
+     * The column <code>public.join_session.cas_offenses</code>.
+     */
+    val CAS_OFFENSES: TableField<JoinSessionRecord, Int?> = createField(DSL.name("cas_offenses"), SQLDataType.INTEGER, this, "")
+
+    /**
+     * The column <code>public.join_session.cas_time_added</code>.
+     */
+    val CAS_TIME_ADDED: TableField<JoinSessionRecord, String?> = createField(DSL.name("cas_time_added"), SQLDataType.CLOB, this, "")
+
+    /**
+     * The column <code>public.join_session.cas_messages</code>.
+     */
+    val CAS_MESSAGES: TableField<JoinSessionRecord, JSONB?> = createField(DSL.name("cas_messages"), SQLDataType.JSONB, this, "")
+
     private constructor(alias: Name, aliased: Table<JoinSessionRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<JoinSessionRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
     private constructor(alias: Name, aliased: Table<JoinSessionRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)

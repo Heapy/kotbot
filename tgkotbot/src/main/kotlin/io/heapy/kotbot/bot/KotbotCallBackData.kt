@@ -50,3 +50,13 @@ data class JoinChallengeAnswerCallbackData(
     val challengeId: String,
     val selectedIndex: Int,
 ) : KotbotCallBackData
+
+@Serializable
+data class ApproveAppealCallbackData(
+    val sessionId: Long,
+) : KotbotCallBackData
+
+@Serializable
+data class DeclineAppealCallbackData(
+    val sessionId: Long,
+) : KotbotCallBackData

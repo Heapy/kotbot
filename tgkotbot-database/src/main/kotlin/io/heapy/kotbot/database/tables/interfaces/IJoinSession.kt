@@ -36,4 +36,8 @@ interface IJoinSession : Serializable {
     val options: JSONB?
     val challengeSentAt: LocalDateTime?
     val messageId: Int?
+    val appealText: String?
+    val casOffenses: Int?
+    val casTimeAdded: String?
+    val casMessages: JSONB?
 }

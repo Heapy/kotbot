@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.commands
 
 import io.heapy.komok.tech.logging.Logger
+import io.heapy.kotbot.bot.MessageHandler
 import io.heapy.kotbot.bot.UserContextService
 import io.heapy.kotbot.bot.commands.Command.Access.USER
 import io.heapy.kotbot.bot.commands.Command.Context.GROUP_CHAT
@@ -13,9 +14,9 @@ class CommandResolver(
     private val commands: List<Command>,
     private val commandExecutor: CommandExecutor,
     private val userContextService: UserContextService,
-) {
+) : MessageHandler {
     context(_: TransactionContext)
-    suspend fun findAndExecuteCommand(
+    override suspend fun handle(
         message: Message,
     ): Boolean = coroutineScope {
         val commandExecutionContext = message.toCommandExecutionContext()

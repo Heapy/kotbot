@@ -9,7 +9,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import org.jooq.JSONB
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 data class JoinSessionData(
     val id: Long,
@@ -29,6 +29,10 @@ data class JoinSessionData(
     val options: List<String>?,
     val challengeSentAt: LocalDateTime?,
     val messageId: Int?,
+    val appealText: String?,
+    val casOffenses: Int?,
+    val casTimeAdded: String?,
+    val casMessages: List<String>?,
 )
 
 class JoinSessionDao {
@@ -174,6 +178,109 @@ class JoinSessionDao {
     }
 
     context(_: TransactionContext)
+    suspend fun findById(
+        sessionId: Long,
+    ): JoinSessionData? = useTx {
+        dslContext
+            .selectFrom(JOIN_SESSION)
+            .where(JOIN_SESSION.ID.eq(sessionId))
+            .fetchOne()
+            ?.toData()
+    }
+
+    /** A non-finished session already in the appeal flow, used as an idempotency guard. */
+    context(_: TransactionContext)
+    suspend fun findAppealSession(
+        telegramId: Long,
+        chatIds: List<Long>,
+    ): JoinSessionData? = useTx {
+        dslContext
+            .selectFrom(JOIN_SESSION)
+            .where(JOIN_SESSION.TELEGRAM_ID.eq(telegramId))
+            .and(JOIN_SESSION.CHAT_ID.`in`(chatIds))
+            .and(JOIN_SESSION.STATUS.`in`(JoinSessionStatus.AWAITING_APPEAL, JoinSessionStatus.APPEAL_PENDING))
+            .limit(1)
+            .fetchOne()
+            ?.toData()
+    }
+
+    context(_: TransactionContext)
+    suspend fun findAwaitingAppealByUser(
+        telegramId: Long,
+        userChatId: Long,
+    ): JoinSessionData? = useTx {
+        dslContext
+            .selectFrom(JOIN_SESSION)
+            .where(JOIN_SESSION.TELEGRAM_ID.eq(telegramId))
+            .and(JOIN_SESSION.USER_CHAT_ID.eq(userChatId))
+            .and(JOIN_SESSION.STATUS.eq(JoinSessionStatus.AWAITING_APPEAL))
+            .limit(1)
+            .fetchOne()
+            ?.toData()
+    }
+
+    /** Marks a passed-but-CAS-flagged session as awaiting the user's written appeal. */
+    context(_: TransactionContext)
+    suspend fun setAwaitingAppeal(
+        sessionId: Long,
+        casOffenses: Int?,
+        casTimeAdded: String?,
+        casMessages: List<String>?,
+    ) = useTx {
+        dslContext
+            .update(JOIN_SESSION)
+            .set(JOIN_SESSION.STATUS, JoinSessionStatus.AWAITING_APPEAL)
+            .set(JOIN_SESSION.CAS_OFFENSES, casOffenses)
+            .set(JOIN_SESSION.CAS_TIME_ADDED, casTimeAdded)
+            .set(JOIN_SESSION.CAS_MESSAGES, casMessages?.let {
+                JSONB.valueOf(
+                    Json.encodeToString(
+                        ListSerializer(String.serializer()),
+                        it,
+                    )
+                )
+            })
+            .setNull(JOIN_SESSION.CHALLENGE_ID)
+            .where(JOIN_SESSION.ID.eq(sessionId))
+            .execute()
+    }
+
+    context(_: TransactionContext)
+    suspend fun submitAppeal(
+        sessionId: Long,
+        text: String,
+    ) = useTx {
+        dslContext
+            .update(JOIN_SESSION)
+            .set(JOIN_SESSION.STATUS, JoinSessionStatus.APPEAL_PENDING)
+            .set(JOIN_SESSION.APPEAL_TEXT, text)
+            .where(JOIN_SESSION.ID.eq(sessionId))
+            .execute()
+    }
+
+    /**
+     * Atomically resolves a pending appeal, but only while it is still [JoinSessionStatus.APPEAL_PENDING].
+     * Returns the updated session, or null when no row matched (a stale/double admin click) so the
+     * caller can avoid reversing a previous decision.
+     */
+    context(_: TransactionContext)
+    suspend fun decidePendingAppeal(
+        sessionId: Long,
+        finalStatus: JoinSessionStatus,
+        finishedAt: LocalDateTime = LocalDateTime.now(),
+    ): JoinSessionData? = useTx {
+        dslContext
+            .update(JOIN_SESSION)
+            .set(JOIN_SESSION.STATUS, finalStatus)
+            .set(JOIN_SESSION.FINISHED_AT, finishedAt)
+            .where(JOIN_SESSION.ID.eq(sessionId))
+            .and(JOIN_SESSION.STATUS.eq(JoinSessionStatus.APPEAL_PENDING))
+            .returning()
+            .fetchOne()
+            ?.toData()
+    }
+
+    context(_: TransactionContext)
     suspend fun findAndExpireSessions(
         now: LocalDateTime,
     ): List<JoinSessionData> = useTx {
@@ -197,6 +304,13 @@ class JoinSessionDao {
                 it.data(),
             )
         }
+        val casMessagesJson = get(JOIN_SESSION.CAS_MESSAGES)
+        val casMessages = casMessagesJson?.let {
+            Json.decodeFromString(
+                ListSerializer(String.serializer()),
+                it.data(),
+            )
+        }
         return JoinSessionData(
             id = get(JOIN_SESSION.ID)!!,
             telegramId = get(JOIN_SESSION.TELEGRAM_ID)!!,
@@ -215,6 +329,10 @@ class JoinSessionDao {
             options = optionsList,
             challengeSentAt = get(JOIN_SESSION.CHALLENGE_SENT_AT),
             messageId = get(JOIN_SESSION.MESSAGE_ID),
+            appealText = get(JOIN_SESSION.APPEAL_TEXT),
+            casOffenses = get(JOIN_SESSION.CAS_OFFENSES),
+            casTimeAdded = get(JOIN_SESSION.CAS_TIME_ADDED),
+            casMessages = casMessages,
         )
     }
 }
