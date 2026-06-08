@@ -56,31 +56,36 @@ class StatsBackfillJob(
     }
 
     private suspend fun backfill() {
+        val statsByTelegramId = transactionProvider.transaction {
+            updateDao.getAllUserStatsFromRaw()
+        }
+        log.info("Computed raw stats for {} telegram ids", statsByTelegramId.size)
+
         val users = transactionProvider.transaction {
             userContextDao.listAll(limit = Int.MAX_VALUE, offset = 0)
         }
         log.info("Backfilling stats for {} users", users.size)
 
         for (user in users) {
+            val stats = statsByTelegramId[user.telegramId]
+            val firstSeen = stats?.firstSeen
+            if (stats == null || firstSeen == null) {
+                log.info("User {} (telegramId={}) has no raw updates, skipping", user.internalId, user.telegramId)
+                continue
+            }
+            val created = if (firstSeen < user.created) firstSeen else user.created
             try {
                 transactionProvider.transaction {
-                    val stats = updateDao.getUserStatsFromRaw(user.telegramId)
-                    val firstSeen = stats.firstSeen
-                    if (firstSeen != null) {
-                        val created = if (firstSeen < user.created) firstSeen else user.created
-                        userContextDao.backfillStats(
-                            internalId = user.internalId,
-                            created = created,
-                            messageCount = stats.messageCount,
-                        )
-                        log.info(
-                            "Backfilled user {} (telegramId={}): created={}, messageCount={}",
-                            user.internalId, user.telegramId, created, stats.messageCount,
-                        )
-                    } else {
-                        log.info("User {} (telegramId={}) has no raw updates, skipping", user.internalId, user.telegramId)
-                    }
+                    userContextDao.backfillStats(
+                        internalId = user.internalId,
+                        created = created,
+                        messageCount = stats.messageCount,
+                    )
                 }
+                log.info(
+                    "Backfilled user {} (telegramId={}): created={}, messageCount={}",
+                    user.internalId, user.telegramId, created, stats.messageCount,
+                )
             } catch (e: Exception) {
                 log.error("Failed to backfill stats for user {} (telegramId={})", user.internalId, user.telegramId, e)
             }
