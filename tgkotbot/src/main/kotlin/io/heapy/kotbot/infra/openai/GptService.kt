@@ -16,44 +16,12 @@ class GptService(
             Provide detailed explanation and links to documentation.
         """.trimIndent()
 
-        val completionResponse = gptApi.complete(
-            GptApi.ChatCompletionRequest(
-                model = "gpt-5.4-mini",
-                messages = listOf(
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "system",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = systemPrompt,
-                            ),
-                        )
-                    ),
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "user",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = userPrompt,
-                            ),
-                        )
-                    ),
-                ),
-                temperature = 1.01,
-                maxTokens = 1024,
-                topP = 1.0,
-                frequencyPenalty = 0.0,
-                presencePenalty = 0.0,
-                responseFormat = GptApi.ChatCompletionRequest.ResponseFormat(
-                    type = "text"
-                )
-            )
+        return gptApi.complete(
+            model = "gpt-5.4-mini",
+            systemPrompt = systemPrompt,
+            userPrompt = userPrompt,
+            temperature = 1.01,
+            maxTokens = 1024,
         )
-
-        return completionResponse
-            .choices
-            .first()
-            .message
-            .content
     }
 }

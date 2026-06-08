@@ -72,80 +72,32 @@ class UserNoteService(
     private suspend fun extractBatchFacts(messages: List<String>): String {
         val messagesText = messages.joinToString("\n---\n")
         return gptApi.complete(
-            GptApi.ChatCompletionRequest(
-                model = "gpt-5.4-mini",
-                messages = listOf(
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "system",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = """
-                                    Analyze Telegram messages to extract facts about the user.
-                                    Focus on: area of expertise, programming topics they work with,
-                                    kind of questions they ask, experience level.
-                                    Be concise and factual. Output plain text, no markdown, 3-5 sentences.
-                                """.trimIndent(),
-                            ),
-                        ),
-                    ),
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "user",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = "Extract facts about this user from their messages:\n\n$messagesText",
-                            ),
-                        ),
-                    ),
-                ),
-                temperature = 0.3,
-                maxTokens = 512,
-                topP = 1.0,
-                frequencyPenalty = 0.0,
-                presencePenalty = 0.0,
-                responseFormat = GptApi.ChatCompletionRequest.ResponseFormat(type = "text"),
-            ),
-        ).choices.first().message.content
+            model = "gpt-5.4-mini",
+            systemPrompt = """
+                Analyze Telegram messages to extract facts about the user.
+                Focus on: area of expertise, programming topics they work with,
+                kind of questions they ask, experience level.
+                Be concise and factual. Output plain text, no markdown, 3-5 sentences.
+            """.trimIndent(),
+            userPrompt = "Extract facts about this user from their messages:\n\n$messagesText",
+            temperature = 0.3,
+            maxTokens = 512,
+        )
     }
 
     private suspend fun combineSummaries(summaries: List<String>): String {
         val summariesText = summaries.joinToString("\n\n---\n\n")
         return gptApi.complete(
-            GptApi.ChatCompletionRequest(
-                model = "gpt-5.4-mini",
-                messages = listOf(
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "system",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = """
-                                    Combine multiple observations about a Telegram user into a single concise profile.
-                                    Focus on: area of expertise, programming topics, kind of questions asked, experience level.
-                                    Output plain text, no markdown, 3-5 sentences.
-                                """.trimIndent(),
-                            ),
-                        ),
-                    ),
-                    GptApi.ChatCompletionRequest.Message(
-                        role = "user",
-                        content = listOf(
-                            GptApi.ChatCompletionRequest.Content(
-                                type = "text",
-                                text = "Combine these observations into a user profile:\n\n$summariesText",
-                            ),
-                        ),
-                    ),
-                ),
-                temperature = 0.3,
-                maxTokens = 512,
-                topP = 1.0,
-                frequencyPenalty = 0.0,
-                presencePenalty = 0.0,
-                responseFormat = GptApi.ChatCompletionRequest.ResponseFormat(type = "text"),
-            ),
-        ).choices.first().message.content
+            model = "gpt-5.4-mini",
+            systemPrompt = """
+                Combine multiple observations about a Telegram user into a single concise profile.
+                Focus on: area of expertise, programming topics, kind of questions asked, experience level.
+                Output plain text, no markdown, 3-5 sentences.
+            """.trimIndent(),
+            userPrompt = "Combine these observations into a user profile:\n\n$summariesText",
+            temperature = 0.3,
+            maxTokens = 512,
+        )
     }
 
     private companion object {

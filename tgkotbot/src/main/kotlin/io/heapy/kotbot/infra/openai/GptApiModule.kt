@@ -1,12 +1,11 @@
 package io.heapy.kotbot.infra.openai
 
+import com.openai.client.okhttp.OpenAIOkHttpClient
 import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.komok.tech.di.lib.Module
-import io.heapy.kotbot.infra.HttpClientModule
 
 @Module
 open class GptApiModule(
-    private val httpClientModule: HttpClientModule,
     private val configurationModule: ConfigurationModule,
 ) {
     open val gptConfig: GptApi.GptConfig by lazy {
@@ -17,10 +16,16 @@ open class GptApiModule(
             )
     }
 
+    open val openAiClient by lazy {
+        OpenAIOkHttpClient.builder()
+            .apiKey(gptConfig.apiKey)
+            .organization(gptConfig.organization)
+            .build()
+    }
+
     open val gptApi by lazy {
         GptApi(
-            httpClient = httpClientModule.httpClient,
-            gptConfig = gptConfig,
+            client = openAiClient,
         )
     }
 

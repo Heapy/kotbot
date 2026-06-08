@@ -33,6 +33,8 @@ dependencies {
 
     implementation(libs.micrometer.prometheus)
 
+    implementation(libs.openai.java)
+
     ksp(libs.komok.tech.di)
     implementation(libs.komok.tech.di.lib)
     implementation(libs.komok.tech.config)
