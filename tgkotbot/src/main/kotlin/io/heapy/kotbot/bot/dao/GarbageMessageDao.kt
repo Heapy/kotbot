@@ -13,8 +13,8 @@ class GarbageMessageDao {
                 GARBAGE_MESSAGES.ID,
                 GARBAGE_MESSAGES.TEXT,
                 GARBAGE_MESSAGES.TYPE,
-                GARBAGE_MESSAGES.ACTION,
                 GARBAGE_MESSAGES.MATCH,
+                GARBAGE_MESSAGES.ACTION,
             )
             .from(GARBAGE_MESSAGES)
             .fetchInto(GarbageMessages::class.java)
