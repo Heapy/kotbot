@@ -51,7 +51,15 @@ kotlin {
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("ManualTest")
+    }
+}
+
+val manualTests by tasks.registering(Test::class) {
+    useJUnitPlatform {
+        includeTags("ManualTest")
+    }
 }
 
 kotlin.sourceSets.getByName("main").generatedKotlin.srcDir("src/generated/kotlin")
