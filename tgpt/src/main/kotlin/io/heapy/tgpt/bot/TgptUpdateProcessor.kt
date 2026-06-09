@@ -86,14 +86,14 @@ class TgptUpdateProcessor(
             extractContent(message)
         } catch (e: Exception) {
             log.error("Failed to extract content", e)
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Something went wrong. Please try again.",
             )
             return
         }
         if (extracted == null) {
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Sorry, this message type is not supported. I can process text, photos, documents, voice messages, and video notes.",
             )
@@ -102,7 +102,7 @@ class TgptUpdateProcessor(
 
         // Send transcription text back to the user
         if (extracted.contentType == ContentType.transcription) {
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = extracted.content,
             )
@@ -111,7 +111,7 @@ class TgptUpdateProcessor(
         // Determine thread: new, continue, or fork
         val replyToMessageId = message.reply_to_message?.message_id
 
-        val (threadId, isNewThread) = transactionProvider.transaction {
+        val [threadId, isNewThread] = transactionProvider.transaction {
             resolveThread(
                 chatId = chatId,
                 userId = userId,
@@ -121,7 +121,7 @@ class TgptUpdateProcessor(
 
         // Add system prompt for new threads
         if (isNewThread) {
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 threadMessageDao.addMessage(
                     threadId = threadId,
                     role = MessageRole.system,
@@ -132,7 +132,7 @@ class TgptUpdateProcessor(
         }
 
         // Add user message
-        transactionProvider.transaction {
+        val _ = transactionProvider.transaction {
             threadMessageDao.addMessage(
                 threadId = threadId,
                 role = MessageRole.user,
@@ -174,7 +174,7 @@ class TgptUpdateProcessor(
             openAiService.createResponse(params)
         } catch (e: Exception) {
             log.error("OpenAI API call failed", e)
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Something went wrong. Please try again.",
             )
@@ -191,7 +191,7 @@ class TgptUpdateProcessor(
         )
 
         // Store assistant message
-        transactionProvider.transaction {
+        val _ = transactionProvider.transaction {
             threadMessageDao.addMessage(
                 threadId = threadId,
                 role = MessageRole.assistant,
@@ -213,7 +213,7 @@ class TgptUpdateProcessor(
                 inputTokens = inputTokens,
                 outputTokens = outputTokens,
             )
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 apiCallDao.recordApiCall(
                     threadId = threadId,
                     telegramUserId = userId,
@@ -292,7 +292,7 @@ class TgptUpdateProcessor(
 
         return when (command.name) {
             "me" -> {
-                replyToMessage(
+                val _ = replyToMessage(
                     message = message,
                     text = buildMeInfo(message),
                 )
@@ -329,7 +329,7 @@ class TgptUpdateProcessor(
             ?: message.reply_to_message?.caption
 
         if (sourceText.isNullOrBlank()) {
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Usage: /checklist <text>\nOr reply to a text message with /checklist.",
             )
@@ -347,7 +347,7 @@ class TgptUpdateProcessor(
             openAiService.createResponse(params)
         } catch (e: Exception) {
             log.error("OpenAI API call failed for /checklist", e)
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Something went wrong. Please try again.",
             )
@@ -360,7 +360,7 @@ class TgptUpdateProcessor(
         val checklistTasks = parseChecklistTasks(checklistText)
 
         if (checklistTasks.isEmpty()) {
-            replyToMessage(
+            val _ = replyToMessage(
                 message = message,
                 text = "Could not generate checklist.",
             )
@@ -370,7 +370,7 @@ class TgptUpdateProcessor(
         val businessConnectionId = message.business_connection_id
         if (businessConnectionId != null) {
             try {
-                kotbot.execute(
+                val _ = kotbot.execute(
                     SendChecklist(
                         business_connection_id = businessConnectionId,
                         chat_id = LongChatId(message.chat.id),
@@ -403,7 +403,7 @@ class TgptUpdateProcessor(
             textFallback
         }
 
-        replyToMessage(
+        val _ = replyToMessage(
             message = message,
             text = responseText,
         )
@@ -534,7 +534,7 @@ class TgptUpdateProcessor(
 
     private suspend fun sendTypingAction(chatId: Long) {
         try {
-            kotbot.execute(
+            val _ = kotbot.execute(
                 SendChatAction(
                     chat_id = chatId.chatId,
                     action = "typing",

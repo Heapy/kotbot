@@ -9,14 +9,14 @@ class ResolvedJoinChallengeConfig(
     private val groupsConfig: KnownChatsConfiguration,
 ) {
     private val chatIdToName: Map<Long, String> by lazy {
-        groupsConfig.allowedGroups.entries.associate { (name, id) -> id to name }
+        groupsConfig.allowedGroups.entries.associate { [name, id] -> id to name }
     }
 
     /** Maps each chat ID to the list of all chat IDs in its group (including itself). */
     private val chatIdToGroupChatIds: Map<Long, List<Long>> by lazy {
         val nameToId = groupsConfig.allowedGroups
         val result = mutableMapOf<Long, List<Long>>()
-        for ((_, chatNames) in config.chatGroups) {
+        for ([_, chatNames] in config.chatGroups) {
             val groupIds = chatNames.mapNotNull { nameToId[it] }
             for (id in groupIds) {
                 result[id] = groupIds

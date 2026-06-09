@@ -15,7 +15,7 @@ import io.heapy.kotbot.database.enums.TelegramUserStatus
 import io.heapy.kotbot.infra.jdbc.TransactionContext
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 import kotlin.time.toKotlinDuration
@@ -44,7 +44,7 @@ class JoinRequestHandler(
         val userContext = userContextDao.get(telegramId)
         if (userContext?.status == TelegramUserStatus.BANNED) {
             log.info("Banned user {} attempted to join chat {}, declining", telegramId, chatId)
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 DeclineChatJoinRequest(
                     chat_id = LongChatId(chatId),
                     user_id = telegramId,
@@ -57,7 +57,7 @@ class JoinRequestHandler(
         val verified = verifiedUserDao.findByTelegramId(telegramId)
         if (verified != null) {
             log.info("User {} already verified, auto-approving join to chat {}", telegramId, chatId)
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 ApproveChatJoinRequest(
                     chat_id = LongChatId(chatId),
                     user_id = telegramId,
@@ -91,13 +91,13 @@ class JoinRequestHandler(
             if (now.isBefore(cooldownEnd)) {
                 val remaining = Duration.between(now, cooldownEnd).toKotlinDuration().inWholeMinutes.minutes
                 log.info("User {} in cooldown until {} for chat {}, declining", telegramId, cooldownEnd, chatId)
-                kotbot.executeSafely(
+                val _ = kotbot.executeSafely(
                     DeclineChatJoinRequest(
                         chat_id = LongChatId(chatId),
                         user_id = telegramId,
                     )
                 )
-                kotbot.executeSafely(
+                val _ = kotbot.executeSafely(
                     SendMessage(
                         chat_id = LongChatId(userChatId),
                         text = messages.formatCooldown(remaining),
@@ -123,7 +123,7 @@ class JoinRequestHandler(
         val challenge = challengeGenerator.generate()
         val challengeId = UUID.randomUUID()
         val now = LocalDateTime.now()
-        joinSessionDao.updateChallenge(
+        val _ = joinSessionDao.updateChallenge(
             sessionId = sessionId,
             challengeId = challengeId,
             templateKey = challenge.templateKey,
@@ -145,7 +145,7 @@ class JoinRequestHandler(
         )
 
         if (message != null) {
-            joinSessionDao.updateMessageId(sessionId, message.message_id)
+            val _ = joinSessionDao.updateMessageId(sessionId, message.message_id)
         }
 
         log.info("Sent join challenge to user {} for chat {} (session={})", telegramId, chatId, sessionId)

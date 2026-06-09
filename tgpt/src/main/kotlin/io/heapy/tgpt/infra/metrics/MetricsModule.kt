@@ -1,7 +1,7 @@
 package io.heapy.tgpt.infra.metrics
 
-import io.heapy.komok.tech.di.lib.Module
 import io.heapy.komok.tech.config.ConfigurationModule
+import io.heapy.komok.tech.di.lib.Module
 import io.micrometer.core.instrument.Tag
 import io.micrometer.core.instrument.Tags
 import io.micrometer.prometheusmetrics.PrometheusConfig
@@ -28,7 +28,7 @@ open class MetricsModule(
     open val commonTags: Tags by lazy {
         Tags.of(
             configuration.tags
-                .map { (k, v) -> Tag.of(k, v) }
+                .map { [k, v] -> Tag.of(k, v) }
         )
     }
 

@@ -16,9 +16,25 @@ class ThreadDao {
         dslContext.insertInto(THREAD)
             .set(THREAD.CHAT_ID, chatId)
             .set(THREAD.CREATED_BY, createdBy)
-            .apply {
-                if (forkedFromThreadId != null) set(THREAD.FORKED_FROM_THREAD_ID, forkedFromThreadId)
-                if (forkedAtMessageId != null) set(THREAD.FORKED_AT_MESSAGE_ID, forkedAtMessageId)
+            .run {
+                if (forkedFromThreadId != null) {
+                    set(
+                        THREAD.FORKED_FROM_THREAD_ID,
+                        forkedFromThreadId,
+                    )
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (forkedAtMessageId != null) {
+                    set(
+                        THREAD.FORKED_AT_MESSAGE_ID,
+                        forkedAtMessageId,
+                    )
+                } else {
+                    this
+                }
             }
             .returning(THREAD.ID)
             .fetchOne()!!

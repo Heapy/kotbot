@@ -4,8 +4,8 @@ import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.DismissGptCallbackData
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.SendGptMessageCallbackData
-import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.dao.GptSessionDao
+import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InlineKeyboardButton
@@ -93,7 +93,7 @@ class GptCommand(
         }
 
         // Store user prompt
-        gptSessionDao.addMessage(sessionId, "user", prompt)
+        val _ = gptSessionDao.addMessage(sessionId, "user", prompt)
 
         val response = gptService.complete(userPrompt = prompt)
         val escaped = markdown.escape(response)
@@ -102,7 +102,7 @@ class GptCommand(
         log.info("Escaped response: {}", escaped)
 
         // Store assistant response
-        gptSessionDao.addMessage(sessionId, "assistant", response)
+        val _ = gptSessionDao.addMessage(sessionId, "assistant", response)
 
         // Send preview to user's private chat with Send/Dismiss buttons
         val previewMessage = kotbot.executeSafely(
@@ -121,7 +121,7 @@ class GptCommand(
 
         // Store preview message reference
         if (previewMessage != null) {
-            gptSessionDao.setPreviewMessage(
+            val _ = gptSessionDao.setPreviewMessage(
                 sessionId = sessionId,
                 previewChatId = previewMessage.chat.id,
                 previewMessageId = previewMessage.message_id,
@@ -157,7 +157,7 @@ class GptCommand(
         val response = gptService.complete(userPrompt = prompt)
         val escaped = markdown.escape(response)
 
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             EditMessageText(
                 chat_id = LongChatId(message.from!!.id),
                 message_id = sentMessage?.message_id,

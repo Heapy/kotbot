@@ -33,35 +33,35 @@ class DeleteMessageRule : Rule {
                 message.new_chat_members != null -> {
                     actions.runIfNew("new_chat_members_rule", message.delete) { deleteMessage ->
                         log.info("Delete joined users message ${message.new_chat_members}")
-                        kotbot.executeSafely(deleteMessage)
+                        val _ = kotbot.executeSafely(deleteMessage)
                     }
                 }
 
                 message.left_chat_member != null -> {
                     actions.runIfNew("left_chat_member_rule", message.delete) { deleteMessage ->
                         log.info("Delete left user message ${message.left_chat_member}")
-                        kotbot.executeSafely(deleteMessage)
+                        val _ = kotbot.executeSafely(deleteMessage)
                     }
                 }
 
                 message.video_note != null -> {
                     actions.runIfNew("video_note_rule", message.delete) {
                         log.info("Delete video note message from ${message.from?.refLog}.")
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                     }
                 }
 
                 message.voice != null -> {
                     actions.runIfNew("voice_rule", message.delete) {
                         log.info("Delete voice message from ${message.from?.refLog}.")
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                     }
                 }
 
                 message.sticker != null -> {
                     actions.runIfNew("sticker_rule", message.delete) {
                         log.info("Delete sticker-message from ${message.from?.refLog}.")
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                     }
                 }
             }

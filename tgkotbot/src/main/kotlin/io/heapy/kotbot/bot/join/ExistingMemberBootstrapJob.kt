@@ -40,12 +40,12 @@ class ExistingMemberBootstrapJob(
         try {
             log.info("Starting existing member bootstrap job")
             bootstrap()
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 jobExecutionDao.completeExecution(executionId)
             }
             log.info("Existing member bootstrap job completed")
         } catch (e: Exception) {
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 jobExecutionDao.failExecution(executionId)
             }
             throw e
@@ -60,7 +60,7 @@ class ExistingMemberBootstrapJob(
 
         for (user in users) {
             try {
-                transactionProvider.transaction {
+                val _ = transactionProvider.transaction {
                     verifiedUserDao.insertExistingMember(user.telegramId)
                 }
             } catch (e: Exception) {

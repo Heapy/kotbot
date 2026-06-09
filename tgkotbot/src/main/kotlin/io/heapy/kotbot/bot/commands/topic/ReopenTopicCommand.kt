@@ -37,7 +37,7 @@ class ReopenTopicCommand(
                 )
 
             if (threadId != null) {
-                kotbot.executeSafely(
+                val _ = kotbot.executeSafely(
                     ReopenForumTopic(
                         chat_id = LongChatId(message.chat.id),
                         message_thread_id = threadId,

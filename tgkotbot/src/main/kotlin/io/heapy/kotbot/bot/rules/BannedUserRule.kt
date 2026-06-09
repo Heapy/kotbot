@@ -27,10 +27,10 @@ class BannedUserRule : Rule {
         if (userContext.status == TelegramUserStatus.BANNED) {
             log.info("Banned user ${message.from?.refLog} sent message in chat ${message.chat.id}, deleting and banning")
             actions.runIfNew("banned_user_rule", message.delete) {
-                kotbot.executeSafely(it)
+                val _ = kotbot.executeSafely(it)
             }
             actions.runIfNew("banned_user_rule", message.banFrom) {
-                kotbot.executeSafely(it)
+                val _ = kotbot.executeSafely(it)
             }
         }
     }

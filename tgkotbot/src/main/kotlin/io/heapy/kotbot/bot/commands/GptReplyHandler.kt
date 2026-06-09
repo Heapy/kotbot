@@ -5,8 +5,8 @@ import io.heapy.kotbot.bot.DismissGptCallbackData
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.MessageHandler
 import io.heapy.kotbot.bot.SendGptMessageCallbackData
-import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.dao.GptSessionDao
+import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.EditMessageText
 import io.heapy.kotbot.bot.model.InlineKeyboardButton
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
@@ -42,7 +42,7 @@ class GptReplyHandler(
         ) ?: return false
 
         // Show processing state
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             EditMessageText(
                 chat_id = LongChatId(message.chat.id),
                 message_id = replyToMessage.message_id,
@@ -52,7 +52,7 @@ class GptReplyHandler(
         )
 
         // Store user prompt
-        gptSessionDao.addMessage(session.sessionId, "user", prompt)
+        val _ = gptSessionDao.addMessage(session.sessionId, "user", prompt)
 
         val response = gptService.complete(userPrompt = prompt)
         val escaped = markdown.escape(response)
@@ -60,7 +60,7 @@ class GptReplyHandler(
         log.info("GPT refinement response: {}", response)
 
         // Store assistant response
-        gptSessionDao.addMessage(session.sessionId, "assistant", response)
+        val _ = gptSessionDao.addMessage(session.sessionId, "assistant", response)
 
         // Build new callback data
         val sendCallbackData = callbackDataService.insert(
@@ -81,7 +81,7 @@ class GptReplyHandler(
         ) ?: error("Failed to create dismiss callback data")
 
         // Edit the preview message with new response and buttons
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             EditMessageText(
                 chat_id = LongChatId(message.chat.id),
                 message_id = replyToMessage.message_id,

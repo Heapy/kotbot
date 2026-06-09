@@ -36,12 +36,12 @@ class StatsBackfillJob(
                         try {
                             log.info("Starting stats backfill job")
                             backfill()
-                            transactionProvider.transaction {
+                            val _ = transactionProvider.transaction {
                                 jobExecutionDao.completeExecution(executionId)
                             }
                             log.info("Stats backfill job completed")
                         } catch (e: Exception) {
-                            transactionProvider.transaction {
+                            val _ = transactionProvider.transaction {
                                 jobExecutionDao.failExecution(executionId)
                             }
                             throw e
@@ -75,7 +75,7 @@ class StatsBackfillJob(
             }
             val created = if (firstSeen < user.created) firstSeen else user.created
             try {
-                transactionProvider.transaction {
+                val _ = transactionProvider.transaction {
                     userContextDao.backfillStats(
                         internalId = user.internalId,
                         created = created,

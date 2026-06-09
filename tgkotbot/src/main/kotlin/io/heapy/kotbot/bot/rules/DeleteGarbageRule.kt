@@ -44,17 +44,17 @@ class DeleteGarbageRule(
                     log.info("Delete message ${message.text}, reason ${ban.type}, from ${message.from?.refLog} (banned)")
                     userContextService.ban(message, ban.type)
                     actions.runIfNew("garbage_ban_rule", message.delete) {
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                     }
                     actions.runIfNew("garbage_ban_rule", message.banFrom) {
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                     }
                 }
 
                 warn != null -> {
                     log.info("Delete message ${message.text}, reason ${warn.type}, from ${message.from?.refLog}")
                     actions.runIfNew("garbage_warn_rule", message.delete) {
-                        kotbot.executeSafely(it)
+                        val _ = kotbot.executeSafely(it)
                         userContextService.addStrike(message, warn.type)
                     }
                 }

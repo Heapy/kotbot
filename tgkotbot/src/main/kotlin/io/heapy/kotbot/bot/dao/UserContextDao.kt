@@ -23,7 +23,7 @@ data class UserContext(
 )
 
 private fun TelegramUserRecord.toUserContext(): UserContext = UserContext(
-    internalId = internalId ?: error("internalId is null"),
+    internalId = internalId,
     telegramId = telegramId,
     created = created ?: error("created is null"),
     role = role ?: error("role is null"),

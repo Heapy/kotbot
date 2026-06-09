@@ -16,7 +16,7 @@ object CostCalculator {
         inputTokens: Int,
         outputTokens: Int,
     ): BigDecimal {
-        val (inputPrice, outputPrice) = MODEL_PRICING[model] ?: DEFAULT_PRICING
+        val [inputPrice, outputPrice] = MODEL_PRICING[model] ?: DEFAULT_PRICING
         val inputCost = inputPrice.multiply(BigDecimal(inputTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
         val outputCost = outputPrice.multiply(BigDecimal(outputTokens)).divide(BigDecimal(1_000_000), 6, RoundingMode.HALF_UP)
         return inputCost.add(outputCost)

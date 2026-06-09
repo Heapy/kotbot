@@ -83,7 +83,7 @@ class AdminRoute(
             val pageSize = 50
             val offset = page * pageSize
 
-            val (users, totalCount) = transactionProvider.transaction {
+            val [users, totalCount] = transactionProvider.transaction {
                 val users = userContextDao.listAll(limit = pageSize, offset = offset)
                 val count = userContextDao.countAll()
                 users to count
@@ -156,7 +156,7 @@ class AdminRoute(
             val user = transactionProvider.transaction {
                 val userContext = userContextDao.getByInternalId(id)
                 if (userContext != null) {
-                    userContextDao.updateRole(userContext, newRole)
+                    val _ = userContextDao.updateRole(userContext, newRole)
                     userContextDao.getByInternalId(id)
                 } else {
                     null
@@ -193,7 +193,7 @@ class AdminRoute(
             val user = transactionProvider.transaction {
                 val userContext = userContextDao.getByInternalId(id)
                 if (userContext != null) {
-                    userContextDao.updateStatus(userContext, newStatus)
+                    val _ = userContextDao.updateStatus(userContext, newStatus)
                     userContextDao.getByInternalId(id)
                 } else {
                     null
@@ -224,7 +224,7 @@ class AdminRoute(
             val user = transactionProvider.transaction {
                 val userContext = userContextDao.getByInternalId(id)
                 if (userContext != null) {
-                    userContextDao.updateBadge(userContext, tag)
+                    val _ = userContextDao.updateBadge(userContext, tag)
                     userContextDao.getByInternalId(id)
                 } else {
                     null
@@ -274,7 +274,7 @@ class AdminRoute(
             val user = transactionProvider.transaction {
                 val userContext = userContextDao.getByInternalId(id)
                 if (userContext != null) {
-                    userContextDao.updateNote(userContext, note)
+                    val _ = userContextDao.updateNote(userContext, note)
                     userContextDao.getByInternalId(id)
                 } else {
                     null

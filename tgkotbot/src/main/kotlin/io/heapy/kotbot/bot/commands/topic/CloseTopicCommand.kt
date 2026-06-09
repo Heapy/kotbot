@@ -37,7 +37,7 @@ class CloseTopicCommand(
                         """.trimIndent()
                     )
 
-                kotbot.executeSafely(
+                val _ = kotbot.executeSafely(
                     CloseForumTopic(
                         chat_id = LongChatId(message.chat.id),
                         message_thread_id = threadId,

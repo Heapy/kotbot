@@ -33,7 +33,7 @@ class LogUpdatesService(
         applicationScope.launch {
             log.info("Saving raw response to database")
             try {
-                transactionProvider.transaction {
+                val _ = transactionProvider.transaction {
                     updateDao.saveRawUpdate(update)
                 }
                 updatesSaved.increment()

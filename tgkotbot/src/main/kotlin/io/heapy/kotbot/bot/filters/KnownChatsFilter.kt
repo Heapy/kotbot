@@ -34,7 +34,7 @@ class KnownChatsFilter(
                     notificationService.notifyAdmins(
                         "Leaving unknown chat $chatId"
                     )
-                    kotbot.executeSafely(
+                    val _ = kotbot.executeSafely(
                         LeaveChat(
                             chat_id = LongChatId(chatId)
                         )

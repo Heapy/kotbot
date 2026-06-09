@@ -2,17 +2,17 @@ package io.heapy.kotbot.bot.commands
 
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.KotlinChatBotConfigurationModule
-import io.heapy.kotbot.bot.dao.DaoModule
-import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.bot.NotificationServiceModule
 import io.heapy.kotbot.bot.UserContextServiceModule
 import io.heapy.kotbot.bot.commands.info.ChatInfoCommand
 import io.heapy.kotbot.bot.commands.topic.CloseTopicCommand
 import io.heapy.kotbot.bot.commands.topic.RenameTopicCommand
 import io.heapy.kotbot.bot.commands.topic.ReopenTopicCommand
+import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
 import io.heapy.kotbot.infra.debug.PrettyPrintModule
+import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.infra.openai.GptApiModule
 
 @Module
@@ -111,7 +111,7 @@ open class CommandsModule(
         kotlinChatBotConfigurationModule
             .groupsConfiguration
             .allowedGroups
-            .map { (name, id) ->
+            .map { [name, id] ->
                 SendMessageFromBotCommand(
                     kotbot = kotbotModule.kotbot,
                     notificationService = notificationServiceModule.notificationService,

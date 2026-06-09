@@ -44,7 +44,7 @@ class SpamCommand(
 
     private suspend fun CommandExecutionContext.executeModerator() {
         message.reply_to_message?.let { reply ->
-            kotbot.executeSafely(reply.delete)
+            val _ = kotbot.executeSafely(reply.delete)
             kotbot.executeSafely(reply.banFrom)
         }
     }
@@ -63,7 +63,7 @@ class SpamCommand(
             $linkToMessage: ${message.reply_to_message?.text}
         """.trimIndent()
 
-        kotbot.execute(
+        val _ = kotbot.execute(
             SendMessage(
                 chat_id = LongChatId(notificationChannelId),
                 text = markdown.escape(message),

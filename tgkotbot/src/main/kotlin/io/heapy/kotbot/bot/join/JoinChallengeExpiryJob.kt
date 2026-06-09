@@ -46,7 +46,7 @@ class JoinChallengeExpiryJob(
 
         for (session in expired) {
             try {
-                kotbot.executeSafely(
+                val _ = kotbot.executeSafely(
                     DeclineChatJoinRequest(
                         chat_id = LongChatId(session.chatId),
                         user_id = session.telegramId,
@@ -55,7 +55,7 @@ class JoinChallengeExpiryJob(
 
                 val messageId = session.messageId
                 if (messageId != null) {
-                    kotbot.executeSafely(
+                    val _ = kotbot.executeSafely(
                         EditMessageText(
                             chat_id = LongChatId(session.userChatId),
                             message_id = messageId,

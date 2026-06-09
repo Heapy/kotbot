@@ -38,7 +38,7 @@ class TagEnforcementRule(
                 return
             }
             log.info("Updating tag for user ${message.from?.refLog} in chat ${message.chat.id}: '$currentTag' -> '$expectedTag'")
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 SetChatMemberTag(
                     chat_id = LongChatId(message.chat.id),
                     user_id = userId,

@@ -28,7 +28,7 @@ class SendMessageFromBotCommand(
         val message = cex.message
         message.textWithoutCommand?.let { text ->
             val escaped = markdown.escape(text)
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 SendMessage(
                     chat_id = LongChatId(id),
                     parse_mode = ParseMode.MarkdownV2.name,

@@ -1,11 +1,11 @@
 package io.heapy.kotbot.bot
 
-import io.heapy.kotbot.infra.markdown.Markdown
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.LongChatId
 import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ParseMode
+import io.heapy.kotbot.infra.markdown.Markdown
 
 class NotificationService(
     private val kotbot: Kotbot,
@@ -15,7 +15,7 @@ class NotificationService(
     suspend fun notifyAdmins(
         message: String,
     ) {
-        kotbot.execute(
+        val _ = kotbot.execute(
             SendMessage(
                 chat_id = LongChatId(chatId),
                 text = markdown.escape(message),

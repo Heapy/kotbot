@@ -19,7 +19,7 @@ import io.heapy.kotbot.database.enums.VerificationSource
 import io.heapy.kotbot.infra.jdbc.TransactionContext
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Second stage of the join flow: scores a tapped challenge answer. On success it gates the user
@@ -70,7 +70,7 @@ class ChallengeAnswerHandler(
         val latencyMs = Duration.between(challengeSentAt, answeredAt).toMillis()
 
         // Log attempt
-        challengeAttemptDao.insertAttempt(
+        val _ = challengeAttemptDao.insertAttempt(
             sessionId = session.id,
             telegramId = telegramId,
             challengeId = challengeId,
@@ -84,7 +84,7 @@ class ChallengeAnswerHandler(
         )
 
         // Increment attempts
-        joinSessionDao.incrementAttempts(session.id)
+        val _ = joinSessionDao.incrementAttempts(session.id)
         val attemptsUsed = session.attemptsUsed + 1
 
         if (isCorrect) {
@@ -99,7 +99,7 @@ class ChallengeAnswerHandler(
             val newChallenge = challengeGenerator.generate()
             val newChallengeId = UUID.randomUUID()
             val now = LocalDateTime.now()
-            joinSessionDao.updateChallenge(
+            val _ = joinSessionDao.updateChallenge(
                 sessionId = session.id,
                 challengeId = newChallengeId,
                 templateKey = newChallenge.templateKey,
@@ -122,8 +122,8 @@ class ChallengeAnswerHandler(
             log.info("User {} wrong answer for chat {} (attempt {}/{})", telegramId, session.chatId, attemptsUsed, session.maxAttempts)
         } else {
             // Exhausted attempts: mark FAILED, decline join
-            joinSessionDao.finishSession(session.id, JoinSessionStatus.FAILED)
-            kotbot.executeSafely(
+            val _ = joinSessionDao.finishSession(session.id, JoinSessionStatus.FAILED)
+            val _ = kotbot.executeSafely(
                 DeclineChatJoinRequest(
                     chat_id = LongChatId(session.chatId),
                     user_id = telegramId,
@@ -143,13 +143,13 @@ class ChallengeAnswerHandler(
         session: JoinSessionData,
         telegramId: Long,
     ) {
-        joinSessionDao.finishSession(session.id, JoinSessionStatus.PASSED)
-        verifiedUserDao.insertVerified(
+        val _ = joinSessionDao.finishSession(session.id, JoinSessionStatus.PASSED)
+        val _ = verifiedUserDao.insertVerified(
             telegramId = telegramId,
             source = VerificationSource.CHALLENGE,
             sessionId = session.id,
         )
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             ApproveChatJoinRequest(
                 chat_id = LongChatId(session.chatId),
                 user_id = telegramId,
@@ -168,7 +168,7 @@ class ChallengeAnswerHandler(
         telegramId: Long,
         casResult: CasResult.Flagged,
     ) {
-        joinSessionDao.setAwaitingAppeal(session.id, casResult.offenses, casResult.timeAdded, casResult.messages)
+        val _ = joinSessionDao.setAwaitingAppeal(session.id, casResult.offenses, casResult.timeAdded, casResult.messages)
 
         // Show the CAS reason + appeal instructions BEFORE approving: Telegram only guarantees the
         // user_chat_id DM window while the join request is still pending.
@@ -179,7 +179,7 @@ class ChallengeAnswerHandler(
         )
 
         // RestrictChatMember only works once the user is a member, so approve first, then restrict.
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             ApproveChatJoinRequest(
                 chat_id = LongChatId(session.chatId),
                 user_id = telegramId,
@@ -196,7 +196,7 @@ class ChallengeAnswerHandler(
         if (restricted == null) {
             // Optimistic flow: if we cannot restrict (e.g. missing can_restrict_members), the user is
             // admitted unrestricted -- alert admins to review manually rather than fail closed.
-            notificationService.notifyAdmins(
+            val _ = notificationService.notifyAdmins(
                 "⚠️ Could not restrict CAS-flagged user $telegramId in chat ${session.chatId} after a passed challenge. Please review manually.",
                 null,
             )
@@ -210,7 +210,7 @@ class ChallengeAnswerHandler(
         keyboard: InlineKeyboardMarkup?,
     ) {
         val messageId = session.messageId ?: return
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             EditMessageText(
                 chat_id = LongChatId(session.userChatId),
                 message_id = messageId,

@@ -34,12 +34,12 @@ class UserAutoTagJob(
                         try {
                             log.info("Starting user auto-tag job")
                             autoTag()
-                            transactionProvider.transaction {
+                            val _ = transactionProvider.transaction {
                                 jobExecutionDao.completeExecution(executionId)
                             }
                             log.info("User auto-tag job completed")
                         } catch (e: Exception) {
-                            transactionProvider.transaction {
+                            val _ = transactionProvider.transaction {
                                 jobExecutionDao.failExecution(executionId)
                             }
                             throw e
@@ -64,7 +64,7 @@ class UserAutoTagJob(
 
         for (user in users) {
             try {
-                val targetTag = THRESHOLDS.firstOrNull { (threshold, _) ->
+                val targetTag = THRESHOLDS.firstOrNull { [threshold, _] ->
                     user.messageCount >= threshold
                 }?.second ?: continue
 
@@ -72,7 +72,7 @@ class UserAutoTagJob(
                     continue
                 }
 
-                transactionProvider.transaction {
+                val _ = transactionProvider.transaction {
                     userContextDao.updateBadge(user, targetTag)
                 }
                 log.info(

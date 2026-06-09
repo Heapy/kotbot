@@ -54,7 +54,9 @@ class UserNoteService(
     private suspend fun saveNote(internalId: Long, note: String) {
         transactionProvider.transaction {
             val fresh = userContextDao.getByInternalId(internalId)
-            if (fresh != null) userContextDao.updateNote(fresh, note)
+            if (fresh != null) {
+                val _ = userContextDao.updateNote(fresh, note)
+            }
         }
     }
 

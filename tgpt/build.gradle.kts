@@ -68,9 +68,12 @@ kotlin {
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
 
+
     compilerOptions {
+        allWarningsAsErrors = true
         freeCompilerArgs.addAll(
-            "-Xcontext-parameters",
+            "-Xreturn-value-checker=full",
+            "-Xname-based-destructuring=complete",
         )
     }
 }

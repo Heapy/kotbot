@@ -29,7 +29,7 @@ class DeletePropagandaRule : Rule {
                 log.info("Delete flag-message from ${message.from?.refLog}.")
 
                 actions.runIfNew("zombie_rule", message.delete) {
-                    kotbot.executeSafely(it)
+                    val _ = kotbot.executeSafely(it)
                 }
             }
         }

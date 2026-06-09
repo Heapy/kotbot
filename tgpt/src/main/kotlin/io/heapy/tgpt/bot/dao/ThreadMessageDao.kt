@@ -22,9 +22,19 @@ class ThreadMessageDao {
             .set(THREAD_MESSAGE.ROLE, role)
             .set(THREAD_MESSAGE.CONTENT_TYPE, contentType)
             .set(THREAD_MESSAGE.CONTENT, content)
-            .apply {
-                if (telegramMessageId != null) set(THREAD_MESSAGE.TELEGRAM_MESSAGE_ID, telegramMessageId)
-                if (telegramUserId != null) set(THREAD_MESSAGE.TELEGRAM_USER_ID, telegramUserId)
+            .run {
+                if (telegramMessageId != null) {
+                    set(THREAD_MESSAGE.TELEGRAM_MESSAGE_ID, telegramMessageId)
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (telegramUserId != null) {
+                    set(THREAD_MESSAGE.TELEGRAM_USER_ID, telegramUserId)
+                } else {
+                    this
+                }
             }
             .returning(THREAD_MESSAGE.ID)
             .fetchOne()!!

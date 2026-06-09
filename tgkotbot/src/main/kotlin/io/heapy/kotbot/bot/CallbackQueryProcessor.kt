@@ -48,8 +48,8 @@ class CallbackQueryProcessor(
                     is Message -> {
                         callBackData.message.reply_to_message
                             ?.let {
-                                kotbot.executeSafely(it.delete)
-                                kotbot.executeSafely(it.banFrom)
+                                val _ = kotbot.executeSafely(it.delete)
+                                val _ = kotbot.executeSafely(it.banFrom)
 
                                 kotbot.executeSafely(
                                     EditMessageText(
@@ -74,7 +74,7 @@ class CallbackQueryProcessor(
                     is Message -> {
                         callBackData.message.reply_to_message
                             ?.let { strikeMessage ->
-                                kotbot.executeSafely(strikeMessage.delete)
+                                val _ = kotbot.executeSafely(strikeMessage.delete)
                                 userContextService.addStrike(
                                     message = strikeMessage,
                                     reason = "Strike by moderator"
@@ -103,7 +103,7 @@ class CallbackQueryProcessor(
                     is Message -> {
                         callBackData.message.reply_to_message?.delete
                             ?. let {
-                                kotbot.executeSafely(it)
+                                val _ = kotbot.executeSafely(it)
 
                                 kotbot.executeSafely(
                                     EditMessageText(
@@ -126,7 +126,7 @@ class CallbackQueryProcessor(
                 when (val message = callbackQuery.message) {
                     is InaccessibleMessage, null -> error("Inaccessible message")
                     is Message -> {
-                        kotbot.executeSafely(
+                        val _ = kotbot.executeSafely(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,
@@ -147,7 +147,7 @@ class CallbackQueryProcessor(
                     is InaccessibleMessage, null -> error("Inaccessible message")
                     is Message -> {
                         // Edit the "please wait" message in the group with the GPT response
-                        kotbot.executeSafely(
+                        val _ = kotbot.executeSafely(
                             EditMessageText(
                                 chat_id = LongChatId(callBackData.groupChatId),
                                 message_id = callBackData.waitMessageId,
@@ -157,10 +157,10 @@ class CallbackQueryProcessor(
                         )
 
                         // Mark session as sent
-                        gptSessionDao.updateStatus(callBackData.sessionId, "SENT")
+                        val _ = gptSessionDao.updateStatus(callBackData.sessionId, "SENT")
 
                         // Update the private chat message to indicate it was sent
-                        kotbot.executeSafely(
+                        val _ = kotbot.executeSafely(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,
@@ -205,7 +205,7 @@ class CallbackQueryProcessor(
                     is InaccessibleMessage, null -> error("Inaccessible message")
                     is Message -> {
                         // Delete the "please wait" message from the group
-                        kotbot.executeSafely(
+                        val _ = kotbot.executeSafely(
                             DeleteMessage(
                                 chat_id = LongChatId(callBackData.groupChatId),
                                 message_id = callBackData.waitMessageId,
@@ -213,10 +213,10 @@ class CallbackQueryProcessor(
                         )
 
                         // Mark session as dismissed
-                        gptSessionDao.updateStatus(callBackData.sessionId, "DISMISSED")
+                        val _ = gptSessionDao.updateStatus(callBackData.sessionId, "DISMISSED")
 
                         // Update the private chat message to indicate it was dismissed
-                        kotbot.executeSafely(
+                        val _ = kotbot.executeSafely(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,

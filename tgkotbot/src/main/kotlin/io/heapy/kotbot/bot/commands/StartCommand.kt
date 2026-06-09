@@ -23,7 +23,7 @@ class StartCommand(
     )
     override suspend fun execute() {
         val message = cex.message
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
                 text = startMessage(

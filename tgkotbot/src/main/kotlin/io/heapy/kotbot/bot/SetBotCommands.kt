@@ -9,7 +9,7 @@ class SetBotCommands(
     private val kotbot: Kotbot,
 ) {
     suspend fun setBotCommands() {
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             SetMyCommands(
                 commands = listOf(
                     BotCommand(

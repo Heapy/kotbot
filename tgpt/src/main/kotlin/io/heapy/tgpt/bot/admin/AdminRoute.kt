@@ -15,6 +15,8 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import kotlinx.html.InputType
+import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.button
 import kotlinx.html.div
@@ -24,10 +26,8 @@ import kotlinx.html.h2
 import kotlinx.html.head
 import kotlinx.html.id
 import kotlinx.html.input
-import kotlinx.html.InputType
 import kotlinx.html.meta
 import kotlinx.html.nav
-import kotlinx.html.a
 import kotlinx.html.script
 import kotlinx.html.span
 import kotlinx.html.style
@@ -105,7 +105,7 @@ class AdminRoute(
             val pageSize = 50
             val offset = page * pageSize
 
-            val (users, totalCount) = transactionProvider.transaction {
+            val [users, totalCount] = transactionProvider.transaction {
                 val users = allowedUserDao.listAll(limit = pageSize, offset = offset)
                 val count = allowedUserDao.countAll()
                 users to count
@@ -188,12 +188,12 @@ class AdminRoute(
             val username = formParameters["username"]?.takeIf { it.isNotBlank() }
             val displayName = formParameters["display_name"]?.takeIf { it.isNotBlank() }
 
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 allowedUserDao.addUser(telegramId, username, displayName)
             }
 
             // Re-render user list
-            val (users, totalCount) = transactionProvider.transaction {
+            val [users, totalCount] = transactionProvider.transaction {
                 val users = allowedUserDao.listAll(limit = 50, offset = 0)
                 val count = allowedUserDao.countAll()
                 users to count
@@ -251,12 +251,12 @@ class AdminRoute(
                 return@delete
             }
 
-            transactionProvider.transaction {
+            val _ = transactionProvider.transaction {
                 allowedUserDao.deactivateUser(userId)
             }
 
             // Re-render user list
-            val (users, totalCount) = transactionProvider.transaction {
+            val [users, totalCount] = transactionProvider.transaction {
                 val users = allowedUserDao.listAll(limit = 50, offset = 0)
                 val count = allowedUserDao.countAll()
                 users to count
@@ -404,7 +404,7 @@ class AdminRoute(
                                 td { +"${stat.promptTokens}" }
                                 td { +"${stat.completionTokens}" }
                                 td { +"${stat.totalTokens}" }
-                                td { +"${"%.6f".format(stat.costUsd)}" }
+                                td { +"%.6f".format(stat.costUsd) }
                                 td { +"${stat.threads}" }
                             }
                         }

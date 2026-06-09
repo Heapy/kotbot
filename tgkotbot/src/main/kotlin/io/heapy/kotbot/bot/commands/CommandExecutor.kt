@@ -22,7 +22,7 @@ class CommandExecutor(
         // Keep commands only in user chats
         if (context != Command.Context.USER_CHAT) {
             launch(Dispatchers.Default) {
-                kotbot.executeSafely(message.delete)
+                val _ = kotbot.executeSafely(message.delete)
             }
         }
 

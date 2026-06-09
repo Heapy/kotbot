@@ -51,7 +51,7 @@ class AppealHandler(
         val text = message.text?.trim()
         if (text.isNullOrBlank()) {
             // Sticker/photo/etc.: keep the session awaiting and ask for text, but still own the message.
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 SendMessage(
                     chat_id = LongChatId(message.chat.id),
                     text = markdown.escape("Please send a text explanation to appeal for write access."),
@@ -61,12 +61,12 @@ class AppealHandler(
             return true
         }
 
-        joinSessionDao.submitAppeal(session.id, text)
+        val _ = joinSessionDao.submitAppeal(session.id, text)
 
         val keyboard = messages.buildAppealKeyboard(session.id)
-        notificationService.notifyAdmins(messages.formatAppealForAdmins(session, from, text), keyboard)
+        val _ = notificationService.notifyAdmins(messages.formatAppealForAdmins(session, from, text), keyboard)
 
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
                 text = markdown.escape("✅ Your appeal has been submitted and is under review. You can read the group while you wait."),
@@ -95,7 +95,7 @@ class AppealHandler(
 
         val telegramId = session.telegramId
         if (approve) {
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 RestrictChatMember(
                     chat_id = LongChatId(session.chatId),
                     user_id = telegramId,
@@ -105,7 +105,7 @@ class AppealHandler(
             )
                 ?: error("Failed to restore write access for approved appeal session $sessionId")
 
-            verifiedUserDao.insertVerified(
+            val _ = verifiedUserDao.insertVerified(
                 telegramId = telegramId,
                 source = VerificationSource.MANUAL,
                 sessionId = session.id,
@@ -126,7 +126,7 @@ class AppealHandler(
     ) {
         val message = callbackQuery.message
         if (message is Message) {
-            kotbot.executeSafely(
+            val _ = kotbot.executeSafely(
                 EditMessageText(
                     chat_id = LongChatId(message.chat.id),
                     message_id = message.message_id,
@@ -142,7 +142,7 @@ class AppealHandler(
         userChatId: Long,
         text: String,
     ) {
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(userChatId),
                 text = markdown.escape(text),

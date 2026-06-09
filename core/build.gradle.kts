@@ -41,6 +41,13 @@ kotlin {
         languageVersion.set(JavaLanguageVersion.of(25))
         vendor.set(JvmVendorSpec.BELLSOFT)
     }
+    compilerOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs.addAll(
+            "-Xreturn-value-checker=full",
+            "-Xname-based-destructuring=complete",
+        )
+    }
 }
 
 tasks.test {

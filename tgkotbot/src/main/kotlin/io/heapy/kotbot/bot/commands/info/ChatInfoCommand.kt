@@ -27,7 +27,7 @@ class ChatInfoCommand(
     )
     override suspend fun execute() {
         val message = cex.message
-        kotbot.executeSafely(
+        val _ = kotbot.executeSafely(
             SendMessage(
                 chat_id = LongChatId(message.chat.id),
                 parse_mode = ParseMode.MarkdownV2.name,
