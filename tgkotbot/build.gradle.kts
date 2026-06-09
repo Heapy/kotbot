@@ -90,6 +90,7 @@ tasks.test {
 }
 
 val manualTests by tasks.registering(Test::class) {
+    group = "verification"
     useJUnitPlatform {
         includeTags("ManualTest")
     }
