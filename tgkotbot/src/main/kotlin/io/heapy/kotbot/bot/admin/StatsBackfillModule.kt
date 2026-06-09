@@ -6,12 +6,12 @@ import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 
 @Module
-open class StatsBackfillModule(
+class StatsBackfillModule(
     private val daoModule: DaoModule,
     private val jdbcModule: JdbcModule,
     private val applicationScopeModule: ApplicationScopeModule,
 ) {
-    open val statsBackfillJob by lazy {
+    val statsBackfillJob by lazy {
         StatsBackfillJob(
             userContextDao = daoModule.userContextDao,
             updateDao = daoModule.updateDao,

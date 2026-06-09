@@ -9,8 +9,8 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 @Module
-open class HttpClientModule {
-    open val httpClient: HttpClient by lazy {
+class HttpClientModule {
+    val httpClient: HttpClient by lazy {
         HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(json = Json {

@@ -4,6 +4,7 @@ import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.bot.KotlinChatBotConfigurationModule
 import io.heapy.kotbot.bot.NotificationServiceModule
+import io.heapy.kotbot.bot.cas.CasModule
 import io.heapy.kotbot.bot.challenge.ChallengeGenerator
 import io.heapy.kotbot.bot.challenge.ChallengeTemplate
 import io.heapy.kotbot.bot.challenge.DistractorGenerator
@@ -16,16 +17,14 @@ import io.heapy.kotbot.bot.challenge.templates.ScopeTransformTemplate
 import io.heapy.kotbot.bot.challenge.templates.StringOperationsTemplate
 import io.heapy.kotbot.bot.dao.DaoModule
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
-import io.heapy.kotbot.infra.HttpClientModule
 import io.heapy.kotbot.infra.KotbotModule
-import io.heapy.kotbot.infra.configuration.CasConfiguration
 import io.heapy.kotbot.infra.configuration.JoinChallengeConfiguration
 import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 import io.heapy.kotbot.infra.markdown.MarkdownModule
 
 @Module
-open class JoinChallengeModule(
+class JoinChallengeModule(
     private val configurationModule: ConfigurationModule,
     private val kotbotModule: KotbotModule,
     private val jdbcModule: JdbcModule,
@@ -34,10 +33,10 @@ open class JoinChallengeModule(
     private val daoModule: DaoModule,
     private val callbackDataServiceModule: CallbackDataServiceModule,
     private val markdownModule: MarkdownModule,
-    private val httpClientModule: HttpClientModule,
     private val notificationServiceModule: NotificationServiceModule,
+    private val casModule: CasModule,
 ) {
-    open val joinChallengeConfiguration: JoinChallengeConfiguration by lazy {
+    val joinChallengeConfiguration: JoinChallengeConfiguration by lazy {
         configurationModule
             .config
             .read(
@@ -46,11 +45,11 @@ open class JoinChallengeModule(
             )
     }
 
-    open val distractorGenerator: DistractorGenerator by lazy {
+    val distractorGenerator: DistractorGenerator by lazy {
         DistractorGenerator()
     }
 
-    open val challengeTemplates: List<ChallengeTemplate> by lazy {
+    val challengeTemplates: List<ChallengeTemplate> by lazy {
         listOf(
             CollectionPipelineTemplate(distractorGenerator),
             StringOperationsTemplate(distractorGenerator),
@@ -62,53 +61,37 @@ open class JoinChallengeModule(
         )
     }
 
-    open val challengeGenerator: ChallengeGenerator by lazy {
+    val challengeGenerator: ChallengeGenerator by lazy {
         ChallengeGenerator(challengeTemplates)
     }
 
-    open val joinSessionDao: JoinSessionDao by lazy {
+    val joinSessionDao: JoinSessionDao by lazy {
         JoinSessionDao()
     }
 
-    open val casConfiguration: CasConfiguration by lazy {
-        configurationModule
-            .config
-            .read(
-                deserializer = CasConfiguration.serializer(),
-                path = "cas",
-            )
-    }
-
-    open val casClient: CasClient by lazy {
-        CasClient(
-            client = httpClientModule.httpClient,
-            casConfiguration = casConfiguration,
-        )
-    }
-
-    open val verifiedUserDao: VerifiedUserDao by lazy {
+    val verifiedUserDao: VerifiedUserDao by lazy {
         VerifiedUserDao()
     }
 
-    open val challengeAttemptDao: ChallengeAttemptDao by lazy {
+    val challengeAttemptDao: ChallengeAttemptDao by lazy {
         ChallengeAttemptDao()
     }
 
-    open val resolvedJoinChallengeConfig: ResolvedJoinChallengeConfig by lazy {
+    val resolvedJoinChallengeConfig: ResolvedJoinChallengeConfig by lazy {
         ResolvedJoinChallengeConfig(
             config = joinChallengeConfiguration,
             groupsConfig = kotlinChatBotConfigurationModule.groupsConfiguration,
         )
     }
 
-    open val joinMessages: JoinMessages by lazy {
+    val joinMessages: JoinMessages by lazy {
         JoinMessages(
             markdown = markdownModule.markdown,
             callbackDataService = callbackDataServiceModule.callbackDataService,
         )
     }
 
-    open val joinRequestHandler: JoinRequestHandler by lazy {
+    val joinRequestHandler: JoinRequestHandler by lazy {
         JoinRequestHandler(
             kotbot = kotbotModule.kotbot,
             challengeGenerator = challengeGenerator,
@@ -120,20 +103,20 @@ open class JoinChallengeModule(
         )
     }
 
-    open val challengeAnswerHandler: ChallengeAnswerHandler by lazy {
+    val challengeAnswerHandler: ChallengeAnswerHandler by lazy {
         ChallengeAnswerHandler(
             kotbot = kotbotModule.kotbot,
             challengeGenerator = challengeGenerator,
             joinSessionDao = joinSessionDao,
             verifiedUserDao = verifiedUserDao,
             challengeAttemptDao = challengeAttemptDao,
-            casClient = casClient,
+            casClient = casModule.casClient,
             notificationService = notificationServiceModule.notificationService,
             messages = joinMessages,
         )
     }
 
-    open val appealHandler: AppealHandler by lazy {
+    val appealHandler: AppealHandler by lazy {
         AppealHandler(
             kotbot = kotbotModule.kotbot,
             joinSessionDao = joinSessionDao,
@@ -144,7 +127,7 @@ open class JoinChallengeModule(
         )
     }
 
-    open val joinChallengeExpiryJob: JoinChallengeExpiryJob by lazy {
+    val joinChallengeExpiryJob: JoinChallengeExpiryJob by lazy {
         JoinChallengeExpiryJob(
             joinSessionDao = joinSessionDao,
             kotbot = kotbotModule.kotbot,
@@ -154,7 +137,7 @@ open class JoinChallengeModule(
         )
     }
 
-    open val existingMemberBootstrapJob: ExistingMemberBootstrapJob by lazy {
+    val existingMemberBootstrapJob: ExistingMemberBootstrapJob by lazy {
         ExistingMemberBootstrapJob(
             userContextDao = daoModule.userContextDao,
             verifiedUserDao = verifiedUserDao,

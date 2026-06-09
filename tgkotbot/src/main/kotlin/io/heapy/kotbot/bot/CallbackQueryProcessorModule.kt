@@ -7,14 +7,14 @@ import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
 
 @Module
-open class CallbackQueryProcessorModule(
+class CallbackQueryProcessorModule(
     private val callbackDataServiceModule: CallbackDataServiceModule,
     private val kotbotModule: KotbotModule,
     private val userContextServiceModule: UserContextServiceModule,
     private val daoModule: DaoModule,
     private val joinChallengeModule: JoinChallengeModule,
 ) {
-    open val callbackQueryProcessor by lazy {
+    val callbackQueryProcessor by lazy {
         CallbackQueryProcessor(
             callbackDataService = callbackDataServiceModule.callbackDataService,
             kotbot = kotbotModule.kotbot,

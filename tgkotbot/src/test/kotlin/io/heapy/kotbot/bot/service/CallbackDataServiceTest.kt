@@ -16,12 +16,12 @@ import org.jooq.JSONB
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @WithMockTransaction
 class CallbackDataServiceTest {
-    context(_: MockTransactionContext)
     @Test
+    context(_: MockTransactionContext)
     fun getById() = runTest {
         // prepare
         val created = LocalDateTime.now()
@@ -71,15 +71,15 @@ class CallbackDataServiceTest {
 
         // verify
         coVerifySequence {
-            dao.getOnceById(id = uuid)
+            val _ = dao.getOnceById(id = uuid)
         }
 
         confirmVerified(dao)
 
     }
 
-    context(_: MockTransactionContext)
     @Test
+    context(_: MockTransactionContext)
     fun insert() = runTest {
         // prepare
         val uuid = UUID.fromString("60ed0b49-659a-4dec-b799-11e7319b7ff9")
@@ -124,7 +124,7 @@ class CallbackDataServiceTest {
 
         // verify
         coVerifySequence {
-            dao.insert(jsonData = json)
+            val _ = dao.insert(jsonData = json)
         }
 
         confirmVerified(dao)

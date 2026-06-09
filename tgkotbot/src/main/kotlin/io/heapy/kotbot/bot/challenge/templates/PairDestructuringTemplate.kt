@@ -28,7 +28,7 @@ class PairDestructuringTemplate(
         val correctValue = StringValue(result)
 
         val snippet = buildString {
-            appendLine("val (a, b) = $a to $b")
+            appendLine("val [a, b] = $a to $b")
             append($$""""$b $a"""")
         }
 
@@ -57,7 +57,7 @@ class PairDestructuringTemplate(
         val correctValue = IntValue(result)
 
         val snippet = buildString {
-            appendLine("val (x, _, z) = Triple($a, $b, $c)")
+            appendLine("val [x, _, z] = Triple($a, $b, $c)")
             append("x + z")
         }
 
@@ -86,7 +86,7 @@ class PairDestructuringTemplate(
 
         val snippet = buildString {
             appendLine("val pair = $a to $b")
-            appendLine("val (first, second) = pair")
+            appendLine("val [first, second] = pair")
             append("first * second + first + second")
         }
 

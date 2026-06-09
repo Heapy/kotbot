@@ -14,50 +14,50 @@ import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
 
 @Module
-open class MetricsReportersModule(
+class MetricsReportersModule(
     private val autoClosableModule: AutoClosableModule,
     private val jdbcModule: JdbcModule,
 ) {
-    open val classLoaderMetrics by lazy {
+    val classLoaderMetrics by lazy {
         ClassLoaderMetrics()
     }
 
-    open val jvmMemoryMetrics by lazy {
+    val jvmMemoryMetrics by lazy {
         JvmMemoryMetrics()
     }
 
-    open val jvmHeapPressureMetrics by lazy {
+    val jvmHeapPressureMetrics by lazy {
         autoClosableModule.addClosable(JvmHeapPressureMetrics(), JvmHeapPressureMetrics::close)
     }
 
-    open val jvmInfoMetrics by lazy {
+    val jvmInfoMetrics by lazy {
         JvmInfoMetrics()
     }
 
-    open val jvmThreadMetrics by lazy {
+    val jvmThreadMetrics by lazy {
         JvmThreadMetrics()
     }
 
-    open val processorMetrics by lazy {
+    val processorMetrics by lazy {
         ProcessorMetrics()
     }
 
-    open val uptimeMetrics by lazy {
+    val uptimeMetrics by lazy {
         UptimeMetrics()
     }
 
-    open val logbackMetrics by lazy {
+    val logbackMetrics by lazy {
         autoClosableModule.addClosable(LogbackMetrics(), LogbackMetrics::close)
     }
 
-    open val postgreSQLDatabaseMetrics by lazy {
+    val postgreSQLDatabaseMetrics by lazy {
         PostgreSQLDatabaseMetrics(
             jdbcModule.hikariDataSource,
             jdbcModule.configuration.database,
         )
     }
 
-    open val meterBinders by lazy {
+    val meterBinders by lazy {
         listOf(
             classLoaderMetrics,
             jvmMemoryMetrics,
@@ -71,7 +71,7 @@ open class MetricsReportersModule(
         )
     }
 
-    open val metricsRegister by lazy {
+    val metricsRegister by lazy {
         MetricsRegister(
             meterBinders = meterBinders,
         )

@@ -48,4 +48,14 @@ class ChallengeAttemptDao {
             )
             .execute()
     }
+
+    context(_: TransactionContext)
+    suspend fun deleteByTelegramId(
+        telegramId: Long,
+    ): Int = useTx {
+        dslContext
+            .deleteFrom(CHALLENGE_ATTEMPT)
+            .where(CHALLENGE_ATTEMPT.TELEGRAM_ID.eq(telegramId))
+            .execute()
+    }
 }

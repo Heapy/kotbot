@@ -5,14 +5,14 @@ import io.heapy.kotbot.bot.dao.DaoModule
 import kotlinx.serialization.json.Json
 
 @Module
-open class CallbackDataServiceModule(
+class CallbackDataServiceModule(
     private val daoModule: DaoModule,
 ) {
-    open val json by lazy {
+    val json by lazy {
         Json
     }
 
-    open val callbackDataService by lazy {
+    val callbackDataService by lazy {
         CallbackDataService(
             callbackDataDao = daoModule.callbackDataDao,
             json = json,

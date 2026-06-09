@@ -5,10 +5,10 @@ import io.heapy.komok.tech.di.lib.Module
 import io.heapy.kotbot.infra.configuration.KnownChatsConfiguration
 
 @Module
-open class KotlinChatBotConfigurationModule(
+class KotlinChatBotConfigurationModule(
     private val configurationModule: ConfigurationModule,
 ) {
-    open val groupsConfiguration: KnownChatsConfiguration by lazy {
+    val groupsConfiguration: KnownChatsConfiguration by lazy {
         configurationModule
             .config
             .read(
@@ -17,7 +17,7 @@ open class KotlinChatBotConfigurationModule(
             )
     }
 
-    open val wellKnownChats by lazy {
+    val wellKnownChats by lazy {
         groupsConfiguration.allowedGroups.values.toSet() + groupsConfiguration.notificationChannel
     }
 }

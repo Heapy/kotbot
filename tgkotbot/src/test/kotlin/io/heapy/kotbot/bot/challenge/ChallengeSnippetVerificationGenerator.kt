@@ -38,7 +38,7 @@ class ChallengeSnippetVerificationGenerator {
 
             val batches = challenges.chunked(batchSize)
 
-            for ((batchIndex, batch) in batches.withIndex()) {
+            for ([batchIndex, batch] in batches.withIndex()) {
                 sb.appendLine()
                 sb.appendLine("    @Test")
                 sb.appendLine("    fun `verify ${template.key} batch $batchIndex`() {")

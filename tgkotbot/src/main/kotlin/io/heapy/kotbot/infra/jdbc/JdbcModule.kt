@@ -12,11 +12,11 @@ import org.jooq.impl.DSL
 import org.postgresql.ds.PGSimpleDataSource
 
 @Module
-open class JdbcModule(
+class JdbcModule(
     private val configurationModule: ConfigurationModule,
     private val metricsModule: MetricsModule,
 ) {
-    open val configuration: JdbcConfiguration by lazy {
+    val configuration: JdbcConfiguration by lazy {
         configurationModule
             .config
             .read(
@@ -25,7 +25,7 @@ open class JdbcModule(
             )
     }
 
-    open val dslContext: DSLContext by lazy {
+    val dslContext: DSLContext by lazy {
         System.setProperty("org.jooq.no-logo", "true")
         System.setProperty("org.jooq.no-tips", "true")
         MetricsDSLContext.withMetrics(
@@ -35,13 +35,13 @@ open class JdbcModule(
         )
     }
 
-    open val transactionProvider: TransactionProvider by lazy {
+    val transactionProvider: TransactionProvider by lazy {
         TransactionProvider(
             dslContext = dslContext,
         )
     }
 
-    open val hikariConfig by lazy {
+    val hikariConfig by lazy {
         HikariConfig().apply {
             poolName = "kotbot-hikari-pool"
             dataSourceClassName = PGSimpleDataSource::class.qualifiedName
@@ -53,7 +53,7 @@ open class JdbcModule(
         }
     }
 
-    open val hikariDataSource by lazy {
+    val hikariDataSource by lazy {
         HikariDataSource(hikariConfig)
     }
 }

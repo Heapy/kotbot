@@ -8,13 +8,13 @@ import io.heapy.kotbot.infra.KotbotModule
 import io.heapy.kotbot.infra.metrics.MetricsModule
 
 @Module
-open class RulesModule(
+class RulesModule(
     private val kotbotModule: KotbotModule,
     private val metricsModule: MetricsModule,
     private val daoModule: DaoModule,
     private val userContextServiceModule: UserContextServiceModule,
 ) {
-    open val ruleExecutor: RuleExecutor by lazy {
+    val ruleExecutor: RuleExecutor by lazy {
         RuleExecutor(
             rules = rules,
             kotbot = kotbotModule.kotbot,
@@ -23,7 +23,7 @@ open class RulesModule(
         )
     }
 
-    open val rules by lazy {
+    val rules by lazy {
         listOf(
             bannedUserRule,
             deleteMessageRule,
@@ -33,28 +33,28 @@ open class RulesModule(
         )
     }
 
-    open val bannedUserRule: Rule by lazy(::BannedUserRule)
+    val bannedUserRule: Rule by lazy(::BannedUserRule)
 
-    open val tagEnforcementRule: Rule by lazy {
+    val tagEnforcementRule: Rule by lazy {
         TagEnforcementRule(
             chatAdministratorsCache = chatAdministratorsCache,
         )
     }
 
-    open val chatAdministratorsCache: ChatAdministratorsCache by lazy {
+    val chatAdministratorsCache: ChatAdministratorsCache by lazy {
         ChatAdministratorsCache(
             kotbot = kotbotModule.kotbot,
         )
     }
 
-    open val deleteMessageRule: Rule by lazy(::DeleteMessageRule)
+    val deleteMessageRule: Rule by lazy(::DeleteMessageRule)
 
-    open val deleteGarbageRule: Rule by lazy {
+    val deleteGarbageRule: Rule by lazy {
         DeleteGarbageRule(
             garbageMessageDao = daoModule.garbageMessageDao,
             userContextService = userContextServiceModule.userContextService,
         )
     }
 
-    open val deletePropagandaRule: Rule by lazy(::DeletePropagandaRule)
+    val deletePropagandaRule: Rule by lazy(::DeletePropagandaRule)
 }

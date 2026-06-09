@@ -7,10 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 @Module
-open class ApplicationScopeModule(
+class ApplicationScopeModule(
     private val autoClosableModule: AutoClosableModule,
 ) {
-    open val applicationJob by lazy {
+    val applicationJob by lazy {
         autoClosableModule.addClosable(
             SupervisorJob(),
         ) { job ->
@@ -18,7 +18,7 @@ open class ApplicationScopeModule(
         }
     }
 
-    open val applicationScope by lazy {
+    val applicationScope by lazy {
         CoroutineScope(applicationJob + Dispatchers.Default + CoroutineName("ApplicationScope"))
     }
 }

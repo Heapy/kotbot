@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot.join
 import io.heapy.kotbot.bot.ApproveAppealCallbackData
 import io.heapy.kotbot.bot.DeclineAppealCallbackData
 import io.heapy.kotbot.bot.JoinChallengeAnswerCallbackData
+import io.heapy.kotbot.bot.cas.CasResult
 import io.heapy.kotbot.bot.model.InlineKeyboardButton
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
 import io.heapy.kotbot.bot.model.User

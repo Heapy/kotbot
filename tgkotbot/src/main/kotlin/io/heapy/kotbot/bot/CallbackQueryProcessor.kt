@@ -55,7 +55,6 @@ class CallbackQueryProcessor(
                                     EditMessageText(
                                         chat_id = LongChatId(message.chat.id),
                                         message_id = message.message_id,
-                                        reply_markup = null,
                                         text = buildString {
                                             append(message.text)
                                             appendLine()
@@ -84,7 +83,6 @@ class CallbackQueryProcessor(
                                     EditMessageText(
                                         chat_id = LongChatId(message.chat.id),
                                         message_id = message.message_id,
-                                        reply_markup = null,
                                         text = buildString {
                                             append(message.text)
                                             appendLine()
@@ -109,7 +107,6 @@ class CallbackQueryProcessor(
                                     EditMessageText(
                                         chat_id = LongChatId(message.chat.id),
                                         message_id = message.message_id,
-                                        reply_markup = null,
                                         text = buildString {
                                             append(message.text)
                                             appendLine()
@@ -130,7 +127,6 @@ class CallbackQueryProcessor(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,
-                                reply_markup = null,
                                 text = buildString {
                                     append(message.text)
                                     appendLine()
@@ -164,7 +160,6 @@ class CallbackQueryProcessor(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,
-                                reply_markup = null,
                                 text = buildString {
                                     append(message.text)
                                     appendLine()
@@ -220,7 +215,6 @@ class CallbackQueryProcessor(
                             EditMessageText(
                                 chat_id = LongChatId(message.chat.id),
                                 message_id = message.message_id,
-                                reply_markup = null,
                                 text = buildString {
                                     append(message.text)
                                     appendLine()

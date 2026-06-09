@@ -36,8 +36,8 @@ class PollingProbe(
 }
 
 @Module
-open class PollingProbeModule {
-    open val pollingProbe by lazy {
+class PollingProbeModule {
+    val pollingProbe by lazy {
         PollingProbe()
     }
 }

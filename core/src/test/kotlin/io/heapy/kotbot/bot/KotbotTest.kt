@@ -232,7 +232,7 @@ class KotbotTest {
 
     @Test
     fun KotbotVerifier.`execute SendMessage silent`() = runBlocking {
-        kotbot.execute(
+        val _ = kotbot.execute(
             SendMessage(
                 chat_id = qaUserId.chatId,
                 text = "Are you ready for a silent message? Unfocus Telegram client and listen carefully!",

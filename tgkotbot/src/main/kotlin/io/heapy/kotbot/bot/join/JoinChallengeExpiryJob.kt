@@ -61,7 +61,6 @@ class JoinChallengeExpiryJob(
                             message_id = messageId,
                             text = markdown.escape("⏰ Challenge expired. Your join request has been declined. Please try again."),
                             parse_mode = ParseMode.MarkdownV2.name,
-                            reply_markup = null,
                         )
                     )
                 }

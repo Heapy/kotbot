@@ -79,4 +79,14 @@ class VerifiedUserDao {
             .doNothing()
             .execute()
     }
+
+    context(_: TransactionContext)
+    suspend fun deleteByTelegramId(
+        telegramId: Long,
+    ): Int = useTx {
+        dslContext
+            .deleteFrom(VERIFIED_USER)
+            .where(VERIFIED_USER.TELEGRAM_ID.eq(telegramId))
+            .execute()
+    }
 }

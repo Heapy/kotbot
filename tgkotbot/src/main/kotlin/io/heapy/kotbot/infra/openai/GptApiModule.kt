@@ -5,10 +5,10 @@ import io.heapy.komok.tech.config.ConfigurationModule
 import io.heapy.komok.tech.di.lib.Module
 
 @Module
-open class GptApiModule(
+class GptApiModule(
     private val configurationModule: ConfigurationModule,
 ) {
-    open val gptConfig: GptApi.GptConfig by lazy {
+    val gptConfig: GptApi.GptConfig by lazy {
         configurationModule.config
             .read(
                 deserializer = GptApi.GptConfig.serializer(),
@@ -16,20 +16,20 @@ open class GptApiModule(
             )
     }
 
-    open val openAiClient by lazy {
+    val openAiClient by lazy {
         OpenAIOkHttpClient.builder()
             .apiKey(gptConfig.apiKey)
             .organization(gptConfig.organization)
             .build()
     }
 
-    open val gptApi by lazy {
+    val gptApi by lazy {
         GptApi(
             client = openAiClient,
         )
     }
 
-    open val gptService by lazy {
+    val gptService by lazy {
         GptService(
             gptApi = gptApi,
         )

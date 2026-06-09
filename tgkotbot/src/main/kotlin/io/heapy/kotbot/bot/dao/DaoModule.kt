@@ -4,15 +4,15 @@ import io.heapy.komok.tech.di.lib.Module
 
 @Module
 open class DaoModule {
-    open val userContextDao by lazy {
+    val userContextDao by lazy {
         UserContextDao()
     }
 
-    open val updateDao by lazy {
+    val updateDao by lazy {
         UpdateDao()
     }
 
-    open val garbageMessageDao by lazy {
+    val garbageMessageDao by lazy {
         GarbageMessageDao()
     }
 
@@ -20,11 +20,11 @@ open class DaoModule {
         CallbackDataDao()
     }
 
-    open val gptSessionDao by lazy {
+    val gptSessionDao by lazy {
         GptSessionDao()
     }
 
-    open val jobExecutionDao by lazy {
+    val jobExecutionDao by lazy {
         JobExecutionDao()
     }
 }

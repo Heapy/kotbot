@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot
 
 import io.heapy.kotbot.bot.method.AnswerCallbackQuery
+import io.heapy.kotbot.bot.method.DeleteMessage
 import io.heapy.kotbot.bot.method.GetUpdates
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.InaccessibleMessage
@@ -22,8 +23,8 @@ class KotbotVerifier(
     val qaUserId: Long,
 ) : AutoCloseable {
     init {
-        drain()
-        sendNotification("*Kotbot smoke test started\\!*")
+        val _ = drain()
+        val _ = sendNotification("*Kotbot smoke test started\\!*")
     }
 
     private fun drain() = runBlocking {
@@ -107,6 +108,13 @@ class KotbotVerifier(
 
                     assertEquals(expectedData, update.callback_query.data)
 
+                    val _ = kotbot.execute(
+                        DeleteMessage(
+                            chat_id = message.chat.id.chatId,
+                            message_id = message.message_id,
+                        )
+                    )
+
                     return
                 }
         }
@@ -114,7 +122,7 @@ class KotbotVerifier(
 
     override fun close() {
         try {
-            sendNotification("*Kotbot smoke test finished\\!*")
+            val _ = sendNotification("*Kotbot smoke test finished\\!*")
         } finally {
             kotbot.httpClient.use {}
         }

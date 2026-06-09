@@ -16,7 +16,7 @@ import io.heapy.kotbot.infra.metrics.MetricsModule
 import io.heapy.kotbot.infra.openai.GptApiModule
 
 @Module
-open class UpdateProcessorsModule(
+class UpdateProcessorsModule(
     private val rulesModule: RulesModule,
     private val commandsModule: CommandsModule,
     private val filtersModule: FiltersModule,
@@ -31,14 +31,14 @@ open class UpdateProcessorsModule(
     private val callbackDataServiceModule: CallbackDataServiceModule,
     private val joinChallengeModule: JoinChallengeModule,
 ) {
-    open val updateProcessor: UpdateProcessor by lazy {
+    val updateProcessor: UpdateProcessor by lazy {
         ParallelUpdateProcessor(
             typedUpdateProcessor = kotbotUpdateProcessor,
             applicationScope = applicationScopeModule.applicationScope,
         )
     }
 
-    open val gptReplyHandler: GptReplyHandler by lazy {
+    val gptReplyHandler: GptReplyHandler by lazy {
         GptReplyHandler(
             kotbot = kotbotModule.kotbot,
             gptService = gptApiModule.gptService,
@@ -50,7 +50,7 @@ open class UpdateProcessorsModule(
 
     // Ordered message-handling chain: each handler may consume a non-command message, falling
     // through to the next. Adding a new message feature is a one-line change here.
-    open val messageHandlers: List<MessageHandler> by lazy {
+    val messageHandlers: List<MessageHandler> by lazy {
         listOf(
             commandsModule.commandResolver,
             joinChallengeModule.appealHandler,
@@ -58,7 +58,7 @@ open class UpdateProcessorsModule(
         )
     }
 
-    open val kotbotUpdateProcessor: TypedUpdateProcessor by lazy {
+    val kotbotUpdateProcessor: TypedUpdateProcessor by lazy {
         KotbotUpdateProcessor(
             filter = filtersModule.filter,
             meterRegistry = metricsModule.meterRegistry,

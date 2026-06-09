@@ -9,6 +9,9 @@ import io.heapy.kotbot.bot.commands.topic.CloseTopicCommand
 import io.heapy.kotbot.bot.commands.topic.RenameTopicCommand
 import io.heapy.kotbot.bot.commands.topic.ReopenTopicCommand
 import io.heapy.kotbot.bot.dao.DaoModule
+import io.heapy.kotbot.bot.join.JoinChallengeModule
+import io.heapy.kotbot.bot.testing.KotbotTestingModule
+import io.heapy.kotbot.bot.testing.TestingCommand
 import io.heapy.kotbot.bot.use_case.callback.CallbackDataServiceModule
 import io.heapy.kotbot.infra.KotbotModule
 import io.heapy.kotbot.infra.debug.PrettyPrintModule
@@ -16,7 +19,7 @@ import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.infra.openai.GptApiModule
 
 @Module
-open class CommandsModule(
+class CommandsModule(
     private val kotbotModule: KotbotModule,
     private val kotlinChatBotConfigurationModule: KotlinChatBotConfigurationModule,
     private val gptApiModule: GptApiModule,
@@ -26,8 +29,10 @@ open class CommandsModule(
     private val prettyPrintModule: PrettyPrintModule,
     private val markdownModule: MarkdownModule,
     private val daoModule: DaoModule,
+    private val joinChallengeModule: JoinChallengeModule,
+    private val kotbotTestingModule: KotbotTestingModule,
 ) {
-    open val commandResolver: CommandResolver by lazy {
+    val commandResolver: CommandResolver by lazy {
         CommandResolver(
             commands = commands,
             commandExecutor = commandExecutor,
@@ -35,13 +40,13 @@ open class CommandsModule(
         )
     }
 
-    open val commandExecutor: CommandExecutor by lazy {
+    val commandExecutor: CommandExecutor by lazy {
         CommandExecutor(
             kotbot = kotbotModule.kotbot,
         )
     }
 
-    open val commands by lazy {
+    val commands by lazy {
         listOf(
             chatInfoCommand,
             spamCommand,
@@ -50,10 +55,11 @@ open class CommandsModule(
             reopenTopicCommand,
             renameTopicCommand,
             gptCommand,
+            testingCommand,
         ) + sendMessageToGroupCommands
     }
 
-    open val gptCommand: Command by lazy {
+    val gptCommand: Command by lazy {
         GptCommand(
             kotbot = kotbotModule.kotbot,
             gptService = gptApiModule.gptService,
@@ -63,7 +69,7 @@ open class CommandsModule(
         )
     }
 
-    open val chatInfoCommand: Command by lazy {
+    val chatInfoCommand: Command by lazy {
         ChatInfoCommand(
             prettyPrint = prettyPrintModule.prettyPrint,
             kotbot = kotbotModule.kotbot,
@@ -71,7 +77,7 @@ open class CommandsModule(
         )
     }
 
-    open val spamCommand: Command by lazy {
+    val spamCommand: Command by lazy {
         SpamCommand(
             kotbot = kotbotModule.kotbot,
             notificationChannelId = kotlinChatBotConfigurationModule.groupsConfiguration.notificationChannel,
@@ -80,34 +86,45 @@ open class CommandsModule(
         )
     }
 
-    open val closeTopicCommand: Command by lazy {
+    val closeTopicCommand: Command by lazy {
         CloseTopicCommand(
             kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
-    open val renameTopicCommand: Command by lazy {
+    val renameTopicCommand: Command by lazy {
         RenameTopicCommand(
             kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
-    open val reopenTopicCommand: Command by lazy {
+    val reopenTopicCommand: Command by lazy {
         ReopenTopicCommand(
             kotbot = kotbotModule.kotbot,
             notificationService = notificationServiceModule.notificationService,
         )
     }
 
-    open val startCommand: Command by lazy {
+    val startCommand: Command by lazy {
         StartCommand(
             kotbot = kotbotModule.kotbot,
         )
     }
 
-    open val sendMessageToGroupCommands by lazy {
+    val testingCommand: Command by lazy {
+        TestingCommand(
+            kotbot = kotbotModule.kotbot,
+            testingConfiguration = kotbotTestingModule.testingConfiguration,
+            testingCasClientToggle = kotbotTestingModule.testingCasClientToggle,
+            verifiedUserDao = joinChallengeModule.verifiedUserDao,
+            joinSessionDao = joinChallengeModule.joinSessionDao,
+            challengeAttemptDao = joinChallengeModule.challengeAttemptDao,
+        )
+    }
+
+    val sendMessageToGroupCommands by lazy {
         kotlinChatBotConfigurationModule
             .groupsConfiguration
             .allowedGroups

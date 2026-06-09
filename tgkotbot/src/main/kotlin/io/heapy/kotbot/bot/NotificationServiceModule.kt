@@ -5,12 +5,12 @@ import io.heapy.kotbot.infra.markdown.MarkdownModule
 import io.heapy.kotbot.infra.KotbotModule
 
 @Module
-open class NotificationServiceModule(
+class NotificationServiceModule(
     private val kotbotModule: KotbotModule,
     private val kotlinChatBotConfigurationModule: KotlinChatBotConfigurationModule,
     private val markdownModule: MarkdownModule,
 ) {
-    open val notificationService: NotificationService by lazy {
+    val notificationService: NotificationService by lazy {
         NotificationService(
             kotbot = kotbotModule.kotbot,
             chatId = kotlinChatBotConfigurationModule.groupsConfiguration.notificationChannel,

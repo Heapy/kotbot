@@ -7,13 +7,13 @@ import io.heapy.kotbot.infra.health_check.HealthCheckModule
 import io.heapy.kotbot.infra.metrics.MetricsModule
 
 @Module
-open class RoutesModule(
+class RoutesModule(
     private val metricsModule: MetricsModule,
     private val healthCheckModule: HealthCheckModule,
     private val eventsModule: EventsModule,
     private val adminModule: AdminModule,
 ) {
-    open val routes by lazy {
+    val routes by lazy {
         listOf(
             metricsModule.route,
             healthCheckModule.route,

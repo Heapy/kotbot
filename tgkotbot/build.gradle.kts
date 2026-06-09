@@ -2,6 +2,7 @@ plugins {
     application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.allopen)
     alias(libs.plugins.ksp)
 }
 
@@ -16,6 +17,10 @@ tasks.distTar {
 
 tasks.distZip {
     enabled = false
+}
+
+allOpen {
+    annotation("io.heapy.komok.tech.di.lib.Module")
 }
 
 dependencies {

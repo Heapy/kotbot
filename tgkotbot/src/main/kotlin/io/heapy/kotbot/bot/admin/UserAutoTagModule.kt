@@ -6,12 +6,12 @@ import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
 
 @Module
-open class UserAutoTagModule(
+class UserAutoTagModule(
     private val daoModule: DaoModule,
     private val jdbcModule: JdbcModule,
     private val applicationScopeModule: ApplicationScopeModule,
 ) {
-    open val userAutoTagJob by lazy {
+    val userAutoTagJob by lazy {
         UserAutoTagJob(
             userContextDao = daoModule.userContextDao,
             jobExecutionDao = daoModule.jobExecutionDao,

@@ -132,7 +132,6 @@ class AppealHandler(
                     message_id = message.message_id,
                     text = markdown.escape(text),
                     parse_mode = ParseMode.MarkdownV2.name,
-                    reply_markup = null,
                 )
             )
         }

@@ -6,12 +6,12 @@ import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.openai.GptApiModule
 
 @Module
-open class AdminModule(
+class AdminModule(
     private val daoModule: DaoModule,
     private val jdbcModule: JdbcModule,
     private val gptApiModule: GptApiModule,
 ) {
-    open val userNoteService by lazy {
+    val userNoteService by lazy {
         UserNoteService(
             gptApi = gptApiModule.gptApi,
             updateDao = daoModule.updateDao,
@@ -20,7 +20,7 @@ open class AdminModule(
         )
     }
 
-    open val route by lazy {
+    val route by lazy {
         AdminRoute(
             userContextDao = daoModule.userContextDao,
             transactionProvider = jdbcModule.transactionProvider,

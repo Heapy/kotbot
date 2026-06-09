@@ -7,13 +7,13 @@ import io.heapy.kotbot.infra.KotbotModule
 import io.heapy.kotbot.infra.debug.PrettyPrintModule
 
 @Module
-open class FiltersModule(
+class FiltersModule(
     private val kotlinChatBotConfigurationModule: KotlinChatBotConfigurationModule,
     private val notificationServiceModule: NotificationServiceModule,
     private val prettyPrintModule: PrettyPrintModule,
     private val kotbotModule: KotbotModule,
 ) {
-    open val groupInFamilyFilter: Filter by lazy {
+    val groupInFamilyFilter: Filter by lazy {
         KnownChatsFilter(
             kotbot = kotbotModule.kotbot,
             wellKnownChats = kotlinChatBotConfigurationModule.wellKnownChats,
@@ -22,7 +22,7 @@ open class FiltersModule(
         )
     }
 
-    open val filter: Filter by lazy {
+    val filter: Filter by lazy {
         Filter.combine(
             listOf(
                 groupInFamilyFilter,

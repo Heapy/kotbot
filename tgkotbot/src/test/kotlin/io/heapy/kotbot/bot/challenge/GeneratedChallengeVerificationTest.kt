@@ -557,437 +557,437 @@ class GeneratedChallengeVerificationTest {
     @Test
     fun `verify pair_destructuring batch 0`() {
         verify("14 11", run {
-            val (a, b) = 11 to 14
+            val [a, b] = 11 to 14
             "$b $a"
-        }, 0L, "val (a, b) = 11 to 14\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 11 to 14\n\"\$b \$a\"")
         verify("14 7", run {
-            val (a, b) = 7 to 14
+            val [a, b] = 7 to 14
             "$b $a"
-        }, 0L, "val (a, b) = 7 to 14\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 7 to 14\n\"\$b \$a\"")
         verify("34", run {
-            val (x, _, z) = Triple(7, 10, 27)
+            val [x, _, z] = Triple(7, 10, 27)
             x + z
-        }, 0L, "val (x, _, z) = Triple(7, 10, 27)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(7, 10, 27)\nx + z")
         verify("11 14", run {
-            val (a, b) = 14 to 11
+            val [a, b] = 14 to 11
             "$b $a"
-        }, 0L, "val (a, b) = 14 to 11\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 14 to 11\n\"\$b \$a\"")
         verify("2 12", run {
-            val (a, b) = 12 to 2
+            val [a, b] = 12 to 2
             "$b $a"
-        }, 0L, "val (a, b) = 12 to 2\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 12 to 2\n\"\$b \$a\"")
         verify("7", run {
             val pair = 1 to 3
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 1 to 3\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 1 to 3\nval [first, second] = pair\nfirst * second + first + second")
         verify("13 8", run {
-            val (a, b) = 8 to 13
+            val [a, b] = 8 to 13
             "$b $a"
-        }, 0L, "val (a, b) = 8 to 13\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 8 to 13\n\"\$b \$a\"")
         verify("26", run {
             val pair = 2 to 8
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 2 to 8\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 2 to 8\nval [first, second] = pair\nfirst * second + first + second")
         verify("29", run {
-            val (x, _, z) = Triple(4, 11, 25)
+            val [x, _, z] = Triple(4, 11, 25)
             x + z
-        }, 0L, "val (x, _, z) = Triple(4, 11, 25)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(4, 11, 25)\nx + z")
         verify("28", run {
-            val (x, _, z) = Triple(6, 18, 22)
+            val [x, _, z] = Triple(6, 18, 22)
             x + z
-        }, 0L, "val (x, _, z) = Triple(6, 18, 22)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(6, 18, 22)\nx + z")
         verify("13 5", run {
-            val (a, b) = 5 to 13
+            val [a, b] = 5 to 13
             "$b $a"
-        }, 0L, "val (a, b) = 5 to 13\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 5 to 13\n\"\$b \$a\"")
         verify("179", run {
             val pair = 11 to 14
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 11 to 14\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 11 to 14\nval [first, second] = pair\nfirst * second + first + second")
         verify("33", run {
-            val (x, _, z) = Triple(4, 13, 29)
+            val [x, _, z] = Triple(4, 13, 29)
             x + z
-        }, 0L, "val (x, _, z) = Triple(4, 13, 29)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(4, 13, 29)\nx + z")
         verify("25", run {
-            val (x, _, z) = Triple(1, 18, 24)
+            val [x, _, z] = Triple(1, 18, 24)
             x + z
-        }, 0L, "val (x, _, z) = Triple(1, 18, 24)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(1, 18, 24)\nx + z")
         verify("26", run {
-            val (x, _, z) = Triple(1, 12, 25)
+            val [x, _, z] = Triple(1, 12, 25)
             x + z
-        }, 0L, "val (x, _, z) = Triple(1, 12, 25)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(1, 12, 25)\nx + z")
         verify("29", run {
-            val (x, _, z) = Triple(3, 11, 26)
+            val [x, _, z] = Triple(3, 11, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(3, 11, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(3, 11, 26)\nx + z")
         verify("10 19", run {
-            val (a, b) = 19 to 10
+            val [a, b] = 19 to 10
             "$b $a"
-        }, 0L, "val (a, b) = 19 to 10\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 19 to 10\n\"\$b \$a\"")
         verify("224", run {
             val pair = 14 to 14
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 14 to 14\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 14 to 14\nval [first, second] = pair\nfirst * second + first + second")
         verify("31", run {
-            val (x, _, z) = Triple(8, 11, 23)
+            val [x, _, z] = Triple(8, 11, 23)
             x + z
-        }, 0L, "val (x, _, z) = Triple(8, 11, 23)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(8, 11, 23)\nx + z")
         verify("33", run {
-            val (x, _, z) = Triple(5, 18, 28)
+            val [x, _, z] = Triple(5, 18, 28)
             x + z
-        }, 0L, "val (x, _, z) = Triple(5, 18, 28)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(5, 18, 28)\nx + z")
         verify("4 3", run {
-            val (a, b) = 3 to 4
+            val [a, b] = 3 to 4
             "$b $a"
-        }, 0L, "val (a, b) = 3 to 4\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 3 to 4\n\"\$b \$a\"")
         verify("19 6", run {
-            val (a, b) = 6 to 19
+            val [a, b] = 6 to 19
             "$b $a"
-        }, 0L, "val (a, b) = 6 to 19\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 6 to 19\n\"\$b \$a\"")
         verify("89", run {
             val pair = 9 to 8
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 9 to 8\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 9 to 8\nval [first, second] = pair\nfirst * second + first + second")
         verify("6 1", run {
-            val (a, b) = 1 to 6
+            val [a, b] = 1 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 1 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 1 to 6\n\"\$b \$a\"")
         verify("10 2", run {
-            val (a, b) = 2 to 10
+            val [a, b] = 2 to 10
             "$b $a"
-        }, 0L, "val (a, b) = 2 to 10\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 2 to 10\n\"\$b \$a\"")
         verify("5 11", run {
-            val (a, b) = 11 to 5
+            val [a, b] = 11 to 5
             "$b $a"
-        }, 0L, "val (a, b) = 11 to 5\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 11 to 5\n\"\$b \$a\"")
         verify("44", run {
             val pair = 4 to 8
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 4 to 8\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 4 to 8\nval [first, second] = pair\nfirst * second + first + second")
         verify("11 7", run {
-            val (a, b) = 7 to 11
+            val [a, b] = 7 to 11
             "$b $a"
-        }, 0L, "val (a, b) = 7 to 11\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 7 to 11\n\"\$b \$a\"")
         verify("7 8", run {
-            val (a, b) = 8 to 7
+            val [a, b] = 8 to 7
             "$b $a"
-        }, 0L, "val (a, b) = 8 to 7\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 8 to 7\n\"\$b \$a\"")
         verify("71", run {
             val pair = 7 to 8
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 7 to 8\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 7 to 8\nval [first, second] = pair\nfirst * second + first + second")
         verify("33", run {
-            val (x, _, z) = Triple(4, 15, 29)
+            val [x, _, z] = Triple(4, 15, 29)
             x + z
-        }, 0L, "val (x, _, z) = Triple(4, 15, 29)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(4, 15, 29)\nx + z")
         verify("37", run {
-            val (x, _, z) = Triple(9, 16, 28)
+            val [x, _, z] = Triple(9, 16, 28)
             x + z
-        }, 0L, "val (x, _, z) = Triple(9, 16, 28)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(9, 16, 28)\nx + z")
         verify("139", run {
             val pair = 9 to 13
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 9 to 13\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 9 to 13\nval [first, second] = pair\nfirst * second + first + second")
         verify("4 1", run {
-            val (a, b) = 1 to 4
+            val [a, b] = 1 to 4
             "$b $a"
-        }, 0L, "val (a, b) = 1 to 4\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 1 to 4\n\"\$b \$a\"")
         verify("44", run {
             val pair = 8 to 4
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 8 to 4\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 8 to 4\nval [first, second] = pair\nfirst * second + first + second")
         verify("12 14", run {
-            val (a, b) = 14 to 12
+            val [a, b] = 14 to 12
             "$b $a"
-        }, 0L, "val (a, b) = 14 to 12\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 14 to 12\n\"\$b \$a\"")
         verify("15", run {
             val pair = 1 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 1 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 1 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("6 10", run {
-            val (a, b) = 10 to 6
+            val [a, b] = 10 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 10 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 10 to 6\n\"\$b \$a\"")
         verify("30", run {
-            val (x, _, z) = Triple(6, 19, 24)
+            val [x, _, z] = Triple(6, 19, 24)
             x + z
-        }, 0L, "val (x, _, z) = Triple(6, 19, 24)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(6, 19, 24)\nx + z")
         verify("26", run {
-            val (x, _, z) = Triple(3, 12, 23)
+            val [x, _, z] = Triple(3, 12, 23)
             x + z
-        }, 0L, "val (x, _, z) = Triple(3, 12, 23)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(3, 12, 23)\nx + z")
         verify("6 5", run {
-            val (a, b) = 5 to 6
+            val [a, b] = 5 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 5 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 5 to 6\n\"\$b \$a\"")
         verify("24", run {
-            val (x, _, z) = Triple(3, 13, 21)
+            val [x, _, z] = Triple(3, 13, 21)
             x + z
-        }, 0L, "val (x, _, z) = Triple(3, 13, 21)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(3, 13, 21)\nx + z")
         verify("119", run {
             val pair = 7 to 14
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 7 to 14\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 7 to 14\nval [first, second] = pair\nfirst * second + first + second")
         verify("5 10", run {
-            val (a, b) = 10 to 5
+            val [a, b] = 10 to 5
             "$b $a"
-        }, 0L, "val (a, b) = 10 to 5\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 10 to 5\n\"\$b \$a\"")
         verify("119", run {
             val pair = 14 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 14 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 14 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("36", run {
-            val (x, _, z) = Triple(9, 17, 27)
+            val [x, _, z] = Triple(9, 17, 27)
             x + z
-        }, 0L, "val (x, _, z) = Triple(9, 17, 27)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(9, 17, 27)\nx + z")
         verify("55", run {
             val pair = 7 to 6
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 7 to 6\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 7 to 6\nval [first, second] = pair\nfirst * second + first + second")
         verify("8 6", run {
-            val (a, b) = 6 to 8
+            val [a, b] = 6 to 8
             "$b $a"
-        }, 0L, "val (a, b) = 6 to 8\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 6 to 8\n\"\$b \$a\"")
         verify("17 5", run {
-            val (a, b) = 5 to 17
+            val [a, b] = 5 to 17
             "$b $a"
-        }, 0L, "val (a, b) = 5 to 17\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 5 to 17\n\"\$b \$a\"")
         verify("22", run {
-            val (x, _, z) = Triple(1, 14, 21)
+            val [x, _, z] = Triple(1, 14, 21)
             x + z
-        }, 0L, "val (x, _, z) = Triple(1, 14, 21)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(1, 14, 21)\nx + z")
     }
 
     @Test
     fun `verify pair_destructuring batch 1`() {
         verify("31", run {
-            val (x, _, z) = Triple(5, 14, 26)
+            val [x, _, z] = Triple(5, 14, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(5, 14, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(5, 14, 26)\nx + z")
         verify("13 4", run {
-            val (a, b) = 4 to 13
+            val [a, b] = 4 to 13
             "$b $a"
-        }, 0L, "val (a, b) = 4 to 13\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 4 to 13\n\"\$b \$a\"")
         verify("30", run {
-            val (x, _, z) = Triple(2, 17, 28)
+            val [x, _, z] = Triple(2, 17, 28)
             x + z
-        }, 0L, "val (x, _, z) = Triple(2, 17, 28)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(2, 17, 28)\nx + z")
         verify("16 19", run {
-            val (a, b) = 19 to 16
+            val [a, b] = 19 to 16
             "$b $a"
-        }, 0L, "val (a, b) = 19 to 16\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 19 to 16\n\"\$b \$a\"")
         verify("17 10", run {
-            val (a, b) = 10 to 17
+            val [a, b] = 10 to 17
             "$b $a"
-        }, 0L, "val (a, b) = 10 to 17\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 10 to 17\n\"\$b \$a\"")
         verify("6 6", run {
-            val (a, b) = 6 to 6
+            val [a, b] = 6 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 6 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 6 to 6\n\"\$b \$a\"")
         verify("33", run {
-            val (x, _, z) = Triple(7, 17, 26)
+            val [x, _, z] = Triple(7, 17, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(7, 17, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(7, 17, 26)\nx + z")
         verify("13 15", run {
-            val (a, b) = 15 to 13
+            val [a, b] = 15 to 13
             "$b $a"
-        }, 0L, "val (a, b) = 15 to 13\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 15 to 13\n\"\$b \$a\"")
         verify("35", run {
-            val (x, _, z) = Triple(9, 16, 26)
+            val [x, _, z] = Triple(9, 16, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(9, 16, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(9, 16, 26)\nx + z")
         verify("25", run {
-            val (x, _, z) = Triple(2, 15, 23)
+            val [x, _, z] = Triple(2, 15, 23)
             x + z
-        }, 0L, "val (x, _, z) = Triple(2, 15, 23)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(2, 15, 23)\nx + z")
         verify("43", run {
             val pair = 3 to 10
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 3 to 10\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 3 to 10\nval [first, second] = pair\nfirst * second + first + second")
         verify("6 14", run {
-            val (a, b) = 14 to 6
+            val [a, b] = 14 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 14 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 14 to 6\n\"\$b \$a\"")
         verify("30", run {
-            val (x, _, z) = Triple(4, 10, 26)
+            val [x, _, z] = Triple(4, 10, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(4, 10, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(4, 10, 26)\nx + z")
         verify("3 19", run {
-            val (a, b) = 19 to 3
+            val [a, b] = 19 to 3
             "$b $a"
-        }, 0L, "val (a, b) = 19 to 3\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 19 to 3\n\"\$b \$a\"")
         verify("27", run {
-            val (x, _, z) = Triple(2, 14, 25)
+            val [x, _, z] = Triple(2, 14, 25)
             x + z
-        }, 0L, "val (x, _, z) = Triple(2, 14, 25)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(2, 14, 25)\nx + z")
         verify("31", run {
-            val (x, _, z) = Triple(5, 13, 26)
+            val [x, _, z] = Triple(5, 13, 26)
             x + z
-        }, 0L, "val (x, _, z) = Triple(5, 13, 26)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(5, 13, 26)\nx + z")
         verify("90", run {
             val pair = 6 to 12
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 6 to 12\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 6 to 12\nval [first, second] = pair\nfirst * second + first + second")
         verify("13 6", run {
-            val (a, b) = 6 to 13
+            val [a, b] = 6 to 13
             "$b $a"
-        }, 0L, "val (a, b) = 6 to 13\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 6 to 13\n\"\$b \$a\"")
         verify("55", run {
             val pair = 13 to 3
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 13 to 3\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 13 to 3\nval [first, second] = pair\nfirst * second + first + second")
         verify("21", run {
             val pair = 1 to 10
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 1 to 10\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 1 to 10\nval [first, second] = pair\nfirst * second + first + second")
         verify("15 3", run {
-            val (a, b) = 3 to 15
+            val [a, b] = 3 to 15
             "$b $a"
-        }, 0L, "val (a, b) = 3 to 15\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 3 to 15\n\"\$b \$a\"")
         verify("1 8", run {
-            val (a, b) = 8 to 1
+            val [a, b] = 8 to 1
             "$b $a"
-        }, 0L, "val (a, b) = 8 to 1\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 8 to 1\n\"\$b \$a\"")
         verify("71", run {
             val pair = 8 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 8 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 8 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("34", run {
             val pair = 6 to 4
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 6 to 4\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 6 to 4\nval [first, second] = pair\nfirst * second + first + second")
         verify("129", run {
             val pair = 9 to 12
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 9 to 12\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 9 to 12\nval [first, second] = pair\nfirst * second + first + second")
         verify("6 18", run {
-            val (a, b) = 18 to 6
+            val [a, b] = 18 to 6
             "$b $a"
-        }, 0L, "val (a, b) = 18 to 6\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 18 to 6\n\"\$b \$a\"")
         verify("9 8", run {
-            val (a, b) = 8 to 9
+            val [a, b] = 8 to 9
             "$b $a"
-        }, 0L, "val (a, b) = 8 to 9\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 8 to 9\n\"\$b \$a\"")
         verify("12 8", run {
-            val (a, b) = 8 to 12
+            val [a, b] = 8 to 12
             "$b $a"
-        }, 0L, "val (a, b) = 8 to 12\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 8 to 12\n\"\$b \$a\"")
         verify("25", run {
-            val (x, _, z) = Triple(4, 13, 21)
+            val [x, _, z] = Triple(4, 13, 21)
             x + z
-        }, 0L, "val (x, _, z) = Triple(4, 13, 21)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(4, 13, 21)\nx + z")
         verify("24", run {
-            val (x, _, z) = Triple(2, 12, 22)
+            val [x, _, z] = Triple(2, 12, 22)
             x + z
-        }, 0L, "val (x, _, z) = Triple(2, 12, 22)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(2, 12, 22)\nx + z")
         verify("32", run {
-            val (x, _, z) = Triple(9, 13, 23)
+            val [x, _, z] = Triple(9, 13, 23)
             x + z
-        }, 0L, "val (x, _, z) = Triple(9, 13, 23)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(9, 13, 23)\nx + z")
         verify("35", run {
-            val (x, _, z) = Triple(7, 16, 28)
+            val [x, _, z] = Triple(7, 16, 28)
             x + z
-        }, 0L, "val (x, _, z) = Triple(7, 16, 28)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(7, 16, 28)\nx + z")
         verify("15", run {
             val pair = 1 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 1 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 1 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("29", run {
-            val (x, _, z) = Triple(1, 15, 28)
+            val [x, _, z] = Triple(1, 15, 28)
             x + z
-        }, 0L, "val (x, _, z) = Triple(1, 15, 28)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(1, 15, 28)\nx + z")
         verify("4 2", run {
-            val (a, b) = 2 to 4
+            val [a, b] = 2 to 4
             "$b $a"
-        }, 0L, "val (a, b) = 2 to 4\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 2 to 4\n\"\$b \$a\"")
         verify("23", run {
             val pair = 2 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 2 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 2 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("83", run {
             val pair = 5 to 13
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 5 to 13\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 5 to 13\nval [first, second] = pair\nfirst * second + first + second")
         verify("19 2", run {
-            val (a, b) = 2 to 19
+            val [a, b] = 2 to 19
             "$b $a"
-        }, 0L, "val (a, b) = 2 to 19\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 2 to 19\n\"\$b \$a\"")
         verify("16 5", run {
-            val (a, b) = 5 to 16
+            val [a, b] = 5 to 16
             "$b $a"
-        }, 0L, "val (a, b) = 5 to 16\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 5 to 16\n\"\$b \$a\"")
         verify("31", run {
             val pair = 7 to 3
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 7 to 3\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 7 to 3\nval [first, second] = pair\nfirst * second + first + second")
         verify("7 15", run {
-            val (a, b) = 15 to 7
+            val [a, b] = 15 to 7
             "$b $a"
-        }, 0L, "val (a, b) = 15 to 7\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 15 to 7\n\"\$b \$a\"")
         verify("23", run {
-            val (x, _, z) = Triple(3, 13, 20)
+            val [x, _, z] = Triple(3, 13, 20)
             x + z
-        }, 0L, "val (x, _, z) = Triple(3, 13, 20)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(3, 13, 20)\nx + z")
         verify("19", run {
             val pair = 3 to 4
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 3 to 4\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 3 to 4\nval [first, second] = pair\nfirst * second + first + second")
         verify("10 18", run {
-            val (a, b) = 18 to 10
+            val [a, b] = 18 to 10
             "$b $a"
-        }, 0L, "val (a, b) = 18 to 10\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 18 to 10\n\"\$b \$a\"")
         verify("55", run {
             val pair = 6 to 7
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 6 to 7\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 6 to 7\nval [first, second] = pair\nfirst * second + first + second")
         verify("20", run {
             val pair = 6 to 2
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 6 to 2\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 6 to 2\nval [first, second] = pair\nfirst * second + first + second")
         verify("30", run {
-            val (x, _, z) = Triple(6, 13, 24)
+            val [x, _, z] = Triple(6, 13, 24)
             x + z
-        }, 0L, "val (x, _, z) = Triple(6, 13, 24)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(6, 13, 24)\nx + z")
         verify("71", run {
             val pair = 5 to 11
-            val (first, second) = pair
+            val [first, second] = pair
             first * second + first + second
-        }, 0L, "val pair = 5 to 11\nval (first, second) = pair\nfirst * second + first + second")
+        }, 0L, "val pair = 5 to 11\nval [first, second] = pair\nfirst * second + first + second")
         verify("15 1", run {
-            val (a, b) = 1 to 15
+            val [a, b] = 1 to 15
             "$b $a"
-        }, 0L, "val (a, b) = 1 to 15\n\"\$b \$a\"")
+        }, 0L, "val [a, b] = 1 to 15\n\"\$b \$a\"")
         verify("37", run {
-            val (x, _, z) = Triple(8, 17, 29)
+            val [x, _, z] = Triple(8, 17, 29)
             x + z
-        }, 0L, "val (x, _, z) = Triple(8, 17, 29)\nx + z")
+        }, 0L, "val [x, _, z] = Triple(8, 17, 29)\nx + z")
     }
 
     @Test

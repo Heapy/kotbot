@@ -1,6 +1,7 @@
 package io.heapy.kotbot.bot.join
 
-import io.heapy.kotbot.infra.configuration.CasConfiguration
+import io.heapy.kotbot.bot.cas.CasResult
+import io.heapy.kotbot.bot.cas.DefaultCasClient
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
 
-class CasClientTest {
+class DefaultCasClientTest {
     private fun clientFrom(engine: MockEngine) =
         HttpClient(engine) {
             install(ContentNegotiation) {
@@ -39,22 +40,8 @@ class CasClientTest {
             },
         )
 
-    private fun casClient(client: HttpClient, forceFlagged: Long? = null) =
-        CasClient(client, CasConfiguration(forceFlagged = forceFlagged))
-
-    @Test
-    fun `force-flagged user is flagged without querying CAS`() = runBlocking {
-        val engine = MockEngine { error("CAS must not be called for force-flagged users") }
-        val result = casClient(clientFrom(engine), forceFlagged = 42L).check(42L)
-        assertEquals(
-            CasResult.Flagged(
-                offenses = null,
-                timeAdded = null,
-                messages = listOf("Forced CAS flag via configuration (cas.forceFlagged)"),
-            ),
-            result,
-        )
-    }
+    private fun casClient(client: HttpClient) =
+        DefaultCasClient(client)
 
     @Test
     fun `ok false is clean`() = runBlocking {

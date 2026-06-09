@@ -296,6 +296,16 @@ class JoinSessionDao {
             .map { it.toData() }
     }
 
+    context(_: TransactionContext)
+    suspend fun deleteByTelegramId(
+        telegramId: Long,
+    ): Int = useTx {
+        dslContext
+            .deleteFrom(JOIN_SESSION)
+            .where(JOIN_SESSION.TELEGRAM_ID.eq(telegramId))
+            .execute()
+    }
+
     private fun org.jooq.Record.toData(): JoinSessionData {
         val optionsJson = get(JOIN_SESSION.OPTIONS)
         val optionsList = optionsJson?.let {

@@ -3,6 +3,8 @@ package io.heapy.kotbot.bot.join
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
 import io.heapy.kotbot.bot.NotificationService
+import io.heapy.kotbot.bot.cas.CasClient
+import io.heapy.kotbot.bot.cas.CasResult
 import io.heapy.kotbot.bot.challenge.ChallengeGenerator
 import io.heapy.kotbot.bot.executeSafely
 import io.heapy.kotbot.bot.method.ApproveChatJoinRequest

@@ -16,7 +16,7 @@ import runMigrations
 import kotlin.concurrent.thread
 
 @Module
-open class ApplicationModule(
+class ApplicationModule(
     private val serverModule: ServerModule,
     private val jdbcModule: JdbcModule,
     private val metricsModule: MetricsModule,
@@ -30,7 +30,7 @@ open class ApplicationModule(
     private val userAutoTagModule: UserAutoTagModule,
     private val joinChallengeModule: JoinChallengeModule,
 ) {
-    open suspend fun start() {
+    suspend fun start() {
         metricsReportersModule
             .metricsRegister
             .addMetricsToRegistry(

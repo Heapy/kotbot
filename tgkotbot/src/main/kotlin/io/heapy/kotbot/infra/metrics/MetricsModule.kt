@@ -9,10 +9,10 @@ import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import io.micrometer.prometheusmetrics.PrometheusRenameFilter
 
 @Module
-open class MetricsModule(
+class MetricsModule(
     private val configurationModule: ConfigurationModule,
 ) {
-    open val configuration: MetricsConfiguration by lazy {
+    val configuration: MetricsConfiguration by lazy {
         configurationModule
             .config
             .read(
@@ -21,25 +21,25 @@ open class MetricsModule(
             )
     }
 
-    open val prometheusConfig: PrometheusConfig by lazy {
+    val prometheusConfig: PrometheusConfig by lazy {
         PrometheusConfig.DEFAULT
     }
 
-    open val commonTags: Tags by lazy {
+    val commonTags: Tags by lazy {
         Tags.of(
             configuration.tags
                 .map { [k, v] -> Tag.of(k, v) }
         )
     }
 
-    open val meterRegistry by lazy {
+    val meterRegistry by lazy {
         PrometheusMeterRegistry(prometheusConfig).also { meterRegistry ->
             meterRegistry.config().meterFilter(PrometheusRenameFilter())
             meterRegistry.config().commonTags(commonTags)
         }
     }
 
-    open val route by lazy {
+    val route by lazy {
         MetricsRoute(
             prometheusMeterRegistry = meterRegistry,
         )

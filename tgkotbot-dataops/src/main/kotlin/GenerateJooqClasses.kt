@@ -9,7 +9,7 @@ import org.jooq.meta.jaxb.Generator
 import org.jooq.meta.jaxb.Jdbc
 import org.jooq.meta.jaxb.Target
 import org.postgresql.ds.PGSimpleDataSource
-import java.util.Locale
+import java.util.*
 
 fun main() {
     drop()
@@ -69,7 +69,7 @@ fun jooq() {
             }
 
             generate = Generate().apply {
-                isDaos = true
+                isDaos = false
                 isPojos = true
                 isKotlinNotNullPojoAttributes = true
                 isKotlinNotNullInterfaceAttributes = true

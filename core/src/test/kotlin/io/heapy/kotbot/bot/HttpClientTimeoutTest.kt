@@ -40,7 +40,7 @@ class HttpClientTimeoutTest {
                 engine { requestTimeout = 300L }
             }.use { client ->
                 val exception = assertThrows<HttpRequestTimeoutException> {
-                    runBlocking { client.get(server) }
+                    runBlocking { val _ = client.get(server) }
                 }
 
                 // Without the plugin there is no HttpTimeoutCapability on the request,
@@ -89,7 +89,7 @@ class HttpClientTimeoutTest {
                 }
             }.use { client ->
                 val exception = assertThrows<HttpRequestTimeoutException> {
-                    runBlocking { client.get(server) }
+                    runBlocking { val _ = client.get(server) }
                 }
 
                 assertTrue("request_timeout=${300L} ms" in exception.message.orEmpty()) {
@@ -110,7 +110,7 @@ class HttpClientTimeoutTest {
                 }
             }.use { client ->
                 assertThrows<SocketTimeoutException> {
-                    runBlocking { client.get(server) }
+                    runBlocking { val _ = client.get(server) }
                 }
             }
         }
@@ -150,14 +150,14 @@ class HttpClientTimeoutTest {
         val port: Int get() = serverSocket.localPort
 
         init {
-            thread(isDaemon = true, name = "slow-server") {
+            val _ = thread(isDaemon = true, name = "slow-server") {
                 while (!serverSocket.isClosed) {
                     val socket = try {
                         serverSocket.accept()
                     } catch (_: Throwable) {
                         break
                     }
-                    thread(isDaemon = true) { respond(socket) }
+                    val _ = thread(isDaemon = true) { respond(socket) }
                 }
             }
         }

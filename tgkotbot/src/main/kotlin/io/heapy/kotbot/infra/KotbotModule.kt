@@ -14,11 +14,11 @@ import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 
 @Module
-open class KotbotModule(
+class KotbotModule(
     private val configurationModule: ConfigurationModule,
     private val logUpdatesServiceModule: LogUpdatesServiceModule,
 ) {
-    open val botConfiguration: BotConfiguration by lazy {
+    val botConfiguration: BotConfiguration by lazy {
         configurationModule
             .config
             .read(
@@ -27,7 +27,7 @@ open class KotbotModule(
             )
     }
 
-    open val kotbotHttpClient by lazy {
+    val kotbotHttpClient by lazy {
         HttpClient(CIO) {
             install(HttpTimeout) {
                 connectTimeoutMillis = 10_000
@@ -51,7 +51,7 @@ open class KotbotModule(
         }
     }
 
-    open val kotbot: Kotbot by lazy {
+    val kotbot: Kotbot by lazy {
         Kotbot(
             token = botConfiguration.token,
             httpClient = kotbotHttpClient,

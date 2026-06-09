@@ -5,7 +5,7 @@ import io.heapy.komok.tech.logging.Logger
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Module
-open class AutoClosableModule : AutoCloseable {
+class AutoClosableModule : AutoCloseable {
     private val closable = mutableListOf<() -> Unit>()
     private val used = AtomicBoolean(false)
 
