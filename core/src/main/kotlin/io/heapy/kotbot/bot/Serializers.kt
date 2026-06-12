@@ -83,6 +83,56 @@ import io.heapy.kotbot.bot.model.RevenueWithdrawalState
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStateFailed
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStatePending
 import io.heapy.kotbot.bot.model.RevenueWithdrawalStateSucceeded
+import io.heapy.kotbot.bot.model.RichBlock
+import io.heapy.kotbot.bot.model.RichBlockAnchor
+import io.heapy.kotbot.bot.model.RichBlockAnimation
+import io.heapy.kotbot.bot.model.RichBlockAudio
+import io.heapy.kotbot.bot.model.RichBlockBlockQuotation
+import io.heapy.kotbot.bot.model.RichBlockCollage
+import io.heapy.kotbot.bot.model.RichBlockDetails
+import io.heapy.kotbot.bot.model.RichBlockDivider
+import io.heapy.kotbot.bot.model.RichBlockFooter
+import io.heapy.kotbot.bot.model.RichBlockList
+import io.heapy.kotbot.bot.model.RichBlockMap
+import io.heapy.kotbot.bot.model.RichBlockMathematicalExpression
+import io.heapy.kotbot.bot.model.RichBlockParagraph
+import io.heapy.kotbot.bot.model.RichBlockPhoto
+import io.heapy.kotbot.bot.model.RichBlockPreformatted
+import io.heapy.kotbot.bot.model.RichBlockPullQuotation
+import io.heapy.kotbot.bot.model.RichBlockSectionHeading
+import io.heapy.kotbot.bot.model.RichBlockSlideshow
+import io.heapy.kotbot.bot.model.RichBlockTable
+import io.heapy.kotbot.bot.model.RichBlockThinking
+import io.heapy.kotbot.bot.model.RichBlockVideo
+import io.heapy.kotbot.bot.model.RichBlockVoiceNote
+import io.heapy.kotbot.bot.model.RichText
+import io.heapy.kotbot.bot.model.RichTextAnchor
+import io.heapy.kotbot.bot.model.RichTextAnchorLink
+import io.heapy.kotbot.bot.model.RichTextBankCardNumber
+import io.heapy.kotbot.bot.model.RichTextBold
+import io.heapy.kotbot.bot.model.RichTextBotCommand
+import io.heapy.kotbot.bot.model.RichTextCashtag
+import io.heapy.kotbot.bot.model.RichTextCode
+import io.heapy.kotbot.bot.model.RichTextCustomEmoji
+import io.heapy.kotbot.bot.model.RichTextDateTime
+import io.heapy.kotbot.bot.model.RichTextEmailAddress
+import io.heapy.kotbot.bot.model.RichTextHashtag
+import io.heapy.kotbot.bot.model.RichTextItalic
+import io.heapy.kotbot.bot.model.RichTextList
+import io.heapy.kotbot.bot.model.RichTextMarked
+import io.heapy.kotbot.bot.model.RichTextMathematicalExpression
+import io.heapy.kotbot.bot.model.RichTextMention
+import io.heapy.kotbot.bot.model.RichTextPhoneNumber
+import io.heapy.kotbot.bot.model.RichTextReference
+import io.heapy.kotbot.bot.model.RichTextReferenceLink
+import io.heapy.kotbot.bot.model.RichTextSpoiler
+import io.heapy.kotbot.bot.model.RichTextStrikethrough
+import io.heapy.kotbot.bot.model.RichTextString
+import io.heapy.kotbot.bot.model.RichTextSubscript
+import io.heapy.kotbot.bot.model.RichTextSuperscript
+import io.heapy.kotbot.bot.model.RichTextTextMention
+import io.heapy.kotbot.bot.model.RichTextUnderline
+import io.heapy.kotbot.bot.model.RichTextUrl
 import io.heapy.kotbot.bot.model.StoryAreaType
 import io.heapy.kotbot.bot.model.StoryAreaTypeLink
 import io.heapy.kotbot.bot.model.StoryAreaTypeLocation
@@ -100,6 +150,7 @@ import io.heapy.kotbot.bot.model.TransactionPartnerTelegramAds
 import io.heapy.kotbot.bot.model.TransactionPartnerTelegramApi
 import io.heapy.kotbot.bot.model.TransactionPartnerUser
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -240,6 +291,74 @@ public object ReactionTypeSerializer : JsonContentPolymorphicSerializer<Reaction
             "custom_emoji" -> ReactionTypeCustomEmoji.serializer()
             "paid" -> ReactionTypePaid.serializer()
             else -> error("Unknown argument type: $type")
+        }
+}
+
+public object RichBlockSerializer : JsonContentPolymorphicSerializer<RichBlock>(RichBlock::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out RichBlock> =
+        when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+            "anchor" -> RichBlockAnchor.serializer()
+            "animation" -> RichBlockAnimation.serializer()
+            "audio" -> RichBlockAudio.serializer()
+            "blockquote" -> RichBlockBlockQuotation.serializer()
+            "collage" -> RichBlockCollage.serializer()
+            "details" -> RichBlockDetails.serializer()
+            "divider" -> RichBlockDivider.serializer()
+            "footer" -> RichBlockFooter.serializer()
+            "heading" -> RichBlockSectionHeading.serializer()
+            "list" -> RichBlockList.serializer()
+            "map" -> RichBlockMap.serializer()
+            "mathematical_expression" -> RichBlockMathematicalExpression.serializer()
+            "paragraph" -> RichBlockParagraph.serializer()
+            "photo" -> RichBlockPhoto.serializer()
+            "pre" -> RichBlockPreformatted.serializer()
+            "pullquote" -> RichBlockPullQuotation.serializer()
+            "slideshow" -> RichBlockSlideshow.serializer()
+            "table" -> RichBlockTable.serializer()
+            "thinking" -> RichBlockThinking.serializer()
+            "video" -> RichBlockVideo.serializer()
+            "voice_note" -> RichBlockVoiceNote.serializer()
+            else -> error("Unknown RichBlock type: $type")
+        }
+}
+
+public object RichTextSerializer : JsonContentPolymorphicSerializer<RichText>(RichText::class) {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out RichText> =
+        when (element) {
+            is JsonPrimitive -> if (element.isString) {
+                RichTextString.serializer()
+            } else {
+                error("Unknown RichText primitive: ${element.content}")
+            }
+            is JsonArray -> RichTextList.serializer()
+            else -> when (val type = element.jsonObject["type"]?.jsonPrimitive?.content) {
+                "anchor" -> RichTextAnchor.serializer()
+                "anchor_link" -> RichTextAnchorLink.serializer()
+                "bank_card_number" -> RichTextBankCardNumber.serializer()
+                "bold" -> RichTextBold.serializer()
+                "bot_command" -> RichTextBotCommand.serializer()
+                "cashtag" -> RichTextCashtag.serializer()
+                "code" -> RichTextCode.serializer()
+                "custom_emoji" -> RichTextCustomEmoji.serializer()
+                "date_time" -> RichTextDateTime.serializer()
+                "email_address" -> RichTextEmailAddress.serializer()
+                "hashtag" -> RichTextHashtag.serializer()
+                "italic" -> RichTextItalic.serializer()
+                "marked" -> RichTextMarked.serializer()
+                "mathematical_expression" -> RichTextMathematicalExpression.serializer()
+                "mention" -> RichTextMention.serializer()
+                "phone_number" -> RichTextPhoneNumber.serializer()
+                "reference" -> RichTextReference.serializer()
+                "reference_link" -> RichTextReferenceLink.serializer()
+                "spoiler" -> RichTextSpoiler.serializer()
+                "strikethrough" -> RichTextStrikethrough.serializer()
+                "subscript" -> RichTextSubscript.serializer()
+                "superscript" -> RichTextSuperscript.serializer()
+                "text_mention" -> RichTextTextMention.serializer()
+                "underline" -> RichTextUnderline.serializer()
+                "url" -> RichTextUrl.serializer()
+                else -> error("Unknown RichText type: $type")
+            }
         }
 }
 

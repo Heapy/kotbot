@@ -27,7 +27,7 @@ public data class ChatMemberRestricted(
      */
     public val is_member: Boolean,
     /**
-     * *True*, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+     * *True*, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
      */
     public val can_send_messages: Boolean,
     /**

@@ -33,4 +33,8 @@ public data class ChatJoinRequest(
      * *Optional*. Chat invite link that was used by the user to send the join request
      */
     public val invite_link: ChatInviteLink? = null,
+    /**
+     * *Optional*. Identifier of the join request query. If present, then the bot must call [sendChatJoinRequestWebApp](https://core.telegram.org/bots/api/#sendchatjoinrequestwebapp) or directly call [answerChatJoinRequestQuery](https://core.telegram.org/bots/api/#answerchatjoinrequestquery) within 10 seconds.
+     */
+    public val query_id: String? = null,
 )

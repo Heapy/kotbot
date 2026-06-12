@@ -55,4 +55,6 @@ public data class InputMediaAnimation(
      * *Optional*. Pass *True* if the animation needs to be covered with a spoiler animation
      */
     public val has_spoiler: Boolean? = null,
-) : InputMedia, InputPollMedia, InputPollOptionMedia
+) : InputPollMedia,
+    InputPollOptionMedia,
+    InputMedia

@@ -21,6 +21,10 @@ public data class PollMedia(
      */
     public val document: Document? = null,
     /**
+     * *Optional*. The HTTP link attached to the poll option
+     */
+    public val link: Link? = null,
+    /**
      * *Optional*. Media is a live photo, information about the live photo
      */
     public val live_photo: LivePhoto? = null,

@@ -38,7 +38,7 @@ import io.heapy.kotbot.apiparser.model.nullable
 import kotlin.io.path.Path
 
 fun main() {
-    val apiResource = "api1000"
+    val apiResource = "api1010"
     val apiHtml = {}::class.java
         .getResource(apiResource)
         ?.readText()
@@ -265,9 +265,11 @@ private fun AnyOfApiType.toFileSpec() =
 private fun Object.toFileSpec(
     supertypes: Map<String, List<String>>,
 ): FileSpec {
+    val obj = this
+
     return FileSpec.builder(modelPackageName, name)
         .kotbotIndent()
-        .addType(when (val obj = this) {
+        .addType(when (obj) {
             is AnyOfObject -> TypeSpec.interfaceBuilder(obj.name)
                 .addModifiers(KModifier.SEALED)
                 .addAnnotation(
@@ -319,6 +321,52 @@ private fun Object.toFileSpec(
                 .addKdoc(CodeBlock.of(obj.description.asKdoc()))
                 .build()
         })
+        .apply {
+            if (obj is AnyOfObject && obj.name == "RichText") {
+                addType(
+                    TypeSpec.classBuilder("RichTextString")
+                        .addModifiers(KModifier.VALUE)
+                        .addAnnotation(jvmInlineAnnotation)
+                        .addAnnotation(serializableAnnotation)
+                        .addSuperinterface(ClassName(modelPackageName, "RichText"))
+                        .addProperty(
+                            PropertySpec.builder("value", stringType)
+                                .initializer("value")
+                                .build()
+                        )
+                        .primaryConstructor(
+                            FunSpec.constructorBuilder()
+                                .addParameter("value", stringType)
+                                .build()
+                        )
+                        .build()
+                )
+                addType(
+                    TypeSpec.classBuilder("RichTextList")
+                        .addModifiers(KModifier.VALUE)
+                        .addAnnotation(jvmInlineAnnotation)
+                        .addAnnotation(serializableAnnotation)
+                        .addSuperinterface(ClassName(modelPackageName, "RichText"))
+                        .addProperty(
+                            PropertySpec.builder(
+                                "value",
+                                listType.parameterizedBy(ClassName(modelPackageName, "RichText"))
+                            )
+                                .initializer("value")
+                                .build()
+                        )
+                        .primaryConstructor(
+                            FunSpec.constructorBuilder()
+                                .addParameter(
+                                    "value",
+                                    listType.parameterizedBy(ClassName(modelPackageName, "RichText"))
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+            }
+        }
         .build()
 }
 

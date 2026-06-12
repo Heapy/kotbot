@@ -157,6 +157,10 @@ public data class Message(
      */
     public val effect_id: String? = null,
     /**
+     * *Optional*. Message is a rich formatted message
+     */
+    public val rich_message: RichMessage? = null,
+    /**
      * *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set.
      */
     public val animation: Animation? = null,

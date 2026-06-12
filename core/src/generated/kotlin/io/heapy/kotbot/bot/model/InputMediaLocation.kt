@@ -25,4 +25,5 @@ public data class InputMediaLocation(
      * *Optional*. The radius of uncertainty for the location, measured in meters; 0-1500
      */
     public val horizontal_accuracy: Double? = null,
-) : InputPollMedia, InputPollOptionMedia
+) : InputPollMedia,
+    InputPollOptionMedia

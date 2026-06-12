@@ -4,6 +4,7 @@ import io.heapy.kotbot.bot.Method
 import io.heapy.kotbot.bot.Response
 import io.heapy.kotbot.bot.model.ChatId
 import io.heapy.kotbot.bot.model.InlineKeyboardMarkup
+import io.heapy.kotbot.bot.model.InputRichMessage
 import io.heapy.kotbot.bot.model.LinkPreviewOptions
 import io.heapy.kotbot.bot.model.MessageEntity
 import io.heapy.kotbot.bot.model.MessageOrTrue
@@ -14,7 +15,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
 /**
- * Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+ * Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
  */
 @Serializable
 public data class EditMessageText(
@@ -35,9 +36,9 @@ public data class EditMessageText(
      */
     public val inline_message_id: String? = null,
     /**
-     * New text of the message, 1-4096 characters after entities parsing
+     * New text of the message, 1-4096 characters after entity parsing; required if *rich_message* isn't specified
      */
-    public val text: String,
+    public val text: String? = null,
     /**
      * Mode for parsing entities in the message text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
      */
@@ -50,6 +51,10 @@ public data class EditMessageText(
      * Link preview generation options for the message
      */
     public val link_preview_options: LinkPreviewOptions? = null,
+    /**
+     * New rich content of the message; required if *text* isn't specified
+     */
+    public val rich_message: InputRichMessage? = null,
     /**
      * A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
      */

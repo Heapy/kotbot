@@ -216,4 +216,8 @@ public data class ChatFullInfo(
      * *Optional*. The number of Telegram Stars a general user has to pay to send a message to the chat
      */
     public val paid_message_star_count: Int? = null,
+    /**
+     * *Optional*. The bot that processes join request queries in the chat. The field is only available to chat administrators.
+     */
+    public val guard_bot: User? = null,
 )
