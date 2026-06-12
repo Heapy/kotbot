@@ -58,6 +58,8 @@ tasks.test {
 
 val manualTests by tasks.registering(Test::class) {
     group = "verification"
+    testClassesDirs = sourceSets.getByName("test").output.classesDirs
+    classpath = sourceSets.getByName("test").runtimeClasspath
     useJUnitPlatform {
         includeTags("ManualTest")
     }
