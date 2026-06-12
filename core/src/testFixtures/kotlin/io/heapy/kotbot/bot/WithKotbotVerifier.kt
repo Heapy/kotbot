@@ -3,6 +3,7 @@ package io.heapy.kotbot.bot
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.parallel.ResourceLock
+import org.junit.jupiter.api.parallel.ResourceLockTarget
 
 /**
  * Annotation to inject a [KotbotVerifier] instance into test methods.
@@ -12,6 +13,6 @@ import org.junit.jupiter.api.parallel.ResourceLock
  * allowed per bot token, so they must never run concurrently with each other or across modules.
  */
 @Tag("ManualTest")
-@ResourceLock("kotbot")
+@ResourceLock("kotbot", target = ResourceLockTarget.CHILDREN)
 @ExtendWith(KotbotVerifierParameterResolver::class)
 annotation class WithKotbotVerifier
