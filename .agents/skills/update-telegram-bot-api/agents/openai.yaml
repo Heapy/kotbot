@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Telegram Bot API"
+  short_description: "Regenerate and review Telegram Bot API bindings"
+  default_prompt: "Use $update-telegram-bot-api to update kotbot to a new Telegram Bot API version."

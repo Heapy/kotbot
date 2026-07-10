@@ -41,11 +41,11 @@ public sealed interface RichText
 @JvmInline
 @Serializable
 public value class RichTextString(
-    public val value: String,
+    public val `value`: String,
 ) : RichText
 
 @JvmInline
 @Serializable
 public value class RichTextList(
-    public val value: List<RichText>,
+    public val `value`: List<RichText>,
 ) : RichText
