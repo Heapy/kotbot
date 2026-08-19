@@ -4,6 +4,8 @@ import io.heapy.kotbot.bot.method.GetUpdates
 import io.heapy.kotbot.bot.model.Update
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.network.sockets.SocketTimeoutException
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -68,7 +70,26 @@ public fun Kotbot.receiveUpdates(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                log.error("getUpdates failed, retrying in {}", retryDelay, e)
+                // A long poll that outruns the client deadline is normal Telegram behaviour, not a
+                // fault: Telegram caps the poll at ~50s regardless of the requested timeout and
+                // answers late often enough to matter -- frame-level measurement put roughly a
+                // sixth of all polls at 65-100s, and the reference Go bot on the same host sees
+                // the same spread but sets no deadline at all, so it never reports anything. The
+                // retry below recovers in one second and no update is lost, because the offset
+                // only advances on a delivered batch. Logging that at ERROR with a stack trace
+                // buried real failures under a steady stream of identical noise.
+                //
+                // The exception message is deliberately not logged: it embeds the request URL,
+                // which carries the bot token.
+                if (e is HttpRequestTimeoutException || e is SocketTimeoutException) {
+                    log.warn(
+                        "getUpdates timed out ({}), retrying in {}",
+                        e::class.simpleName,
+                        retryDelay,
+                    )
+                } else {
+                    log.error("getUpdates failed, retrying in {}", retryDelay, e)
+                }
                 delay(retryDelay)
                 continue
             }

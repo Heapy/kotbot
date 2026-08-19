@@ -9,9 +9,6 @@ import io.heapy.kotbot.infra.http_client.HttpRequestLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
 
 @Module
 class KotbotModule(
@@ -31,18 +28,14 @@ class KotbotModule(
         HttpClient(CIO) {
             install(HttpTimeout) {
                 connectTimeoutMillis = 10_000
+                // Telegram caps a long poll at ~50s whatever timeout the request asks for, so
+                // this leaves a 10s margin. Some polls still answer past it -- that is expected
+                // and handled by the retry in receiveUpdates, which logs it at WARN. Raising the
+                // deadline to outrun those was measured and does not work: the late answers move
+                // with it, and past DEFAULT_POLL_STALE_THRESHOLD a stuck poll trips
+                // /healthcheck and gets the container restarted instead of simply retried.
                 requestTimeoutMillis = 60_000
                 socketTimeoutMillis = 60_000
-            }
-            // getUpdates long-polls for ~50s, so a keep-alive connection sits idle for
-            // the whole poll. When the network/Telegram edge silently drops that pooled
-            // connection, CIO reuses the dead socket on the next poll and the request
-            // stalls until the 60s request timeout -- the bursts of
-            // HttpRequestTimeoutException seen in the logs. Closing the connection after
-            // each call forces a fresh socket per poll (cheap at ~1 request/min) and
-            // removes stale-connection reuse from the polling path.
-            defaultRequest {
-                header(HttpHeaders.Connection, "close")
             }
             install(HttpRequestLogger) {
                 saveFunction = logUpdatesServiceModule

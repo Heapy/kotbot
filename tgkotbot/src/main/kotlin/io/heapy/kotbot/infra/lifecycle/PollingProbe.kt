@@ -8,10 +8,17 @@ import kotlin.time.Duration.Companion.nanoseconds
 /**
  * How long the bot may go without a successful Telegram poll before it is considered stalled.
  *
- * A healthy bot polls at least every ~50s (the long-poll timeout), so this is set
- * well above that to avoid false positives during transient hiccups.
+ * Sized against a run of failed polls, not against a healthy one. A healthy poll returns in ~50s,
+ * but a poll that misses its deadline costs 61s (the 60s client deadline plus the 1s retry delay),
+ * and those arrive in bursts: Telegram answers late often enough that a fifth to a third of polls
+ * miss the deadline on a bad day. At the previous value of 3 minutes a mere three consecutive
+ * misses -- 183s -- already tripped the health check, so the autoheal sidecar restarted a process
+ * that would have recovered by itself on the next poll. That cost 7-18 restarts a day.
+ *
+ * Five minutes rides out four consecutive misses while still catching a genuinely stalled poller
+ * well inside ten minutes.
  */
-val DEFAULT_POLL_STALE_THRESHOLD: Duration = 3.minutes
+val DEFAULT_POLL_STALE_THRESHOLD: Duration = 5.minutes
 
 /**
  * Tracks the time of the last successful Telegram poll so liveness can be observed.
