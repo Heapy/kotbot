@@ -7,6 +7,7 @@ package io.heapy.kotbot.database.keys
 
 import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.ChallengeAttempt
+import io.heapy.kotbot.database.tables.FeedItem
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
@@ -17,6 +18,7 @@ import io.heapy.kotbot.database.tables.UpdateRaw
 import io.heapy.kotbot.database.tables.VerifiedUser
 import io.heapy.kotbot.database.tables.records.CallbackDataRecord
 import io.heapy.kotbot.database.tables.records.ChallengeAttemptRecord
+import io.heapy.kotbot.database.tables.records.FeedItemRecord
 import io.heapy.kotbot.database.tables.records.GarbageMessagesRecord
 import io.heapy.kotbot.database.tables.records.GptSessionMessageRecord
 import io.heapy.kotbot.database.tables.records.GptSessionRecord
@@ -40,6 +42,7 @@ import org.jooq.impl.QOM.ForeignKeyRule
 
 val CALLBACK_DATA_PKEY: UniqueKey<CallbackDataRecord> = Internal.createUniqueKey(CallbackData.CALLBACK_DATA, DSL.name("callback_data_pkey"), arrayOf(CallbackData.CALLBACK_DATA.ID), true)
 val CHALLENGE_ATTEMPT_PKEY: UniqueKey<ChallengeAttemptRecord> = Internal.createUniqueKey(ChallengeAttempt.CHALLENGE_ATTEMPT, DSL.name("challenge_attempt_pkey"), arrayOf(ChallengeAttempt.CHALLENGE_ATTEMPT.ID), true)
+val FEED_ITEM_PKEY: UniqueKey<FeedItemRecord> = Internal.createUniqueKey(FeedItem.FEED_ITEM, DSL.name("feed_item_pkey"), arrayOf(FeedItem.FEED_ITEM.ID), true)
 val GARBAGE_MESSAGES_PKEY: UniqueKey<GarbageMessagesRecord> = Internal.createUniqueKey(GarbageMessages.GARBAGE_MESSAGES, DSL.name("garbage_messages_pkey"), arrayOf(GarbageMessages.GARBAGE_MESSAGES.ID), true)
 val GPT_SESSION_PKEY: UniqueKey<GptSessionRecord> = Internal.createUniqueKey(GptSession.GPT_SESSION, DSL.name("gpt_session_pkey"), arrayOf(GptSession.GPT_SESSION.ID), true)
 val GPT_SESSION_MESSAGE_PKEY: UniqueKey<GptSessionMessageRecord> = Internal.createUniqueKey(GptSessionMessage.GPT_SESSION_MESSAGE, DSL.name("gpt_session_message_pkey"), arrayOf(GptSessionMessage.GPT_SESSION_MESSAGE.ID), true)

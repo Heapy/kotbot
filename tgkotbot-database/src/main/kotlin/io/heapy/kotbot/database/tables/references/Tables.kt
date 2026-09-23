@@ -7,6 +7,7 @@ package io.heapy.kotbot.database.tables.references
 
 import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.ChallengeAttempt
+import io.heapy.kotbot.database.tables.FeedItem
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
@@ -27,6 +28,11 @@ val CALLBACK_DATA: CallbackData = CallbackData.CALLBACK_DATA
  * The table <code>public.challenge_attempt</code>.
  */
 val CHALLENGE_ATTEMPT: ChallengeAttempt = ChallengeAttempt.CHALLENGE_ATTEMPT
+
+/**
+ * The table <code>public.feed_item</code>.
+ */
+val FEED_ITEM: FeedItem = FeedItem.FEED_ITEM
 
 /**
  * The table <code>public.garbage_messages</code>.

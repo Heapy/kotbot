@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Kotlin : A concise multiplatform language developed by JetBrains | The JetBrains Blog</title>
+	<atom:link href="https://blog.jetbrains.com/kotlin/feed/" rel="self" type="application/rss+xml" />
+	<link>https://blog.jetbrains.com</link>
+	<description>Developer Tools for Professionals and Teams</description>
+	<lastBuildDate>Mon, 14 Sep 2026 13:16:26 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	
+
+<image>
+	<url>https://blog.jetbrains.com/wp-content/uploads/2026/09/icon-512.webp</url>
+	<title>Kotlin : A concise multiplatform language developed by JetBrains | The JetBrains Blog</title>
+	<link>https://blog.jetbrains.com</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Kotlin 2.4.20 Released</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/09/kotlin-2-4-20-released/</link>
+		
+		<dc:creator><![CDATA[Daniel Csorba]]></dc:creator>
+		<pubDate>Mon, 07 Sep 2026 11:30:57 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/09/KT-releases-BlogSocialShare-1280x720-1.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=737362</guid>
+					
+		
+		
+		                    <language>
+                        <code><![CDATA[zh-hans]]></code>
+                        <url>https://blog.jetbrains.com/zh-hans/kotlin/2026/09/kotlin-2-4-20-released/</url>
+                    </language>
+                	</item>
+		<item>
+		<title>Kotlin Toolchain 0.12: Multiplatform Library Publishing, Wasm Apps, and More</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/09/kotlin-toolchain-0-12-multiplatform-library-publishing-wasm-apps-and-more/</link>
+		
+		<dc:creator><![CDATA[Joffrey Bion]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2026 10:40:05 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/09/KT-social-BlogFeatured-1280x720-1.png</featuredImage>		<product ><![CDATA[amper]]></product>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=736282</guid>
+					
+		
+		
+		                    <language>
+                        <code><![CDATA[zh-hans]]></code>
+                        <url>https://blog.jetbrains.com/zh-hans/kotlin/2026/09/kotlin-toolchain-0-12-multiplatform-library-publishing-wasm-apps-and-more/</url>
+                    </language>
+                	</item>
+		<item>
+		<title>Compose Multiplatform 1.12.0 Released</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/08/compose-multiplatform-1-12-0/</link>
+					<comments>https://blog.jetbrains.com/kotlin/2026/08/compose-multiplatform-1-12-0/#respond</comments>
+		
+		<dc:creator><![CDATA[Elvira Mustafina]]></dc:creator>
+		<pubDate>Wed, 26 Aug 2026 13:28:41 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/08/CMP-social-BlogFeatured-1280x720-1.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=734018</guid>
+					
+					<wfw:commentRss>https://blog.jetbrains.com/kotlin/2026/08/compose-multiplatform-1-12-0/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Signatures, be true: domain errors and functional handling in Kotlin</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/08/signatures-be-true-domain-errors-and-functional-handling-in-kotlin/</link>
+		
+		<dc:creator><![CDATA[Alina Dolgikh]]></dc:creator>
+		<pubDate>Wed, 19 Aug 2026 15:52:05 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/08/KT-social-BlogFeatured-1280x720-1-1.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=732373</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Klibs.io Grows to 4,200+ KMP Projects With Smarter Discovery and New AI Integrations</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/08/klibsio-grows-to-4200-kmp-projects-with-smarter-discovery-and-new-ai-integrations/</link>
+		
+		<dc:creator><![CDATA[Daria Voronina]]></dc:creator>
+		<pubDate>Mon, 17 Aug 2026 13:12:57 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/08/KM-social-BlogFeatured-1280x720-1.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=731768</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Exploring Compose HTML for Server Side Rendering</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/08/exploring-compose-html-for-server-side-rendering/</link>
+		
+		<dc:creator><![CDATA[Frederik Pietzko]]></dc:creator>
+		<pubDate>Fri, 14 Aug 2026 12:15:09 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/08/KT-social-BlogFeatured-1280x720-1.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=731283</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>When Escape Routes Become Toll Roads: Mapping How Developers Move Between Programming Languages</title>
+		<link>https://blog.jetbrains.com/research/2026/08/programming-language-migration/</link>
+		
+		<dc:creator><![CDATA[Vladimir Volokhonsky]]></dc:creator>
+		<pubDate>Wed, 12 Aug 2026 16:15:18 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/08/JB-social-BlogFeatured-1280x720-1-1.png</featuredImage>		<product ><![CDATA[kotlin]]></product>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=research&#038;p=729328</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Kodee’s Kotlin Roundup: Birthday Wishes, Shipaton 2026, and the New Kotlin AI Benchmark</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/08/kodees-kotlin-roundup-birthday-wishes-shipaton-2026-and-the-new-kotlin-ai-benchmark/</link>
+		
+		<dc:creator><![CDATA[Kodee]]></dc:creator>
+		<pubDate>Tue, 04 Aug 2026 08:14:27 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/07/KT-social-BlogFeatured-1280x720-1-5.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=727205</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Know Kotlin? Ship It Everywhere and Win at Shipaton 2026</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/07/know-kotlin-ship-it-everywhere-and-win-at-shipaton-2026/</link>
+		
+		<dc:creator><![CDATA[Ekaterina Petrova]]></dc:creator>
+		<pubDate>Fri, 31 Jul 2026 13:49:33 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/07/KT-social-BlogFeatured-1280x720-1-6.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=727590</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Qodana 2026.2: More Security, Better Coverage, Less Configuration</title>
+		<link>https://blog.jetbrains.com/qodana/2026/07/qodana-2026-2-more-security-better-coverage-less-configuration/</link>
+		
+		<dc:creator><![CDATA[Kerry Beetge]]></dc:creator>
+		<pubDate>Wed, 29 Jul 2026 13:47:03 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/07/Untitled-design-45.png</featuredImage>		<product ><![CDATA[kotlin]]></product>
+		<product ><![CDATA[qodana]]></product>
+		<product ><![CDATA[teamcity]]></product>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=qodana&#038;p=726686</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>Secure Your APIs: OAuth2 and JWT for Beginners</title>
+		<link>https://blog.jetbrains.com/kotlin/2026/07/secure-your-apis-oauth2-and-jwt-for-beginners/</link>
+		
+		<dc:creator><![CDATA[Alina Dolgikh]]></dc:creator>
+		<pubDate>Wed, 29 Jul 2026 11:28:21 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/04/KT-social-BlogFeatured-1280x720-1-6.png</featuredImage>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=kotlin&#038;p=721798</guid>
+					
+		
+		
+			</item>
+		<item>
+		<title>KotlinLLM is Going Open Source </title>
+		<link>https://blog.jetbrains.com/research/2026/07/kotlinllm-open-source/</link>
+		
+		<dc:creator><![CDATA[Anastasia Birillo]]></dc:creator>
+		<pubDate>Tue, 28 Jul 2026 07:50:41 +0000</pubDate>
+		<featuredImage>https://blog.jetbrains.com/wp-content/uploads/2026/07/JB-social-BlogFeatured-1280x720-1-8.png</featuredImage>		<product ><![CDATA[kotlin]]></product>
+		<guid isPermaLink="false">https://blog.jetbrains.com/?post_type=research&#038;p=724665</guid>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

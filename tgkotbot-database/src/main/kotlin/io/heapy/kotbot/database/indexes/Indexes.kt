@@ -6,6 +6,7 @@ package io.heapy.kotbot.database.indexes
 
 
 import io.heapy.kotbot.database.tables.ChallengeAttempt
+import io.heapy.kotbot.database.tables.FeedItem
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.JobExecution
 import io.heapy.kotbot.database.tables.JoinSession
@@ -24,6 +25,7 @@ import org.jooq.impl.Internal
 
 val CHALLENGE_ATTEMPT_SESSION_IDX: Index = Internal.createIndex(DSL.name("challenge_attempt_session_idx"), ChallengeAttempt.CHALLENGE_ATTEMPT, arrayOf(ChallengeAttempt.CHALLENGE_ATTEMPT.SESSION_ID), false)
 val CHALLENGE_ATTEMPT_TELEGRAM_IDX: Index = Internal.createIndex(DSL.name("challenge_attempt_telegram_idx"), ChallengeAttempt.CHALLENGE_ATTEMPT, arrayOf(ChallengeAttempt.CHALLENGE_ATTEMPT.TELEGRAM_ID), false)
+val FEED_ITEM_SOURCE_KEY_UINDEX: Index = Internal.createIndex(DSL.name("feed_item_source_key_uindex"), FeedItem.FEED_ITEM, arrayOf(FeedItem.FEED_ITEM.SOURCE, FeedItem.FEED_ITEM.ITEM_KEY), true)
 val GPT_SESSION_PREVIEW_UINDEX: Index = Internal.createIndex(DSL.name("gpt_session_preview_uindex"), GptSession.GPT_SESSION, arrayOf(GptSession.GPT_SESSION.PREVIEW_CHAT_ID, GptSession.GPT_SESSION.PREVIEW_MESSAGE_ID), true)
 val JOB_EXECUTION_NAME_IDX: Index = Internal.createIndex(DSL.name("job_execution_name_idx"), JobExecution.JOB_EXECUTION, arrayOf(JobExecution.JOB_EXECUTION.JOB_NAME, JobExecution.JOB_EXECUTION.STARTED), false)
 val JOIN_SESSION_ACTIVE_IDX: Index = Internal.createIndex(DSL.name("join_session_active_idx"), JoinSession.JOIN_SESSION, arrayOf(JoinSession.JOIN_SESSION.STATUS, JoinSession.JOIN_SESSION.EXPIRES_AT), false)

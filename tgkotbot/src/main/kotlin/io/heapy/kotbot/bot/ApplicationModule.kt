@@ -4,6 +4,7 @@ import io.heapy.komok.tech.di.lib.Module
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.admin.StatsBackfillModule
 import io.heapy.kotbot.bot.admin.UserAutoTagModule
+import io.heapy.kotbot.bot.feeds.KotlinFeedsModule
 import io.heapy.kotbot.bot.join.JoinChallengeModule
 import io.heapy.kotbot.infra.jdbc.JdbcModule
 import io.heapy.kotbot.infra.lifecycle.ApplicationScopeModule
@@ -29,6 +30,7 @@ class ApplicationModule(
     private val statsBackfillModule: StatsBackfillModule,
     private val userAutoTagModule: UserAutoTagModule,
     private val joinChallengeModule: JoinChallengeModule,
+    private val kotlinFeedsModule: KotlinFeedsModule,
 ) {
     suspend fun start() {
         metricsReportersModule
@@ -54,6 +56,7 @@ class ApplicationModule(
         userAutoTagModule.userAutoTagJob.start()
         joinChallengeModule.existingMemberBootstrapJob.start()
         joinChallengeModule.joinChallengeExpiryJob.start()
+        kotlinFeedsModule.kotlinFeedsJob.start()
 
         log.info("Application started in ${uptimeModule.uptimeService.uptime}ms.")
 

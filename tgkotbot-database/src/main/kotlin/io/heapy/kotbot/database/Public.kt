@@ -6,6 +6,7 @@ package io.heapy.kotbot.database
 
 import io.heapy.kotbot.database.tables.CallbackData
 import io.heapy.kotbot.database.tables.ChallengeAttempt
+import io.heapy.kotbot.database.tables.FeedItem
 import io.heapy.kotbot.database.tables.GarbageMessages
 import io.heapy.kotbot.database.tables.GptSession
 import io.heapy.kotbot.database.tables.GptSessionMessage
@@ -45,6 +46,11 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
      * The table <code>public.challenge_attempt</code>.
      */
     val CHALLENGE_ATTEMPT: ChallengeAttempt get() = ChallengeAttempt.CHALLENGE_ATTEMPT
+
+    /**
+     * The table <code>public.feed_item</code>.
+     */
+    val FEED_ITEM: FeedItem get() = FeedItem.FEED_ITEM
 
     /**
      * The table <code>public.garbage_messages</code>.
@@ -91,6 +97,7 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     override fun getTables(): List<Table<*>> = listOf(
         CallbackData.CALLBACK_DATA,
         ChallengeAttempt.CHALLENGE_ATTEMPT,
+        FeedItem.FEED_ITEM,
         GarbageMessages.GARBAGE_MESSAGES,
         GptSession.GPT_SESSION,
         GptSessionMessage.GPT_SESSION_MESSAGE,

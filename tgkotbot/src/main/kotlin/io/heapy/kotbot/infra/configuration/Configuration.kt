@@ -27,3 +27,14 @@ data class JoinChallengeConfiguration(
     val chatMaxAttempts: Map<String, Int> = emptyMap(),
     val chatGroups: Map<String, List<String>> = emptyMap(),
 )
+
+@Serializable
+data class KotlinFeedsConfiguration(
+    val chatId: Long,
+    val releasesThreadId: Int,
+    val newsThreadId: Int,
+    val releasesUrl: String,
+    val newsUrls: List<String>,
+    val pollInterval: Duration,
+    val sendInterval: Duration,
+)
