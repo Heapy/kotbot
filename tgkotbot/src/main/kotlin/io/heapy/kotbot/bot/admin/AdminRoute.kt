@@ -9,7 +9,7 @@ import io.heapy.kotbot.infra.web.KtorRoute
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.html.respondHtml
-import io.ktor.server.html.respondHtmlFragment
+import io.ktor.server.html.respondHtmlPartial
 import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
@@ -91,7 +91,7 @@ class AdminRoute(
 
             val totalPages = (totalCount + pageSize - 1) / pageSize
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 table {
                     thead {
                         tr {
