@@ -8,7 +8,7 @@ import io.heapy.tgpt.infra.jdbc.TransactionProvider
 import io.heapy.tgpt.infra.web.KtorRoute
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.html.respondHtml
-import io.ktor.server.html.respondHtmlFragment
+import io.ktor.server.html.respondHtmlPartial
 import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
@@ -113,7 +113,7 @@ class AdminRoute(
 
             val totalPages = (totalCount + pageSize - 1) / pageSize
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 table {
                     thead {
                         tr {
@@ -199,7 +199,7 @@ class AdminRoute(
                 users to count
             }
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 table {
                     thead {
                         tr {
@@ -262,7 +262,7 @@ class AdminRoute(
                 users to count
             }
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 table {
                     thead {
                         tr {
@@ -355,7 +355,7 @@ class AdminRoute(
                 StatsData(spend, calls, threads, messages)
             }
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 div(classes = "stats-cards") {
                     div(classes = "stat-card") {
                         div(classes = "stat-value") { +"$${"%.4f".format(totalSpend)}" }
@@ -383,7 +383,7 @@ class AdminRoute(
                 apiCallDao.perUserStats()
             }
 
-            call.respondHtmlFragment {
+            call.respondHtmlPartial {
                 table {
                     thead {
                         tr {
