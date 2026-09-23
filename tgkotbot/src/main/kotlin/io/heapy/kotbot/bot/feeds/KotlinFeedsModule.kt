@@ -49,6 +49,7 @@ class KotlinFeedsModule(
 
     val kotlinFeedsJob: KotlinFeedsJob by lazy {
         KotlinFeedsJob(
+            enabled = kotlinFeedsConfiguration.enabled,
             feeds = listOf(kotlinReleasesFeed, kotlinNewsFeed),
             feedItemDao = feedItemDao,
             kotbot = kotbotModule.kotbot,

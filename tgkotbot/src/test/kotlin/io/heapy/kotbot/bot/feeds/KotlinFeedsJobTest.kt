@@ -16,6 +16,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
 import io.mockk.mockk
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
 import java.time.Instant
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -84,7 +86,9 @@ class KotlinFeedsJobTest {
         feeds: List<Feed>,
         dao: FeedItemDao,
         kotbot: Kotbot = kotbot(),
+        enabled: Boolean = true,
     ) = KotlinFeedsJob(
+        enabled = enabled,
         feeds = feeds,
         feedItemDao = dao,
         kotbot = kotbot,
@@ -191,6 +195,30 @@ class KotlinFeedsJobTest {
         coVerify(exactly = 0) {
             val _ = dao.findKnownKeys(any(), any())
         }
+    }
+
+    @Test
+    fun `disabled job never polls`() = runTest {
+        var fetches = 0
+        val feed = feed(FeedSource.KOTLIN_RELEASES, RELEASES_THREAD) { fetches++; emptyList() }
+
+        job(listOf(feed), mockk(), enabled = false).start()
+        delay(1.hours)
+
+        assertEquals(0, fetches)
+    }
+
+    @Test
+    fun `enabled job polls on start and every poll interval`() = runTest {
+        var fetches = 0
+        val feed = feed(FeedSource.KOTLIN_RELEASES, RELEASES_THREAD) { fetches++; emptyList() }
+
+        job(listOf(feed), mockk()).start()
+        delay(1.minutes)
+        assertEquals(1, fetches)
+
+        delay(15.minutes)
+        assertEquals(2, fetches)
     }
 
     private companion object {

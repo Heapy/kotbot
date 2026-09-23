@@ -13,6 +13,7 @@ class KotlinFeedsConfigurationTest {
 
         assertEquals(
             KotlinFeedsConfiguration(
+                enabled = false,
                 chatId = -1001032833563,
                 releasesThreadId = 293400,
                 newsThreadId = 293499,

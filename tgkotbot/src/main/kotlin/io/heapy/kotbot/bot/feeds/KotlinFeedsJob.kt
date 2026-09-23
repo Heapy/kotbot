@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 class KotlinFeedsJob(
+    private val enabled: Boolean,
     private val feeds: List<Feed>,
     private val feedItemDao: FeedItemDao,
     private val kotbot: Kotbot,
@@ -26,6 +27,11 @@ class KotlinFeedsJob(
     private val sendInterval: Duration,
 ) {
     fun start() {
+        if (!enabled) {
+            log.info("Kotlin feeds are disabled")
+            return
+        }
+
         applicationScope.launch {
             while (true) {
                 publishAll()

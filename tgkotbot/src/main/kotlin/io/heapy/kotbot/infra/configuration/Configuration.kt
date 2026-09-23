@@ -30,6 +30,7 @@ data class JoinChallengeConfiguration(
 
 @Serializable
 data class KotlinFeedsConfiguration(
+    val enabled: Boolean,
     val chatId: Long,
     val releasesThreadId: Int,
     val newsThreadId: Int,
