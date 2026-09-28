@@ -2,9 +2,11 @@ package io.heapy.kotbot.bot.feeds
 
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.bot.Kotbot
-import io.heapy.kotbot.bot.executeSafely
+import io.heapy.kotbot.bot.TelegramApiError
+import io.heapy.kotbot.bot.execute
 import io.heapy.kotbot.bot.method.SendMessage
 import io.heapy.kotbot.bot.model.LongChatId
+import io.heapy.kotbot.bot.model.Message
 import io.heapy.kotbot.bot.model.ParseMode
 import io.heapy.kotbot.infra.jdbc.TransactionProvider
 import io.heapy.kotbot.infra.markdown.Markdown
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class KotlinFeedsJob(
     private val enabled: Boolean,
@@ -78,14 +81,7 @@ class KotlinFeedsJob(
         for (item in selectNewItems(response.items, knownKeys)) {
             // Stop at the first failed send and drop the version: the next poll refetches everything,
             // so the remaining items are retried in order.
-            val message = kotbot.executeSafely(
-                SendMessage(
-                    chat_id = LongChatId(chatId),
-                    message_thread_id = feed.threadId,
-                    text = markdown.formatFeedItem(item),
-                    parse_mode = ParseMode.MarkdownV2.name,
-                )
-            ) ?: return null
+            val message = send(feed, item) ?: return null
 
             val _ = transactionProvider.transaction {
                 feedItemDao.insert(feed.source, item, chatId, message.message_id)
@@ -97,7 +93,65 @@ class KotlinFeedsJob(
         return response.version
     }
 
-    private companion object : Logger()
+    private suspend fun send(
+        feed: Feed,
+        item: FeedItem,
+    ): Message? =
+        try {
+            try {
+                executeRetryingRateLimit(
+                    SendMessage(
+                        chat_id = LongChatId(chatId),
+                        message_thread_id = feed.threadId,
+                        text = markdown.formatFeedItem(item),
+                        parse_mode = ParseMode.MarkdownV2.name,
+                    )
+                )
+            } catch (e: TelegramApiError) {
+                if (!e.isEntityParseError()) throw e
+                log.warn("Telegram can't parse {} {}, sending plain text: {}", feed.source, item.key, e.description)
+                executeRetryingRateLimit(
+                    SendMessage(
+                        chat_id = LongChatId(chatId),
+                        message_thread_id = feed.threadId,
+                        text = "${item.title}\n${item.url}",
+                    )
+                )
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: TelegramApiError) {
+            log.warn(
+                "Telegram rejected {} {}: {} {}",
+                feed.source,
+                item.key,
+                e.errorCode ?: e.httpStatusCode,
+                e.description,
+            )
+            null
+        } catch (e: Exception) {
+            // Ktor timeout messages contain the request URL, and the Telegram URL contains the bot token.
+            log.warn("Failed to send {} {}: {}", feed.source, item.key, e::class.simpleName)
+            null
+        }
+
+    private suspend fun executeRetryingRateLimit(message: SendMessage): Message =
+        try {
+            kotbot.execute(message)
+        } catch (e: TelegramApiError) {
+            val retryAfter = e.retryAfter
+            if (e.errorCode != TOO_MANY_REQUESTS || retryAfter == null) throw e
+            delay(retryAfter.seconds)
+            kotbot.execute(message)
+        }
+
+    private fun TelegramApiError.isEntityParseError(): Boolean =
+        errorCode == BAD_REQUEST && description?.startsWith("Bad Request: can't parse entities") == true
+
+    private companion object : Logger() {
+        private const val BAD_REQUEST = 400
+        private const val TOO_MANY_REQUESTS = 429
+    }
 }
 
 private val COMMONMARK_PUNCTUATION = Regex("""[!-/:-@\[-`{-~]""")

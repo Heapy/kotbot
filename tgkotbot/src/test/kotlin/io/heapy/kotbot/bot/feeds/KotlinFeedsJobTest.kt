@@ -19,10 +19,12 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -34,6 +36,7 @@ import java.io.IOException
 import java.time.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -43,31 +46,52 @@ class KotlinFeedsJobTest {
         val chatId: Long,
         val threadId: Int,
         val text: String,
+        val parseMode: String?,
     )
 
-    private val sent = mutableListOf<SentMessage>()
+    private sealed interface TelegramReply {
+        data object Ok : TelegramReply
 
-    private fun kotbot(failThreadId: Int? = null) =
+        data class Error(
+            val code: Int,
+            val description: String,
+            val retryAfter: Int? = null,
+        ) : TelegramReply
+
+        data object ConnectionReset : TelegramReply
+    }
+
+    private val requests = mutableListOf<SentMessage>()
+    private val posted = mutableListOf<SentMessage>()
+
+    private fun kotbot(reply: (SentMessage) -> TelegramReply = { TelegramReply.Ok }) =
         Kotbot(
             token = "test",
             httpClient = HttpClient(MockEngine { request ->
                 val body = Json.parseToJsonElement((request.body as TextContent).text).jsonObject
-                val threadId = body.getValue("message_thread_id").jsonPrimitive.int
-                if (threadId == failThreadId) {
-                    return@MockEngine respond(
-                        content = """{"ok":false,"error_code":400,"description":"Bad Request"}""",
-                        status = HttpStatusCode.BadRequest,
-                    )
-                }
-                sent += SentMessage(
+                val message = SentMessage(
                     chatId = body.getValue("chat_id").jsonPrimitive.long,
-                    threadId = threadId,
+                    threadId = body.getValue("message_thread_id").jsonPrimitive.int,
                     text = body.getValue("text").jsonPrimitive.content,
+                    parseMode = body["parse_mode"]?.jsonPrimitive?.contentOrNull,
                 )
-                respond(
-                    content = """{"ok":true,"result":{"message_id":${sent.size},"date":0,"chat":{"id":$CHAT_ID,"type":"supergroup"}}}""",
-                    status = HttpStatusCode.OK,
-                )
+                requests += message
+                when (val answer = reply(message)) {
+                    TelegramReply.Ok -> {
+                        posted += message
+                        respond(
+                            content = """{"ok":true,"result":{"message_id":${posted.size},"date":0,"chat":{"id":$CHAT_ID,"type":"supergroup"}}}""",
+                            status = HttpStatusCode.OK,
+                        )
+                    }
+                    is TelegramReply.Error -> respond(
+                        content = """{"ok":false,"error_code":${answer.code},"description":"${answer.description}"""" +
+                            (answer.retryAfter?.let { ""","parameters":{"retry_after":$it}""" } ?: "") +
+                            "}",
+                        status = HttpStatusCode.fromValue(answer.code),
+                    )
+                    TelegramReply.ConnectionReset -> throw IOException("connection reset")
+                }
             }),
         )
 
@@ -106,6 +130,12 @@ class KotlinFeedsJobTest {
             threadId = NEWS_THREAD,
             pollInterval = 15.minutes,
         )
+
+    context(_: MockTransactionContext)
+    private fun daoKnowingAllBlogItemsButNewest() =
+        mockk<FeedItemDao>(relaxed = true) {
+            coEvery { findKnownKeys(any(), any()) } returns parseRss(rss).drop(1).map { it.key }.toSet()
+        }
 
     private fun TestScope.job(
         feeds: List<Feed>,
@@ -159,13 +189,12 @@ class KotlinFeedsJobTest {
 
         assertEquals(
             listOf(
-                RELEASES_THREAD to "*[Kotlin 2\\.4\\.20](${stable.url})*",
-                RELEASES_THREAD to "*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*",
-                NEWS_THREAD to "*[Kotlin 2\\.4\\.20 Released](${post.url})*",
+                SentMessage(CHAT_ID, RELEASES_THREAD, "*[Kotlin 2\\.4\\.20](${stable.url})*", "MarkdownV2"),
+                SentMessage(CHAT_ID, RELEASES_THREAD, "*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*", "MarkdownV2"),
+                SentMessage(CHAT_ID, NEWS_THREAD, "*[Kotlin 2\\.4\\.20 Released](${post.url})*", "MarkdownV2"),
             ),
-            sent.map { it.threadId to it.text },
+            posted,
         )
-        assertEquals(setOf(CHAT_ID), sent.map { it.chatId }.toSet())
         coVerifySequence {
             val _ = dao.findKnownKeys(FeedSource.KOTLIN_RELEASES, listOf(beta.key, stable.key))
             val _ = dao.insert(FeedSource.KOTLIN_RELEASES, stable, CHAT_ID, 1)
@@ -184,7 +213,7 @@ class KotlinFeedsJobTest {
 
         val _ = job(listOf(releasesFeed), dao).publish(releasesFeed, since = null)
 
-        assertEquals(listOf("*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*"), sent.map { it.text })
+        assertEquals(listOf("*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*"), posted.map { it.text })
         coVerify(exactly = 1) {
             val _ = dao.insert(any(), any(), any(), any())
         }
@@ -192,19 +221,84 @@ class KotlinFeedsJobTest {
 
     @Test
     context(_: MockTransactionContext)
-    fun `failed send stops the feed without recording and other feeds continue`() = runTest {
+    fun `sends plain text when telegram cannot parse markdown and continues`() = runTest {
         val dao = mockk<FeedItemDao>(relaxed = true) {
             coEvery { findKnownKeys(any(), any()) } returns emptySet()
         }
+        val kotbot = kotbot { message ->
+            if (message.parseMode == "MarkdownV2" && message.text.contains("2\\.4\\.20")) {
+                TelegramReply.Error(400, "Bad Request: can't parse entities: Character '.' is reserved")
+            } else {
+                TelegramReply.Ok
+            }
+        }
 
-        val job = job(listOf(releasesFeed, newsFeed), dao, kotbot(failThreadId = RELEASES_THREAD))
+        val _ = job(listOf(releasesFeed), dao, kotbot).publish(releasesFeed, since = null)
+
+        assertEquals(
+            listOf(
+                SentMessage(CHAT_ID, RELEASES_THREAD, "Kotlin 2.4.20\n${stable.url}", null),
+                SentMessage(CHAT_ID, RELEASES_THREAD, "*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*", "MarkdownV2"),
+            ),
+            posted,
+        )
+        assertEquals(3, requests.size)
+        coVerifySequence {
+            val _ = dao.findKnownKeys(FeedSource.KOTLIN_RELEASES, any())
+            val _ = dao.insert(FeedSource.KOTLIN_RELEASES, stable, CHAT_ID, 1)
+            val _ = dao.insert(FeedSource.KOTLIN_RELEASES, beta, CHAT_ID, 2)
+        }
+    }
+
+    @Test
+    context(_: MockTransactionContext)
+    fun `rejected topic stops the feed without recording and other feeds continue`() = runTest {
+        val dao = mockk<FeedItemDao>(relaxed = true) {
+            coEvery { findKnownKeys(any(), any()) } returns emptySet()
+        }
+        val kotbot = kotbot { message ->
+            if (message.threadId == RELEASES_THREAD) {
+                TelegramReply.Error(400, "Bad Request: message thread not found")
+            } else {
+                TelegramReply.Ok
+            }
+        }
+
+        val job = job(listOf(releasesFeed, newsFeed), dao, kotbot)
         val _ = job.publish(releasesFeed, since = null)
         val _ = job.publish(newsFeed, since = null)
 
-        assertEquals(listOf(NEWS_THREAD), sent.map { it.threadId })
+        assertEquals(listOf(RELEASES_THREAD, NEWS_THREAD), requests.map { it.threadId })
+        assertEquals(listOf(NEWS_THREAD), posted.map { it.threadId })
         coVerify(exactly = 0) {
             val _ = dao.insert(FeedSource.KOTLIN_RELEASES, any(), any(), any())
         }
+        coVerify(exactly = 1) {
+            val _ = dao.insert(FeedSource.KOTLIN_NEWS, post, CHAT_ID, 1)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    context(_: MockTransactionContext)
+    fun `waits retry after and sends again when rate limited`() = runTest {
+        val dao = mockk<FeedItemDao>(relaxed = true) {
+            coEvery { findKnownKeys(any(), any()) } returns emptySet()
+        }
+        val kotbot = kotbot {
+            if (requests.size == 1) {
+                TelegramReply.Error(429, "Too Many Requests: retry after 5", retryAfter = 5)
+            } else {
+                TelegramReply.Ok
+            }
+        }
+
+        val _ = job(listOf(newsFeed), dao, kotbot).publish(newsFeed, since = null)
+
+        assertEquals(2, requests.size)
+        assertEquals(requests.first(), requests.last())
+        assertEquals(1, posted.size)
+        assertEquals(5.seconds + 3.seconds, testScheduler.currentTime.milliseconds)
         coVerify(exactly = 1) {
             val _ = dao.insert(FeedSource.KOTLIN_NEWS, post, CHAT_ID, 1)
         }
@@ -221,7 +315,7 @@ class KotlinFeedsJobTest {
         val _ = job.publish(broken, since = null)
         val _ = job.publish(empty, since = null)
 
-        assertEquals(emptyList<SentMessage>(), sent)
+        assertEquals(emptyList<SentMessage>(), requests)
         coVerify(exactly = 0) {
             val _ = dao.findKnownKeys(any(), any())
         }
@@ -231,9 +325,7 @@ class KotlinFeedsJobTest {
     context(_: MockTransactionContext)
     fun `keeps version after posting and skips not modified feed`() = runTest {
         val newest = parseRss(rss).first()
-        val dao = mockk<FeedItemDao>(relaxed = true) {
-            coEvery { findKnownKeys(any(), any()) } returns parseRss(rss).drop(1).map { it.key }.toSet()
-        }
+        val dao = daoKnowingAllBlogItemsButNewest()
         val ifNoneMatch = mutableListOf<String?>()
         val blog = blogFeed(ifNoneMatch)
         val job = job(listOf(blog), dao)
@@ -244,7 +336,7 @@ class KotlinFeedsJobTest {
         assertNotNull(version)
         assertEquals(version, notModifiedVersion)
         assertEquals(listOf(null, "\"blog\""), ifNoneMatch)
-        assertEquals(listOf(NEWS_THREAD), sent.map { it.threadId })
+        assertEquals(listOf(NEWS_THREAD), posted.map { it.threadId })
         coVerifySequence {
             val _ = dao.findKnownKeys(FeedSource.KOTLIN_NEWS, any())
             val _ = dao.insert(FeedSource.KOTLIN_NEWS, newest, CHAT_ID, 1)
@@ -253,15 +345,34 @@ class KotlinFeedsJobTest {
 
     @Test
     context(_: MockTransactionContext)
-    fun `drops version when a send fails`() = runTest {
-        val dao = mockk<FeedItemDao>(relaxed = true) {
-            coEvery { findKnownKeys(any(), any()) } returns parseRss(rss).drop(1).map { it.key }.toSet()
-        }
+    fun `drops version without plain text resend when telegram rejects the topic`() = runTest {
+        val dao = daoKnowingAllBlogItemsButNewest()
         val blog = blogFeed()
+        val kotbot = kotbot { TelegramReply.Error(400, "Bad Request: message thread not found") }
 
-        val version = job(listOf(blog), dao, kotbot(failThreadId = NEWS_THREAD)).publish(blog, since = null)
+        val version = job(listOf(blog), dao, kotbot).publish(blog, since = null)
 
         assertEquals(null, version)
+        assertEquals(listOf("MarkdownV2"), requests.map { it.parseMode })
+        coVerify(exactly = 0) {
+            val _ = dao.insert(any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    context(_: MockTransactionContext)
+    fun `drops version when network fails`() = runTest {
+        val dao = daoKnowingAllBlogItemsButNewest()
+        val blog = blogFeed()
+        val kotbot = kotbot { TelegramReply.ConnectionReset }
+
+        val version = job(listOf(blog), dao, kotbot).publish(blog, since = null)
+
+        assertEquals(null, version)
+        assertEquals(1, requests.size)
+        coVerify(exactly = 0) {
+            val _ = dao.insert(any(), any(), any(), any())
+        }
     }
 
     @Test
