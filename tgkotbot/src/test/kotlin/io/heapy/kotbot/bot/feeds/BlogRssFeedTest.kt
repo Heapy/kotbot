@@ -12,11 +12,13 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import java.time.Instant
 import kotlin.time.Duration.Companion.minutes
 
 class BlogRssFeedTest {
-    private val rss = javaClass.getResource("/feeds/kotlin-blog-rss.xml")!!.readText()
+    private val rss = javaClass.getResource("/feeds/kotlin-blog-rss.xml")!!.readBytes()
 
     private fun feed(
         urls: List<String>,
@@ -58,10 +60,53 @@ class BlogRssFeedTest {
                 <pubDate>Mon, 07 Sep 2026 11:30:57 +0000</pubDate>
               </item>
             </channel></rss>
-            """.trimIndent()
+            """.trimIndent().toByteArray()
         )
 
         assertEquals("https://blog.jetbrains.com/kotlin/post/", items.single().key)
+    }
+
+    @Test
+    fun `skips item with unsupported pubDate and keeps the rest`() {
+        val items = parseRss(
+            """
+            <rss version="2.0"><channel>
+              <item>
+                <title>Bad date</title>
+                <link>https://blog.jetbrains.com/kotlin/bad/</link>
+                <pubDate>Fri, 14 Aug 2026 12:15:09 UT</pubDate>
+              </item>
+              <item>
+                <title>Good date</title>
+                <link>https://blog.jetbrains.com/kotlin/good/</link>
+                <pubDate>Mon, 07 Sep 2026 11:30:57 +0000</pubDate>
+              </item>
+            </channel></rss>
+            """.trimIndent().toByteArray()
+        )
+
+        assertEquals(listOf("https://blog.jetbrains.com/kotlin/good/"), items.map { it.url })
+    }
+
+    @Test
+    fun `parses feed that starts with byte order mark`() {
+        assertEquals(12, parseRss(BYTE_ORDER_MARK + rss).size)
+    }
+
+    @Test
+    fun `does not print parser errors to stderr`() {
+        val stderr = ByteArrayOutputStream()
+        val original = System.err
+        System.setErr(PrintStream(stderr, true))
+        try {
+            assertThrows<Exception> {
+                val _ = parseRss("<html>not a feed".toByteArray())
+            }
+        } finally {
+            System.setErr(original)
+        }
+
+        assertEquals("", stderr.toString())
     }
 
     @Test
@@ -72,7 +117,7 @@ class BlogRssFeedTest {
                 <?xml version="1.0"?>
                 <!DOCTYPE rss [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
                 <rss version="2.0"><channel><item><title>&xxe;</title></item></channel></rss>
-                """.trimIndent()
+                """.trimIndent().toByteArray()
             )
         }
     }
@@ -138,6 +183,17 @@ class BlogRssFeedTest {
     }
 
     @Test
+    fun `reads feed body with byte order mark`() = runTest {
+        val engine = MockEngine {
+            respond(content = BYTE_ORDER_MARK + rss, status = HttpStatusCode.OK)
+        }
+
+        val response = feed(urls = listOf(BLOG), engine = engine).fetch(since = null).updated()
+
+        assertEquals(12, response.items.size)
+    }
+
+    @Test
     fun `returns empty update when every url fails`() = runTest {
         val engine = MockEngine { request ->
             when (request.url.host) {
@@ -156,5 +212,6 @@ class BlogRssFeedTest {
     private companion object {
         private const val BLOG = "https://blog.jetbrains.com/kotlin/feed/"
         private const val MIRROR = "https://feeds.feedburner.com/kotlin"
+        private val BYTE_ORDER_MARK = byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte())
     }
 }

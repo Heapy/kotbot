@@ -1,20 +1,24 @@
 package io.heapy.kotbot.bot.feeds
 
-import io.heapy.komok.tech.logging.Logger
+import io.heapy.komok.tech.logging.logger
 import io.heapy.kotbot.database.enums.FeedSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.bodyAsBytes
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import org.w3c.dom.Element
-import org.xml.sax.InputSource
-import java.io.StringReader
+import org.xml.sax.ErrorHandler
+import org.xml.sax.SAXParseException
+import java.io.ByteArrayInputStream
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.time.Duration
+
+private val log = logger<BlogRssFeed>()
 
 class BlogRssFeed(
     private val client: HttpClient,
@@ -38,7 +42,7 @@ class BlogRssFeed(
                     log.warn("Feed {} answered {}", url, response.status)
                     continue
                 }
-                val items = parseRss(response.bodyAsText())
+                val items = parseRss(response.bodyAsBytes())
                 if (items.isNotEmpty()) {
                     return FeedResponse.Updated(
                         items = items,
@@ -55,8 +59,6 @@ class BlogRssFeed(
         log.warn("No feed URL returned items: {}", urls)
         return FeedResponse.Updated(items = emptyList(), version = null)
     }
-
-    private companion object : Logger()
 }
 
 private data class RssVersion(
@@ -64,7 +66,7 @@ private data class RssVersion(
     val etag: String,
 ) : FeedVersion
 
-internal fun parseRss(xml: String): List<FeedItem> {
+internal fun parseRss(xml: ByteArray): List<FeedItem> {
     val factory = DocumentBuilderFactory.newInstance().apply {
         setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
         isXIncludeAware = false
@@ -72,21 +74,40 @@ internal fun parseRss(xml: String): List<FeedItem> {
     }
     val items = factory
         .newDocumentBuilder()
-        .parse(InputSource(StringReader(xml)))
+        .apply { setErrorHandler(ThrowingErrorHandler) }
+        .parse(ByteArrayInputStream(xml))
         .getElementsByTagName("item")
 
     return (0 until items.length).mapNotNull { index ->
-        val item = items.item(index) as Element
-        val title = item.childText("title") ?: return@mapNotNull null
-        val link = item.childText("link") ?: return@mapNotNull null
-        val pubDate = item.childText("pubDate") ?: return@mapNotNull null
-        FeedItem(
-            key = item.childText("guid") ?: link,
-            title = title,
-            url = link,
-            publishedAt = ZonedDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant(),
-        )
+        parseItem(items.item(index) as Element)
     }
+}
+
+private fun parseItem(item: Element): FeedItem? {
+    val title = item.childText("title") ?: return null
+    val link = item.childText("link") ?: return null
+    val pubDate = item.childText("pubDate") ?: return null
+    val publishedAt = try {
+        ZonedDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
+    } catch (_: DateTimeParseException) {
+        log.warn("Skipping feed item {} with unsupported pubDate '{}'", link, pubDate)
+        return null
+    }
+    return FeedItem(
+        key = item.childText("guid") ?: link,
+        title = title,
+        url = link,
+        publishedAt = publishedAt,
+    )
+}
+
+/**
+ * Without a handler the JDK parser prints every error to stderr, outside logback.
+ */
+private object ThrowingErrorHandler : ErrorHandler {
+    override fun warning(exception: SAXParseException) = Unit
+    override fun error(exception: SAXParseException) = throw exception
+    override fun fatalError(exception: SAXParseException) = throw exception
 }
 
 private fun Element.childText(tagName: String): String? =
