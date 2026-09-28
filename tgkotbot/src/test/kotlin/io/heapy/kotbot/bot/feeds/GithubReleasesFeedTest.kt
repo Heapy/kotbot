@@ -168,17 +168,19 @@ class GithubReleasesFeedTest {
     }
 
     @Test
-    fun `fails without request when token is missing`() = runTest {
+    fun `fails without request when token is missing or blank`() = runTest {
         var requests = 0
         val engine = MockEngine {
             requests++
             respond(content = response, status = HttpStatusCode.OK)
         }
 
-        val error = assertThrows<IllegalStateException> {
-            val _ = feed(engine, token = null).fetch(since = null)
+        for (token in listOf(null, "", "   ")) {
+            val error = assertThrows<IllegalStateException> {
+                val _ = feed(engine, token = token).fetch(since = null)
+            }
+            assertEquals("KOTBOT_GITHUB_TOKEN is not set", error.message, "token=[$token]")
         }
-        assertEquals("KOTBOT_GITHUB_TOKEN is not set", error.message)
         assertEquals(0, requests)
     }
 }

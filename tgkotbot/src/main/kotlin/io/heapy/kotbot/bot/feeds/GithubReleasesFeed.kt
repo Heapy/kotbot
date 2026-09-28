@@ -22,7 +22,7 @@ class GithubReleasesFeed(
     override val source = FeedSource.KOTLIN_RELEASES
 
     override suspend fun fetch(since: FeedVersion?): FeedResponse {
-        val token = checkNotNull(token) { "KOTBOT_GITHUB_TOKEN is not set" }
+        val token = checkNotNull(token?.takeIf { it.isNotBlank() }) { "KOTBOT_GITHUB_TOKEN is not set" }
         val response = client.post(GITHUB_GRAPHQL_URL) {
             feedRequest(etag = null)
             bearerAuth(token)
