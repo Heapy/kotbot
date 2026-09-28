@@ -98,26 +98,14 @@ class KotlinFeedsJob(
         item: FeedItem,
     ): Message? =
         try {
-            try {
-                executeRetryingRateLimit(
-                    SendMessage(
-                        chat_id = LongChatId(chatId),
-                        message_thread_id = feed.threadId,
-                        text = markdown.formatFeedItem(item),
-                        parse_mode = ParseMode.MarkdownV2.name,
-                    )
+            executeRetryingRateLimit(
+                SendMessage(
+                    chat_id = LongChatId(chatId),
+                    message_thread_id = feed.threadId,
+                    text = markdown.formatFeedItem(item),
+                    parse_mode = ParseMode.MarkdownV2.name,
                 )
-            } catch (e: TelegramApiError) {
-                if (!e.isEntityParseError()) throw e
-                log.warn("Telegram can't parse {} {}, sending plain text: {}", feed.source, item.key, e.description)
-                executeRetryingRateLimit(
-                    SendMessage(
-                        chat_id = LongChatId(chatId),
-                        message_thread_id = feed.threadId,
-                        text = "${item.title}\n${item.url}",
-                    )
-                )
-            }
+            )
         } catch (e: CancellationException) {
             throw e
         } catch (e: TelegramApiError) {
@@ -145,11 +133,7 @@ class KotlinFeedsJob(
             kotbot.execute(message)
         }
 
-    private fun TelegramApiError.isEntityParseError(): Boolean =
-        errorCode == BAD_REQUEST && description?.startsWith("Bad Request: can't parse entities") == true
-
     private companion object : Logger() {
-        private const val BAD_REQUEST = 400
         private const val TOO_MANY_REQUESTS = 429
     }
 }

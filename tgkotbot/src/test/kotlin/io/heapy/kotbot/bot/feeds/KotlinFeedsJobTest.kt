@@ -113,7 +113,7 @@ class KotlinFeedsJobTest {
         override suspend fun fetch(since: FeedVersion?) = FeedResponse.Updated(items = fetch(), version = null)
     }
 
-    private val rss = javaClass.getResource("/feeds/kotlin-blog-rss.xml")!!.readText()
+    private val rss = javaClass.getResource("/feeds/kotlin-blog-rss.xml")!!.readBytes()
 
     private fun blogFeed(ifNoneMatch: MutableList<String?> = mutableListOf()) =
         BlogRssFeed(
@@ -221,37 +221,6 @@ class KotlinFeedsJobTest {
 
     @Test
     context(_: MockTransactionContext)
-    fun `sends plain text when telegram cannot parse markdown and continues`() = runTest {
-        val dao = mockk<FeedItemDao>(relaxed = true) {
-            coEvery { findKnownKeys(any(), any()) } returns emptySet()
-        }
-        val kotbot = kotbot { message ->
-            if (message.parseMode == "MarkdownV2" && message.text.contains("2\\.4\\.20")) {
-                TelegramReply.Error(400, "Bad Request: can't parse entities: Character '.' is reserved")
-            } else {
-                TelegramReply.Ok
-            }
-        }
-
-        val _ = job(listOf(releasesFeed), dao, kotbot).publish(releasesFeed, since = null)
-
-        assertEquals(
-            listOf(
-                SentMessage(CHAT_ID, RELEASES_THREAD, "Kotlin 2.4.20\n${stable.url}", null),
-                SentMessage(CHAT_ID, RELEASES_THREAD, "*[Kotlin 2\\.5\\.0\\-Beta1](${beta.url})*", "MarkdownV2"),
-            ),
-            posted,
-        )
-        assertEquals(3, requests.size)
-        coVerifySequence {
-            val _ = dao.findKnownKeys(FeedSource.KOTLIN_RELEASES, any())
-            val _ = dao.insert(FeedSource.KOTLIN_RELEASES, stable, CHAT_ID, 1)
-            val _ = dao.insert(FeedSource.KOTLIN_RELEASES, beta, CHAT_ID, 2)
-        }
-    }
-
-    @Test
-    context(_: MockTransactionContext)
     fun `rejected topic stops the feed without recording and other feeds continue`() = runTest {
         val dao = mockk<FeedItemDao>(relaxed = true) {
             coEvery { findKnownKeys(any(), any()) } returns emptySet()
@@ -345,10 +314,10 @@ class KotlinFeedsJobTest {
 
     @Test
     context(_: MockTransactionContext)
-    fun `drops version without plain text resend when telegram rejects the topic`() = runTest {
+    fun `drops version and sends nothing more when telegram rejects the markup`() = runTest {
         val dao = daoKnowingAllBlogItemsButNewest()
         val blog = blogFeed()
-        val kotbot = kotbot { TelegramReply.Error(400, "Bad Request: message thread not found") }
+        val kotbot = kotbot { TelegramReply.Error(400, "Bad Request: can't parse entities: Character '.' is reserved") }
 
         val version = job(listOf(blog), dao, kotbot).publish(blog, since = null)
 
