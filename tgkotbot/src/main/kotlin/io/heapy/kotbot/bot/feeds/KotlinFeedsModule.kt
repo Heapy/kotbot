@@ -34,8 +34,9 @@ class KotlinFeedsModule(
     val kotlinReleasesFeed: Feed by lazy {
         GithubReleasesFeed(
             client = httpClientModule.httpClient,
-            url = kotlinFeedsConfiguration.releasesUrl,
+            token = kotlinFeedsConfiguration.githubToken,
             threadId = kotlinFeedsConfiguration.releasesThreadId,
+            pollInterval = kotlinFeedsConfiguration.releasesPollInterval,
         )
     }
 
@@ -44,6 +45,7 @@ class KotlinFeedsModule(
             client = httpClientModule.httpClient,
             urls = kotlinFeedsConfiguration.newsUrls,
             threadId = kotlinFeedsConfiguration.newsThreadId,
+            pollInterval = kotlinFeedsConfiguration.newsPollInterval,
         )
     }
 
@@ -57,7 +59,6 @@ class KotlinFeedsModule(
             transactionProvider = jdbcModule.transactionProvider,
             applicationScope = applicationScopeModule.applicationScope,
             chatId = kotlinFeedsConfiguration.chatId,
-            pollInterval = kotlinFeedsConfiguration.pollInterval,
             sendInterval = kotlinFeedsConfiguration.sendInterval,
         )
     }

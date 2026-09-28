@@ -3,9 +3,7 @@ package io.heapy.kotbot.bot.feeds
 import io.heapy.komok.tech.logging.Logger
 import io.heapy.kotbot.database.enums.FeedSource
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -16,22 +14,25 @@ import java.io.StringReader
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
+import kotlin.time.Duration
 
 class BlogRssFeed(
     private val client: HttpClient,
     private val urls: List<String>,
     override val threadId: Int,
+    override val pollInterval: Duration,
 ) : Feed {
     override val source = FeedSource.KOTLIN_NEWS
 
-    override suspend fun fetch(): List<FeedItem> {
+    override suspend fun fetch(since: FeedVersion?): FeedResponse {
         for (url in urls) {
             try {
+                val etag = (since as? RssVersion)?.takeIf { it.url == url }?.etag
                 val response = client.get(url) {
-                    header(HttpHeaders.UserAgent, FEED_USER_AGENT)
-                    timeout {
-                        requestTimeoutMillis = FEED_REQUEST_TIMEOUT_MS
-                    }
+                    feedRequest(etag)
+                }
+                if (response.status == HttpStatusCode.NotModified) {
+                    return FeedResponse.NotModified
                 }
                 if (response.status != HttpStatusCode.OK) {
                     log.warn("Feed {} answered {}", url, response.status)
@@ -39,7 +40,10 @@ class BlogRssFeed(
                 }
                 val items = parseRss(response.bodyAsText())
                 if (items.isNotEmpty()) {
-                    return items
+                    return FeedResponse.Updated(
+                        items = items,
+                        version = response.headers[HttpHeaders.ETag]?.let { RssVersion(url, it) },
+                    )
                 }
                 log.warn("Feed {} has no items", url)
             } catch (e: CancellationException) {
@@ -49,11 +53,16 @@ class BlogRssFeed(
             }
         }
         log.warn("No feed URL returned items: {}", urls)
-        return emptyList()
+        return FeedResponse.Updated(items = emptyList(), version = null)
     }
 
     private companion object : Logger()
 }
+
+private data class RssVersion(
+    val url: String,
+    val etag: String,
+) : FeedVersion
 
 internal fun parseRss(xml: String): List<FeedItem> {
     val factory = DocumentBuilderFactory.newInstance().apply {

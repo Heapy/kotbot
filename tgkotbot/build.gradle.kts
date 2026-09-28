@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client)
     implementation(libs.ktor.client.content.negation)
+    implementation(libs.ktor.client.encoding)
     implementation(libs.ktor.server)
     implementation(libs.ktor.server.content.negation)
     implementation(libs.ktor.server.html.builder)

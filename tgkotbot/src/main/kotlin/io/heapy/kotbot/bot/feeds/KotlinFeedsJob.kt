@@ -12,6 +12,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
 class KotlinFeedsJob(
@@ -23,45 +25,59 @@ class KotlinFeedsJob(
     private val transactionProvider: TransactionProvider,
     private val applicationScope: CoroutineScope,
     private val chatId: Long,
-    private val pollInterval: Duration,
     private val sendInterval: Duration,
 ) {
+    private val sendLock = Mutex()
+
     fun start() {
         if (!enabled) {
             log.info("Kotlin feeds are disabled")
             return
         }
 
-        applicationScope.launch {
-            while (true) {
-                publishAll()
-                delay(pollInterval)
-            }
-        }
-    }
-
-    internal suspend fun publishAll() {
         for (feed in feeds) {
-            try {
-                publish(feed)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                log.error("Failed to publish {} feed", feed.source, e)
+            applicationScope.launch {
+                var version: FeedVersion? = null
+                while (true) {
+                    version = publish(feed, version)
+                    delay(feed.pollInterval)
+                }
             }
         }
     }
 
-    private suspend fun publish(feed: Feed) {
-        val fetched = feed.fetch()
-        if (fetched.isEmpty()) return
+    internal suspend fun publish(
+        feed: Feed,
+        since: FeedVersion?,
+    ): FeedVersion? =
+        try {
+            sendLock.withLock {
+                publishNewItems(feed, since)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.error("Failed to publish {} feed", feed.source, e)
+            null
+        }
+
+    private suspend fun publishNewItems(
+        feed: Feed,
+        since: FeedVersion?,
+    ): FeedVersion? {
+        val response = when (val fetched = feed.fetch(since)) {
+            FeedResponse.NotModified -> return since
+            is FeedResponse.Updated -> fetched
+        }
+        if (response.items.isEmpty()) return response.version
 
         val knownKeys = transactionProvider.transaction {
-            feedItemDao.findKnownKeys(feed.source, fetched.map { it.key })
+            feedItemDao.findKnownKeys(feed.source, response.items.map { it.key })
         }
 
-        for (item in selectNewItems(fetched, knownKeys)) {
-            // Stop at the first failed send so the remaining items keep their order on the next poll.
+        for (item in selectNewItems(response.items, knownKeys)) {
+            // Stop at the first failed send and drop the version: the next poll refetches everything,
+            // so the remaining items are retried in order.
             val message = kotbot.executeSafely(
                 SendMessage(
                     chat_id = LongChatId(chatId),
@@ -69,7 +85,7 @@ class KotlinFeedsJob(
                     text = markdown.formatFeedItem(item),
                     parse_mode = ParseMode.MarkdownV2.name,
                 )
-            ) ?: return
+            ) ?: return null
 
             val _ = transactionProvider.transaction {
                 feedItemDao.insert(feed.source, item, chatId, message.message_id)
@@ -78,6 +94,7 @@ class KotlinFeedsJob(
 
             delay(sendInterval)
         }
+        return response.version
     }
 
     private companion object : Logger()

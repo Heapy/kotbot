@@ -34,8 +34,9 @@ data class KotlinFeedsConfiguration(
     val chatId: Long,
     val releasesThreadId: Int,
     val newsThreadId: Int,
-    val releasesUrl: String,
+    val githubToken: String? = null,
     val newsUrls: List<String>,
-    val pollInterval: Duration,
+    val releasesPollInterval: Duration,
+    val newsPollInterval: Duration,
     val sendInterval: Duration,
 )
