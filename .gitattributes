@@ -4,6 +4,7 @@
 # Linux start script should use lf
 gradlew        text eol=lf
 
-# These are Windows script files and should use crlf
-*.bat           text eol=crlf
+# Windows scripts are stored as generated (CRLF): Dependabot commits wrapper updates
+# without normalization, so normalizing them leaves gradlew.bat permanently modified.
+*.bat           -text
 
