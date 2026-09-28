@@ -7,6 +7,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -22,7 +23,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
@@ -167,6 +170,7 @@ public class TelegramApiError(
     public val description: String? = null,
     public val migrateToChatId: Long? = null,
     public val retryAfter: Int? = null,
+    public val httpStatusCode: Int? = null,
 ) : RuntimeException(message)
 
 public class KotbotException(
@@ -180,6 +184,7 @@ public suspend inline fun <Response> Kotbot.requestForJson(
 ): Response {
     val response = httpClient
         .post("$baseUrl$token/$name") {
+            expectSuccess = false
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(serialize())
         }
@@ -187,7 +192,35 @@ public suspend inline fun <Response> Kotbot.requestForJson(
     return if (response.status.isSuccess()) {
         deserialize(response)
     } else {
-        throw TelegramApiError("${response.status} ${response.bodyAsText()}")
+        val body = response.bodyAsText()
+        val errorResponse = try {
+            json.decodeFromString(
+                Response.serializer(JsonElement.serializer()),
+                body,
+            )
+        } catch (_: SerializationException) {
+            null
+        }
+
+        if (errorResponse?.ok == false) {
+            throw TelegramApiError(
+                message = "${response.status} $body",
+                errorCode = errorResponse.errorCode,
+                description = errorResponse.description,
+                migrateToChatId = errorResponse.parameters?.migrateToChatId,
+                retryAfter = errorResponse.parameters?.retryAfter,
+                httpStatusCode = response.status.value,
+            )
+        } else {
+            throw TelegramApiError(
+                message = "${response.status} $body",
+                errorCode = null,
+                description = null,
+                migrateToChatId = null,
+                retryAfter = null,
+                httpStatusCode = response.status.value,
+            )
+        }
     }
 }
 
