@@ -1,7 +1,7 @@
 [versions]
-commonmark = "0.30.1"
+commonmark = "0.31.0"
 coroutines = "1.11.0"
-flyway = "13.10.3"
+flyway = "13.11.1"
 hikari = "7.1.0"
 jooq = "3.21.9"
 jsoup = "1.23.2"
@@ -11,12 +11,12 @@ kotlin = "2.4.21"
 ksp = "2.3.12"
 ktor = "3.6.0"
 logback = "1.6.5"
-micrometer = "1.17.1"
+micrometer = "1.17.2"
 mockk = "1.14.11"
-openai = "4.82.0"
+openai = "4.91.0"
 poet = "2.4.0"
 postgresql = "42.7.14"
-serialization = "1.11.0"
+serialization = "1.12.0"
 
 [libraries]
 commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark" }
