@@ -58,15 +58,15 @@ class GptApiTest {
     }
 
     @Test
-    fun `public Kotlin replies retain their existing model and parameters`() = runTest {
+    fun `public Kotlin replies use Luna without reasoning and retain their output budget`() = runTest {
         withApi { api, requests ->
             val _ = GptService(api).complete("What is a Kotlin data class?")
 
             val request = requests.poll(5, TimeUnit.SECONDS)!!
-            assertEquals("gpt-5.4-mini", request.getValue("model").jsonPrimitive.content)
+            assertEquals("gpt-6-luna", request.getValue("model").jsonPrimitive.content)
             assertEquals("1.01", request.getValue("temperature").jsonPrimitive.content)
             assertEquals("1024", request.getValue("max_completion_tokens").jsonPrimitive.content)
-            assertFalse("reasoning_effort" in request)
+            assertEquals("none", request.getValue("reasoning_effort").jsonPrimitive.content)
         }
     }
 
