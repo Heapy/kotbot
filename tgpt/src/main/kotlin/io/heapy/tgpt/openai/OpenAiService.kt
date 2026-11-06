@@ -2,6 +2,8 @@ package io.heapy.tgpt.openai
 
 import com.openai.client.OpenAIClient
 import com.openai.core.MultipartField
+import com.openai.models.Reasoning
+import com.openai.models.ReasoningEffort
 import com.openai.models.audio.transcriptions.TranscriptionCreateParams
 import com.openai.models.responses.Response
 import com.openai.models.responses.ResponseCreateParams
@@ -24,7 +26,11 @@ class OpenAiService(
     ): Response {
         return withContext(Dispatchers.Loom) {
             log.info("Calling responses API with model ${configuration.model}")
-            client.responses().create(params)
+            client.responses().create(
+                params.toBuilder()
+                    .reasoning(Reasoning.builder().effort(ReasoningEffort.MEDIUM).build())
+                    .build()
+            )
         }
     }
 
