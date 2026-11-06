@@ -1,5 +1,7 @@
 package io.heapy.kotbot.infra.openai
 
+import com.openai.models.ReasoningEffort
+
 class GptService(
     private val gptApi: GptApi,
 ) {
@@ -17,11 +19,12 @@ class GptService(
         """.trimIndent()
 
         return gptApi.complete(
-            model = "gpt-5.4-mini",
+            model = "gpt-6-luna",
             systemPrompt = systemPrompt,
             userPrompt = userPrompt,
             temperature = 1.01,
             maxTokens = 1024,
+            reasoningEffort = ReasoningEffort.NONE,
         )
     }
 }
