@@ -1,5 +1,6 @@
 package io.heapy.kotbot.bot.admin
 
+import com.openai.models.ReasoningEffort
 import io.heapy.kotbot.bot.dao.UpdateDao
 import io.heapy.kotbot.bot.dao.UserContext
 import io.heapy.kotbot.bot.dao.UserContextDao
@@ -74,7 +75,7 @@ class UserNoteService(
     private suspend fun extractBatchFacts(messages: List<String>): String {
         val messagesText = messages.joinToString("\n---\n")
         return gptApi.complete(
-            model = "gpt-5.4-mini",
+            model = "gpt-6-luna",
             systemPrompt = """
                 Analyze Telegram messages to extract facts about the user.
                 Focus on: area of expertise, programming topics they work with,
@@ -84,13 +85,14 @@ class UserNoteService(
             userPrompt = "Extract facts about this user from their messages:\n\n$messagesText",
             temperature = 0.3,
             maxTokens = 512,
+            reasoningEffort = ReasoningEffort.NONE,
         )
     }
 
     private suspend fun combineSummaries(summaries: List<String>): String {
         val summariesText = summaries.joinToString("\n\n---\n\n")
         return gptApi.complete(
-            model = "gpt-5.4-mini",
+            model = "gpt-6-luna",
             systemPrompt = """
                 Combine multiple observations about a Telegram user into a single concise profile.
                 Focus on: area of expertise, programming topics, kind of questions asked, experience level.
@@ -99,6 +101,7 @@ class UserNoteService(
             userPrompt = "Combine these observations into a user profile:\n\n$summariesText",
             temperature = 0.3,
             maxTokens = 512,
+            reasoningEffort = ReasoningEffort.NONE,
         )
     }
 
